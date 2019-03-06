@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  baseApi: 'https://api.alexapp.pp.ua/api',
+  //baseApi: 'https://api.alexapp.pp.ua/api',
+  baseApi: 'https://api.ltk.cards/api',
   baseMedia: 'https://www.ltk.cards'
 };
 
