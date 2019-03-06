@@ -1,0 +1,23 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-ar5">
+  	<div class='card-content-body-wrap-ar5'>
+		<div class='card-input-field-ar5'>
+			<input type='text' class='card-input-ar5' [(ngModel)]='input_data' (focus)='handleLetterFocus()'/>
+			<div class='card-content-hint1-ar5' [ngStyle]='hint_2_show'>{{ the_word }}</div>
+			<div class='card-content-hint3-ar5' [ngStyle]='hint_3_show'>
+				<span class='card-content-hint3-letter-ar5' [ngClass]="{'card_hint3_4_letter_ar5': show_letter_4}"><span [ngStyle]='hint_3_letter_1'>{{ letter_1 }}</span></span>
+				<span class='card-content-hint3-letter-ar5' [ngClass]="{'card_hint3_4_letter_ar5': show_letter_4}"><span [ngStyle]='hint_3_letter_2'>{{ letter_2 }}</span></span>
+				<span class='card-content-hint3-letter-ar5' [ngClass]="{'card_hint3_4_letter_ar5': show_letter_4}"><span [ngStyle]='hint_3_letter_3'>{{ letter_3 }}</span></span>
+				<span class='card-content-hint3-letter-ar5' [ngClass]="{'card_hint3_4_letter_ar5': show_letter_4}" *ngIf='show_letter_4'><span [ngStyle]='hint_3_letter_4'>{{ letter_4 }}</span></span>
+				<span class='clearfix'></span>
+			</div>
+		</div>
+	</div>
+	<div class='card-description-wrap-ar5'>
+        <span (click)='playCardDescription()'>{{ card.content[0].desc }}</span>
+    </div>
+</div>

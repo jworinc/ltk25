@@ -1,0 +1,19 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-ar1">
+  	<div class='card-content-body-wrap-ar2 card-content-ar1-word' [innerHTML]="content | bindhtml">
+  		
+        <span class='clearfix'></span>
+    </div>
+    <div class='card-content-body-btn-wrap card-content-ar1-answer'
+    	(click)='stopPlay(); answerPlay()' [innerHTML]="right_answer | bindhtml">
+    	<span class='clearfix'></span>
+    </div>
+
+    <div class='card-description-wrap-ar2'>
+        <span>{{ card.content[0].desc }}</span>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-al1">
+    <div class='card-content-body-wrap-al1'>
+		<input *ngFor='let i of input_data; let ki = index'
+			class='card-al1-letter' [attr.data-pos]='ki' (click)='playLetter(ki)'
+			[(ngModel)]='i.letter' [ngStyle]='i.mark' (focus)='handleLetterFocus(ki)'>
+        <div class='clearfix'></div>
+    </div>
+    <div class='card-hint-wrap-al1'>
+    	<span>&nbsp;{{ hint_letter }}</span>
+    </div>
+    <div class='card-description-wrap-al1'>
+        <span>{{ card.content[0].desc }}</span>
+        <span>&nbsp;{{ message }}</span>
+    </div>
+</div>

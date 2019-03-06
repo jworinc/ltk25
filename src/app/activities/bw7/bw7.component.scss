@@ -1,0 +1,82 @@
+/***********************************************	BW7 block styling **************************************************/
+
+.bw7-word-wrap{
+	margin-top: 43px;
+	opacity: 1;
+}
+.bw7-letters-wrap{
+	flex-flow: column nowrap;
+	padding: 0px 33px;
+	min-height: 167px;
+}
+.bw7-syllables-selector{
+
+}
+.bw7-syllables-selector-letters{
+
+}
+.bw7-syllables-selector-syllables{
+	margin-top: 23px;
+}
+.bw7-letters{
+	font-size: 46px;
+	padding: 4px;
+	padding-bottom: 12px;
+	height: auto;
+}
+.bw7dash{
+	margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border-style: none;
+    color: transparent;
+    padding-bottom: 12px;
+    position: relative;
+}
+.bw7-letters-select.bw7dash{
+	cursor: pointer;
+}
+.bw7-dashmark{
+	display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    margin-top: -3px;
+    background-color: brown;
+}
+.bw7-dashmark-select{
+	opacity: 0;
+}
+.bw7dashmarkselected{
+	opacity: 1;
+}
+
+
+
+@media only screen and (max-width:1024px)
+{
+	.bw7-word-wrap{
+    	margin-top: 8px;
+    }
+    .bw7-letters{
+	    font-size: 26px;
+	    padding: 2px;
+	    padding-bottom: 5px;
+	}
+    .bw7-letters-wrap{
+	    padding: 0px 16px;
+	    min-height: 83px;
+	}
+	.bw7dash{
+    	padding-bottom: 6px;
+    }
+    .bw7-syllables-selector-syllables{
+	    margin-top: 8px;
+	}
+	.bw7-description{
+		font-size: 18px;
+		padding: 0px 8px;
+	}
+}

@@ -1,0 +1,22 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-ar2">
+    <div class='card-content-body-wrap-ar2 content_body_width_corrections' [innerHTML]="content | bindhtml">
+        <span class='clearfix'></span>
+    </div>
+    <div class='card-syllables-body-wrap-ar2 syllables_body_width_corrections' [innerHTML]="syllables | bindhtml">
+        <span class='clearfix'></span>
+    </div>
+    <div class='card-content-body-btn-wrap'>
+        <button type="button" class="btn btn-secondary" 
+            *ngFor="let cn of variants" [attr.data-btn-pos]='cn' (click)='handleAnswer(cn)'>
+                {{ cn }}</button>
+    </div>
+
+    <div class='card-description-wrap-ar2'>
+        <span>{{ card.content[0].desc }}</span>
+    </div>
+</div>

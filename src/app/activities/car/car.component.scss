@@ -1,0 +1,203 @@
+/*  Activity T1 */
+
+/*  Card content  */
+
+.card-content-container-t1{
+    display: block;
+    position: relative;
+    width: 84%;
+    float: right;
+    padding: 20px;
+    padding-top: 10px;
+}
+.card-content-title-wrap-t1{
+    display: block;
+    width: 100%;
+    color: #c40040;
+    z-index: 100;
+}
+.card-content-title-t1{
+    display: block;
+    width: 100%;
+    font-size: 2em;
+    cursor: pointer;
+}
+.card-content-subtitle-t1{
+    display: block;
+    width: 100%;
+    font-size: 1.1em;
+    cursor: pointer;
+}
+.card-content-head-wrap-t1{
+    display: none;
+    position: relative;
+    text-align: center;
+    font-family: TimesNewRoman;
+    font-size: 8em;
+    /* line-height: 1.5em; */
+    padding-bottom: 20px;
+    color: #c40040;
+    text-shadow: 0 0 3px #f00;
+    z-index: 99;
+}
+.card-content-head-t1{
+    cursor: pointer;
+}
+.card-content-body-wrap-t1{
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    padding-bottom: 12px;
+}
+.card-content-body-wrap-t1 ul{
+    display: flex;
+    flex-flow: column nowrap;
+    height: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    /* margin-top: 76px; */
+    align-items: center;
+    align-content: center;
+}
+.card-content-body-wrap-t1 ul li{
+    display: flex;
+    position: relative;
+    width: 100%;
+    /* margin-bottom: 76px; */
+    align-items: center;
+    flex-shrink: 1;
+    flex-grow: 1;
+    flex-basis: 100%;
+}
+.card-content-body-item-word-t1{
+    display: block;
+    /* justify-items: center; */
+    position: relative;
+    float: left;
+    width: 100%;
+    text-align: center;
+    font-size: 3.4em;
+    color: #606060;
+    /* line-height: 4.9em; */
+    text-shadow: 0 0 3px #f00;
+    cursor: pointer;
+    margin-bottom: 0px;
+}
+.card-content-intensified-t1{
+    font-weight: 700;
+    color: #c40040;
+}
+.card-content-body-item-img-t1{
+    display: flex;
+    height: 80%;
+    position: relative;
+    float: left;
+    width: 42%;
+    justify-content: center;
+}
+.card-content-body-item-img-t1 img{
+    display: block;
+    position: relative;
+    /* height: auto !important; */
+    width: auto;
+    max-height: 80%;
+    /* max-height: 80px; */
+    max-width: 87% !important;
+    margin: auto;
+}
+.card-content-body-number {
+    display: block;
+    position: absolute;
+    width: 12%;
+    top: 5%;
+    left: 5%;
+    text-align: left;
+    font-size: 28px;
+}
+.card-content-body-item-text-t1{
+    display: flex;
+    position: relative;
+    width: 50%;
+    flex-flow: column nowrap;
+}
+.t1-card-letter-picture{
+    display: block;
+    position: relative;
+    max-width: 80%;
+    max-height: 60%;
+    text-align: center;
+    margin: auto;
+    margin-top: -100px;
+    font-size: 136px;
+    line-height: 2em;
+    cursor: pointer;
+    z-index: 10000;
+}
+.t1-card-letter-picture img{
+
+}
+.card-description-wrap-ar2{
+    display: none;
+    position: relative;
+    width: 100%;
+    margin-top: 36px;
+    text-align: center;
+    font-size: 18px;
+    z-index: 100;
+    color: #C2272D;
+}
+
+
+
+
+/*        Mobile layout         */
+
+@media screen and (max-width: 1024px) {
+    .card-content-title-t1{
+		display: none;
+	}
+    .card-header-label-mobile-t1{
+        display: none;
+    }
+    .card-content-body-wrap-t1{
+        padding-bottom: 0px;
+    }
+
+    .card-content-body-wrap-t1 ul li {
+        max-height: 100%;
+    }
+    .card-content-body-item-word-t1 {
+        font-size: 3em;
+    }
+    .t1-card-letter-picture {
+        margin-top: -10px;
+        font-size: 76px;
+        line-height: 1em;
+    }
+    .card-content-body-number-t1 {
+        top: 0% !important;
+        left: 2%;
+        font-size: 24px;
+    }
+    .card-content-body-wrap-t1 ul {
+        height: 68%;
+    }
+    .zoom-card-sequence-good {
+        margin-left: 10px !important;
+    }
+    .zoom-card-sequence-bad {
+        margin-left: 10px !important;
+    }
+    .card-content-body-item-img-t1{
+        display: block;
+        width: 47%;
+        height: 80%;
+    }
+    .card-description-wrap-ar2 {margin-top: 4px;}
+    .card-description-wrap-ar2{
+        display: block;
+    }
+}

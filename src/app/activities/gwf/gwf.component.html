@@ -1,0 +1,28 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-gwf">
+    <div class='gwf-body-wrap'>
+		<div class='gwf-sentence-wrap'>
+			<span class='gwf-sentence' [innerHTML]="current_sentence | bindhtml" [attr.data-ind]='sentence_index' app-playsentence></span>
+			<span class='gwf-answers'>
+				<span class='gwf-answer-right'>{{ expected[current_set] }}<div class='gwf-ap-mark'></div></span>
+				<span class='gwf-answer-wrong'>{{ input_data }}</span>
+			</span>
+		</div>
+		<div class='gwf-variants-wrap'>
+			<span class='gwf-variant' *ngFor='let v of variants; let kv=index' [attr.data-index]='kv' (click)='addAnswer(v)'>
+				{{ v }}
+			</span>
+		</div>
+		<div class='gsc-results gwf-results'>
+			<span class='gsc-result-right'>Right: {{ display_result.right }}</span>
+			<span class='gsc-result-wrong'>Wrong: {{ display_result.wrong }}</span>
+		</div>
+		<div class='bw1-block bw1-description'>
+			{{ card.content[0].desc }}
+		</div>
+	</div>
+</div>

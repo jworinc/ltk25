@@ -1,0 +1,21 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-bw3">
+    <div class='bw1-block bw1-word-wrap bw3-word-wrap'>
+		<span class='bw1-word' (click)='playWord()' [innerHTML]='display_answer_word | bindhtml'></span>
+	</div>
+	<div class='bw1-block bw1-letters-wrap bw3-letters-wrap'>
+		<span class='bw1-letter' *ngFor="let l of syllables; let kl = index" [attr.data-letter]='kl' ngClass="{'bw3hilight': l===expected}">
+			{{ l }}
+		</span>
+	</div>
+	<div class='bw1-block bw1-user-input'>
+		<input type='text' [(ngModel)]='input_data' />
+	</div>
+	<div class='bw1-block bw1-description'>
+		{{ card.content[0].desc }}
+	</div>
+</div>

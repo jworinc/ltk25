@@ -1,0 +1,37 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-rw1">
+
+    <div *ngFor='let cn of card.content; let cnkey = index' class="word-block" [attr.wordindex]="cnkey">
+      <div class='word-box' (click)="playWord(cn.wavename)">
+        <span class='word'>{{ cn.title }}</span>
+        <img [hidden]='!cn.content[0].img' [src]='cn.content[0].img ? playmedia.ltkmediaurl + cn.content[0].img : ""' alt='' />
+      </div>
+      <div class='phoneme-box' (click)="playPronounce(cnkey)" [attr.wordblock]="cnkey">
+        <span class='phoneme-header'>Pronounce</span>
+        <span *ngFor='let ph of cn.breakdown.split("-"); let kph = index' class='phoneme-syllable'>
+          <span *ngFor='let l of ph.split(","); let kl=index' [attr.playsyl]='kph' [attr.playpos]='kl'>{{ l }}</span>
+        </span>
+      </div>
+      <div class='sentence-box'>
+        <span class='sentence-header'>Sample sentence</span>
+        <span class='word-box-sentence' (click)="playWord(cn.wavename)">
+            <span class='word'>{{ cn.title }}</span>
+            <img [hidden]='!cn.content[0].img' [src]='cn.content[0].img ? playmedia.ltkmediaurl + cn.content[0].img : ""' alt='' />
+        </span>
+        <span class='sample-sentence' [hidden]="!cn.content[0].sentence" [innerHTML]="cn.content[0].sentence | bindhtml" app-playsentence [attr.data-ind]="'sent_'+cnkey"></span>
+        <span class='sample-sentence' [hidden]="cn.content[0].sentence">No sentence</span>
+      </div>
+    </div>
+
+    <!--
+    <div class='card-showdown-button' (click)='showNextView()'><i class="far fa-arrow-alt-circle-down"></i></div>
+    <div class='card-showdown-button card-showup-button' (click)='showPrevView()'><i class="far fa-arrow-alt-circle-up"></i></div>
+    -->
+    <div class='card-showdown-button word-next-button' (click)='showNextWord()'><i class="far fa-arrow-alt-circle-right"></i></div>
+    <div class='card-showdown-button word-prev-button' (click)='showPrevWord()'><i class="far fa-arrow-alt-circle-left"></i></div>
+
+</div>

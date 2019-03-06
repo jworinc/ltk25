@@ -1,0 +1,22 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-diw">
+    <div class='card-content-body-wrap-diw'>
+		<div class='diw-input-wrap'>
+			<input type='text' [(ngModel)]='input_data' (input)="valueChange($event)" [disabled]="uinputph === 'finish'"/>
+		</div>
+		<div class='diw-hint-letters diw-hint-letters-show'>
+			<span *ngFor='let l of letters; let kl = index' [attr.data-index]='kl'>
+			{{ l }}</span>
+		</div>
+		<div class='diw-hint-letters diw-hint-word'>
+			<span>{{ answer_word }}</span>
+		</div>
+		<div class='card-description-wrap-ar2 diw-card-description'>
+            <span>{{ card.content[0].desc }}</span>
+        </div>
+   </div>
+</div>

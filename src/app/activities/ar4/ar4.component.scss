@@ -1,0 +1,47 @@
+/***********************************************	AR1 block styling **************************************************/
+
+
+.card-ar1-digraph-input{
+    display: inline-block;
+    width: 60px;
+    text-align: center;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding: 0;
+    padding-bottom: 1px;
+    padding-top: 1px;
+}
+.card-ar1-syllable{
+    padding: 5px 13px;
+    height: 103px;
+    line-height: 1.1em;
+    margin-right: 3px;
+    margin-left: 3px;
+}
+.card-content-body-wrap-ar2 .card-ar1-syllable{
+    cursor: default;
+}
+.card-ar1-syllable-dash span{
+    border-color: transparent;
+}
+.card-ar1-right-answer{
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    cursor: default;
+}
+.card-content-ar1-answer{
+    margin-top: 10px;
+}
+.card-content-ar1-word{
+    /*opacity: 0;*/
+    transition: opacity 0.2s ease;
+}
+@media screen and (max-width: 1024px) {
+	.card-ar1-digraph-input {
+	    width: 30px;
+        margin-top: -4px;
+	}
+    .card-ar1-syllable {
+        line-height: 1em;
+    }
+}

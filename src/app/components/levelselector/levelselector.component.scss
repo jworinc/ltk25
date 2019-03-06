@@ -1,0 +1,51 @@
+/*  Level selector directive   */
+
+.levelselector{
+    display: block;
+    position: relative;
+    margin: auto;
+}
+.settings-level-selector{
+    display: block;
+    position: relative;
+    width: 120px;
+}
+.level-selector-btn-down, .level-selector-btn-up, .level-selector-display-field{
+    display: block;
+    position: relative;
+    width: 23%;
+    float: left;
+    padding: 0 3px;
+}
+.level-selector-display-field{
+    width: 54%;
+    text-align: center;
+    line-height: 41px;
+    color: white;
+    font-size: 22px;
+    background-color: #0094FF;
+    border-radius: 4px;
+    margin-top: 7px;
+}
+.level-selector-btn-down{
+
+}
+.level-selector-btn-up{
+
+}
+.level-selector-btn-down-icon, .level-selector-btn-up-icon{
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 55px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+.level-selector-btn-down-icon{
+  background-image: url(../../../assets/img/laleft.png);
+}
+.level-selector-btn-up-icon{
+  background-image: url(../../../assets/img/laright.png);
+}

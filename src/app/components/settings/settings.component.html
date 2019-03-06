@@ -1,0 +1,84 @@
+<div id='app-settings-modal' class="modal fade show" tabindex="-1" role="dialog" style='z-index: 10100; display: block; padding-left: 0px; background-color: rgba(0, 0, 0, 0.7); overflow-y: auto;'>
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ 'settings' | translate }}</h4>
+                <button type="button" class="close" (click)="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" style="display: flex; flex-flow: row wrap;">
+                <div class='col-xl-4 col-lg-6 app-setting-item'>
+                	<h5>{{ 'screen_colors' | translate }}</h5>
+                	<div class='app-setting-item-wrap'>
+                		<span class='app-settings-icon'><i class='app-settings-icon-screencolors'></i></span>
+                        <app-levelselector style='left: -9px;' class='levelselector' [level]='options.screencolor' [units]='""' [min]='0' [max]='10' [step]='1' (levelset)="setScreencolor($event)"></app-levelselector>
+                    </div>
+                </div>
+                <div class='col-xl-4 col-lg-6 app-setting-item'>
+                	<h5>{{ 'sound_controls' | translate }}</h5>
+                	<div class='app-setting-item-wrap'>
+                		<span class='app-settings-icon'><i class='app-settings-icon-soundcontrols'></i></span>
+                		<span class='app-settings-soundcontrols-wrap'>
+                			<canvas id='test-volume-rec-settings' width='120' height='4'></canvas>
+                        	<input id='settings-global-recgain' type='range' [ngModel]='recgain' (ngModelChange)="onChangeRecgain($event)" class='test-volume-settings-gain' min='0' max='100' step='1' value="50" />
+                        	<input id='settings-global-volume-level' type='range' [ngModel]='globalvolume' (ngModelChange)="onChangeGlobalvolume($event)" class='test-volume-settings-gain' min='0.01' max='1.0' step='0.01' value="0.9"/>
+                			<span class='soundcontrols-item-icon soundcontrols-item-icon-small soundcontrols-item-icon-mic' (click)='micDown()'></span>
+                			<span class='soundcontrols-item-icon soundcontrols-item-icon-big soundcontrols-item-icon-mic' (click)='micUp()'></span>
+                			<span class='soundcontrols-item-icon soundcontrols-item-icon-small soundcontrols-item-icon-speaker' (click)='volDown()'></span>
+                			<span class='soundcontrols-item-icon soundcontrols-item-icon-big soundcontrols-item-icon-speaker' (click)='volUp()'></span>
+                		</span>
+                    </div>
+                </div>
+                <div class='col-xl-4 col-lg-6 app-setting-item'>
+                	<h5>{{ 'language' | translate }}</h5>
+                	<div class='app-setting-item-wrap'>
+                		<span class='app-settings-icon'><i class='app-settings-icon-languages'></i></span>
+                        <select class='form-control' [(ngModel)]='options.language' (ngModelChange)="onLangChange($event)">
+                            <!--
+                            <option value='english'>{{ 'english' | translate }}</option>
+                            <option value='arabic'>{{ 'arabic' | translate }}</option>
+                            <option value='chinese'>{{ 'chinese' | translate }}</option>
+                            <option value='french'>{{ 'french' | translate }}</option>
+                            <option value='russian'>{{ 'russian' | translate }}</option>
+                            <option value='turkish'>{{ 'turkish' | translate }}</option>
+                            -->
+
+                            <option *ngFor="let l of locales" [attr.value]="l.lang">{{ l.title }}</option>
+
+                        </select>
+                        <p>{{ 'lang_en_changes' | translate }}</p>
+                    </div>
+                </div>
+                <div class='col-xl-4 col-lg-6 app-setting-item'>
+                	<h5>{{ 'expert_level' | translate }}</h5>
+                	<div class='app-setting-item-wrap'>
+                		<span class='app-settings-icon'><i class='app-settings-icon-expertlevel'></i></span>
+                        <app-levelselector class='levelselector' [level]='options.expertlevel' [units]='""' [min]='0' [max]='10' [step]='1' (levelset)="setExpertlevel($event)"></app-levelselector>
+                    </div>
+                </div>
+                <div class='col-xl-4 col-lg-6 app-setting-item'>
+                	<h5>{{ 'repeat_level' | translate }}</h5>
+                	<div class='app-setting-item-wrap'>
+                		<span class='app-settings-icon'><i class='app-settings-icon-repeat'></i></span>
+                        <app-levelselector class='levelselector' [level]='options.replevel' [units]='"%"' [min]='50' [max]='150' [step]='50' (levelset)="setReplevel($event)"></app-levelselector>
+                    </div>
+                </div>
+                <div class='col-xl-4 col-lg-6 app-setting-item'>
+                	<h5>{{ 'quick_pace' | translate }}</h5>
+                	<div class='app-setting-item-wrap'>
+                		<span class='app-settings-icon'><i class='app-settings-icon-quickpace'></i></span>
+                        <div class="checkbox" style='margin-left: 20%;'>
+                            <label>
+                                <input type="checkbox" [(ngModel)]='options.quickpace'> {{ 'no' | translate }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class='clearfix'></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" (click)='close()'>{{ 'close' | translate }}</button>
+                <button type="button" class="btn btn-primary" (click)='save()'>{{ 'save_changes' | translate }}</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

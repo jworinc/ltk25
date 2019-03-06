@@ -1,0 +1,34 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-ar6">
+    <div class='card-content-body-wrap-ar5'>
+		<div class='card-input-field-ar5'>
+			<input type='text' class='card-input-ar5' [(ngModel)]='input_data' (focus)='handleLetterFocus()' />
+			<div class='card-content-hint1-ar5 card-content-hint1-ar6' [ngStyle]='hint_2_show'>{{ the_word }}</div>
+			<div class='card-content-hint3-ar5' [ngStyle]='hint_3_show'>
+				<span class='card-content-hint3-letter-ar5'><span [ngStyle]='hint_3_letter_1'>{{ letter_1 }}</span></span>
+				<span class='card-content-hint3-letter-ar5'><span [ngStyle]='hint_3_letter_2'>{{ letter_2 }}</span></span>
+				<span class='card-content-hint3-letter-ar5'><span [ngStyle]='hint_3_letter_3'>{{ letter_3 }}</span></span>
+				<span class='clearfix'></span>
+			</div>
+			<div class='card-content-expected-ar6'>
+				<span class='card-content-expected-wrap'>
+					<span class='card-content-expected-item-ar6 card-content-expected-1-ar6' [ngClass]="{'expecteditemar6': expected_1}"></span>
+				</span>
+				<span class='card-content-expected-wrap'>
+					<span class='card-content-expected-item-ar6 card-content-expected-2-ar6' [ngClass]="{'expecteditemar6': expected_2}"></span>
+				</span>
+				<span class='card-content-expected-wrap'>
+					<span class='card-content-expected-item-ar6 card-content-expected-3-ar6' [ngClass]="{'expecteditemar6': expected_3}"></span>
+				</span>
+				<span class='clearfix'></span>
+			</div>
+		</div>
+	</div>
+	<div class='card-description-wrap-ar5'>
+        <span (click)='playCardDescription()'>{{ card.content[0].desc }}</span>
+    </div>
+</div>

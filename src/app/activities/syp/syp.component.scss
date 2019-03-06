@@ -1,0 +1,88 @@
+/***********************************************	SYP block styling **************************************************/
+
+.card-content-body-wrap-syp{
+	display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-style: solid;
+    border-width: 4px;
+    border-color: #91CDC3;
+}
+.syp-card-picture{
+	display: block;
+    position: relative;
+    width: 100%;
+    height: 70%;
+    top: 10%;
+}
+.syp-card-animation{
+	display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+}
+.syp-card-picture img{
+	display: block;
+    position: relative;
+    max-width: 80%;
+    max-height: 100%;
+    margin: auto;
+}
+.syp-card-animation-item{
+	display: flex;
+    position: relative;
+    max-width: 18%;
+}
+.syp-card-letter{
+	text-align: center;
+    font-size: 110px;
+    line-height: 2.4;
+    color: brown;
+}
+.syp-card-init-desc{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    align-content: center;
+    justify-content: space-evenly;
+    font-size: 21px;
+    color: darkblue;
+    line-height: 1.1em;
+    padding: 10px;
+    font-weight: 400;
+    margin: 0;
+}
+.syp-card-init-desc p{
+    margin: 0;
+    margin-bottom: 0;
+}
+
+
+
+
+
+/*        Mobile layout         */
+@media screen and (max-width: 1024px) {
+ 
+	.syp-card-picture{
+	    height: 71%;
+	    top: 5%;
+	    font-size: 94px;
+	    line-height: 1.1;
+	}
+	.syp-description{
+		position: relative;
+	    margin-top: 15px;
+	    padding: 0px 10px;
+	    line-height: 1;
+	}
+    .syp-card-init-desc{
+        font-size: 11px;
+        line-height: 1;
+    }
+    .syp-card-init-desc p{
+        padding: 0;
+        margin: 0;
+    }
+
+}

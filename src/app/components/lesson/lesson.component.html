@@ -1,0 +1,187 @@
+<div class="book-container" id='main-app-container'>
+
+		
+        <div id='page-is-loading-screen' style='margin-top: 50px;' [hidden]="!page_is_loading_screen">{{ 'loading' | translate }}<img src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PGxpbmVhckdyYWRpZW50IGlkPSdGYXN0TG9hZGluZ0luZGljYXRvci1saW5lYXJHcmFkaWVudCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnIHgxPScxLjc4MDQnIHkxPScxNi4wMzc5JyB4Mj0nMzAuMTQzOScgeTI9JzE2LjAzNzknPjxzdG9wIG9mZnNldD0nMC40MTY5JyBzdG9wLWNvbG9yPScjQ0RDRkQyJy8+PHN0b3Agb2Zmc2V0PScwLjkzNzYnIHN0b3AtY29sb3I9J3JnYmEoMjQ4LDI0OCwyNDksMCknLz48L2xpbmVhckdyYWRpZW50PjxjaXJjbGUgY3g9JzE2JyBjeT0nMTYnIHI9JzEyLjcnIHN0eWxlPSdmaWxsOiBub25lOyBzdHJva2U6IHVybCgjRmFzdExvYWRpbmdJbmRpY2F0b3ItbGluZWFyR3JhZGllbnQpOyBzdHJva2Utd2lkdGg6IDI7Jz48L2NpcmNsZT48L3N2Zz4=' alt='' /></div>
+        <div id='main-app-screen' class="book-wrap" [hidden]="!main_app_screen">
+            
+            <div class='main-app-wrapp'>
+
+                <div class='top-and-slide-container-wrap'>
+
+                    <!-- Sidetrip mode enabled message -->
+                    <div class='row sidetrip-mode' *ngIf='sidetripmode'>
+                        <span class='sidetrip-message'>{{ 'sidetrip_mode' | translate }}<span class='sidetrip-disable-btn' (click)="disableSidetrip()">{{ 'here' | translate }}</span>.</span>
+                    </div>
+
+                    <!--     Top Toolbar     -->
+                    <div class='book-top-toolbar noselect'>
+
+                        <!--    Lessons App Top Toolbar      -->
+
+                        <!--    Menu open button    -->
+                        <span class='tool-sidebar-open-icon-top' *ngIf='!show_tool_pages_list' (click)='show_tool_pages_list = true'>
+                            <i class="fas fa-ellipsis-v"></i>
+                        </span>
+
+                        <span class='top-toolbar-rec' [ngClass]="{'blinkhighlight': blinkrec}">
+                            <span class='top-toolbar-rec-icon card-content-rec-button' title="{{ 'rec_btn' | translate }}"
+                                (mousedown)="recDown()" (touchstart)="recDown()" (mouseup)="recUp()" (touchend)="recUp()">
+                                <span class='top-toolbar-rec-redcircle' *ngIf='rec_toggle'></span>
+                            </span>
+                        </span>
+                        <span class='top-toolbar-listen' (click)='playStart();' title="{{ 'listen_btn' | translate }}"
+                             [ngClass]="{'blinkhighlight': blinkplay}"></span>
+                        <span class='top-toolbar-repeat' (click)='repeat();' title="{{ 'repeat_btn' | translate }}"></span>
+
+                    </div><!--     Top Toolbar     -->
+
+                    <!--  Header  -->
+                    <div class='zoom-frame-header'>{{ global_header }}</div>
+                    <!--  Header  -->
+
+                    <!--     Container for slides    -->
+                    <div class='book-slides-container'  (swipeleft)='moveNext()' (swiperight)='movePrev()'>
+
+                        <div class='zoom-frame noselect' id='card_placeholder'>
+
+                            <!-- Zoom card body -->
+                            <div class='zoom-card-body card-blocks-container' >
+        						<ng-template app-card></ng-template>
+                            </div><!-- Zoom card body -->
+
+                            <!-- Start Lesson Screen -->
+                            <span class='main-app-start-lesson-screen' *ngIf="show_start_screen">
+                                
+                                <span class='main-app-start-lesson-header'>
+                                    <span class='main-app-start-ltkicon-wrap'>
+                                        <i class='main-app-start-ltkicon'></i>
+                                        LTK
+                                    </span>
+                                    <span class='main-app-start-ltkurl'>
+                                        
+                                    </span>
+                                </span>
+                                <span class='main-app-start-lesson-desc'>
+                                    <h2>{{ 'welcome_to_ltk' | translate }}</h2>
+                                    <h2>{{ 'lets_begin' | translate }}</h2>
+                                </span>
+                                <span class='main-app-start-lesson-btn'>
+                                    <button class='main-app-start-btn' (click)='startLesson()'>{{ 'lstart' | translate }} <i class='main-app-start-lesson-icon'></i></button>
+                                </span>
+                            </span>
+
+                            <!-- Finish Lesson Screen -->
+                            <span class='main-app-finish-lesson-screen'>
+                                <span class='finish-lesson-label'>
+                                    <span>{{ 'you_finish' | translate }}</span>
+                                    <span>{{ 'the' | translate }}</span>
+                                    <span>{{ 'lesson' | translate }}</span><br>
+                                    <a href='/home'> < {{ 'home_link' | translate }}</a>
+                                </span>
+                            </span>
+
+                            <!-- Lesson not complete Screen -->
+                            <span class='lesson-not-complete-screen'>
+                                <span class='finish-lesson-label'>
+                                    <span>{{ 'u_n_complete' | translate }}</span>
+                                    <span>{{ 'the' | translate }}</span>
+                                    <span>{{ 'lesson' | translate }}</span><br>
+                                    <a href='{{ repeat_url }}'> < {{ 'repeat_link' | translate }}</a> <a href='/home'>  {{ 'home_link' | translate }}</a>
+                                </span>
+                            </span>
+
+                        </div>
+
+                    </div><!--     Container for slides    -->
+
+                    <span class='zoom-card-sequence-buttons-mobile'>
+
+                        <!-- <span class='zoom-card-sequence-hint' (click)='hint();'></span> -->
+                        <span class='zoom-card-sequence-goodbad' *ngIf='rui_button_goodbad' [ngClass]="{'blinkhighlight': blinkgoodbad}">
+                            <span class='zoom-card-sequence-good' (click)='good();' title="{{ 'good_btn' | translate }}"></span>
+                            <span class='zoom-card-sequence-bad' (click)='bad();' title="{{ 'bad_btn' | translate }}"></span>
+                        </span>
+                        <span class='zoom-card-sequence-clear' *ngIf='rui_button_clear' (click)='clear();' title="{{ 'clear_input' | translate }}"></span>
+                        <span class='zoom-card-sequence-hint' *ngIf='rui_button_hint' (click)='hint();' title="{{ 'show_hint' | translate }}"></span>
+                        <span class='zoom-card-sequence-enter' (click)='enter();' title="{{ 'enter_answer' | translate }}" [ngClass]="{'blinkhighlight': blinkenter}"></span>
+                        <span class='zoom-card-next' (click)='moveNext()' title="{{ 'move_to_next' | translate }}" [ngClass]="{'blinkhighlight': blinknextnavbtn}"></span>
+
+                    </span>
+                    <!-- Card Sequence buttons for mobile layout -->
+
+                </div>
+
+
+                <!-- Right tools window -->
+                <div class='tool-window tool-window-right noselect' *ngIf='show_tool_pages_list'>
+
+                    <!-- Card Sequence Buttons -->
+                    <span class='zoom-card-sequence-buttons'>
+                        <span class='zoom-card-sequence-buttons-wrap'>
+                            <span class='zoom-card-sequence-goodbad' *ngIf='rui_button_goodbad' [ngClass]="{'blinkhighlight': blinkgoodbad}">
+                                <span class='zoom-card-sequence-good' (click)='good();' title="{{ 'good_btn' | translate }}"></span>
+                                <span class='zoom-card-sequence-bad' (click)='bad();' title="{{ 'bad_btn' | translate }}"></span>
+                            </span>
+                            <span class='zoom-card-sequence-clear' *ngIf='rui_button_clear' (click)='clear();' title="{{ 'clear_input' | translate }}"></span>
+                            <span class='zoom-card-sequence-hint' *ngIf='rui_button_hint' (click)='hint();' title="{{ 'show_hint' | translate }}"></span>
+                            <span class='zoom-card-sequence-enter' (click)='enter();' title="{{ 'enter_answer' | translate }}" [ngClass]="{'blinkhighlight': blinkenter}"></span>
+                        </span>       
+                    </span>
+                    <!-- Card Sequence Buttons -->
+
+                    <!-- Card Next Button -->
+                    <span class='zoom-card-next-button'>
+                        <span class='zoom-card-next-button-wrap' title="{{ 'move_to_next' | translate }}">
+                            <span class='zoom-card-next' (click)='moveNext()' [ngClass]="{'blinkhighlight': blinknextnavbtn}"></span>
+                        </span>       
+                    </span>
+                    <!-- Card Next Button -->
+
+                </div>
+                <!-- /Right tools window -->
+
+
+            </div>
+
+            <!--    Bottom description box    -->
+            <div class='bottom-description-box'>
+                {{ global_desc }}
+            </div>
+            <!--    /Bottom description box    -->
+
+        </div>
+
+
+
+
+        <!--  Menu background   -->
+        <app-msmenu (sidetripmode)="onSidetripmode($event)"
+                    (closemenu)="onCloseMenu()"
+                    (showsettings)="onShowSettings()"
+                    (showfeedback)="onShowFeedback()"
+                    [lu]="current_lesson_title"
+                    [show_tool_pages_list]="show_tool_pages_list"
+                    [show_menu_open_button]="false"
+                    *ngIf="main_app_screen"></app-msmenu>
+        <!-- /Menu background   -->
+
+        
+
+        
+    <!--    Settings window   -->
+    <app-settings [show]='show_setting_modal' 
+                  [hidden]="!show_setting_modal" 
+                  (closesettings)="onCloseSettings()"></app-settings>
+
+    <!--    Feedback window   -->
+    <app-feedback  [show]='show_feedback_modal' 
+                   [hidden]="!show_feedback_modal" 
+                   (closefeedback)="onCloseFeedback()"></app-feedback>
+
+    <!--    Warn not complete card window   -->
+    <app-warncomplete [hidden]="!show_warncomplete_modal"
+                      (closewarncomplete)="onCloseWarncomplete()"
+                      (gonextcard)="onGoNextCard()"></app-warncomplete>
+
+        
+</div>

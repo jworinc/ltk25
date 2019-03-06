@@ -1,0 +1,17 @@
+.showme-report-container{
+	width: 70%;
+	max-width: 1200px;
+	margin: auto;
+}
+
+@media screen and (max-width: 1400px){
+	.showme-report-container{
+		width: 90%;
+		max-width: 1000px;
+	}
+}
+@media screen and (max-width: 1024px){
+	.showme-report-container{
+		width: 100%;
+	}
+}

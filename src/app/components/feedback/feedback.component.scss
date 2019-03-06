@@ -1,0 +1,38 @@
+/*		LTK Feedback Directive styles      */
+
+#app-feedback-modal{
+
+}
+.app-feedback-intro{
+
+}
+.app-feedback-like-dislike{
+  text-align: center;
+  margin-bottom: 10px;
+}
+.app-feedback-category{
+  text-align: center;
+  margin-bottom: 10px;
+}
+.app-feedback-message{
+
+}
+.app-feedback-like-btn{
+
+}
+.app-feedback-dislike-btn{
+
+}
+.app-feedback-like-dislike .btn i, .app-feedback-like-dislike .btn svg{
+  margin-right: 5px;
+}
+.app-feedback-category .btn i, .app-feedback-category .btn svg{
+  margin-right: 2px;
+}
+.btn{
+	margin: 2px;
+}
+
+@media screen and (max-width: 347px) {
+	
+}

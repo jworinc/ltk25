@@ -1,0 +1,74 @@
+/***********************************************	BW5 block styling **************************************************/
+.card-description-wrap-ar2{
+    display: none;
+    position: relative;
+    width: 100%;
+    margin-top: 36px;
+    text-align: center;
+    font-size: 18px;
+    z-index: 100;
+    color: #C2272D;
+}
+.card-content-body-wrap-diw{
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    padding-bottom: 12px;
+    z-index: 9999;
+}
+.diw-input-wrap, .diw-hint-letters{
+	display: flex;
+    min-height: 43%;
+    align-items: flex-end;
+    justify-content: space-evenly;
+    font-size: 35px;
+}
+.diw-input-wrap input{
+	border-width: 6px;
+    border-color: #29AAE3;
+    text-align: center;
+    padding-bottom: 7px;
+}
+.diw-hint-letters{
+	min-height: 48%;
+	align-items: center;
+}
+.diw-hint-letters span{
+	display: inline-block;
+    padding: 0px 8px;
+    padding-bottom: 11px;
+    background-color: #C69C6C;
+    color: white;
+    margin: 0 3px;
+    font-size: 54px;
+    line-height: 1;
+}
+.diw-hint-letters-show, .diw-hint-word{
+	display: none;
+	opacity: 0;
+	transition: opacity 0.4s ease;
+}
+
+@media only screen and (max-width:1024px)
+{
+	.diw-input-wrap, .diw-hint-letters {
+	    min-height: 36%;
+	    font-size: 26px;
+        margin-top: 10px;
+	}
+	.diw-card-description{
+		position: absolute;
+    	bottom: 5px;
+	}
+	.diw-hint-letters span {
+	    padding-bottom: 8px;
+	    font-size: 34px;
+	}
+    .card-description-wrap-ar2 {margin-top: 4px;}
+    .card-description-wrap-ar2{
+        display: block;
+    }
+	
+}

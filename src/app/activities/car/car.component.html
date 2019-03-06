@@ -1,0 +1,32 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-car">
+  	<div class='card-content-body-wrap-t1'>
+        <ul>
+        	<li *ngFor='let cn of card.content; let cnkey = index'>
+        		<span class='card-content-body-item-text-t1'>
+        			<div class='t1-card-letter-picture' *ngIf='t1_letter_picture !== ""' (click)='playAnswerLetters()'>
+    					<span [ngStyle]='cn.wcstyles'
+    					 [ngClass]="{'blinkhighlight': blinkletter}"
+                         [innerHTML]="cn.word_letters | bindhtml">
+                        </span>
+    				</div>
+                    <span class='card-content-body-item-word-t1' [ngStyle]='cn.wcstyles'
+                     [innerHTML]='cn.word_parsed | bindhtml' (click)='playWord()'>
+                    </span>
+                </span>
+                <span class='card-content-body-item-img-t1' (click)='playWord()'>
+                    <img [src]='cn.img' alt='' />
+                </span>
+                <span class='clearfix'></span>
+            </li>
+        </ul>
+        <div class='card-content-body-number card-content-body-number-t1'>{{ card.content[0].cdeck_number }}</div>
+        <div class='card-description-wrap-ar2'>
+            <span>{{ card.content[0].desc }}</span>
+        </div>
+    </div>
+</div>

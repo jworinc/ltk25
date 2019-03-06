@@ -1,0 +1,33 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-syp">
+  <!--
+  syp works!
+  <p>{{ data.activity }}</p>
+  -->
+
+  	<div class='card-content-body-wrap-syp'>
+		<div class='syp-card-picture syp-card-letter syp-card-init-desc' 
+			[hidden]='syp_card_word !== "" || syp_card_picture !== "" || syp_card_animation.length !== 0' 
+			[innerHTML]="syp_card_inidesc | bindhtml">
+		</div>
+		<div class='syp-card-picture syp-card-letter' *ngIf='syp_card_word !== ""'>
+			{{ syp_card_word }}
+		</div>
+		<div class='syp-card-picture' *ngIf='syp_card_picture !== ""'>
+			<img [src]='syp_card_picture' alt='' />
+		</div>
+		<div class='syp-card-picture syp-card-animation' *ngIf='syp_card_animation.length > 0'>
+			<span class='syp-card-animation-item' *ngFor='let an of syp_card_animation' >
+				<img [src]='an' alt='' />
+			</span>
+		</div>
+		<div class='bw1-block bw1-description syp-description'>
+			{{ data.content[0].desc }}
+		</div>
+	</div>
+
+</div>

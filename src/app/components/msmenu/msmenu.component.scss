@@ -1,0 +1,228 @@
+/*      Menu       */
+
+:host{
+    z-index: 1010;
+};
+
+.tool-window{
+    /*display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+    /*display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+    /*display: -ms-flexbox;      /* TWEENER - IE 10 */
+    /*display: -webkit-flex;     /* NEW - Chrome */
+    /*display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    display: flex;
+    -webkit-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+    z-index: 1000;
+    background-color: white;
+    box-shadow: 0 0 4px #4c4c4c;
+    width: 170px;
+    min-width: 170px;
+}
+.tool-window-pages-list{
+    -webkit-box-ordinal-group: 1;   /* OLD - iOS 6-, Safari 3.1-6 */
+    -moz-box-ordinal-group: 1;      /* OLD - Firefox 19- */
+    -ms-flex-order: 1;              /* TWEENER - IE 10 */
+    -webkit-order: 1;               /* NEW - Chrome */
+    order: 1; 
+}
+
+.tool-sidebar-lesson-header{
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 148px;
+    min-height: 148px;
+    /* background-color: #17AAEA; */
+    background-image: url(../../../assets/img/lesson_bg2.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-size: 38px;
+    color: white;
+    padding: 0px;
+    text-align: center;
+    padding-top: 10px;
+}
+.tool-sidebar-lesson-controls{
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    flex-flow: column nowrap;
+}
+.tool-sidebar-button{
+    display: flex;
+    position: relative;
+    flex-grow: 1;
+    flex-shrink: 1;
+    cursor: pointer;
+    z-index: 1001;
+    background-repeat: no-repeat;
+    background-size: auto 85%;
+    background-position: center;
+    max-height: 125px;
+}
+.tool-sidebar-options-button{
+    background-image: url(../../../assets/img/options_button.png);
+        margin-top: 10%;
+}
+.tool-sidebar-keyboard-button{
+    background-image: url(../../../assets/img/mail_button.png);
+}
+.tool-sidebar-sidetrip-button{
+    background-image: url(../../../assets/img/arrowrnd_button.png);
+}
+.tool-sidebar-mail-button{
+    background-image: url(../../../assets/img/zigzag_button.png);
+    margin-bottom: 20%;
+    background-size: auto 43%;
+}
+.tool-sidebar-help-button{
+    background-image: url(../../../assets/img/help_button.png);
+}
+.tool-sidebar-exit-button{
+    background-image: url(../../../assets/img/exit_button.png);
+        margin-bottom: 20%;
+}
+.tool-sidebar-ltk-button{
+    background-image: url(../../../assets/img/ltk_button.png);
+}
+.tool-sidebar-feedback-btn{
+    background-image: url(../../../assets/img/feedback_icon.png);
+}
+.tool-sidebar-fullscreen-max{
+    background-image: url(../../../assets/img/fullscreen_max.png);
+}
+.tool-sidebar-fullscreen-min{
+    background-image: url(../../../assets/img/fullscreen_min.png);
+}
+.tool-sidebar-notebook-button{
+    background-image: url(../../../assets/img/notebook_btn.png);
+}
+.showtoolsidebar{
+    left: 0 !important;
+}
+.tool-sidebar-open-close{
+    display: none;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 55px;
+    right: 3px;
+    background-color: #23A7E5;
+    border-radius: 6px;
+    box-shadow: 0 0 4px #333;
+    color: white;
+    z-index: 4;
+    transition: right 0.4s ease;
+}
+.tool-sidebar-open-icon, .tool-sidebar-close-icon{
+    display: none;
+    position: absolute;
+    top: -6px;
+    left: 57%;
+    margin-left: -15px;
+    font-size: 36px;
+    cursor: pointer;
+}
+.tool-sidebar-open-icon{
+    display: block;
+    left: 104%;
+    top: -9%;
+    font-size: 32px;
+    opacity: 0;
+    cursor: default;
+}
+.tool-sidebar-close-icon{
+
+}
+.toolsidebarocb{
+    right: 21%!important;
+}
+.toolsidebaroi{
+    opacity: 1;
+    cursor: pointer;
+}
+.toolsidebarci{
+    display: block;
+}
+.tool-sidebar-background{
+    display: flex;
+    position: relative;
+    height: 100%;
+    width: 171px;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    /* background-color: black; */
+    opacity: 1;
+    overflow: hidden;
+    overflow-y: auto;
+}
+.tool-sidebar-background-shadow{
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0;
+}
+
+.sbbshadowopen{
+    opacity: 0.7;
+}
+.ssbforlessons{
+    left: -100% !important;
+}
+
+@media screen and (max-width: 1024px) {
+    .tool-sidebar-background{
+        display: none;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: -94.7%;
+        z-index: 10;
+        /* background-color: black; */
+        opacity: 1;
+        overflow: hidden;
+        overflow-y: auto;
+    }
+    .tool-window{
+        display: flex;
+        position: absolute;
+        height: 100%;
+        left: -170px;
+        transition: left 0.4s ease;
+        overflow: hidden;
+        overflow-y: auto;
+    }
+    .tool-sidebar-lesson-header{
+        height: 20%;
+        z-index: 10;
+        background-color: white;
+    }
+    .tool-sidebar-lesson-controls{
+        height: auto;
+        z-index: 10;
+        background-color: white;
+        margin-top: -0.5%;
+        padding-bottom: 20px;
+        min-height: 150px;
+    }
+    .tool-sidebar-background{
+        display: block;
+    }
+    .tool-sidebar-open-close{
+        display: block;
+    }
+}
+@media screen and (max-width: 1024px) {
+    
+    .sbbackgroundop{
+        left: 0;
+    }
+    
+}

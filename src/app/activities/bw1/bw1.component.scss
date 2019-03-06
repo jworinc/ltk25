@@ -1,0 +1,71 @@
+/***********************************************	BW1 block styling **************************************************/
+
+.bw1-block{
+	display: flex;
+    position: relative;
+    flex-flow: row nowrap;
+    width: 100%;
+    text-align: center;
+    justify-content: space-around;
+    z-index: 1000;
+    padding: 0px 63px;
+    margin-top: 50px;
+}
+.bw1-word, .bw1-letter{
+	display: inline-block;
+    font-size: 60px;
+    font-weight: 300;
+    line-height: 1.2em;
+    background-color: #C69C6D;
+    color: white;
+    padding: 0px 11px;
+    /* padding-bottom: 10px; */
+    border-style: solid;
+    border-width: 1px;
+    border-color: #8E704F;
+    color: white;
+    cursor: pointer;
+    height: 84px;
+    position: relative;
+}
+.bw1-user-input input{
+	font-size: 24px;
+    text-align: center;
+    margin-top: 2px;
+    border-width: 3px;
+}
+.bw1-description{
+    display: none;
+	font-size: 16px;
+    color: #C2272D;
+}
+.bw1-word-wrap, .bw1-expected-enter{
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+
+@media only screen and (max-width:1024px)
+{
+	
+	.bw1-block {
+	    padding: 0px 50px;
+	    margin-top: 3px;
+	}
+	.bw1-word, .bw1-letter {
+	    font-size: 28px;
+        padding: 0px 14px;
+        padding-bottom: 0;
+        height: 39px;
+	}
+	.bw1-user-input input {
+	    font-size: 21px;
+	}
+    .bw1-expected-enter{
+        margin-top: 0;
+    }
+    .bw1-description{
+        display: block;
+    }
+
+}

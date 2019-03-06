@@ -1,0 +1,212 @@
+/***********************************************	AL1 block styling **************************************************/
+.card-al1-letter{
+	padding: 0;
+}
+@media only screen and (min-width:1025px)
+{
+.card-content-body-wrap-al1 ,.card-content-body-wrap-al2,.card-content-body-wrap-ar1,.card-syllables-body-wrap-ar2{
+	display: block;
+	position: relative;
+	max-width: 600px;
+	margin: auto;
+	padding-top: 90px;
+	z-index: 100;
+	text-align: center;
+}
+.card-content-body-wrap-ar2{
+	padding-top: 48px;
+}
+.card-syllables-body-wrap-ar2{
+	padding-top: 6px;
+}
+.card-description-wrap-al1, .card-hint-wrap-al1{
+    display: none;
+    position: relative;
+    width: 100%;
+    text-align: center;
+    margin-top: 13px;
+    font-size: 18px;
+    z-index: 100;
+}
+.card-hint-wrap-al1{
+	margin-top: 10px;
+	font-size: 24px;
+	font-weight: 600;
+}
+.card-content-body-wrap-ar2 {
+	min-width: 600px;
+	max-width:600px;
+	width:100%;
+	text-align:center;
+}
+.card-content-body-wrap-al1 {
+	padding: 0 2px;
+}
+.card-content-body-wrap-al1 > input {
+	width: 65px;
+	height: 65px;
+	margin: 9px 10px;
+}
+.card-content-body-wrap-ar2 > .card-ar2-syllable, .card-syllables-body-wrap-ar2 > .card-ar2-syllable {
+	float: none;
+	display: inline-block;
+}
+.card-content-body-btn-wrap.card-content-ar1-answer span {
+	text-align: center !important;
+	float: none !important;
+	display: block;
+	margin-top: 29px;
+}
+
+.card-al2-letter,.card-al1-letter,.card-ar1-letter,.card-ar2-letter {
+	display: inline-block;
+	position: relative;
+	width: 100px;
+	height: 100px;
+	float: none;
+	background-color: #C69C6D; color: white;
+	border-color: #8E704F;
+	border-style: solid;
+	border-width: 2px;
+	margin: 0 20px;
+	top: 32%;
+	padding: 5px;
+	font-size: 56px;
+	font-weight: 400;
+	color: white;
+	text-align: center;
+	cursor: pointer;
+}
+.card-description-wrap-al1 span{
+    display: block;
+    position: relative;
+    width: 100%;
+}
+}
+.card-ar2-syllable-dash {float: none !important;display: inline-block !important;padding: 3.5% 0; top: 35px; color: #C2272D;}
+
+/*        Mobile layout         */
+
+@media only screen and (min-width:100px) and (max-width: 768px)
+{
+.card-content-body-wrap-al1 {padding-top: 0px !important;}
+.card-content-body-wrap-ar2, .card-syllables-body-wrap-ar2 {text-align: center; margin-top:10px; min-width:100%; }
+.card-ar2-syllable {float: none;display: inline-block;}
+.card-content-body-btn-wrap {text-align: center;min-width: 100%;padding: 0 15px; margin-top:5px !important }
+.card-ar2-syllable-dash {float: none !important;display: inline-block !important;padding: 5% 0;}
+
+.card-content-body-wrap-al2 {text-align: center; margin-top:10px; min-width:100%;padding-top: 2px; width:100%;}
+.card-al2-letter {float: none;display: inline-block;margin: 0 10px;height: 60px;width: 60px; font-size: 30px;}
+
+
+.card-content-body-wrap-al1 {padding: 1px; text-align:center;}
+.card-al1-letter {margin:3px;background-color: #C69C6D; color: white;border:1px solid #ccc; border-color: #8E704F; box-shadow: inset 1px 2px 3px rgba(0,0,0,.1);float: none !important;display: nline-block!important;}
+.card-description-wrap-al1 {text-align: center;}
+
+.card-content-body-wrap-ar2, .card-syllables-body-wrap-ar2 {margin-top: 0;text-align: center;}
+.card-ar2-syllable.card-ar1-syllable {font-size: 24px;height: 39px;font-weight: 400;margin: 10px 2px;padding: 5px 10px;}
+.card-ar1-digraph-input {padding: 0 !important;}
+.card-content-ar1-answer {margin-top: 0;}
+.card-description-wrap-ar2 {margin-top: 4px;}
+
+.card-input-field-ar5 {width: 50px;	height: 50px;}
+.card-input-ar5.ng-pristine.ng-valid.ng-empty.ng-touched {height: 50px;}
+.card-input-field-ar5 {width: 54px !important;height: 54px !important;padding: 1px !important;}
+.card-content-hint3-ar5 {min-width: 100%;}
+.card-content-hint3-letter-ar5 > span, .card-content-hint3-letter-ar5 {	padding: 0 !important;width: 50px !important;}
+.card-content-hint3-ar5 {min-width: 400px !important;/* margin: auto !important; */position: relative !important;left: 0 !important;right: 0 !important;
+	transform: translatex(-43%) scale(.6);margin: 0 !important;top: 0px !important;text-align: center !important;}
+.card-content-hint3-ar5 > span {float: none !important;	display: inline-block !important;}
+.card-input-field-ar5 {height: 60px !important;font-size: 39px !important;	width: 60px !important;}
+.card-hint-buttons-wrap {margin-top:51px !important;}
+.card-block-item.card-style-obj-single.card-block-ar6.ng-scope {padding-bottom: 10px;}
+.card-description-wrap-ar5 {margin-top: 0 !important;}
+.card-block-item.card-style-obj-single.card-block-ar5.ng-scope {}
+
+
+.card-description-wrap-al2 {
+	margin-top: 7px;
+}
+
+
+.book-container.ng-scope, .book-container.ng-scope>div {
+	max-width: 100% !important;
+}
+.card-content-wrap-trace-tw1 {
+    padding-top: 3.88% !important;
+}
+
+.card-content-body-wrap-al1{ 
+        width: 100%;
+        padding-top: 40px;
+    }
+    .card-al1-letter {
+        width: 34px;
+        height: 37px;
+        font-size: 22px;
+        text-align: center;
+    }
+}
+
+
+@media screen and (max-width: 670px) {
+    .card-content-body-wrap-al1{ 
+        width: 100%;
+        padding-top: 40px;
+    }
+} 
+
+/* Responsive style from 769px  to 1024px */
+
+@media only screen and (min-width:769px) and (max-width:1024px)
+{
+.card-content-body-wrap-ar2.card-content-ar1-word, .card-syllables-body-wrap-ar2.card-content-ar1-word {	min-width: 100%;text-align: center;	margin-top: 9px;}
+.card-content-body-wrap-ar2.card-content-ar1-word .card-ar2-syllable, .card-syllables-body-wrap-ar2.card-content-ar-word .card-ar2-syllable{float: none;display: inline-block;	height: 40px !important;font-size: 27px;padding: 4px 6px !important;margin: 0 4px !important;	font-weight: 400;}
+.card-ar1-digraph-input {padding: 0 !important;}
+.card-content-body-btn-wrap.card-content-ar1-answer {padding-top: 20px;	text-align: center;}
+.card-content-body-btn-wrap.card-content-ar1-answer {text-align: center;min-width: 100%;padding-top: 0;}
+.card-description-wrap-ar2 {margin-top: 21px;}
+.card-content-body-btn-wrap.card-content-ar1-answer > span {float: none;display: inline-block;}
+.card-content-body-wrap-al1 input {width: 35px;	height:35px; background-color: #C69C6D; color: white; border: 1px solid #ccc; border-color: #8E704F; box-shadow: inset 1px 2px 3px rgba(0,0,0,.1);
+margin: 3px 2px;display: inline-block;text-align:center;}
+.card-content-body-wrap-al1 {text-align: center;padding: 6px 8px;}
+.card-description-wrap-al1 {text-align: center;}	
+.card-content-body-wrap-ar2, .card-syllables-body-wrap-ar2 {margin-top: 0px;}
+.card-content-body-btn-wrap {min-width: 100%;text-align: center;margin-top: 23px;}
+
+.card-content-body-wrap-ar2, .card-syllables-body-wrap-ar2 {min-width: 100%;text-align: center;}
+.card-ar2-syllable.ng-scope {float: none;margin-top:0;	display: inline-block;}
+.card-description-wrap-ar2 {margin-top: 15px;font-size: 17px;}
+.card-ar2-syllable.card-ar2-syllable-dash.ng-scope {padding-top: 5%;}
+.card-content-body-wrap-al2 {max-width: 100%;text-align: center;padding-top: 12px;}
+.card-al2-letter {width: 50px;height: 50px;font-size: 23px !important;margin: 10px 7px;	float: none;display: inline-block;font-weight: 400;}
+.card-description-wrap-al2 {
+    margin-top: 7px;
+}
+.card-hint-buttons-wrap > div {	margin-bottom: 32px !important;margin-top: 18px;}
+.card-input-field-ar5 {	width: 60px  !important;height: 60px  !important;padding:2px !important;}	
+.card-input-ar5.ng-pristine.ng-untouched.ng-valid.ng-empty {height: 56px !important;}
+.card-hint-buttons-wrap {top: 122px !important;	min-width: 400px;height: 40px !important;left: 0 !important;right: 0 !important;margin: auto !important;
+}
+
+.card-hint-buttons-wrap > div {margin: 5px;	display: inline-block;max-width: 30%;}
+.card-hint-buttons-wrap button {padding: 6px 20px;	font-size: 13px;}
+.card-content-hint3-ar5 {max-width: 400px;left: -283% !important;right: 0 !important;margin: auto !important;width: 400px !important;text-align:center;transform: scale(.6);}
+.card-content-hint3-ar5 > span {display: inline-block !important;float: none !important;width: auto !important;font-size: 17px !important;}
+.card-input-ar5.ng-valid.ng-not-empty.ng-dirty.ng-valid-parse.ng-touched {height: 56px !important;font-size: 42px !important;padding-bottom: 10px!important;}
+.card-description-wrap-ar5 {padding-top: 7px;}
+.card-input-ar5{height: 56px!important;font-size: 42px !important; padding:0px !important;}
+	
+}
+.card-hint-wrap-al1{
+	text-align: center;
+}
+
+
+@media screen and (max-width: 1024px) {
+    .card-description-wrap-al1{
+    	display: block;
+    	color: #C2272D;
+    	line-height: 1;
+    }
+}

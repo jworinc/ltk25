@@ -1,0 +1,29 @@
+export interface CardComponent {
+  data: any;
+  mnext: any;
+  mprev: any;
+  blinkenter: any;
+  blinknextnavbtn: any;
+  blink_good_bad: any;
+  default_waves: any;
+  option_hide: any;
+  show_good_bad: any;
+  show_hint: any;
+  show_clear: any;
+  set_card_id: any;
+  global_recorder: boolean;
+  sidetripmode: boolean;
+  blinkrec: any;
+  blinkplay: any;
+  recstart_event: any;
+  recstop_event: any;
+  playstart_event: any;
+  playstop_event: any;
+  good_btn: any;
+  bad_btn: any;
+  disable_next_slide: any;
+  enable_next_slide: any;
+  global_start: boolean;
+  set_global_desc: any;
+  set_global_header: any;
+}

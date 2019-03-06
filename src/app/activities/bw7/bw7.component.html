@@ -1,0 +1,27 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-bw7">
+    <div class='bw1-block bw1-word-wrap bw7-word-wrap'>
+		<span class='bw1-word' (click)="playWord()" [innerHTML]="display_answer_word | bindhtml"></span>
+	</div>
+	<div class='bw1-block bw1-letters-wrap bw7-letters-wrap' >
+		<span class='bw7-syllables-selector bw7-syllables-selector-letters' *ngIf="split_letters_show">
+			<span class='bw1-letter bw7-letters bw7-letters-select' *ngFor="let l of letters; let kl=index" [attr.data-letter]='kl' [ngClass]="{'bw7dash': l==='-'}" (click)="setDash(kl)">
+				{{ l }}
+				<span class='bw7-dashmark bw7-dashmark-select' [ngClass]="{'bw7dashmarkselected': dashes[kl]}" *ngIf="l === '-'"></span>
+			</span>
+		</span>
+		<span class='bw7-syllables-selector bw7-syllables-selector-syllables' *ngIf='split_syllables_show'>
+			<span class='bw1-letter bw7-letters' *ngFor="let l of syllables; let kl=index" [attr.data-letter]='kl' [ngClass]="{'bw7dash': l==='-'}" (click)="playRule()">
+				{{ l }}
+				<span class='bw7-dashmark' *ngIf="l === '-'"></span>
+			</span>
+		</span>
+	</div>
+	<div class='bw1-block bw1-description bw7-description'>
+		{{ card.content[0].desc }}
+	</div>
+</div>

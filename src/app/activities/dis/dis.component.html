@@ -1,0 +1,25 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-dis">
+    <div class='gwf-body-wrap dis-body-wrap'>
+		<div class='diw-input-wrap dis-input-wrap'>
+			<input type='text' [(ngModel)]='input_data' (input)="valueChange($event)" [disabled]="uinputph === 'finish'" data-ng-trim='false'/>
+		</div>
+		<div class='diw-hint-letters diw-hint-word dis-hint-word' >
+			<span>
+			{{ hint_string }}</span>
+		</div>
+		<div class='gwf-sentence-wrap dis-sentence-wrap'>
+			<span class='gwf-sentence' [attr.data-ind]='sentence_index' 
+				[innerHTML]='answer_sent | bindhtml' app-playsentence ></span>
+		
+		</div>
+		
+		<div class='bw1-block bw1-description'>
+			{{ card.content[0].desc }}
+		</div>
+	</div>
+</div>

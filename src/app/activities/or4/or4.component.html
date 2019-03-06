@@ -1,0 +1,17 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-or4">
+	<div class='card-content-body-wrap-or1 card-content-body-wrap-or3'>
+		<div class='or3-story-wrap' app-playwords>
+			<span>{{ answer_word }}</span>
+		</div>
+		<div class='or3-story-question-wrap'>
+		</div>
+		<div class='bw1-block bw1-description'>
+			{{ card.content[0].desc }}
+		</div>
+	</div>
+</div>

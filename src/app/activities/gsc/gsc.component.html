@@ -1,0 +1,24 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-gsc">
+  	<div class='card-content-body-wrap-gsc'>
+		<div class='gsc-user-input'>
+			<span *ngFor='let a of answers; let ka = index' [attr.data-index]='ka' [ngClass]="{'gschilight': a !== expected[ka]}">
+			{{ a }}<span class='gsc-right-answer' *ngIf='a !== expected[ka]'>{{ expected[ka] }}</span></span>
+		</div>
+		<div class='diw-hint-letters gsc-letters'>
+			<span *ngFor='let l of letters; let kl = index' [attr.data-index]='kl' (click)='addAnswer(kl)'>
+			{{ l }}</span>
+		</div>
+		<div class='gsc-results'>
+			<span class='gsc-result-right'>Right: {{ display_result.right }}</span>
+			<span class='gsc-result-wrong'>Wrong: {{ display_result.wrong }}</span>
+		</div>
+		<div class='card-description-wrap-ar2 diw-card-description'>
+            <span>{{ card.content[0].desc }}</span>
+        </div>
+   </div>
+</div>
