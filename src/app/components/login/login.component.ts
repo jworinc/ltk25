@@ -39,6 +39,10 @@ export class LoginComponent implements OnInit {
   public locales: any;
   public have_link: boolean = false;
   public login_link: string = '';
+  public login_screen: boolean = true;
+  public request_update_screen: boolean = false;
+  public update_message_screen: boolean = false;
+  public disable_request_button: boolean = false;
 
   ngOnInit() {
     //  Get app locales
@@ -73,6 +77,27 @@ export class LoginComponent implements OnInit {
   }
 
   handleResponse(data) {
+
+    //  Check if we received expired link message
+    if(typeof data.expired !== 'undefined' && data.expired){
+      console.log('Link expired');
+      console.log(data);
+      //  Get current user locale
+      let lang = data.options;
+      //  Default locale
+      let current_locale = 'en';
+      for(let i in this.locales){
+        let lc = this.locales[i];
+        if(lc.lang === lang) current_locale = lc.locale;
+      }
+      //  Set new locale
+      this.translate.use(current_locale);
+      //  Hide loading and show message
+      this.login_screen = false;
+      this.request_update_screen = true;
+      return;
+    }
+
     this.tn.handle(data.access_token);
     this.Auth.changeAuthStatus(true);
     this.notify.success('You are logged in!', {timeout: 2000});
@@ -86,6 +111,18 @@ export class LoginComponent implements OnInit {
   setNewLanguage(l){
     this.translate.use(l);
     this.form.userlocale = l;
+  }
+
+  sendRequestToUpdate() {
+    let that = this;
+    this.disable_request_button = true;
+
+    //  Imitation of sent request
+    setTimeout(()=>{
+      that.request_update_screen = false;
+      that.update_message_screen = true;
+    }, 400);
+
   }
 
 }

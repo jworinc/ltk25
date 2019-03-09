@@ -131,5 +131,11 @@
 	"placement_test" : "Placement Test",
 	"errors_made" : "Errors Made",
 	"word_groups_presented" : "Word Groups Presented",
-	"assigned_lesson" : "Assigned Lesson"
+	"assigned_lesson" : "Assigned Lesson",
+	"your_link_expired_soon" : "Your login link will expire:",
+	"contact_administrator" : "Please contact your administrator to update it.",
+	"login_link_exp_message" : "Your login link expired, to continue using application you have to request updates for your account. Please click button below to send message for administrator and request updates.",
+	"request_link_update" : "Request updates",
+	"message_sent" : "Message sent",
+	"message_sent_info" : "Your message is sent to administrator. We will note you when changes will ready."
 }

@@ -99,13 +99,23 @@ export class DashboardComponent implements OnInit {
   handleStudentInfo(data){
     console.log('Student Info:');
     console.log(data);
-
+    let exp = data.link_expire;
+    let that = this;
     this.student.name = data.user_name;
     this.student.lu = data.last_uncomplete;
     this.student.sid_message = data.sid_message;
-
-    this.Option.setLanguage(data.options.language);
     
+    this.Option.setLanguage(data.options.language);
+
+    if(typeof data.link_expire !== 'undefined' && data.link_expire){
+      //  Timeout needed to wait until lang setup will ready
+      //setTimeout(()=>{
+      this.translate.onLangChange.subscribe(()=>{
+        that.student.sid_message = that.translate.instant('your_link_expired_soon') + ' ' + exp +
+          '. ' + that.translate.instant('contact_administrator');
+      });
+      
+    }
   }
 
   handleLessons(data){
