@@ -27,7 +27,7 @@ export class LoggingService {
 	//	Logging begin lesson
 	lessonBegin(l){
 		
-		return this.http.get(`${this.base_url}/logging/lesson/begin/${l}`, {
+		return this.http.get(`${this.base_url}/u/logging/lesson/begin/${l}`, {
 	      headers: this.Token.getAuthHeader()
 	    }).pipe(share());
 
@@ -36,7 +36,7 @@ export class LoggingService {
 	//	Logging end lesson
 	lessonEnd(l){
 		
-		return this.http.get(`${this.base_url}/logging/lesson/end/${l}`, {
+		return this.http.get(`${this.base_url}/u/logging/lesson/end/${l}`, {
 	      headers: this.Token.getAuthHeader()
 	    }).pipe(share());
 
@@ -45,7 +45,7 @@ export class LoggingService {
 	//	Logging time on
 	lessonTimeon(l){
 		
-		return this.http.get(`${this.base_url}/logging/lesson/timeon/${l}`, {
+		return this.http.get(`${this.base_url}/u/logging/lesson/timeon/${l}`, {
 	      headers: this.Token.getAuthHeader()
 	    }).pipe(share());
 
@@ -60,7 +60,7 @@ export class LoggingService {
 			'lesson': this.current_lesson
 		}
 		
-        return this.http.post(`${this.base_url}/logging/command/begin`, data, {
+        return this.http.post(`${this.base_url}/u/logging/command/begin`, data, {
 	      headers: this.Token.getAuthHeader()
 	    }).pipe(share());
 
@@ -80,7 +80,7 @@ export class LoggingService {
 			'complete': complete
 		}
 
-        return this.http.post(`${this.base_url}/logging/command/end`, data, {
+        return this.http.post(`${this.base_url}/u/logging/command/end`, data, {
 	      headers: this.Token.getAuthHeader()
 	    }).pipe(share());
 

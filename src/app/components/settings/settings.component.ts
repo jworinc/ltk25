@@ -36,6 +36,8 @@ export class SettingsComponent implements OnInit {
      this.refreshSettings();
   }
 
+  @Input() public versetting_show: boolean;
+
   ngOnInit() {
 
   	this.options = {
@@ -43,7 +45,8 @@ export class SettingsComponent implements OnInit {
   		language: 'english',
   		expertlevel: 0,
   		replevel: 0,
-  		quickpace: 0
+		quickpace: 0,
+		version_id: 1
   	};
 
     //  Set canvas element context for volume test indicator
@@ -168,7 +171,9 @@ export class SettingsComponent implements OnInit {
 		this.op.setLanguage(lang);
 	}
 
-
+	onVersionChange(ver){
+		console.log(ver);
+	}
    
 
 

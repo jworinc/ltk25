@@ -527,7 +527,7 @@
 
         
     <!--    Settings window   -->
-    <app-settings [show]='show_setting_modal' [hidden]="!show_setting_modal" (closesettings)="onCloseSettings()"></app-settings>
+    <app-settings [show]='show_setting_modal' [hidden]="!show_setting_modal" [versetting_show]="true"  (closesettings)="onCloseSettings()"></app-settings>
 
     <!--    Feedback window   -->
     <app-feedback  [show]='show_feedback_modal' [hidden]="!show_feedback_modal" (closefeedback)="onCloseFeedback()"></app-feedback>

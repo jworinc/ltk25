@@ -170,7 +170,8 @@
         
     <!--    Settings window   -->
     <app-settings [show]='show_setting_modal' 
-                  [hidden]="!show_setting_modal" 
+                  [hidden]="!show_setting_modal"
+                  [versetting_show]="false" 
                   (closesettings)="onCloseSettings()"></app-settings>
 
     <!--    Feedback window   -->

@@ -281,7 +281,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     } else {
       this.loadCards(this.n);
       this.current_lesson_title = this.getCurrentLessonTitle(this.n);
-      this.start_position = 2;
+      this.start_position = 0;
       console.log('Run sidetrip, start position setted to start!');
     }
     
@@ -417,17 +417,20 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
       //  Check if setted start position, correct cpos according to it
       if(typeof this.start_position !== 'undefined' && this.start_position !== null && this.start_position >= 2){
-        let current_cpos = parseInt(data.cards[data.cards.length - 1].position);
+        let current_cpos = parseInt(data.cards[1].pos);
         console.log("Start position search start:");
         for(let i in data.cards){
           let c = data.cards[i];
-          if(parseInt(c.position) >= this.start_position && parseInt(c.position) < current_cpos){
+          if(parseInt(c.position) === this.start_position){
             current_cpos = c.pos;
             console.log({search_card_position: c.position, required_position: this.start_position, current: current_cpos});
           }
         }
         console.log("Start position search finish, selected position: "+current_cpos);
         this.cpos = current_cpos;
+      } else {
+        console.log("Start position setted default!");
+        this.cpos = parseInt(data.cards[1].pos);
       }
 
 
