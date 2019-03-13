@@ -40,9 +40,9 @@ export class Rp2Component extends Rp1Component implements OnInit {
 				let f = this.data.content[0].parts[i].format.toLowerCase();
 				if(f === 'wmf'){
 					f = 'png';
-					this.pictures.push('/storage/app/public/pic_png/' + this.data.content[0].parts[i].picture + '.' + f);
+					this.pictures.push(this.rp2pm.ltkmediaurl+'/storage/app/public/pic_png/' + this.data.content[0].parts[i].picture + '.' + f);
 				} else {
-					this.pictures.push('/storage/app/public/Pictures/' + this.data.content[0].parts[i].picture + '.' + f);
+					this.pictures.push(this.rp2pm.ltkmediaurl+'/storage/app/public/Pictures/' + this.data.content[0].parts[i].picture + '.' + f);
 				}
 				
 			} else {

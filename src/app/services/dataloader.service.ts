@@ -86,31 +86,31 @@ export class DataloaderService {
   }
 
   showme(l) {
-    return this.http.get(`${this.base_url}/reports/showme/${l}`, {
+    return this.http.get(`${this.base_url}/u/reports/showme/${l}`, {
         headers: this.Token.getAuthHeader()
       }).pipe(share());
   }
 
   getStudentLessons() {
-    return this.http.get(`${this.base_url}/reports/get_student_lessons`, {
+    return this.http.get(`${this.base_url}/u/reports/get_student_lessons`, {
         headers: this.Token.getAuthHeader()
       }).pipe(share());
   }
 
   getProgress() {
-    return this.http.get(`${this.base_url}/reports/progress`, {
+    return this.http.get(`${this.base_url}/u/reports/progress`, {
         headers: this.Token.getAuthHeader()
       }).pipe(share());
   }
 
   getDetail() {
-    return this.http.get(`${this.base_url}/reports/detail`, {
+    return this.http.get(`${this.base_url}/u/reports/detail`, {
         headers: this.Token.getAuthHeader()
       }).pipe(share());
   }
 
   getSummary() {
-    return this.http.get(`${this.base_url}/reports/summary`, {
+    return this.http.get(`${this.base_url}/u/reports/summary`, {
         headers: this.Token.getAuthHeader()
       }).pipe(share());
   }

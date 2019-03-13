@@ -153,8 +153,12 @@ export class Rw1Component extends BaseComponent implements OnInit {
       //  Max word blocks
       let m = this.wblength;
       this.cw++;
-      //  Check overhead
-      if(this.cw >= m) this.cw = m-1;
+      //  Check overhead and enable next card
+      if(this.cw >= m){
+        this.cw = m-1;
+        this.playCorrectSound();
+			  this.enableNextCard();
+      }
       //  Update word blocks
       this.updateWordblocks();
     }

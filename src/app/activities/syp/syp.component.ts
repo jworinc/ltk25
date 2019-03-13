@@ -59,6 +59,8 @@ export class SypComponent extends BaseComponent implements OnInit {
 
 	public syp_card_inidesc = '';
 
+	public disable_enter_btn: boolean = false;
+
 	//	Prevent performing of show function twice in some cases
 	public prevent_dubling_flag = false;
 
@@ -105,7 +107,7 @@ export class SypComponent extends BaseComponent implements OnInit {
 
 
 	handleNextDescStep() {
-
+		this.disable_enter_btn = false;
 		//	Check if next buffer item is not syncroplay/waitforuser, skip wait stuff
 		let next = this.desc_buffer[0];
 		if(typeof next !== 'undefined' && typeof next.type !== 'undefined' && next.type === 'syncroplay' && next.content === 'WaitForUser'){
@@ -129,7 +131,7 @@ export class SypComponent extends BaseComponent implements OnInit {
 	public current_description = 0;
 
 	setDescription() {
-
+		this.disable_enter_btn = true;
 		//	Check if we played last audio instruction
 		if(this.desc_buffer.length === 0){
 			//	Allow move next
@@ -205,7 +207,7 @@ export class SypComponent extends BaseComponent implements OnInit {
 			
 		}
 		else if(typeof itm !== 'undefined' && typeof itm.type !== 'undefined' && itm.type === 'syncroplay'){
-			
+			this.disable_enter_btn = false;
 			if(itm.content === 'WaitForUser'){
 				let remaining_syp = true;
 				for(let i in this.desc_buffer){
@@ -287,15 +289,15 @@ export class SypComponent extends BaseComponent implements OnInit {
 				}
 				//	Check if we must set picture
 				else if(typeof c.picture !== 'undefined' && c.picture !== ''){
-					let syp_card_picture = '/storage/app/public/Pictures/'+c.picture+'.'+c.format;
-					if(c.format.toLowerCase() === 'wmf') syp_card_picture = '/storage/app/public/pic_png/'+c.picture.toLowerCase()+'.png';
+					let syp_card_picture = this.playmedia.ltkmediaurl+'/storage/app/public/Pictures/'+c.picture+'.'+c.format;
+					if(c.format.toLowerCase() === 'wmf') syp_card_picture = this.playmedia.ltkmediaurl+'/storage/app/public/pic_png/'+c.picture.toLowerCase()+'.png';
 					this.desc_buffer.push({content: syp_card_picture, type: 'picture'});
 				}
 				//	Check if we must play animation
 				else if(typeof c.animation !== 'undefined' && c.animation !== ''){
-					let syp_card_picture = '/storage/app/public/Pictures/'+c.animation+'.'+(typeof c.format !== 'undefined' ? c.format : 'png');
+					let syp_card_picture = this.playmedia.ltkmediaurl+'/storage/app/public/Pictures/'+c.animation+'.'+(typeof c.format !== 'undefined' ? c.format : 'png');
 					if((typeof c.format !== 'undefined' && c.format.toLowerCase() === 'wmf') || typeof c.format === 'undefined')
-						syp_card_picture = '/storage/app/public/pic_png/'+c.animation.toLowerCase()+'.png';
+						syp_card_picture = this.playmedia.ltkmediaurl+'/storage/app/public/pic_png/'+c.animation.toLowerCase()+'.png';
 					this.desc_buffer.push({content: syp_card_picture, type: 'animation'});
 				}
 				//	Check if we must handle syncroplay action
@@ -380,9 +382,11 @@ export class SypComponent extends BaseComponent implements OnInit {
 	hint(){};
 
 	enter() {
+		if(this.disable_enter_btn && this.uinputph !== 'finish') return;
 		if(this.uinputph === 'finish'){
+			let that = this;
 			this.playCorrectSound(function(){ 
-				this.enableNextCard();
+				that.enableNextCard();
 			});
 		}
 		else if(this.uinputph === 'waitforuser') {
