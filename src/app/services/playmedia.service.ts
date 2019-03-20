@@ -144,13 +144,21 @@ export class PlaymediaService {
 
 	word(word, cb, del=1) {
 		del = del || 1;
+		if(word === ''){
+			console.log('Try to play empty word!');
+			return;
+		}
 		let first_letter = word.substr(0, 1).toUpperCase();
-		let path = '/storage/app/public/audio/ltkmedia/'+first_letter+'/'+word.toUpperCase()+'.mp3';
+		let path = '/storage/app/public/audio/ltkmedia/'+first_letter+'/'+word.toUpperCase().replace(/[\,\:\;\!\.]/g, '')+'.mp3';
 		this.play(path, cb, del);
 	}
 
 	sound(sound, cb, del=1) {
 		del = del || 1;
+		if(sound.length < 3){
+			console.log('Try to play empty sound!');
+			return;
+		}
 		let sl = sound.toUpperCase();
 		let fl = sl.slice(2, 3);
 		let path = '/storage/app/public/audio/ltkmedia/_'+fl+'/'+sl+'.mp3';
@@ -205,6 +213,11 @@ export class PlaymediaService {
 	getMediaStorage() {
 		return this.opt.getMediaStorage();
 	}
+
+	pauseOnInstruction() {
+		return this.opt.pauseOnInstruction();
+	}
+
 
 
 }

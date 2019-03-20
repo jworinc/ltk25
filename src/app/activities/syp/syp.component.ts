@@ -108,9 +108,11 @@ export class SypComponent extends BaseComponent implements OnInit {
 
 	handleNextDescStep() {
 		this.disable_enter_btn = false;
-		//	Check if next buffer item is not syncroplay/waitforuser, skip wait stuff
+		//	Check if next buffer item is not syncroplay/waitforuser or option is not set, skip wait stuff
 		let next = this.desc_buffer[0];
-		if(typeof next !== 'undefined' && typeof next.type !== 'undefined' && next.type === 'syncroplay' && next.content === 'WaitForUser'){
+		if((typeof next !== 'undefined' && typeof next.type !== 'undefined' && next.type === 'syncroplay' && next.content === 'WaitForUser') ||
+			!this.playmedia.pauseOnInstruction()
+			){
 			this.setDescription();
 			return;
 		}

@@ -32,6 +32,7 @@ export class OptionService {
   public current_language = 'english';
   public change_language_event = new EventEmitter<boolean>();
   public last_requested_lang = '';
+  public pause_on_instruction: boolean = false;
 
   constructor(private dl: DataloaderService) {
     let that = this;
@@ -80,6 +81,18 @@ export class OptionService {
   
   getLocales() {
     return this.langs;
+  }
+
+  pauseOnInstruction() {
+    return this.pause_on_instruction;
+  }
+
+  enablePauseOnInstruction() {
+    this.pause_on_instruction = true;
+  }
+
+  disablePauseOnInstruction() {
+    this.pause_on_instruction = false;
   }
 
 
