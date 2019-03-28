@@ -244,26 +244,30 @@ export class DashboardComponent implements OnInit {
       //  if selected lesson number less than last uncomplete, show 'You've already completed this lesson' 
       if(n < this.student.lu){
         
-        this.translate.get(['y_have_complete', 'next', 'next_btn', 'close']).subscribe((res) => {
-            const toast = that.notify.warning(res.y_have_complete + res.next, {
+        this.translate.get(['y_have_complete', 'next', 'next_btn', 'close', 'or_try_sidetrip', 'sidetrip_btn']).subscribe((res) => {
+            const toast = that.notify.warning(res.y_have_complete + res.next+', '+res.or_try_sidetrip, {
               timeout: 5000,
               buttons: [
-                {text: res.next_btn, action: (toast) => {console.log('Clicked: Yes'); that.location("/lesson"); that.notify.remove(toast.id);}, bold: false},
+                {text: res.sidetrip_btn, action: (toast)=>{console.log('Clicked: Sidetrip'); that.location("/sidetrip/"+n); that.notify.remove(toast.id);}, bold: false},
+                {text: res.next_btn, action: (toast) => {console.log('Clicked: Next'); that.location("/lesson"); that.notify.remove(toast.id);}, bold: false},
                 {text: res.close, action: (toast) => {console.log('Clicked: Close'); that.notify.remove(toast.id); }, bold: true},
-              ]
+              ],
+              bodyMaxLength: 200
             });
         });
         
 
       } else {
       //  Esle show 'Try another lesson message'
-        this.translate.get(['before_u_have_complete', 'this', 'lesson', 'close']).subscribe((res) => {
-            const toast = that.notify.warning(res.before_u_have_complete + res.this, {
+        this.translate.get(['before_u_have_complete', 'this', 'lesson', 'close', 'or_try_sidetrip', 'sidetrip_btn']).subscribe((res) => {
+            const toast = that.notify.warning(res.before_u_have_complete + res.this+', '+res.or_try_sidetrip, {
               timeout: 5000,
               buttons: [
+                {text: res.sidetrip_btn, action: (toast)=>{console.log('Clicked: Sidetrip'); that.location("/sidetrip/"+n); that.notify.remove(toast.id);}, bold: false},
                 {text: res.lesson + ' ' + that.student.lu, action: (toast) => {console.log('Clicked: Yes'); that.location("/lesson"); that.notify.remove(toast.id);}, bold: false},
                 {text: res.close, action: (toast) => {console.log('Clicked: Close'); that.notify.remove(toast.id); }, bold: true},
-              ]
+              ],
+              bodyMaxLength: 200
             });
         });
       }

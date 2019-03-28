@@ -137,5 +137,7 @@
 	"login_link_exp_message" : "Your login link expired, to continue using application you have to request updates for your account. Please click button below to send message for administrator and request updates.",
 	"request_link_update" : "Request updates",
 	"message_sent" : "Message sent",
-	"message_sent_info" : "Your message is sent to administrator. We will note you when changes will ready."
+	"message_sent_info" : "Your message is sent to administrator. We will note you when changes will ready.",
+	"or_try_sidetrip" : "or try sidetrip mode.",
+	"sidetrip_btn" : "Sidetrip"
 }
