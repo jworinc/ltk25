@@ -1,0 +1,145 @@
+/***********************************************	gmu block styling **************************************************/
+
+.gmu-word-wrap{
+	margin-top: 43px;
+	opacity: 1;
+}
+.gmu-letters-wrap{
+	flex-flow: column nowrap;
+	padding: 0px 33px;
+	min-height: 167px;
+}
+.gmu-syllables-selector{
+
+}
+.gmu-syllables-selector-letters{
+
+}
+.gmu-syllables-selector-syllables{
+	margin-top: 23px;
+}
+.gmu-letters{
+	font-size: 46px;
+	padding: 4px;
+	padding-bottom: 12px;
+	height: auto;
+}
+.gmudash{
+	margin: 0;
+    padding: 0;
+    background-color: white;
+    border-style: none;
+    color: transparent;
+    padding-bottom: 12px;
+    position: relative;
+}
+.gmu-letters-select.gmudash{
+	cursor: pointer;
+}
+.gmu-dashmark{
+	display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    margin-top: -3px;
+    background-color: brown;
+}
+.gmu-dashmark-select{
+	opacity: 0;
+}
+.gmudashmarkselected{
+	opacity: 1;
+}
+
+.gmu-results{	
+    position: relative;
+    min-height: 30%;
+    width: 100%;
+    margin-top: 65px;
+}
+.gmu-results span{
+	display: table;
+    position: relative;
+    width: 70%;
+    margin: auto;
+    text-align: center;
+    font-size: 42px;
+    color: white;
+    line-height: 1.8em;
+}
+.gmu-result-right{
+    background-color: #03cd03;
+}
+.gmu-result-wrong{
+    background-color: lightcoral;
+}
+span.bw1-letter.gmu-letters.gmu-letters-select:not(:last-child){
+    margin-right: 50px;
+}
+.custom-input{
+    position: absolute;
+    width: 100%;
+    bottom: 40px;
+    padding: 10px;
+    max-width: 350px;
+    margin: 0 auto;
+    bottom: 15px;
+    left: 0;
+    right: 0;
+    input{
+        border: 1px solid lightgrey;
+        padding: 7px 0;
+        margin-top: 15px;
+        text-align: center;
+    }
+}
+@media only screen and (max-width:1024px)
+{
+	.gmu-right-answer {
+        width: 30px;
+        font-size: 28px !important;
+        margin-left: -15px !important;
+    }
+    .gmu-results {
+        margin-top: 40px;
+    }
+    .gmu-results span {
+        font-size: 26px;
+        color: white;
+        line-height: 1.6em;
+    }
+	.gmu-word-wrap{
+    	margin-top: 8px;
+    }
+    .gmu-letters{
+	    font-size: 20px;
+	    padding: 2px;
+	    padding-bottom: 5px;
+	}
+    .gmu-letters-wrap{
+	    padding: 0px 16px;
+	    min-height: 83px;
+	}
+	.gmudash{
+    	padding-bottom: 6px;
+    }
+    .gmu-syllables-selector-syllables{
+	    margin-top: 8px;
+	}
+	.gmu-description{
+        font-size: 16px;
+        top: 25px;
+		padding: 0px 8px;
+    }
+    span.bw1-letter.gmu-letters.gmu-letters-select:not(:last-child) {
+        margin-right: 30px;
+    }
+    .bw1-block.bw1-description.gmu-description {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        top: auto;
+    }
+}

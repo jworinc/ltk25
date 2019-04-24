@@ -1,0 +1,107 @@
+.card-block-gcp, .cr-words, .cr-layout{
+    display: flex;
+    flex-flow: column;
+    vertical-align: middle;
+    justify-content: space-evenly;
+    align-content: center;
+}
+.cr-words{
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+}
+.cr-words span{
+    width: auto;
+    padding: 4px 4px;
+    height: auto;
+    background-color: #C69C6D;
+    border-color: #DBCCBC;
+    color: white;
+}
+.cr-layout{
+    
+}
+.cr-row{
+    display: block;
+    position: relative;
+    width: 200px;
+    /* text-align: center; */
+    margin: auto;
+}
+.cr-letter{
+    display: block;
+    float: left;
+    width: 23px;
+    height: 20px;
+    border: 1px solid brown;
+    text-align: center;
+    line-height: 17px;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 1px;
+}
+.cr-empty-letter{
+    opacity: 0;
+}
+.cr-hl-letter{
+    background-color: lightgreen;
+}
+.gsc-results{
+    display: none;
+    position: relative;
+    min-height: 30%;
+    width: 100%;
+    margin-top: 65px;
+}
+.gsc-results span{
+    display: block;
+    position: relative;
+    width: 70%;
+    margin: auto;
+    text-align: center;
+    font-size: 42px;
+    color: white;
+    line-height: 1.8em;
+}
+.gsc-result-right{
+    background-color: #03cd03;
+}
+.gsc-result-wrong{
+    background-color: lightcoral;
+}
+
+@media only screen and (max-width:1024px)
+{
+
+    .gsc-right-answer {
+        width: 30px;
+        font-size: 28px !important;
+        margin-left: -15px !important;
+    }
+    .gsc-results {
+        margin-top: 40px;
+    }
+    .gsc-results span {
+        font-size: 26px;
+        color: white;
+        line-height: 1.6em;
+    }
+    .card-description-wrap-ar2 {margin-top: 4px;}
+    .card-description-wrap-ar2{
+        display: block;
+        font-size: 12px;
+    }
+    .cr-words span{
+        padding: 4px 1px;
+        font-size: 9px;
+    }
+    .cr-letter{
+        width: 14px;
+        height: 10px;
+        line-height: 8px;
+        font-size: 8px;
+        font-weight: 200;
+        margin: 0px;
+        margin-bottom: 1px;
+        margin-left: 1px;
+    }
+}

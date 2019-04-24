@@ -1,0 +1,60 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-gcs">
+  <div class='card-content-body-wrap-gsc card-content-body-wrap-gnb'>
+		<!-- <div class='cust-word' *ngIf="next_word == this.data['content'].length ? false : true">
+			<span>{{word[0]}}</span>
+    </div>
+
+    <div class="row cust-row"  *ngIf="next_word == this.data['content'].length ? false : true">
+      <div class="col-4" *ngFor="let item of all_words;let i = index">
+        <span [ngClass]=" i == ind ? 'cust-back' : ''" (click)="checkAnswer(item.word,i)">{{item.word.split('-')[1]}}</span>
+      </div>
+    </div>
+
+    <div class='cust-word' *ngIf="showAnswer && next_word != this.data['content'].length ? true:false">
+			<span>{{word[0]}}{{word[1]}}</span>
+    </div>
+
+    <div *ngIf="next_word == this.data['content'].length ? true : false">
+      <div class='result'>
+        <span class='result-right'>Right: {{ count }}</span>
+        <span class='result-wrong'>Wrong: {{ data.content.length - count }}</span>
+      </div>
+    </div> -->
+
+    <div class='cust-word' *ngIf="isDisplay">
+			<span>{{word[0]}}</span>
+    </div>
+
+    <!-- <div class="row cust-row"  *ngIf="isDisplay">
+      <div class="col-4" *ngFor="let item of all_words;let i = index">
+        <span [ngClass]=" i == ind ? 'cust-back' : ''" (click)="checkAnswer(item.word,i)">{{item.word.split('-')[1]}}</span>
+      </div>
+    </div> -->
+
+    <div class="row cust-row"  *ngIf="isDisplay">
+      <div *ngFor="let item of all_words;let i = index" [ngClass]="item.word.split('-')[1]? 'ques-div':'hide-que'">
+        <span [ngClass]=" i == ind ? 'cust-back' : ''" (click)="checkAnswer(item.word,i)">{{item.word.split('-')[1]}}</span>
+      </div>
+    </div>
+
+    <div class='cust-word' *ngIf="showAnswer && isDisplay">
+			<span>{{word[0]}}{{word[1]}}</span>
+    </div>
+
+    <div *ngIf="!isDisplay">
+      <div class='result'>
+        <span class='result-right'>Right: {{ count }}</span>
+        <span class='result-wrong'>Wrong: {{ data.content.length - count }}</span>
+      </div>
+    </div>
+
+    <div class='card-description-wrap-ar2 diw-card-description'>
+      <span>{{ card.content[0].desc }}</span>
+    </div>
+   </div>
+</div>

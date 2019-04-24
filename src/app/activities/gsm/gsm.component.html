@@ -1,0 +1,38 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-gwm">
+    <div class='card-content-body-wrap-gsc'>
+      <div class='gsc-user-input gwm-user-input'>
+        <span class='gwm-answer-wrap' *ngFor='let a of answers; let ka=index' [attr.data-index]='ka'>
+          <span class='gwm-user-answer' [ngClass]="{'gschilight': a !== expected[ka]}">{{ a }}</span>
+          <span class='gwm-rigth-answer' *ngIf='a !== expected[ka]'>{{ expected[ka] }}</span>
+        </span>
+      </div>
+      <div class="row cust-div">
+      <div class="col-lg-5 col-md-5 col-sm-5">
+          <h3>Column 1</h3>
+          <div class='diw-hint-letters gsc-letters gwm-words'>
+              <span *ngFor='let l of Displaywordsarray; let kl = index' [attr.data-index]='kl' (click)='addAnswer(kl)'>
+              {{ l.number }}</span>
+          </div>
+      </div>
+      <div class="col-lg-7 col-md-7 col-sm-7">
+          <h3>Column 2</h3>
+          <div class='diw-hint-letters gsc-letters gwm-words'>
+              <span *ngFor='let l of Displaywordsarray; let kl = index' [ngClass]="{'current-number': kl === currentIndex}"  [attr.data-index]='kl'>
+              {{ l.word }}</span>
+          </div>
+      </div>
+      </div>
+		<div class='gsc-results'>
+			<span class='gsc-result-right'>Right: {{ display_result.right }}</span>
+			<span class='gsc-result-wrong'>Wrong: {{ display_result.wrong }}</span>
+		</div>
+		<div class='card-description-wrap-ar2 diw-card-description'>
+            <span>{{ card.content[0].desc }}</span>
+        </div>
+   </div>
+</div>

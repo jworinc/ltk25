@@ -1,0 +1,116 @@
+/***********************************************	gis block styling **************************************************/
+
+.gis-word-wrap{
+	margin-top: 43px;
+	opacity: 1;
+}
+.gis-letters-wrap{
+	flex-flow: column nowrap;
+	padding: 0px 33px;
+	min-height: 167px;
+}
+.gis-syllables-selector{
+
+}
+.gis-syllables-selector-letters{
+
+}
+.gis-syllables-selector-syllables{
+	margin-top: 23px;
+}
+.gis-letters{
+	font-size: 32px;
+	padding: 4px;
+	padding-bottom: 12px;
+	height: auto;
+}
+.gisdash{
+	margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border-style: none;
+    color: transparent;
+    padding-bottom: 12px;
+    position: relative;
+}
+.gis-letters-select.gisdash{
+	cursor: pointer;
+}
+.gis-dashmark{
+	display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    margin-top: -3px;
+    background-color: brown;
+}
+.gis-dashmark-select{
+	opacity: 0;
+}
+.gisdashmarkselected{
+	opacity: 1;
+}
+
+.gis-results{	
+    position: relative;
+    min-height: 30%;
+    width: 100%;
+    margin-top: 65px;
+}
+.gis-results span{
+	display: table;
+    position: relative;
+    width: 70%;
+    margin: auto;
+    text-align: center;
+    font-size: 42px;
+    color: white;
+    line-height: 1.8em;
+}
+.gis-result-right{
+    background-color: #03cd03;
+}
+.gis-result-wrong{
+    background-color: lightcoral;
+}
+
+@media only screen and (max-width:1024px)
+{
+	.gis-right-answer {
+        width: 30px;
+        font-size: 28px !important;
+        margin-left: -15px !important;
+    }
+    .gis-results {
+        margin-top: 40px;
+    }
+    .gis-results span {
+        font-size: 26px;
+        color: white;
+        line-height: 1.6em;
+    }
+	.gis-word-wrap{
+    	margin-top: 8px;
+    }
+    .gis-letters{
+	    font-size: 26px;
+	    padding: 2px;
+	    padding-bottom: 5px;
+	}
+    .gis-letters-wrap{
+	    padding: 0px 16px;
+	    min-height: 83px;
+	}
+	.gisdash{
+    	padding-bottom: 6px;
+    }
+    .gis-syllables-selector-syllables{
+	    margin-top: 8px;
+	}
+	.gis-description{
+		font-size: 18px;
+		padding: 0px 8px;
+	}
+}

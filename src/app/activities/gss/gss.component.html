@@ -1,0 +1,53 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-gss">
+  <!-- gss works!
+  <p>{{ data.activity }}</p> -->
+  <div class='card-content-body-wrap-gsc card-content-body-wrap-gnb'>
+		<!-- <div class='gsc-user-input gwm-user-input gnb-user-input'>
+			<span class='gwm-answer-wrap' *ngFor='let word of answered; let ka = index' [attr.data-index]='ka'>
+				<span class='gwm-user-answer gnb-user-answer'>{{ word }}</span>
+			</span>
+    </div> -->
+    <div *ngIf="cust_index == data.content.length ? false: true" class='diw-hint-letters gsc-letters gnb-words'>
+      <span>{{temp_word}}</span>
+    </div>
+
+    <div *ngIf="cust_index == data.content.length ? false: true" class="row cust-row">
+      <!-- <div class="col-4 text-center">
+        <h2 *ngFor="let a of data.content[0].HeadingA;let ind = index" (click)="selectedSound(data.content[0].SkillA[ind].pointer_to_value)">{{ a.pointer_to_value }}</h2>
+      </div>
+      <div class="col-4 text-center">
+        <h2 *ngFor="let b of data.content[0].HeadingB;let ind = index" (click)="selectedSound(data.content[0].SkillB[ind].pointer_to_value)">{{ b.pointer_to_value }}</h2>
+      </div>
+      <div class="col-4 text-center">
+        <h2 *ngFor="let c of data.content[0].HeadingC;let ind = index" (click)="selectedSound(data.content[0].SkillC[ind].pointer_to_value)">{{ c.pointer_to_value }}</h2>
+      </div> -->
+
+      <div class="col-4 text-center" [ngClass]=" all_Headings.length == 2 ? 'cust-col' :'' " *ngFor="let a of all_Headings;let ind = index" >
+        <h2 (click)="selectedSound(all_Skills[ind].pointer_to_value, a.pointer_to_value)">{{ a.pointer_to_value }}</h2>
+      </div>
+    </div>
+
+    <div class="row cust-row" *ngIf="corrected_answer != ''? true:false">
+      <div class="col-12 text-center">
+        <h2 >{{ corrected_answer }}</h2>
+      </div>
+    </div>
+    <!-- <div class="word text-center">
+      <input type="text" class="text-center form-control" [(ngModel)]="entered_val" #focus>
+    </div> -->
+    <div *ngIf="cust_index == data.content.length ? true: false">
+      <div class='gsc-results'>
+        <span class='gsc-result-right'>Right: {{ count }}</span>
+        <span class='gsc-result-wrong'>Wrong: {{ data.content.length - count }}</span>
+      </div>
+    </div>
+    <div class='card-description-wrap-ar2 diw-card-description'>
+      <span>{{ card.content[0].desc }}</span>
+    </div>
+   </div>
+</div>

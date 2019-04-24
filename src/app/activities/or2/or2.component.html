@@ -3,7 +3,14 @@
 [ngClass]="{'blinkhighlight': blinknext}"></div>
 
 
-<div class="card-block-item card-style-obj-single card-block-or2">
-  or2 works!
-  <p>{{ data.activity }}</p>
+<div class="card-block-item card-style-obj-single card-block-or3 card-block-or2">
+    <div class='card-content-body-wrap-or1 card-content-body-wrap-or3'>
+        <div class='or3-story-wrap' [innerHTML]="answer_word | bindhtml" [attr.data-ind]='sentence_index' app-playsentence>
+          
+        </div>
+        
+        <div class='bw1-block bw1-description'>
+          {{ card.content[0].desc }}
+        </div>
+      </div>
 </div>

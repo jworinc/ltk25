@@ -1,0 +1,38 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+  [ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-gdn">
+  <!-- gdn works!
+  <p>{{ data.activity }}</p> -->
+  <div class="container">
+    <div class="row text-center rowBreak">
+      <div *ngIf="hideContent">
+        <div class="card">
+          <div class="card-body">
+            <span class="gdn-span"><b>{{currentSpelling}}</b></span>
+          </div>
+        </div>
+        <div style="margin-top: 20px;">
+          <button (click)="submitAnswer(true, currentSpelling)" style="margin-right: 10px;" type="button"
+            class="btn btn-success"><i class="far fa-thumbs-up"></i> Yes</button>
+          <button (click)="submitAnswer(false, currentSpelling)" type="button"
+            class="btn btn-danger"><i class="far fa-thumbs-down"></i> No</button>
+        </div>
+      </div>
+      <div *ngIf="showResult">
+        <div class="card">
+          <div class="card-body">
+            <span style="font-size:15px;"><b>Your Result is here</b> <br /></span>
+            <p class="btn btn-success col-md-3">Right answer: <b>{{rightAnswer}}</b></p> <br />
+            <p class="btn btn-danger col-md-3">Wrong answer: <b>{{wrongAnswer}}</b></p>
+          </div>
+        </div>
+      </div>
+      <div class='card-description-wrap-ar2 diw-card-description' style="font-size: 12px;">
+        <span>{{ card.content[0].desc }}</span>
+      </div>
+    </div>
+  </div>
+</div>

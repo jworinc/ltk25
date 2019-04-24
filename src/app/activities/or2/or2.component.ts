@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { BaseComponent } from '../base/base.component';
+import { BaseorComponent } from '../baseor/baseor.component';
 import { PlaymediaService } from '../../services/playmedia.service';
-import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PlaysentenceDirective } from '../../directives/playsentence.directive';
+import { LoggingService } from '../../services/logging.service';
 
 @Component({
   selector: 'app-or2',
@@ -11,13 +12,111 @@ import { ColorschemeService } from '../../services/colorscheme.service';
   styleUrls: ['./or2.component.scss'],
   host: {'class': 'book-wrapper-slide'}
 })
-export class Or2Component extends BaseComponent implements OnInit {
-
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private or2log: LoggingService, private or2cs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, or2log, or2cs);
+export class Or2Component extends BaseorComponent implements OnInit {
+  @ViewChild(PlaysentenceDirective) psn;
+  constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService, private or2log: LoggingService, private or1cs: ColorschemeService) {
+  	super(element, sz, pms, or2log, or1cs);
   }
 
+
+  public sentence_index = 0; 
+  
   ngOnInit() {
+    console.log(this.data);
+    
+    this.setHeader();
+  	this.current_number = +this.data.cross_number;
+    this.card_id = this.data.id;
+    this.setCardNumber();
+    //this.setCardId();
+
+    this.card = this.data;
+    
+    this.current_header = this.card.header;
+
+    //	Create list of word/image content of the card
+    let content = '';
+    for(let i = 0; i < this.data.content[0].parts.length; i++) {
+
+      //	Get current list item
+      this.words.push(this.data.content[0].parts[i].title.replace('(', '').replace(')', ''));
+
+    }
+    
+    this.answer_word = this.words[this.current_word];
+    
+    this.sentence_index = Math.floor(Math.random() * 100000);
+
+  }
+
+  playContentDescription() {
+    
+    this.disableNextSlide();
+
+    this.blinkOnlyNext();
+  }
+
+  repeat(){
+    let that = this;
+    this.pms.stop();
+    if(typeof this.card.content["0"]["NextInst"] === 'undefined' || this.card.content["0"]["NextInst"].length === 0){
+      this.blinkOnlyNext();
+    } else {
+      this.card.content[0].desc = this.card.content["0"]["NextInst"][0].pointer_to_value;
+      this.setGlobalDesc(this.card.content["0"]["NextInst"][0].pointer_to_value);
+      this.pms.sound(this.card.content["0"]["NextInst"][0].audio, function(){
+        that.blinkOnlyNext();
+      }, 100);
+    }
+		
+  }
+
+  //	Validation of user input
+	validate() {
+		if(this.uinputph === 'finish')
+			return true;
+		else return false;
+  }
+  
+  	//	Callback for show card event
+	show() {
+		//	If card is active and it is not dubling
+		if(this.isActive() && !this.prevent_dubling_flag){
+			//	If user not enter valid data yet
+			if(!this.validate()) {
+				
+				//	Play card description
+				//this.playContentDescription();
+				this.playCardDescription();
+        this.disableMoveNext();
+        
+				
+			} else {
+				this.enableMoveNext();
+			}
+			this.prevent_dubling_flag = true;
+		}
+		
+	}
+  
+  next() {
+    this.current_word++;
+    let that = this;
+    if(this.current_word < this.card.content[0].parts.length){
+      this.answer_word = this.words[this.current_word];
+      setTimeout(()=>{
+        that.psn.compileSentence();
+        that.repeat();
+      }, 20);
+    } else {
+      let that = this;
+      this.playCorrectSound(()=>{
+        that.enableMoveNext();
+        that.uinputph = 'finish';
+        setTimeout(()=>{ that.moveNext(); }, 500);
+      });
+      
+    }
   }
 
 

@@ -1,0 +1,28 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+<div class="card-block-item card-style-obj-single card-block-gnb">
+  <div class='card-content-body-wrap-gsc card-content-body-wrap-gnb'>
+		<div class='gsc-user-input gwm-user-input gnb-user-input'>
+			<span class='gwm-answer-wrap' *ngFor='let word of answered; let ka = index' [attr.data-index]='ka'>
+				<span class='gwm-user-answer gnb-user-answer'>{{ word }}</span>
+			</span>
+    </div>
+    <div *ngIf=" data.content.length == answered.length? false: true" class='diw-hint-letters gsc-letters gnb-words'>
+      <span>{{temp_word}}</span>
+    </div>
+    <div *ngIf=" data.content.length == answered.length? false: true" class="word text-center">
+      <input type="text" class="text-center form-control" [(ngModel)]="entered_val" #focus>
+    </div>
+    <div *ngIf=" data.content.length == answered.length? true: false">
+      <div class='gsc-results'>
+        <span class='gsc-result-right'>Right: {{ count }}</span>
+        <span class='gsc-result-wrong'>Wrong: {{ data.content.length - count }}</span>
+      </div>
+    </div>
+    <div class='card-description-wrap-ar2 diw-card-description'>
+      <span>{{ card.content[0].desc }}</span>
+    </div>
+   </div>
+</div>

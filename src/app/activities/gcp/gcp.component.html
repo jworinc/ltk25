@@ -1,0 +1,26 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-gcp">
+  <div class="cr-words">
+      <span *ngFor="let w of words; let kw = index" class="cr-letter" (click)="handleAnswer(w)">
+          {{ w }}
+      </span>
+  </div>
+  <div class="cr-layout">
+    <span *ngFor="let m of mask; let km = index;" class="cr-row" [ngStyle]="cr_w">
+      <span *ngFor="let l of m; let kl = index" class="cr-letter" [ngClass]="{'cr-empty-letter': l.trim() === ''}">
+        <div [hidden]="!showmask[km][kl]" [ngClass]="{'cr-hl-letter': hlmask[km][kl]}">{{ l }}</div>
+      </span>
+    </span>
+  </div>
+  <div class='gsc-results'>
+    <span class='gsc-result-right'>Right: {{ display_result.right }}</span>
+    <span class='gsc-result-wrong'>Wrong: {{ display_result.wrong }}</span>
+  </div>
+  <div class='card-description-wrap-ar2 diw-card-description'>
+    <span>{{ card.content[0].desc }}</span>
+  </div>
+</div>

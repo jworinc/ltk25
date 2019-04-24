@@ -1,0 +1,32 @@
+.rowBreak {
+    display: block;
+}
+
+.card-style-obj-left, .card-style-obj-right, .card-style-obj-single {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gdn-span{
+    font-size: 50px;
+    background-color: #C69C6C;
+    color: #fff;
+    padding: 4px 10px;
+    border: 1px solid #9B7A55;
+}
+
+.card{
+    border: unset;
+}
+
+.card-body {
+    padding: 0
+}
+
+@media only screen and (max-width:1024px) {
+    .gdn-span{
+        font-size: 34px;
+        
+    }
+}

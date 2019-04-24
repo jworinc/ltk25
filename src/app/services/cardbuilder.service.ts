@@ -30,6 +30,15 @@ import { GwfComponent } from '../activities/gwf/gwf.component';
 import { GqwComponent } from '../activities/gqw/gqw.component';
 import { DisComponent } from '../activities/dis/dis.component';
 import { SplComponent } from '../activities/spl/spl.component';
+import { GdnComponent } from '../activities/gdn/gdn.component';
+import { GcpComponent } from '../activities/gcp/gcp.component';
+import { GcsComponent } from '../activities/gcs/gcs.component';
+import { GisComponent } from '../activities/gis/gis.component';
+import { GmuComponent } from '../activities/gmu/gmu.component';
+import { GnbComponent } from '../activities/gnb/gnb.component';
+import { GslComponent } from '../activities/gsl/gsl.component';
+import { GsmComponent } from '../activities/gsm/gsm.component';
+import { GssComponent } from '../activities/gss/gss.component';
 import { Rw1Component } from '../activities/rw1/rw1.component';
  
 @Injectable({
@@ -77,32 +86,17 @@ export class CardbuilderService {
       if(c.type === 'gqw') out.push(new CardItem(GqwComponent, c));
       if(c.type === 'dis') out.push(new CardItem(DisComponent, c));
       if(c.type === 'spl') out.push(new CardItem(SplComponent, c));
+      if(c.type === 'gdn') out.push(new CardItem(GdnComponent, c));
+      if(c.type === 'gcp') out.push(new CardItem(GcpComponent, c));
+      if(c.type === 'gcs') out.push(new CardItem(GcsComponent, c));
+      if(c.type === 'gis') out.push(new CardItem(GisComponent, c));
+      if(c.type === 'gmu') out.push(new CardItem(GmuComponent, c));
+      if(c.type === 'gnb') out.push(new CardItem(GnbComponent, c));
+      if(c.type === 'gsl') out.push(new CardItem(GslComponent, c));
+      if(c.type === 'gsm') out.push(new CardItem(GsmComponent, c));
+      if(c.type === 'gss') out.push(new CardItem(GssComponent, c));
       if(c.type === 'rw1') out.push(new CardItem(Rw1Component, c));
     }
-
-    /*
-    return [
-      new CardItem(Al1Component, {pos: 1, content: 'card 1'}),
-
-      new CardItem(Al1Component, {pos: 2, content: 'card 2'}),
-
-      new CardItem(Al1Component, {pos: 3, content: 'card 3'}),
-
-      new CardItem(Al1Component, {pos: 4, content: 'card 4'}),
-
-      new CardItem(Al1Component, {pos: 5, content: 'card 5'}),
-
-      new CardItem(Al1Component, {pos: 6, content: 'card 6'}),
-      
-      new CardItem(Al1Component, {pos: 7, content: 'card 7'}),
-
-      new CardItem(Al1Component, {pos: 8, content: 'card 8'}),
-
-      new CardItem(Al1Component, {pos: 9, content: 'card 9'}),
-
-
-    ];
-    */
 
     return out;
 

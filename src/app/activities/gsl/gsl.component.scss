@@ -1,0 +1,219 @@
+/***********************************************	gsl block styling **************************************************/
+.card-description-wrap-ar2{
+    display: none;
+    position: relative;
+    width: 100%;
+    margin-top: 36px;
+    text-align: center;
+    font-size: 18px;
+    z-index: 100;
+    color: #C2272D;
+}
+.card-content-body-wrap-gsc{
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    padding-bottom: 12px;
+    z-index: 9999;
+}
+.gsc-user-input, .gsc-letters{
+    display: flex;
+    min-height: 35%;
+    align-items: center;
+    justify-content: space-evenly;
+    padding-top: 33px;
+    padding-left: 17px;
+    padding-right: 17px;
+    font-size: 35px;
+}
+.gsc-user-input{
+    align-items: flex-start;
+}
+.gsc-user-input span, .gsc-letters span {
+    display: inline-block;
+    position: relative;
+    padding: 0px 8px;
+    padding-bottom: 11px;
+    background-color: #C69C6C;
+    color: white;
+    margin: 0 0px;
+    font-size: 45px;
+    line-height: 1;
+}
+.gsc-user-input span {
+    background-color: #03cd03;
+}
+.gsc-letters{
+    min-height: 30%;
+}
+.gsc-right-answer{
+    display: block !important;
+    position: absolute !important;
+    width: 45px;
+    height: auto;
+    left: 50%;
+    top: 110%;
+    font-size: 43px !important;
+    text-align: center;
+    margin-left: -22px !important;
+    background-color: blue !important;
+}
+.gschilight{
+    background-color: lightcoral !important;
+}
+.gsc-results{
+    //display: none;
+    position: relative;
+    min-height: 30%;
+    width: 100%;
+    margin-top: 65px;
+}
+.gsc-results span{
+    display: block;
+    position: relative;
+    //width: 70%;
+    margin: auto;
+    text-align: center;
+    font-size: 42px;
+    color: white;
+    line-height: 1.8em;
+    padding: 10px;
+}
+.gsc-result-right{
+    background-color: #03cd03;
+}
+.gsc-result-wrong{
+    background-color: lightcoral;
+}
+
+.word{
+    position: absolute;
+    bottom: 25px;
+}
+
+@media only screen and (max-width:1024px)
+{
+
+    .gsc-user-input span, .gsc-letters span {
+        padding: 0px 6px;
+        padding-bottom: 7px;
+        font-size: 34px;
+    }
+    .gsc-user-input, .gsc-letters {
+        padding-top: 0;
+    }
+    .gsc-letters {
+      //  margin-top: 24px;
+    }
+    .gsc-right-answer {
+        width: 30px;
+        font-size: 28px !important;
+        margin-left: -15px !important;
+    }
+    .gsc-results {
+        margin-top: 0px;
+    }
+    .gsc-results span {
+        font-size: 20px;
+        color: white;
+        line-height: 1.6em;
+    }
+    .card-description-wrap-ar2 {margin-top: 4px;}
+    .card-description-wrap-ar2{
+        display: block;
+    }
+
+    .word{
+        position: relative;
+        bottom: 0;
+    }
+}
+
+
+
+.gwm-user-input{
+    justify-content: flex-end;
+}
+.gwm-answer-wrap{
+    background-color: transparent !important;
+}
+.gwm-user-answer{
+
+}
+.gwm-rigth-answer{
+    display: block !important;
+    position: relative;
+    height: auto;
+    font-size: 43px !important;
+    text-align: center;
+    background-color: blue !important;
+    margin-top: 10px !important;
+}
+.gwm-words{
+
+}
+.gwm-user-input span, .gwm-words span {
+    font-size: 50px;
+}
+.gwm-words span {
+    cursor: pointer;
+}
+
+@media only screen and (max-width:1024px)
+{
+    .gwm-user-input{
+        padding-top: 7px;
+    }
+    .gwm-rigth-answer {
+        font-size: 24px !important;
+        margin-top: 7px !important;
+    }
+    .gwm-user-input span, .gwm-words span {
+        font-size: 24px;
+        padding-bottom: 4px;
+    }
+    .gwm-words {
+        margin-top: 18px;
+        padding: 3px;
+    }
+}
+
+
+
+.card-content-body-wrap-gnb{
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.gnb-user-input{
+    justify-content: center;
+    min-height: 29%;
+}
+
+.gnb-words span{
+    margin: 7px;
+    border-style: solid;
+    border-color: brown;
+    border-width: 2px;
+    cursor: pointer;
+}
+.gnb-rigth-answer{
+    display: none;
+}
+.gnb-user-answer{
+
+}
+
+@media only screen and (max-width:1024px)
+{
+
+    .gnb-words {
+        flex-flow: row;
+        max-width: 100%;
+        margin-top: 3px;
+    }
+
+
+}

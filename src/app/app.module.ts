@@ -75,6 +75,15 @@ import { GwfComponent } from './activities/gwf/gwf.component';
 import { GqwComponent } from './activities/gqw/gqw.component';
 import { DisComponent } from './activities/dis/dis.component';
 import { SplComponent } from './activities/spl/spl.component';
+import { GdnComponent } from './activities/gdn/gdn.component';
+import { GcpComponent } from './activities/gcp/gcp.component';
+import { GcsComponent } from './activities/gcs/gcs.component';
+import { GisComponent } from './activities/gis/gis.component';
+import { GmuComponent } from './activities/gmu/gmu.component';
+import { GnbComponent } from './activities/gnb/gnb.component';
+import { GslComponent } from './activities/gsl/gsl.component';
+import { GsmComponent } from './activities/gsm/gsm.component';
+import { GssComponent } from './activities/gss/gss.component';
 import { PlaywordsDirective } from './directives/playwords.directive';
 import { PlaysentenceDirective } from './directives/playsentence.directive';
 import { RequestInterceptor } from './interceptors/http_interceptor';
@@ -134,6 +143,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     GqwComponent,
     DisComponent,
     SplComponent,
+    GdnComponent,
+    GcpComponent,
+    GcsComponent,
+    GisComponent,
+    GmuComponent,
+    GnbComponent,
+    GslComponent,
+    GsmComponent,
+    GssComponent,
     BindhtmlPipe,
     PlaywordsDirective,
     PlaysentenceDirective,
@@ -171,7 +189,8 @@ export function HttpLoaderFactory(http: HttpClient) {
   entryComponents: [ Al1Component, CarComponent, Al2Component, Ar1Component, Ar2Component, Ar3Component, Ar4Component, Ar5Component,
   Ar6Component, Or1Component, Or2Component, Or3Component, Or4Component, Bw1Component, Bw2Component, Bw3Component, Bw5Component,
   Bw6Component, Bw7Component, SypComponent, DiwComponent, GscComponent, Rp1Component, Rp2Component, GwmComponent, SiwComponent,
-  GwfComponent, GqwComponent, DisComponent, SplComponent, Rw1Component ],
+  GwfComponent, GqwComponent, DisComponent, SplComponent, GdnComponent, GcpComponent, GcsComponent, GisComponent, GmuComponent,
+  GnbComponent, GslComponent, GsmComponent, GssComponent, Rw1Component ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

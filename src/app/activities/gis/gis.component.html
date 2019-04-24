@@ -1,0 +1,31 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-gis">
+    <div class='bw1-block bw1-word-wrap gis-word-wrap' *ngIf="!showresult">
+		<span class='bw1-word' (click)="playWord()" [innerHTML]="display_answer_word | bindhtml"></span>
+	</div>
+	<div class='bw1-block bw1-letters-wrap gis-letters-wrap'  *ngIf="!showresult">
+		<span class='gis-syllables-selector gis-syllables-selector-letters' *ngIf="split_letters_show">
+			<span class='bw1-letter gis-letters gis-letters-select' *ngFor="let l of letters; let kl=index" [attr.data-letter]='kl' [ngClass]="{'gisdash': l==='-'}" (click)="setDash(kl)">
+				{{ l }}
+				<span class='gis-dashmark gis-dashmark-select' [ngClass]="{'gisdashmarkselected': dashes[kl]}" *ngIf="l === '-'"></span>
+			</span>
+		</span>
+		<span class='gis-syllables-selector gis-syllables-selector-syllables' *ngIf='split_syllables_show'>
+			<span class='bw1-letter gis-letters' *ngFor="let l of syllables; let kl=index" [attr.data-letter]='kl' [ngClass]="{'gisdash': l==='-'}" (click)="playRule()">
+				{{ l }}
+				<span class='gis-dashmark' *ngIf="l === '-'"></span>
+			</span>
+		</span>
+	</div>
+	<div class='gis-results' *ngIf="showresult">
+		<span class='gis-result-right'>Right: {{ display_result.right }}</span>
+		<span class='gis-result-wrong'>Wrong: {{ display_result.wrong }}</span>
+	</div>
+	<div class='bw1-block bw1-description gis-description'>
+		{{ card.content[0].desc }}
+	</div>
+</div>
