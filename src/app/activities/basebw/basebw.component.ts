@@ -464,7 +464,7 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 		let that = this;
 		this.playPronounce(function(){
 			that.uinputph = 'sounds';
-			that.expected = +that.card.content[0].sounds;
+			that.expected = +that.card.content[that.current_card_instance].sounds;
 			that.playContentDescription();
 		});
 	}
