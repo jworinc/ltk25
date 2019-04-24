@@ -174,13 +174,13 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 				that.setGlobalDesc(i.pointer_to_value);
 	    		if(typeof i.audio !== 'undefined' && i.audio !== ''){
 	    			that.playmedia.sound(i.audio, function(){});
-	    			that.playmedia.word(this.answer_word, function(){
+	    			that.playmedia.word(that.answer_word, function(){
 	    				observer.next(0); observer.complete();
 	    			});
 	    		} else  setTimeout(function(){ observer.next(0); observer.complete(); }, 1);
 	    	} else {
 	    		setTimeout(function(){
-	    			that.playmedia.word(this.answer_word, function(){
+	    			that.playmedia.word(that.answer_word, function(){
 	    				observer.next(0); observer.complete(); 
 	    			}); 
 	    			
