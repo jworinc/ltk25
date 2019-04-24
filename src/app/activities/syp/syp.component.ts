@@ -204,8 +204,10 @@ export class SypComponent extends BaseComponent implements OnInit {
 			this.syp_card_picture = '';
 			this.syp_card_animation = [];
 			this.syp_card_word = itm.content;
-			
-			this.setDescription();
+			this.playmedia.word(itm.content, function(){
+				that.setDescription();
+				
+			}, 600);
 			
 		}
 		else if(typeof itm !== 'undefined' && typeof itm.type !== 'undefined' && itm.type === 'syncroplay'){
