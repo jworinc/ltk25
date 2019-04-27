@@ -262,7 +262,7 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 		if(typeof this.card.content[0].RecInst !== 'undefined' && this.card.content[0].RecInst.length > 0 && this.uinputph === 'rec' && !this.global_recorder){
 			this.uinputph = 'split';
 			this.split_letters_show = true;
-			setTimeout(function(){ this.splitLoop(); }, del*2);
+			setTimeout(function(){ that.splitLoop(); }, del*2);
 		}
 		//	Phase 5 listen instructions
 		else if(typeof this.card.content[0].PlayInst !== 'undefined' && this.card.content[0].PlayInst.length > 0 && this.uinputph === 'listen'){
