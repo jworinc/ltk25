@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
-import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 
 @Component({
@@ -13,8 +12,8 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Rw1Component extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private rw1log: LoggingService, private rw1cs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, rw1log, rw1cs);
+  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private rw1cs: ColorschemeService) {
+  	super(elm, sanitizer, playmedia, rw1cs);
   }
 
   ngOnInit() {
@@ -22,7 +21,10 @@ export class Rw1Component extends BaseComponent implements OnInit {
   	this.current_number = +this.data.cross_number;
   	this.card_id = this.data.id;
   	this.setCardNumber();
-	  this.card = this.data;
+    this.card = this.data;
+    this.showTranslation = false;
+    this.eventStatus = false;
+    console.log(this.data);
     this.current_header = this.card.header;
     let that = this;
     setTimeout(()=>{ 
@@ -56,7 +58,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
   public card_id: any;
   public current_header: any;
   public wblength: number = 0;
-
+  public showTranslation:any;
+  public eventStatus:any;
   //  Current word
   public cw: number = 0;
 
@@ -112,6 +115,14 @@ export class Rw1Component extends BaseComponent implements OnInit {
 
   }
 
+  showTranslationStatus(e)
+  {
+    if(this.showTranslation)
+      this.showTranslation = false;
+    else
+      this.showTranslation = true;
+  }
+  
   //  Update word blocks position according to current word
   updateWordblocks(){
     
@@ -153,12 +164,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
       //  Max word blocks
       let m = this.wblength;
       this.cw++;
-      //  Check overhead and enable next card
-      if(this.cw >= m){
-        this.cw = m-1;
-        this.playCorrectSound();
-			  this.enableNextCard();
-      }
+      //  Check overhead
+      if(this.cw >= m) this.cw = m-1;
       //  Update word blocks
       this.updateWordblocks();
     }
