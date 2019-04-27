@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
+import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 
 @Component({
@@ -12,8 +13,8 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Rw1Component extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private rw1cs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, rw1cs);
+  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private rw1log: LoggingService, private rw1cs: ColorschemeService) {
+  	super(elm, sanitizer, playmedia, rw1log, rw1cs);
   }
 
   ngOnInit() {
