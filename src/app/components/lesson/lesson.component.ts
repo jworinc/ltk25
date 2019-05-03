@@ -615,6 +615,27 @@ export class LessonComponent implements OnInit, AfterViewInit {
     //}, 2000);
   }
 
+  checkForLessonFinish() {
+      let that = this;
+      //  Check if last card was reached and then finish the lesson
+      if(this.cpos === this.ccs.length + 1){
+        let sc = this.getChildCardScope(this.current_id);
+        if(typeof sc !== 'undefined' && sc !== null && typeof sc.prehide !== 'undefined'){
+          sc.prehide();
+        }
+        if(typeof sc !== 'undefined' && sc !== null && typeof sc.hide !== 'undefined'){
+          this.loggingEndCommand(sc, function(){
+            that.finishLesson(); 
+          });
+        } else {
+          this.finishLesson();
+        } 
+        return true;
+      } else {
+        return false;
+      }
+  }
+
 
   public navigation_switch_flag: boolean = false;
 
@@ -642,22 +663,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
       if(typeof sc !== 'undefined' && sc !== null && typeof sc.next !== 'undefined'){
         sc.next();
       }
-
-      //  Check if last card was reached and then finish the lesson
-      if(this.cpos === this.ccs.length + 1){
-        let sc = this.getChildCardScope(this.current_id);
-        if(typeof sc !== 'undefined' && sc !== null && typeof sc.prehide !== 'undefined'){
-          sc.prehide();
-        }
-        if(typeof sc !== 'undefined' && sc !== null && typeof sc.hide !== 'undefined'){
-          this.loggingEndCommand(sc, function(){
-            that.finishLesson(); 
-          });
-        } else {
-          this.finishLesson();
-        }
-        
-      } 
+      
+      this.checkForLessonFinish();
 
       return;
     }
@@ -792,6 +799,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
   blinkNextNavBtn() {
 
     let that = this;
+
+    //  Check if current card is last call finish lesson method
+    if(this.checkForLessonFinish()) return;
 
     setTimeout(()=>{
       that.blinknextnavbtn = true;
