@@ -1030,6 +1030,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
       }, 700);
     }
     this.playmedia.stop();
+    this.global_desc = '';
   }
 
   good() {
