@@ -139,6 +139,7 @@ export class BaseorComponent extends BaseComponent implements OnInit {
 	
 	playWord(){
 		let that = this;
+		this.playmedia.stop();
 		this.playmedia.word(this.audios[this.current_word], function(){
 			if(that.uinputph === 'compare'){
 				if(that.current_word < that.words.length - 1){
