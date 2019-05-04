@@ -199,6 +199,7 @@ export class Rp1Component extends BaseComponent implements OnInit {
 	
 	playLetter(){
 		let that = this;
+		this.playmedia.stop();
 		this.playLetterOrSound(this.audios[this.current_letter], function(){
 			if(that.uinputph === 'compare'){
 				if(that.current_letter < that.letters.length - 1){
