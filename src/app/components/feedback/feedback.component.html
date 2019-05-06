@@ -7,26 +7,29 @@
                 
             </div>
             <div class="modal-body">
-                <div class="app-feedback-intro">
+                <div class="app-feedback-intro" [hidden]="success_result">
                     <p>{{ 'feedback_intro' | translate }}</p>
                 </div>
-                <div class="app-feedback-like-dislike">
+                <div class="app-feedback-like-dislike" [hidden]="success_result">
                     <button class="btn btn-success app-feedback-like-btn" [ngClass]="{'disabled': feedback.like === 1 || feedback.dislike === 1}" (click)='setLike()'><i class="far fa-thumbs-up"></i>{{ 'like_btn' | translate }}</button>
                     <button class="btn btn-danger app-feedback-dislike-btn" [ngClass]="{'disabled': feedback.like === 1 || feedback.dislike === 1}" (click)='setDislike()'><i class="far fa-thumbs-down"></i>{{ 'dislike_btn' | translate }}</button>
                 </div>
-                <div class="app-feedback-category">
+                <div class="app-feedback-category" [hidden]="success_result">
                     <button class="btn btn-sm" [ngClass]="{'btn-primary': feedback.category === 'idea', 'btn-secondary': feedback.category !== 'idea'}" (click)="setCategory('idea')"><i class="fas fa-bolt"></i>{{ 'idea_btn' | translate }}</button>
                     <button class="btn btn-secondary btn-sm" [ngClass]="{'btn-primary': feedback.category === 'problem', 'btn-secondary': feedback.category !== 'problem'}" (click)="setCategory('problem')"><i class="fas fa-exclamation-triangle"></i>{{ 'problem_btn' | translate }}</button>
                     <button class="btn btn-secondary btn-sm" [ngClass]="{'btn-primary': feedback.category === 'question', 'btn-secondary': feedback.category !== 'question'}" (click)="setCategory('question')"><i class="fas fa-question"></i>{{ 'question_btn' | translate }}</button>
                     <button class="btn btn-secondary btn-sm" [ngClass]="{'btn-primary': feedback.category === 'praise', 'btn-secondary': feedback.category !== 'praise'}" (click)="setCategory('praise')"><i class="fas fa-heart"></i>{{ 'praise_btn' | translate }}</button>
                 </div>
-                <div class="app-feedback-message">
+                <div class="app-feedback-message" [hidden]="success_result">
                     <textarea class="form-control" rows="4" placeholder="{{ 'your_feedback' | translate }}" [(ngModel)]="feedback.message"></textarea>
+                </div>
+                <div class="thank-for-feedback" [hidden]="!success_result">
+                    <p>{{ 'feedback_thanks' | translate }}</p>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" (click)="close()">{{ 'close' | translate }}</button>
-                <button type="button" class="btn btn-primary" [ngClass]="{'disabled': feedback.like === 0 && feedback.dislike === 0 && feedback.message === ''}" (click)='submitFeedback()'>{{ 'submit_feedback' | translate }}</button>
+                <button type="button" class="btn btn-primary" [ngClass]="{'disabled': feedback.like === 0 && feedback.dislike === 0 && feedback.message === ''}" (click)='submitFeedback()' [hidden]="success_result">{{ 'submit_feedback' | translate }}</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

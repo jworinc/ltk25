@@ -15,6 +15,7 @@ export class FeedbackComponent implements OnInit {
   public _show: boolean = false;
   public feedback_shown: boolean = false;
   public save_feedback_started: boolean = false;
+  public success_result = false;
   
   @Output() closefeedback = new EventEmitter<boolean>();
   @Input('show')
@@ -42,6 +43,7 @@ export class FeedbackComponent implements OnInit {
             category: 'no',
             message: ''
         }
+        this.success_result = false;
     }
 
     //  Perform some actions before close
@@ -56,11 +58,12 @@ export class FeedbackComponent implements OnInit {
 		console.log(this.feedback);
         let that = this;
         this.dl.saveFeedback(this.feedback).subscribe(
-		        data => { that.save_feedback_started = false; that.close(); },
+		        data => { that.save_feedback_started = false; that.success_result = true; },
 		        error => {
 		          console.log(error);
-		          that.save_feedback_started = false;
-              that.close();
+                  that.save_feedback_started = false;
+                  alert('Error during save your feedback, please contact administrator! Look at console for more details.');
+                  that.close();
 		          //this.notify.error('Student info load status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
 		        }
 		    );
