@@ -73,14 +73,6 @@ export class DashboardComponent implements OnInit {
         }
     );
 
-  	this.DL.getLessons().subscribe(
-  		data => this.handleLessons(data),
-      	error => {
-      		console.log(error);
-      		this.notify.error('Lessons list load status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
-      	}
-  	);
-
     this.innerWidth = window.innerWidth;
 
     this.Option.change_language_event.subscribe(()=>{
@@ -116,6 +108,15 @@ export class DashboardComponent implements OnInit {
       });
       
     }
+    
+  	this.DL.getLessons().subscribe(
+  		data => this.handleLessons(data),
+      	error => {
+      		console.log(error);
+      		this.notify.error('Lessons list load status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
+      	}
+  	);
+
   }
 
   handleLessons(data){
