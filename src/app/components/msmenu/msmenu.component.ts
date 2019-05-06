@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { TokenService } from '../../services/token.service';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { OptionService } from '../../services/option.service';
 import { PlaymediaService } from '../../services/playmedia.service';
@@ -30,7 +31,8 @@ export class MsmenuComponent implements OnInit {
   	private Token: TokenService,
     translate: TranslateService,
     private Option: OptionService,
-    private playmedia: PlaymediaService
+    private playmedia: PlaymediaService,
+    private lcn: Location
   ) {
         // this language will be used as a fallback when a translation isn't found in the current language
         translate.setDefaultLang(Option.getFallbackLocale());
@@ -65,9 +67,14 @@ export class MsmenuComponent implements OnInit {
   	console.log('Logout');
     event.preventDefault();
     this.playmedia.stop();
-  	this.Auth.changeAuthStatus(false);
-    this.router.navigateByUrl('/login');
-    this.Token.remove();
+    let p = this.lcn.path();
+    if(p === '/home'){
+      this.Auth.changeAuthStatus(false);
+      this.router.navigateByUrl('/login');
+      this.Token.remove();
+    } else {
+      this.router.navigateByUrl('/home');
+    }
   }
 
 
