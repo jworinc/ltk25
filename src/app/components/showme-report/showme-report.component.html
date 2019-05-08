@@ -2,6 +2,7 @@
 	<span style="dispaly:block;position:relative;float:none;width:100%;text-align:center;"><h4>{{ 'show_me_report' | translate }}</h4></span>
 	<select name="lessonsSelect" id="showme-report-lessons-select" [(ngModel)]="current_lesson" (ngModelChange)="updateLesson()" style="display: block;position: relative;width: 120px;text-align: center;margin: 10px;float: left;">
      	<option *ngFor="let lesson of lessons" [ngValue]="lesson" [selected]="lesson === current_lesson">{{ 'lesson' | translate }} {{ lesson }}</option>
-    </select>
+	</select>
+	<span class='show-me-loading'><span></span></span>
     <canvas id="showme-report-canvas" style='min-height:200px; max-height: 100%;'></canvas>
 </div>

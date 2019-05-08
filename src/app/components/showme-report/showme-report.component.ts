@@ -264,6 +264,14 @@ export class ShowmeReportComponent implements OnInit {
       }
     }
 
+    //  Get errors quantity for particular command from lesson state dataset
+    getCommandComplete(com, ls) {
+      for(let i in ls){
+        let l = ls[i];
+        if(l.command === com) return parseInt(l.complete);
+      }
+    }
+
     showmeUpdateCallback(data) {
       if(typeof data.result === 'object'){
         console.log(data);
@@ -280,8 +288,18 @@ export class ShowmeReportComponent implements OnInit {
           //  where 5 is a minimum from which starts chart for particular activity
           let total = parseInt(data.result[i]);
           let errors = this.getCommandErrors(i, data.lesson_state);
-          let d = Math.floor(((total - errors) / total)*100);
-          if(d < 5) d = 5;
+          let complete = this.getCommandComplete(i, data.lesson_state);
+          let d = 5;
+          if(errors > 0){
+            d = Math.floor(((total - errors) / total)*100);
+            if(d < 5) d = 5;
+          }
+          else if(errors === 0 && complete === 0){
+            d = 5;
+          } else {
+            d = 100;
+          }
+          
 
           //  Push command data
           this.barChartData.datasets[0].data.push(d);
@@ -307,6 +325,10 @@ export class ShowmeReportComponent implements OnInit {
 
     updateLesson() {
       let that = this;
+      this.barChartData.labels = [];
+			this.barChartData.datasets[0].data = [];
+			this.barChartData.datasets[0].backgroundColor = [];
+			if(typeof this.showMeBar !== 'undefined') this.showMeBar.update();
       this.dataloader.showme(this.current_lesson).subscribe(
           data => { that.showmeUpdateCallback(data); },
           error => { console.log(error); }
