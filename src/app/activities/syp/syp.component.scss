@@ -51,10 +51,14 @@
     padding: 10px;
     font-weight: 400;
     margin: 0;
+    opacity: 0;
 }
 .syp-card-init-desc p{
     margin: 0;
     margin-bottom: 0;
+}
+.hidden-desc{
+    display: none;
 }
 
 

@@ -59,6 +59,11 @@ export class SypComponent extends BaseComponent implements OnInit {
 
 	public syp_card_inidesc = '';
 
+	public inidesc_styling: any = {
+		'opacity': '0',
+		//'display': 'none !important'
+	};
+
 	public disable_enter_btn: boolean = false;
 
 	//	Prevent performing of show function twice in some cases
@@ -92,6 +97,9 @@ export class SypComponent extends BaseComponent implements OnInit {
 		if(this.uinputph !== 'finish' && this.prevent_dubling_flag){
 			this.prevent_dubling_flag = false;
 			this.resetCard();
+			this.inidesc_styling = {
+				'opacity': '1'
+			}
 		}
 		//	Hide option buttons
 		this.optionHide();
@@ -108,6 +116,14 @@ export class SypComponent extends BaseComponent implements OnInit {
 
 	handleNextDescStep() {
 		this.disable_enter_btn = false;
+		//	Check if it is first instruction with long read
+		if(this.first_instruction_in_a_card){
+			this.blinkEnter();
+			this.uinputph = 'waitforuser';
+			this.first_instruction_in_a_card = false;
+			return;
+		}
+
 		//	Check if next buffer item is not syncroplay/waitforuser or option is not set, skip wait stuff
 		let next = this.desc_buffer[0];
 		if((typeof next !== 'undefined' && typeof next.type !== 'undefined' && next.type === 'syncroplay' && next.content === 'WaitForUser') ||
@@ -131,6 +147,7 @@ export class SypComponent extends BaseComponent implements OnInit {
 	//	Description buffer for audio sequence
 	public desc_buffer = [];
 	public current_description = 0;
+	public first_instruction_in_a_card = true;
 
 	setDescription() {
 		this.disable_enter_btn = true;
@@ -269,6 +286,17 @@ export class SypComponent extends BaseComponent implements OnInit {
 		}
 
 		
+		//	Show init description
+		this.inidesc_styling = {
+			'opacity': '0',
+			//'display': 'flex'
+		}
+		//	Show fade in animation for init description
+		if(this.syp_card_word === '' && this.syp_card_picture === '' && this.syp_card_animation.length === 0 && itm.type !== 'syncroplay')
+			that.inidesc_styling = {'opacity': '1'};
+		//	Skip pause after first instruction in case when content displayed, not init desc
+		if((this.syp_card_word !== '' || this.syp_card_picture !== '' || this.syp_card_animation.length !== 0) && typeof itm !== 'undefined' && itm.type !== 'syncroplay') 
+			this.first_instruction_in_a_card = false;
 
 	}
 
@@ -373,11 +401,15 @@ export class SypComponent extends BaseComponent implements OnInit {
 		this.current_description = 0;
 		this.uinputph = 'play';
 		this.syp_card_inidesc = '';
-		
+		this.first_instruction_in_a_card = true;
 	}
 
 	repeat() {
-
+		//	Hide init description
+		this.inidesc_styling = {
+			'opacity': '0',
+			//'display': 'none !important'
+		}
 		this.resetCard();
 		this.SYPComandProcessor();
 		if(this.isActive()) this.setDescription();

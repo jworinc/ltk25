@@ -10,8 +10,9 @@
   -->
 
   	<div class='card-content-body-wrap-syp'>
-		<div class='syp-card-picture syp-card-letter syp-card-init-desc' 
-			[hidden]='syp_card_word !== "" || syp_card_picture !== "" || syp_card_animation.length !== 0' 
+		<div class='syp-card-picture syp-card-letter syp-card-init-desc'
+			[ngClass]="{'hidden-desc': syp_card_word !== '' || syp_card_picture !== '' || syp_card_animation.length !== 0}"
+			[ngStyle]='inidesc_styling'
 			[innerHTML]="syp_card_inidesc | bindhtml">
 		</div>
 		<div class='syp-card-picture syp-card-letter' *ngIf='syp_card_word !== ""'>
