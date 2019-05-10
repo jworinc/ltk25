@@ -11,7 +11,7 @@ import { ColorschemeService } from '../../services/colorscheme.service';
   styleUrls: ['./al1.component.scss'],
   host: {'class': 'book-wrapper-slide'}
 })
-export class Al1Component extends BaseComponent implements OnInit, DoCheck {
+export class Al1Component extends BaseComponent implements OnInit {
 
   constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, differs: IterableDiffers, private al1log: LoggingService, private al1cs: ColorschemeService) {
   	super(elm, sanitizer, playmedia, al1log, al1cs);
@@ -204,6 +204,7 @@ export class Al1Component extends BaseComponent implements OnInit, DoCheck {
 				//	For few letters
 				this.message = 'Remains '+remains+' letters.';
 			}
+			this.setFocus();
 			//	Return fail result of validation
 			return false;
 
@@ -279,6 +280,7 @@ export class Al1Component extends BaseComponent implements OnInit, DoCheck {
 	//	Clear wrong inputs
 	clearUserInput() {
 		let parts = [];
+		let that = this;
 		if(typeof this.card !== 'undefined' && this.card.content !== 'undefined' && this.card.content.length > 0){
 			parts = this.card.content[0].parts;
 		}
@@ -291,6 +293,15 @@ export class Al1Component extends BaseComponent implements OnInit, DoCheck {
 				this.input_data[index].letter = '';
 			}
 		};
+
+		//	Bind to input elems
+		this.elm.nativeElement.querySelectorAll('.card-content-body-wrap-al1 input').forEach((e)=>{
+			let i = parseInt(e.getAttribute('data-pos'));
+			e.value = that.input_data[i].letter;
+		});
+
+		setTimeout(()=>{ that.validate(); that.setFocus(); }, 100);
+
 	}
 
 	getLastNotEnteredLetter() {
@@ -348,7 +359,13 @@ export class Al1Component extends BaseComponent implements OnInit, DoCheck {
 	public inp_data_watcher_doubling: boolean = false;
 
 	//	Watch if user type any data
-	ngDoCheck() {
+	//ngDoCheck() {
+	onUserInput(inp, ki) {
+
+			//	Perform check for doubles and remove extra letters
+			inp.currentTarget.value = inp.currentTarget.value.substr(0, 1).toUpperCase();
+			this.input_data[ki].letter = inp.currentTarget.value;
+
 	    //const change = this.differ.diff(this.input_data);
 	    if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
 	    	

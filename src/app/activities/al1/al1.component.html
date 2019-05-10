@@ -7,7 +7,7 @@
     <div class='card-content-body-wrap-al1'>
 		<input *ngFor='let i of input_data; let ki = index'
 			class='card-al1-letter' [attr.data-pos]='ki' (click)='playLetter(ki)'
-			[(ngModel)]='i.letter' [ngStyle]='i.mark' (focus)='handleLetterFocus(ki)'>
+			(input)="onUserInput($event, ki)" [ngStyle]='i.mark' (focus)='handleLetterFocus(ki)'>
         <div class='clearfix'></div>
     </div>
     <div class='card-hint-wrap-al1'>
