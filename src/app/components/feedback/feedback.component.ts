@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, ElementRef, EventEmitter } from '@angular/core';
 import { DataloaderService } from '../../services/dataloader.service';
+import { addToViewTree } from '@angular/core/src/render3/instructions';
 
 @Component({
   selector: 'app-feedback',
@@ -54,7 +55,12 @@ export class FeedbackComponent implements OnInit {
 	}
 
 	submitFeedback() {
-		console.log('Save feedback.');
+    console.log('Save feedback.');
+    if(this.feedback.like === 0 && this.feedback.dislike === 0 && this.feedback.message === ''){
+      console.log('Empty feedback!');
+      alert('Please fill in form before saving!');
+      return;
+    }
 		console.log(this.feedback);
         let that = this;
         this.dl.saveFeedback(this.feedback).subscribe(
