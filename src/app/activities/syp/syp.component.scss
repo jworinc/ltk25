@@ -13,8 +13,8 @@
 	display: block;
     position: relative;
     width: 100%;
-    height: 70%;
-    top: 10%;
+    height: 85%;
+    top: 3%;
 }
 .syp-card-animation{
 	display: flex;
@@ -45,9 +45,9 @@
     align-items: center;
     align-content: center;
     justify-content: space-evenly;
-    font-size: 21px;
+    font-size: 19px;
     color: darkblue;
-    line-height: 1.1em;
+    line-height: 1em;
     padding: 10px;
     font-weight: 400;
     margin: 0;
@@ -70,19 +70,23 @@
  
 	.syp-card-picture{
 	    height: 71%;
-	    top: 5%;
+	    top: 9%;
 	    font-size: 94px;
 	    line-height: 1.1;
 	}
 	.syp-description{
 		position: relative;
-	    margin-top: 15px;
-	    padding: 0px 10px;
-	    line-height: 1;
+	    margin-top: 24px;
+	    padding: 0px 3px;
+        line-height: 1;
+        height: 15%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
 	}
     .syp-card-init-desc{
-        font-size: 11px;
-        line-height: 1;
+        font-size: 10px;
+        line-height: 0.8;
     }
     .syp-card-init-desc p{
         padding: 0;

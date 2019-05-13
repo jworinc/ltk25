@@ -21,7 +21,7 @@
     overflow: hidden;
     top: 50%;
     box-shadow: 0 0 2px #000;
-    padding: 9px 10px;
+    padding: 5px 5px;
 }
 .book-wrapper-single, .book-wrapper-slide{
     display: block;
@@ -246,7 +246,7 @@
 
 .bw1-description{
     display: none;
-    font-size: 16px;
+    font-size: 12px;
     color: #C2272D;
     line-height: 1;
 }
@@ -271,7 +271,7 @@
 {
     
     .bw1-block {
-        padding: 0px 50px;
+        padding: 0px 0px;
         margin-top: 3px;
     }
     .bw1-word, .bw1-letter {

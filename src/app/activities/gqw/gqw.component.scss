@@ -5,7 +5,7 @@
     width: 100%;
     margin-top: 36px;
     text-align: center;
-    font-size: 18px;
+    font-size: 12px;
     z-index: 100;
     color: #C2272D;
 }
@@ -94,7 +94,7 @@
     .gsc-user-input span, .gsc-letters span {
         padding: 0px 6px;
         padding-bottom: 7px;
-        font-size: 34px;
+        font-size: 24px;
     }
     .gsc-user-input, .gsc-letters {
         padding-top: 15px;
@@ -145,7 +145,7 @@
 
 }
 .gwm-user-input span, .gwm-words span {
-    font-size: 50px;
+    font-size: 34px;
 }
 .gwm-words span {
     cursor: pointer;
@@ -157,7 +157,7 @@
         padding-top: 7px;
     }
     .gwm-rigth-answer {
-        font-size: 24px !important;
+        font-size: 16px !important;
         margin-top: 7px !important;
     }
     .gwm-user-input span, .gwm-words span {

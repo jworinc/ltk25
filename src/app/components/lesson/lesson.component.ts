@@ -722,7 +722,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.refreshNav();
     
     //  Preload media
-    this.preloader.loadCard(this.cpos);
+    let that = this;
+    setTimeout(()=>{ that.preloader.loadCard(this.cpos); }, 1600);
   }
 
   movePrev() {

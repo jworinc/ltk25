@@ -148,6 +148,7 @@ export class SypComponent extends BaseComponent implements OnInit {
 	public desc_buffer = [];
 	public current_description = 0;
 	public first_instruction_in_a_card = true;
+	public temp_inidesc = '';
 
 	setDescription() {
 		this.disable_enter_btn = true;
@@ -292,7 +293,7 @@ export class SypComponent extends BaseComponent implements OnInit {
 			//'display': 'flex'
 		}
 		//	Show fade in animation for init description
-		if(this.syp_card_word === '' && this.syp_card_picture === '' && this.syp_card_animation.length === 0 && itm.type !== 'syncroplay')
+		if(this.syp_card_word === '' && this.syp_card_picture === '' && this.syp_card_animation.length === 0 && typeof itm !== 'undefined' && itm.type !== 'syncroplay')
 			that.inidesc_styling = {'opacity': '1'};
 		//	Skip pause after first instruction in case when content displayed, not init desc
 		if((this.syp_card_word !== '' || this.syp_card_picture !== '' || this.syp_card_animation.length !== 0) && typeof itm !== 'undefined' && itm.type !== 'syncroplay') 
@@ -362,8 +363,19 @@ export class SypComponent extends BaseComponent implements OnInit {
 					
 					//	Prepare initial description for card
 					let mr = /^[A-Z]+$/;
-					if(!mr.test(c.pointer_to_value) && c.audio.split('')[0] === '_')
-						this.syp_card_inidesc += '<p>' + c.pointer_to_value + '</p>';
+					if(!mr.test(c.pointer_to_value) && c.audio.split('')[0] === '_' && c.pointer_to_value.length > 16) {
+						if(this.temp_inidesc !== ''){
+							this.syp_card_inidesc += '<p>' + this.temp_inidesc + '</p>';
+							this.temp_inidesc = '';
+						}
+						this.syp_card_inidesc += '<p>' + c.pointer_to_value.replace('...', '') + '</p>';
+					}
+					else if(!mr.test(c.pointer_to_value) && c.audio.split('')[0] === '_' && c.pointer_to_value.length <= 16) {
+						this.temp_inidesc += c.pointer_to_value.replace('...', '') + ' ';
+					}
+					//	Check if last add it to description list
+					if(this.current_comand === this.cmds.length-1 && this.temp_inidesc !== '') 
+						this.syp_card_inidesc += '<p>' + this.temp_inidesc + '</p>';
 
 				} else {
 					this.current_comand++;
