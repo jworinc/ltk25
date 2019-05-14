@@ -184,10 +184,16 @@ export class DisComponent extends BaseComponent implements OnInit {
 		
 	}
 
+	prehide() {
+		if(this.uinputph !== 'finish')
+			this.result();
+	}
+
 	hide() {
 		this.prevent_dubling_flag = false;
 		//	Hide option buttons
 		this.optionHide();
+		
 	}
 
 	setFocus(){
