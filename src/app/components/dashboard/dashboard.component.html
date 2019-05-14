@@ -35,7 +35,7 @@
 	                </ul>
 	                <!-- Tab panes -->
 	                <div class="tab-content">
-	                    <div role="tabpanel" class="tab-pane fade" id="break_1" aria-labelledby="break_1-tab" [ngClass]="{'in active': student.lu <= 20, 'show': student.lu <= 20}">
+	                    <div role="tabpanel" class="tab-pane fade" id="break_1" aria-labelledby="break_1-tab" [ngClass]="{'in active': student.lu <= 22, 'show': student.lu <= 22}">
 	                        <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_1.col_1.length > 0">
                                 <ul>
                                     <li *ngFor='let lsn of break_to_display_1.col_1' (click)='showLesson(lsn.number)'
@@ -129,7 +129,7 @@
                             <div class='clearfix'></div>
                             <div class="alert alert-success" role="alert">{{ 'checkbox_mark' | translate }}</div>
 	                    </div>
-	                    <div role="tabpanel" class="tab-pane fade" id="break_2" aria-labelledby="break_2-tab" [ngClass]="{'in active': student.lu > 20 && student.lu <= 41, 'show': student.lu > 20 && student.lu <= 41}">
+	                    <div role="tabpanel" class="tab-pane fade" id="break_2" aria-labelledby="break_2-tab" [ngClass]="{'in active': student.lu > 22 && student.lu <= 41, 'show': student.lu > 22 && student.lu <= 41}">
 	                        <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_2.col_1.length > 0">
                                 <ul>
                                     <li *ngFor='let lsn of break_to_display_2.col_1' (click)='showLesson(lsn.number)'
