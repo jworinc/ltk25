@@ -185,6 +185,14 @@ export class DisComponent extends BaseComponent implements OnInit {
 	}
 
 	prehide() {
+		this.playmedia.stop();
+		this.play_card_description_busy = false;
+
+		//	Clear activity log timer, to prevent sending many begin tags when user switch cards very fast (less than 2sec)
+		clearTimeout(this.activity_log_timer);
+
+		this.card_begin_flag = false;
+
 		if(this.uinputph !== 'finish')
 			this.result();
 	}
