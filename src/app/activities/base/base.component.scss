@@ -573,10 +573,25 @@ margin: 3px 2px;display: inline-block;text-align:center;}
 .or4-question-variants{
     display: block;
     position: relative;
+    flex-shrink: 0;
 }
-.or4-question-variants input{
-    display: inline-block;
-    margin: 0 10px;
+.or4-correct-answer{
+    display: block;
+    float: left;
+}
+.or4-question-variants input {
+    display: block;
+    position: relative;
+    margin: 0 20px;
+    margin-right: 2px;
+    width: 23px;
+    height: 23px;
+    float: left;
+    top: 7px;
+}
+.or4-question-variants span{
+    display: block;
+    float: left;
 }
 .syp-card-init-desc p{
     padding: 0;
@@ -588,6 +603,14 @@ margin: 3px 2px;display: inline-block;text-align:center;}
     .syp-card-init-desc p{
         padding: 0;
         margin: 0;
+    }
+    .or4-question-variants input {
+        margin: 0 13px;
+        margin-right: 2px;
+        width: 20px;
+        height: 20px;
+        float: left;
+        top: 2px;
     }
 
 }
