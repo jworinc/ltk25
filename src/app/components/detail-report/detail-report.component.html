@@ -17,7 +17,7 @@
 				<td>{{ report.activity }}</td>
 				<td>{{ report.expected }}</td>
 				<td>{{ report.answer }}</td>
-				<td>{{ report.hintlevel }}</td>
+				<td>{{ report.hintlevel === 0 || report.hintlevel === "0" ? " " : report.hintlevel }}</td>
 				<td>{{ report.end }}</td>
 			</tr>
 		</tbody>
