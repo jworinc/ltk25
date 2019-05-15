@@ -173,7 +173,7 @@ export class CarComponent extends BaseComponent implements OnInit {
 			}
 			this.prevent_dubling_flag = true;
 
-			this.showGoodBad();
+			if(this.global_recorder) this.showGoodBad();
 		}
 		
 	}
