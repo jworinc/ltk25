@@ -1,0 +1,30 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-gmu">
+
+  <div class="header-div">
+    <h4 class="text-center">{{header}}</h4>
+  </div>
+
+  <div class="row cust-row">
+    <div class="sen-parts">
+      <div class="col-sm-5 sen-p sen-begin" [ngClass]="{'showitem': show_sentence_begin}">
+        <span [innerHTML]="current_sentence | bindhtml" [attr.data-ind]='i_sentence_begin' app-playsentence></span>
+      </div>
+      <div class="col-sm-1 sen-p sen-sn" [ngClass]="{'showitem': show_sentence_var}">+</div>
+      <div class="col-sm-5 sen-p sen-variant" [ngClass]="{'showitem': show_sentence_var}">
+        <span [innerHTML]="current_variant | bindhtml" [attr.data-ind]='i_sentence_var' app-playsentence></span>
+      </div>
+    </div>
+    <div class="col-sm-12 sen-ready-list">
+      <span class="sentence" *ngFor="let s of s_pull; let ks = index" [ngStyle]="s.style"
+        [innerHTML]="s.sen | bindhtml" [attr.data-ind]='s.ind' app-playsentence></span>
+      
+    </div>
+
+  </div>
+
+</div>

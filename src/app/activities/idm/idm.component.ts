@@ -6,15 +6,15 @@ import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 
 @Component({
-  selector: 'app-rw1',
-  templateUrl: './rw1.component.html',
-  styleUrls: ['./rw1.component.scss'],
+  selector: 'app-idm',
+  templateUrl: './idm.component.html',
+  styleUrls: ['./idm.component.scss'],
   host: {'class': 'book-wrapper-slide'}
 })
-export class Rw1Component extends BaseComponent implements OnInit {
+export class IdmComponent extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private rw1log: LoggingService, private rw1cs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, rw1log, rw1cs);
+  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private idmlog: LoggingService, private rw1cs: ColorschemeService) {
+  	super(elm, sanitizer, playmedia, idmlog, rw1cs);
   }
 
   ngOnInit() {
@@ -37,22 +37,6 @@ export class Rw1Component extends BaseComponent implements OnInit {
     }, 10);
     this.wblength = this.card.content.length;
     this.initViewStates();
-
-    //  Mark words in sample sentences with the bold font
-    for(let i in this.card.content){
-      let c = this.card.content[i];
-      if(typeof c.content[0].sentence !== 'undefined'){
-        let wr = c.title;
-        let wr1 = wr.substring(wr.length-2, wr.length) === 'es' ? wr.substring(0, wr.length - 2) : wr.substring(wr.length-1, wr.length) === 's' ? wr.substring(0, wr.length-1) : '';
-        let wg = new RegExp('\\b'+wr+'\\b', 'i');
-        let wg1 = new RegExp('\\b'+wr1+'\\b', 'i');
-        if(wg.test(c.content[0].sentence))
-          c.content[0].sentence = c.content[0].sentence.replace(wg, '<b>'+wr+'</b>');
-        else if(wg1.test(c.content[0].sentence))
-          c.content[0].sentence = c.content[0].sentence.replace(wg1, '<b>'+wr1+'</b>');
-      }
-    }
-
   }
   
   public current_number: any;
@@ -226,63 +210,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
     this.updateViewStates();
   }
 
-  //  Play word
-  playWord(name) {
-    this.playmedia.stop();
-    this.playmedia.word(name, ()=>{});
-  }
-
-  public pronounce_play_sequence_started: boolean = false;
-  public pronounce_play_counter: number = 0;
-  public mask_syl_pos = [];
-
-  playPronounce(id) {
-    this.playmedia.stop();
-    this.elm.nativeElement.querySelectorAll('.phoneme-syllable span').forEach((e)=>{
-      e.style.backgroundColor = 'transparent';
-    });
-    this.mask_syl_pos = [];
-    let c = this.card.content[this.cw];
-    if(c.pronounce !== ""){
-      this.pronounce_play_counter = 0;
-      let cp = c.pronounce.split("-");
-      let that = this;
-      //	Create audio objects for each syllable
-      for(let i in cp){
-        let phs = cp[i];
-        let ph = phs.split(",");
-        for(let k in ph){
-          let sl = ph[k];
-          if(sl === '') continue;
-          sl = '_S'+sl.toUpperCase();
-          this.playmedia.sound(sl, ()=>{
-            that.pronounce_play_counter++;
-            if(that.pronounce_play_counter > that.mask_syl_pos.length) that.pronounce_play_counter = that.mask_syl_pos.length;
-            if(that.pronounce_play_counter > that.mask_syl_pos.length-1){
-              that.elm.nativeElement.querySelectorAll('.phoneme-box[wordblock="'+id+'"] .phoneme-syllable span').forEach((e)=>{
-                e.style.backgroundColor = 'transparent';
-              });
-            } else {
-              let s = that.mask_syl_pos[that.pronounce_play_counter];
-              that.elm.nativeElement.querySelectorAll('.phoneme-box[wordblock="'+id+'"] .phoneme-syllable span').forEach((e)=>{
-                e.style.backgroundColor = 'transparent';
-              });
-              that.elm.nativeElement.querySelector('.phoneme-box[wordblock="'+id+'"] .phoneme-syllable span[playsyl=\''+s.syl+'\'][playpos=\''+s.pos+'\']')
-                .style.backgroundColor = 'yellow';
-            }
-            
-          }, 300);
-          this.mask_syl_pos.push({syl: i, pos: k});
-        }
-      }
-      let ss = that.mask_syl_pos[that.pronounce_play_counter];
-      that.elm.nativeElement.querySelectorAll('.phoneme-box[wordblock="'+id+'"] .phoneme-syllable span').forEach((e)=>{
-        e.style.backgroundColor = 'transparent';
-      });
-      that.elm.nativeElement.querySelector('.phoneme-box[wordblock="'+id+'"] .phoneme-syllable span[playsyl=\''+ss.syl+'\'][playpos=\''+ss.pos+'\']')
-        .style.backgroundColor = 'yellow';
-      
-    }
-  } 
+  //public pronounce_play_sequence_started: boolean = false;
+  //public pronounce_play_counter: number = 0;
+ //public mask_syl_pos = [];
 
 }

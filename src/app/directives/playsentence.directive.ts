@@ -30,6 +30,7 @@ export class PlaysentenceDirective {
 	public origin_text = '';
 	public words_audio = [];
 	public end_callback: any = null;
+	public reset_mark_timer: any = null;
 
 	compileSentence(){
 
@@ -79,7 +80,7 @@ export class PlaysentenceDirective {
 		//	RegExp find extra spaces
 		let space_to_one = /[\s]+/g;
 		//	RegExp to find punctuation characters
-		let punctuation = /[\,\:\;\"\'\u2000-\u2060]/g;
+		let punctuation = /[\,\:\;\"\u2000-\u2060]/g;
 		//	RegExp to find dots
 		let dots = /\./g;
 		let wrr = this.origin_text.replace(html, '').replace(space_to_one, ' ').replace(punctuation, '').replace(dots, ' ').split(' ');
@@ -97,6 +98,13 @@ export class PlaysentenceDirective {
 		//if(after.length > 0) nw += after.join(' ');
 		
 		this.elmt.nativeElement.innerHTML = nw;
+
+		//	Start timer to remove mark
+		let that = this;
+		this.reset_mark_timer = setTimeout(()=>{
+			that.removeWordMark();
+		}, 1000);
+
 	}
 
 	public current_play = 0;
@@ -120,6 +128,7 @@ export class PlaysentenceDirective {
 			} else {
 				this.pms.word(a, function(){
 					that.current_play++;
+					clearTimeout(that.reset_mark_timer);
 					that.markTheWord();
 				}, 10);
 			}
@@ -139,6 +148,11 @@ export class PlaysentenceDirective {
 	
 	end() {
 		if(this.end_callback !== null) this.end_callback();
+	}
+
+	stop() {
+		this.pms.stop();
+		this.play_busy = false;
 	}
 
 

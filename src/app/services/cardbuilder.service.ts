@@ -40,6 +40,9 @@ import { GslComponent } from '../activities/gsl/gsl.component';
 import { GsmComponent } from '../activities/gsm/gsm.component';
 import { GssComponent } from '../activities/gss/gss.component';
 import { Rw1Component } from '../activities/rw1/rw1.component';
+import { IdmComponent } from '../activities/idm/idm.component';
+import { Wl1Component } from '../activities/wl1/wl1.component';
+import { Bs1Component } from '../activities/bs1/bs1.component';
  
 @Injectable({
   providedIn: 'root'
@@ -96,6 +99,9 @@ export class CardbuilderService {
       if(c.type === 'gsm') out.push(new CardItem(GsmComponent, c));
       if(c.type === 'gss') out.push(new CardItem(GssComponent, c));
       if(c.type === 'rw1') out.push(new CardItem(Rw1Component, c));
+      if(c.type === 'idm') out.push(new CardItem(IdmComponent, c));
+      if(c.type === 'wl1') out.push(new CardItem(Wl1Component, c));
+      if(c.type === 'bs1') out.push(new CardItem(Bs1Component, c));
     }
 
     return out;

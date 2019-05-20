@@ -1,0 +1,55 @@
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+
+
+<div class="card-block-item card-style-obj-single card-block-rw1">
+  <div *ngFor='let cn of card.content; let cnkey = index' class="word-block" [attr.wordindex]="cnkey">
+    <div class='word-box'>
+      <div class="idm-word">
+        <span>{{ cn.idiom }}</span>
+      </div>
+      <div class="idm-native-img">
+        <img [hidden]='!cn.image' [src]='cn.image ? playmedia.ltkmediaurl + cn.image : ""' alt='' />
+      </div>
+    </div>
+    <div class='phoneme-box' [attr.wordblock]="cnkey">      
+      <div class="idm-native">
+        <span>{{cn.idiom_native}}</span>
+    </div>
+      <div class="idm-native-img">
+        <img [hidden]='!cn.image' [src]='cn.image ? playmedia.ltkmediaurl + cn.image : ""' alt='' />
+      </div>
+    </div>
+    <div class='sentence-box'>
+      <div class='word-box'>
+        <div class="idm-word">
+          <span>{{ cn.idiom }}</span>
+        </div>
+        <div class="idm-native">
+            <span>{{cn.idiom_native}}</span>
+        </div>
+        <span class="show-maining"><span>Means</span></span>
+        <div class="idm-meaning" *ngIf='cn.meaning'>
+          <span>{{ cn.meaning }}</span>
+        </div>
+        <div class="idm-meaning-native">
+            <span>{{cn.meaning_native}}</span>
+        </div>
+      </div>  
+    </div>
+  </div>
+
+
+  <!--
+  <div class='card-showdown-button' (click)='showNextView()'><i class="far fa-arrow-alt-circle-down"></i></div>
+  <div class='card-showdown-button card-showup-button' (click)='showPrevView()'><i class="far fa-arrow-alt-circle-up"></i></div>
+  -->
+  <div class='card-showdown-button word-next-button' (click)='showNextWord()' [hidden]="cw===wbvs.length-1 && wbvs[cw].view === 'sentence'">
+    <i class="far fa-arrow-alt-circle-right"></i>
+  </div>
+  <div class='card-showdown-button word-prev-button' (click)='showPrevWord()' [hidden]="cw===0 && wbvs[cw].view === 'word'">
+    <i class="far fa-arrow-alt-circle-left"></i>
+  </div>
+
+</div>

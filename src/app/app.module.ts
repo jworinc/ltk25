@@ -90,8 +90,9 @@ import { RequestInterceptor } from './interceptors/http_interceptor';
 import { WarncompleteComponent } from './components/warncomplete/warncomplete.component';
 import { EntranceComponent } from './components/entrance/entrance.component';
 import { Rw1Component } from './activities/rw1/rw1.component';
-
-
+import { IdmComponent } from './activities/idm/idm.component';
+import { Wl1Component } from './activities/wl1/wl1.component';
+import { Bs1Component } from './activities/bs1/bs1.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -166,6 +167,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     WarncompleteComponent,
     EntranceComponent,
     Rw1Component,
+    IdmComponent,
+    Wl1Component,
+    Bs1Component
   ],
   imports: [
     BrowserModule,
@@ -190,7 +194,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   Ar6Component, Or1Component, Or2Component, Or3Component, Or4Component, Bw1Component, Bw2Component, Bw3Component, Bw5Component,
   Bw6Component, Bw7Component, SypComponent, DiwComponent, GscComponent, Rp1Component, Rp2Component, GwmComponent, SiwComponent,
   GwfComponent, GqwComponent, DisComponent, SplComponent, GdnComponent, GcpComponent, GcsComponent, GisComponent, GmuComponent,
-  GnbComponent, GslComponent, GsmComponent, GssComponent, Rw1Component ],
+  GnbComponent, GslComponent, GsmComponent, GssComponent, Rw1Component, IdmComponent, Wl1Component, Bs1Component ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
