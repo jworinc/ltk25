@@ -89,7 +89,7 @@ html, body, .book-container, #main-app-screen, .tool-window{
 	color: #23A7E5;
 }
 .ltk-student{
-	margin-bottom: 77px;
+	margin-bottom: 20px;
     color: #7777bb;
 }
 
@@ -104,10 +104,56 @@ html, body, .book-container, #main-app-screen, .tool-window{
         width: 100%;
     }
 }
+.lesson-desc-tab{
+    display: flex;
+    flex-flow: row nowrap;
+    padding: 0 !important;
+    border-style: none !important;
+    box-shadow: 0 0 2px #777;
+    overflow: hidden;
+}
+.subtab{
+    padding: 0;
+    box-shadow: 0 0 8px #333;
+    padding-bottom: 10px;
+    h2{
+        background-color: #0B75AA;
+        color: white;
+        width: 100%;
+        min-height: 45px;
+        display: flex;
+        align-items: center;
+        font-size: 22px;
+        padding: 0 20px;
+    }
+    button{
+        float: right;
+        margin-right: 20px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+}
+.description-subtab{
+    background-color: #A3E0FF;
+    z-index: 300;
+}   
+.theme-subtab{
+    background-color: #B7E6FF;
+    z-index: 200;
+    span{
+        display: block;
+    }
+}
+.goto-lesson-subtab{
+    background-color: #D3EFFF;
+    z-index: 100;
+}
 
 @media screen and (max-width: 767px) {
     
-    
+    .lesson-desc-tab{
+        flex-flow: column;
+    }
     
 }
 

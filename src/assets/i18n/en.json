@@ -140,5 +140,7 @@
 	"message_sent_info" : "Your message is sent to administrator. We will note you when changes will ready.",
 	"or_try_sidetrip" : "or try sidetrip mode.",
 	"sidetrip_btn" : "Sidetrip",
-	"feedback_thanks": "Thank you for your feedback!"
+	"feedback_thanks" : "Thank you for your feedback!",
+	"go_to_lesson" : "Go to the lesson",
+	"theme" : "Theme"
 }

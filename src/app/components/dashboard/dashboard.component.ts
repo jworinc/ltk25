@@ -48,6 +48,9 @@ export class DashboardComponent implements OnInit {
   public show_setting_modal: boolean = false;
   public show_feedback_modal: boolean = false;
 
+  public current_lesson = 0;
+  public cl: any = {};
+
   constructor(
   	private DL: DataloaderService,
     private notify: SnotifyService,
@@ -88,6 +91,13 @@ export class DashboardComponent implements OnInit {
     this.updateBreaks();
   }
 
+  setLesson(l) {
+    this.current_lesson = l;
+    for(let i in this.lessons){
+      if(parseInt(this.lessons[i].number) === parseInt(l)) this.cl = this.lessons[i];
+    }
+  }
+
   handleStudentInfo(data){
     console.log('Student Info:');
     console.log(data);
@@ -125,7 +135,10 @@ export class DashboardComponent implements OnInit {
     this.lessons = data;
     this.sortLessonsBreaks();
     this.updateBreaks();
-    if(this.student.lu !== 0) this.current_lesson_title = this.getCurrentLessonTitle(this.student.lu);
+    if(this.student.lu !== 0) {
+      this.current_lesson_title = this.getCurrentLessonTitle(this.student.lu);
+      this.setLesson(this.student.lu);
+    }
 
     //  Show main screen
     this.el.nativeElement.querySelector('.book-container').style.opacity = '1';
