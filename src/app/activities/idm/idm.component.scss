@@ -59,34 +59,7 @@
     top: 90%;
     margin-top: -20px;
 }
-// .idm-word span, .idm-meaning span {
-//     color: #90278d;
-//     text-transform: lowercase;
-//     font-size: 15px;
-//     border: 1px solid #a3daf1;
-//     border-radius: 4px;
-//     padding: 2px 11px;
-// }
-// .idm-native span, .idm-meaning-native span {
-//     color: #50b9e6;
-//     text-transform: lowercase;
-//     font-size: 15px;
-//     border: 1px dotted #bf83be;
-//     border-radius: 4px;
-//     padding: 2px 11px;
-//     font-style: italic;
-// }
-// span.show-maining {
-//     border: 3px solid #00a69c;
-//     width: 57px;
-//     font-size: 10px;
-//     border-radius: 50%;
-//     line-height: 13px;
-//     padding: 9px 2px;
-//     min-height: 53px;
-//     background: #d9dada;
-//     color: #c54753;
-// }
+
 .idm-word span, .idm-meaning span {
     color: #90278d;
     text-transform: lowercase;
@@ -126,6 +99,11 @@ span.show-maining span {
 }
 span.show-maining {
     position: relative;
+}
+.idm-description{
+    position: absolute;
+    bottom: 0;
+    font-size: 12px;
 }
 
 @media only screen and (max-width:1024px)
@@ -186,6 +164,9 @@ span.show-maining {
     }
     .word-box, .phoneme-box, .sentence-box{       
         margin-top: -5px;
+    }
+    .word-next-button, .word-prev-button{
+        top: 81%;
     }
 }
 

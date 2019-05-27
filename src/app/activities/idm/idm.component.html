@@ -41,10 +41,9 @@
   </div>
 
 
-  <!--
-  <div class='card-showdown-button' (click)='showNextView()'><i class="far fa-arrow-alt-circle-down"></i></div>
-  <div class='card-showdown-button card-showup-button' (click)='showPrevView()'><i class="far fa-arrow-alt-circle-up"></i></div>
-  -->
+  <div class='card-description-wrap-ar2 diw-card-description idm-description'>
+    <span>{{ card.content[0].desc }}</span>
+  </div>
   <div class='card-showdown-button word-next-button' (click)='showNextWord()' [hidden]="cw===wbvs.length-1 && wbvs[cw].view === 'sentence'">
     <i class="far fa-arrow-alt-circle-right"></i>
   </div>
