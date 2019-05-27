@@ -68,6 +68,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public card_total = 0;
   public repeat_url = '';
   public global_header = 'LTK';
+  public default_header = 'LTK';
   public global_desc = 'LTK';
 
   //  Buffer for cards components
@@ -384,6 +385,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
         that.global_header = e;
       });
 
+      (<CardComponent>componentRef.instance).set_default_header.subscribe(function(e){
+        that.global_header = that.default_header;
+      });
+
       (<CardComponent>componentRef.instance).set_global_desc.subscribe(function(e){
         that.global_desc = e;
       });
@@ -448,7 +453,19 @@ export class LessonComponent implements OnInit, AfterViewInit {
       //  Preload media for current card
       this.preloader.loadCard(this.cpos);
 
-      //this.updateLesson();
+      //  Set default header from last card
+      if(typeof this.downloaded_cards !== 'undefined' && this.downloaded_cards.length > 0){
+        //  Last card
+        let lc = this.downloaded_cards[this.downloaded_cards.length - 1];
+        //  Check if last card is SYP and it has header
+        if(lc.activity === 'SYP' && typeof lc.content !== 'undefined' && lc.content.length > 0 && 
+            typeof lc.content[0].Cmd01 !== 'undefined' && lc.content[0].Cmd01.length > 0 &&
+            typeof lc.content[0].Cmd01[0].header !== 'undefined'){
+          this.default_header = lc.content[0].Cmd01[0].header;
+        }
+        
+      }
+      
   }
 
   startLesson() {

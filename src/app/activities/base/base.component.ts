@@ -94,7 +94,7 @@ export class BaseComponent implements OnInit, CardComponent {
 	@Output() enable_next_slide = new EventEmitter<boolean>();
 	@Output() set_global_desc = new EventEmitter<any>();
 	@Output() set_global_header = new EventEmitter<any>();
-
+	@Output() set_default_header = new EventEmitter<any>();
 
   constructor(private el:ElementRef, private sn: DomSanitizer, private pm: PlaymediaService, private logging: LoggingService, private cs: ColorschemeService) { 
 	  this.sp.mediastorage = pm.getMediaStorage();
@@ -290,7 +290,7 @@ export class BaseComponent implements OnInit, CardComponent {
 				}, 300);
 			}
 
-		 
+			that.checkForHeader();
 			that.show(); 
 		}, 3);
 
@@ -650,6 +650,66 @@ export class BaseComponent implements OnInit, CardComponent {
 
 	clear() {
 
+	}
+	
+	eslCustomInstructions(name, cb=()=>{}){
+		this.pm.stop();
+		let ib = [];
+		let that = this;
+		let callback = cb;
+		function nextInstruction(){
+			if(ib.length <= 0) return;
+			that.card.content[0].desc = ib.shift();
+			that.setGlobalDesc(that.card.content[0].desc);
+		}
+		for(let i in this.card.content[0][name]){
+			let a = this.card.content[0][name][i];
+			ib.push(a.pointer_to_value);
+			if(typeof a.audio !== 'undefined' && a.audio !== ''){
+				//	Check if last
+				if(parseInt(i) >= this.card.content[0][name].length - 1){
+					this.pm.sound(a.audio, function(){
+	    				callback();
+	    			});
+				} else {
+					this.pm.sound(a.audio, function(){
+	    				nextInstruction();
+	    			}, 300);
+				}
+    			
+    		} else {
+    			//this.showQuestion();
+    		}
+		}
+		nextInstruction();
+	}
+
+	checkForHeader() {
+		if(typeof this.card !== 'undefined' && 
+				typeof this.card.content !== 'undefined' &&
+				typeof this.card.content.length !== 'undefined') {
+
+			//	Get first content item
+			let c = this.card.content[0];
+
+			//	Check for header
+			if(typeof c.Header !== 'undefined' && typeof c.Header.length !== 'undefined'){
+				this.setGlobalHeader(c.Header[0].pointer_to_value);
+			}
+			//	Check for Cmd01 in Syp activity
+			else if(typeof c.Cmd01 !== 'undefined' && typeof c.Cmd01.length !== 'undefined' &&
+								c.Cmd01.length > 0 && typeof c.Cmd01[0].header !== 'undefined'){
+				this.setGlobalHeader(c.Cmd01[0].header);
+			}
+			else {
+				this.setDefaultHeader();
+			}
+			
+		}
+	}
+
+	setDefaultHeader() {
+		this.set_default_header.emit();
 	}
 
 

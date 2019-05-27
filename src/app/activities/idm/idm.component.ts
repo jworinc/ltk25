@@ -28,6 +28,7 @@ export class IdmComponent extends BaseComponent implements OnInit {
     console.log(this.data);
     this.current_header = this.card.header;
     let that = this;
+    /*
     setTimeout(()=>{ 
       that.updateWordblocks(); 
       that.updateViewStates();
@@ -35,6 +36,7 @@ export class IdmComponent extends BaseComponent implements OnInit {
         e.style.opacity = '1';
       });
     }, 10);
+    */
     this.wblength = this.card.content.length;
     this.initViewStates();
   }
@@ -52,6 +54,60 @@ export class IdmComponent extends BaseComponent implements OnInit {
   //  Word blocks view states, (word | pronounce | sentence)
   public wbvs = [];
 
+  //	Callback for show card event
+	show() {
+		//	If card is active and it is not dubling
+		if(this.isActive() && !this.prevent_dubling_flag){
+      let that = this;
+      setTimeout(()=>{ 
+        that.updateWordblocks(); 
+        that.updateViewStates();
+        that.elm.nativeElement.querySelectorAll('.word-block').forEach((e)=>{
+          e.style.opacity = '1';
+        });
+      }, 10);
+      //	Play card description
+      this.playCardDescription();
+        
+			this.prevent_dubling_flag = true;
+		}
+		
+  }
+  
+  playContentDescription() {
+    
+      let cw = this.cw;
+      let that = this;
+      if(this.wbvs[cw].view === 'word') this.eslCustomInstructions('NextInst', ()=>{
+        that.disableNextSlide();
+        that.blinkOnlyNext();
+      });
+      else if(this.wbvs[cw].view === 'pronounce') this.eslCustomInstructions('TransInst', ()=>{
+        that.disableNextSlide();
+        that.blinkOnlyNext();
+      });
+      else if(this.wbvs[cw].view === 'sentence') this.eslCustomInstructions('RevInst', ()=>{
+        that.enableNextSlide();
+        that.blinkOnlyNext();
+      });
+    
+  }
+
+  next() {
+    if(this.isActive()){
+      this.enableNextSlide();
+      this.showNextWord();
+    }
+
+  }
+
+  repeat() {
+    if(this.uinputph === 'finish'){
+      this.eslCustomInstructions('RevInst');
+      return;
+    }
+    this.playContentDescription();
+  }
   //  Init Word blocks view states
   initViewStates() {
     for(let i = 0; i < this.wblength; i++){
@@ -98,7 +154,7 @@ export class IdmComponent extends BaseComponent implements OnInit {
         element.querySelector('.sentence-box').style.opacity='1';
       }
     });
-
+    this.playContentDescription();
   }
 
   showTranslationStatus(e)

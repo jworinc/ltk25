@@ -68,6 +68,36 @@ export class Rw1Component extends BaseComponent implements OnInit {
   //  Word blocks view states, (word | pronounce | sentence)
   public wbvs = [];
 
+  //	Callback for show card event
+	show() {
+		//	If card is active and it is not dubling
+		if(this.isActive() && !this.prevent_dubling_flag){
+		
+      //	Play card description
+      this.playCardDescription();
+        
+			this.prevent_dubling_flag = true;
+		}
+		
+  }
+  
+  playContentDescription() {
+    
+      let that = this;
+      this.eslCustomInstructions('NextInst', ()=>{
+        setTimeout(()=>{ that.playWord(that.card.content[that.cw].wavename); }, 500);
+      });
+    
+  }
+
+  repeat() {
+    if(this.uinputph === 'finish'){
+      this.eslCustomInstructions('RespAtEnd');
+      return;
+    }
+    this.playContentDescription();
+  }
+
   //  Init Word blocks view states
   initViewStates() {
     for(let i = 0; i < this.wblength; i++){
@@ -175,6 +205,7 @@ export class Rw1Component extends BaseComponent implements OnInit {
       }
       //  Update word blocks
       this.updateWordblocks();
+      this.repeat();
     }
     //  Else switch to the next view
     else {
@@ -200,6 +231,7 @@ export class Rw1Component extends BaseComponent implements OnInit {
       if(this.cw < 0) this.cw = 0;
       //  Update word blocks
       this.updateWordblocks();
+      this.repeat();
     }
     //  Else switch to the prev view
     else {

@@ -26,4 +26,5 @@ export interface CardComponent {
   global_start: boolean;
   set_global_desc: any;
   set_global_header: any;
+  set_default_header: any;
 }

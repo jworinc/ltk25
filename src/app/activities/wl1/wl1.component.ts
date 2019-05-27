@@ -77,14 +77,15 @@ export class Wl1Component extends BaseComponent implements OnInit {
 			if(!this.validate()) {
 				
 				//	Play card description
-				this.playCardDescription();
+        if(!this.is_mixed) this.playCardDescription();
+        else this.playContentDescription();
         this.disableMoveNext();
-        if(!this.wc_started){
-          let that = this;
-          setTimeout(()=>{
-            that.addNextWord();
-          }, 700);
-        }
+        //if(!this.wc_started){
+        //  let that = this;
+        //  setTimeout(()=>{
+        //    that.addNextWord();
+        //  }, 700);
+        //}
 			} else {
 				this.enableMoveNext();
 			}
@@ -102,11 +103,23 @@ export class Wl1Component extends BaseComponent implements OnInit {
   
   playContentDescription() {
     if(this.is_mixed){
-      this.playCurrentWord();
+      //this.playCurrentWord();
+      let that = this;
+      this.eslCustomInstructions('MatchInst', ()=>{
+        setTimeout(()=>{ that.playCurrentWord(); }, 500);
+      });
+    } else {
+    //if(!this.wc_started){
+      let that = this;
+      setTimeout(()=>{
+        that.eslCustomInstructions('NextInst', ()=>{
+          that.addNextWord();
+        });
+      }, 700);
+    //} else this.eslCustomInstructions('NextInst');
     }
   }
 
-  
 	//	Create formated user input string for errors log
 	getUserInputString() {
 		return this.input_data;
@@ -212,18 +225,23 @@ export class Wl1Component extends BaseComponent implements OnInit {
       }
       that.is_mixed = true;
       setTimeout(()=>{ that.initDraw(); }, 10);
-      that.playCurrentWord();
+      //that.playCurrentWord();
     }, 200);
     this.words[0].hilight = true;
     
   }
 
   repeat() {
-    if(this.is_mixed){
-      this.playCurrentWord();
-    } else {
-      this.addNextWord();
+    //if(this.is_mixed){
+    //  this.playCurrentWord();
+    //} else {
+    //  this.addNextWord();
+    //}
+    if(this.uinputph === 'finish'){
+      this.eslCustomInstructions('RespAtEnd');
+      return;
     }
+    this.playContentDescription();
   }
 
   playCurrentWord() {
@@ -251,6 +269,10 @@ export class Wl1Component extends BaseComponent implements OnInit {
       this.uinputph = 'select';
       this.mixTranslations();
       this.enableNextSlide();
+      let that = this;
+      this.eslCustomInstructions('MatchInst', ()=>{
+        setTimeout(()=>{ that.playCurrentWord(); }, 500);
+      });
     }
   }
 
@@ -270,7 +292,8 @@ export class Wl1Component extends BaseComponent implements OnInit {
         });
         that.elm.nativeElement.querySelector('.gsc-results').style.display = 'block';
         that.enableNextCard();
-      }, 1000);
+        that.eslCustomInstructions('RespAtEnd');
+      }, 2000);
       this.uinputph = 'finish';
       
     }

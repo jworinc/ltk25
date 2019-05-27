@@ -75,7 +75,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 					this.disableMoveNext();
 					let that = this;
 					setTimeout(()=>{
-						if(!that.senstarted) that.startSentence(that.sentence_index);
+						//if(!that.senstarted) that.startSentence(that.sentence_index);
 						//else that.nextSentence(that.sentence_index);
 					}, 700);
 				} else {
@@ -86,6 +86,20 @@ export class Bs1Component extends BaseComponent implements OnInit {
 			}
 			
 		}
+
+		
+		playContentDescription() {
+    
+				let that = this;
+				this.eslCustomInstructions('NextInst', ()=>{
+					setTimeout(()=>{ 
+						if(!that.senstarted) that.startSentence(that.sentence_index);
+						else that.nextSentence(that.sentence_index);
+					}, 500);
+				});
+			
+		}
+
 
 		//	Card hide hook
 		hide() {
@@ -99,8 +113,9 @@ export class Bs1Component extends BaseComponent implements OnInit {
 				this.ss.map((s)=>{ 
 					s.stop(); 
 				});
-				this.nextSentence(this.sentence_index);
+				//this.nextSentence(this.sentence_index);
 				//this.blinkEnter();
+				this.playContentDescription();
 			} else {
 				this.enableNextCard();
 			}
@@ -199,9 +214,8 @@ export class Bs1Component extends BaseComponent implements OnInit {
 				this.enter_timer = setTimeout(()=>{ if(that.isActive()) that.nextSentence(that.sentence_index); }, 1500);
 			} else {
 				this.uinputph = 'finish';
-				this.playCorrectSound(function(){ 
-					
-				});
+				//this.playCorrectSound(function(){});
+				this.eslCustomInstructions('RespAtEnd');
 				this.enableNextCard();
 			}
 		}
