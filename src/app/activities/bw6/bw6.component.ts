@@ -4,6 +4,7 @@ import { Bw3Component } from '../bw3/bw3.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { OptionService } from '../../services/option.service';
 
 @Component({
   selector: 'app-bw6',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Bw6Component extends Bw3Component implements OnInit {
 
-  constructor(private bw6el:ElementRef, private bw6sn: DomSanitizer, private bw6pm: PlaymediaService, private bw6log: LoggingService, private bw6cs: ColorschemeService) {
-  	super(bw6el, bw6sn, bw6pm, bw6log, bw6cs);
+	constructor(private bw6el:ElementRef, 
+							private bw6sn: DomSanitizer, 
+							private bw6pm: PlaymediaService, 
+							private bw6log: LoggingService, 
+							private bw6cs: ColorschemeService,
+							private opbw6: OptionService) {
+  	super(bw6el, bw6sn, bw6pm, bw6log, bw6cs, opbw6);
   }
 
   ngOnInit() {
@@ -26,7 +32,12 @@ export class Bw6Component extends Bw3Component implements OnInit {
 	//this.setCardId();
 	this.card = this.data;
 	this.current_header = this.card.header;
-	this.max_presented = this.card.content.length;
+	//this.max_presented = this.card.content.length;
+
+	//	Define number of repetitions
+	this.max_repetitions = this.card.content.length;
+	let op = this.opbw6.getOptions();
+	this.max_presented = this.getMaxPresented(this.max_repetitions, op);
 
 	this.setCard();
 

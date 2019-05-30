@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { OptionService } from '../../services/option.service';
 
 @Component({
   selector: 'app-diw',
@@ -13,7 +14,12 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private diwlog: LoggingService, private diwcs: ColorschemeService) {
+	constructor(private elm:ElementRef, 
+							private sanitizer: DomSanitizer, 
+							private playmedia: PlaymediaService, 
+							private diwlog: LoggingService, 
+							private diwcs: ColorschemeService,
+							private op: OptionService) {
   	super(elm, sanitizer, playmedia, diwlog, diwcs);
   }
 
@@ -28,7 +34,12 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 
 	this.current_header = this.card.header;
 
-	this.max_presented = this.card.content.length;
+	//this.max_presented = this.card.content.length;
+
+	//	Define number of repetitions
+	this.max_repetitions = this.card.content.length;
+	let op = this.op.getOptions();
+	this.max_presented = this.getMaxPresented(this.max_repetitions, op);
 
 	this.setCard();
 

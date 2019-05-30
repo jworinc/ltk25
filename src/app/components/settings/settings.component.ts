@@ -86,8 +86,8 @@ export class SettingsComponent implements OnInit {
         this.options.volume = '' + this.globalvolume;
         this.options.mic = '' + this.recgain;
 
-		console.log(this.options);
-
+				console.log(this.options);
+				this.op.setOptions(this.options);
         let data = this.options;
         let that = this;
         this.save_settings_started = true;
@@ -148,7 +148,7 @@ export class SettingsComponent implements OnInit {
 	setExpertlevel(val) {
 		if(typeof this.options.expertlevel !== 'undefined'){
 			this.options.expertlevel = val;
-            this.playmedia.setRate(0.8 + (parseInt(this.options.expertlevel)*0.04));
+            this.playmedia.setRate(0.8 + (parseInt(this.options.expertlevel)*0.08));
 		}
 	}
 

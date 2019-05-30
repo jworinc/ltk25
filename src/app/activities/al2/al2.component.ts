@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { OptionService } from '../../services/option.service';
 
 @Component({
   selector: 'app-al2',
@@ -13,38 +14,48 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 
-  	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private al2log: LoggingService, private al2cs: ColorschemeService) {
+		constructor(private elm:ElementRef, 
+								private sanitizer: DomSanitizer, 
+								private playmedia: PlaymediaService, 
+								private al2log: LoggingService, 
+								private al2cs: ColorschemeService,
+								private op: OptionService) {
   		super(elm, sanitizer, playmedia, al2log, al2cs);
   	}
 
   	ngOnInit() {
   		this.setHeader();
   		//	Define current card number
-		this.current_number = +this.data.cross_number;
-		this.card_id = this.data.id;
-		this.setCardNumber();
-		//this.setCardId();
+			this.current_number = +this.data.cross_number;
+			this.card_id = this.data.id;
+			this.setCardNumber();
+			//this.setCardId();
 
-		this.card = this.data;
-		
-		this.current_header = this.card.header;
-		
-		//	Data format for AL2
-		/*this.card.content = [{
-			desc: 'Please enter the two missing letters in a 4-letter alphabet sequence above.',
-			parts: [
+			this.card = this.data;
+			
+			this.current_header = this.card.header;
+			
+			//	Data format for AL2
+			/*this.card.content = [{
+				desc: 'Please enter the two missing letters in a 4-letter alphabet sequence above.',
+				parts: [
 
-				{ letter: 'A', expected: '' },
-				{ letter: 'B', expected: '' },
-				{ letter: '', expected: 'C' },
-				{ letter: '', expected: 'D' }
+					{ letter: 'A', expected: '' },
+					{ letter: 'B', expected: '' },
+					{ letter: '', expected: 'C' },
+					{ letter: '', expected: 'D' }
 
-			]
-		}]*/
+				]
+			}]*/
 
-		if(typeof this.card.content[0].RepeatCount !== 'undefined') this.max_presented = parseInt(this.card.content[0].RepeatCount);
+			//if(typeof this.card.content[0].RepeatCount !== 'undefined') this.max_presented = parseInt(this.card.content[0].RepeatCount);
 
-		this.setCard();
+			//	Define number of repetitions
+			let max = this.max_repetitions;
+			let op = this.op.getOptions();
+			this.max_presented = this.getMaxPresented(max, op);
+
+			this.setCard();
 
   	}
 

@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { OptionService } from '../../services/option.service';
 
 @Component({
   selector: 'app-ar1',
@@ -13,36 +14,45 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Ar1Component extends BaseComponent implements OnInit {
 
-    constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private ar1log: LoggingService, private ar1cs: ColorschemeService) {
+		constructor(private elm:ElementRef, 
+								private sanitizer: DomSanitizer, 
+								private playmedia: PlaymediaService, 
+								private ar1log: LoggingService, 
+								private ar1cs: ColorschemeService,
+								private op: OptionService) {
   		super(elm, sanitizer, playmedia, ar1log, ar1cs);
   	}
 
   	ngOnInit() {
   		this.setHeader();
   		this.user_input_background = {
-			'background-color': '#725A3F'
-		}
-		this.content_right_answer_word = {};
-		this.content_right_missing_letter = {};
-		this.current_number = +this.data.cross_number;
-		this.card_id = this.data.id;
-		this.setCardNumber();
-		//this.setCardId();
+				'background-color': '#725A3F'
+			}
+			this.content_right_answer_word = {};
+			this.content_right_missing_letter = {};
+			this.current_number = +this.data.cross_number;
+			this.card_id = this.data.id;
+			this.setCardNumber();
+			//this.setCardId();
 
-		//	Add card data to the directive scope
-		this.card = this.data;
-		
-		//	Set current card header
-		this.current_header = this.card.header;
+			//	Add card data to the directive scope
+			this.card = this.data;
+			
+			//	Set current card header
+			this.current_header = this.card.header;
 
-		this.max_presented = this.card.content.length;
+			//this.max_presented = this.card.content.length;
+
+			//	Define number of repetitions
+			this.max_repetitions = this.card.content.length;
+			let op = this.op.getOptions();
+			this.max_presented = this.getMaxPresented(this.max_repetitions, op);
+
+			//	User input phase
+			this.uinputph = '';
 
 
-		//	User input phase
-		this.uinputph = '';
-
-
-		this.setCard();
+			this.setCard();
 	
   	}
 

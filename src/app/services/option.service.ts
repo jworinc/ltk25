@@ -34,6 +34,16 @@ export class OptionService {
   public last_requested_lang = '';
   public pause_on_instruction: boolean = false;
 
+  public opt = {
+      expertlevel: "2",
+      language: "english",
+      mic: "50",
+      quickpace: "1",
+      replevel: "50",
+      screencolor: "1",
+      volume: "1"
+  }
+
   constructor(private dl: DataloaderService) {
     let that = this;
     dl.getLocales().subscribe((e)=>{
@@ -42,6 +52,12 @@ export class OptionService {
         that.setLanguage(that.last_requested_lang);
       }
     })
+  }
+
+  getOptions() { return this.opt; }
+
+  setOptions(options) {
+    this.opt = options;
   }
 
   getLocale() {

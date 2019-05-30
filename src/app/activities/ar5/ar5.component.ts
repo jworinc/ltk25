@@ -4,6 +4,7 @@ import { BasearComponent } from '../basear/basear.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { OptionService } from '../../services/option.service';
 
 @Component({
   selector: 'app-ar5',
@@ -13,7 +14,12 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Ar5Component extends BasearComponent implements OnInit, DoCheck {
 
-    constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService, private ar5log: LoggingService, private ar5cs: ColorschemeService) {
+	constructor(private element:ElementRef, 
+				private sz: DomSanitizer, 
+				private pms: PlaymediaService, 
+				private ar5log: LoggingService, 
+				private ar5cs: ColorschemeService,
+				private opar5: OptionService) {
   	  super(element, sz, pms, ar5log, ar5cs);
     }
 
@@ -42,7 +48,12 @@ export class Ar5Component extends BasearComponent implements OnInit, DoCheck {
 		this.card = this.data;
 		//	Set current card header
 		this.current_header = this.card.header;
-		this.max_presented = this.card.content.length;
+		//this.max_presented = this.card.content.length;
+
+		//	Define number of repetitions
+		this.max_repetitions = this.card.content.length;
+		let op = this.opar5.getOptions();
+		this.max_presented = this.getMaxPresented(this.max_repetitions, op);
 
 		this.setCard();
 	

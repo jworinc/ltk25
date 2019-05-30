@@ -4,6 +4,7 @@ import { CardComponent } from '../../components/card/card.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { max } from 'rxjs/operators';
 
 @Component({
   selector: 'app-base',
@@ -45,6 +46,7 @@ export class BaseComponent implements OnInit, CardComponent {
 	public activity_log_timer: any;
 	public current_hint_level = 0;
 	public complete = 0;
+	public max_repetitions = 10;
 
     @Input() data: any;
     @Input() default_waves: any;
@@ -547,6 +549,7 @@ export class BaseComponent implements OnInit, CardComponent {
 		if(typeof this.card_object !== 'undefined') res.card_object = this.card_object;
 		if(typeof this.card_instance !== 'undefined') res.card_instance = this.card_instance;
 		this.errors_log.push(res);
+		this.increaseMaxPresented();
 	}
 
 	clearUserInput() {
@@ -710,6 +713,52 @@ export class BaseComponent implements OnInit, CardComponent {
 
 	setDefaultHeader() {
 		this.set_default_header.emit();
+	}
+
+	getMaxPresented(max, op) {
+		let qp = parseInt(op.quickpace);
+		let exp = parseInt(op.expertlevel);
+		let rl = parseInt(op.replevel);
+		let max_presented = 1;
+		//	Quick pace off (inverted!)
+		if(qp === 1){
+			//	Check if we have max content samples
+			if(max >= 4){
+				if(exp === 0 || exp === 1) max_presented = 4;
+				if(exp === 2 || exp === 3) max_presented = 3;
+				if(exp === 4) max_presented = 2;
+			} else {
+				if(exp === 0 || exp === 1) max_presented = max;
+				if(exp === 2 || exp === 3) max_presented = max - 1;
+				if(exp === 4) max_presented = 1;
+			}
+		}
+		//	Quik pace on
+		else {
+			//	Check if we have max content samples
+			if(max >= 3){
+				if(exp === 0 || exp === 1) max_presented = 3;
+				if(exp === 2 || exp === 3) max_presented = 2;
+				if(exp === 4) max_presented = 1;
+			} else {
+				if(exp === 0 || exp === 1) max_presented = max;
+				if(exp === 2 || exp === 3) max_presented = max - 1;
+				if(exp === 4) max_presented = 1;
+			}
+		}
+		//	Check repeat level and correct max presented
+		if(rl < 100) max_presented--;
+		if(rl > 100) max_presented++;
+		//	Check final limits
+		if(max_presented > max) max_presented = max;
+		if(max_presented < 1) max_presented = 1;
+		console.log('Max presented count for current activity: ' + max_presented + ' for activity - ' + this.card.activity);
+		return max_presented;
+	}
+
+	increaseMaxPresented() {
+		if(this.max_presented < this.max_repetitions) this.max_presented++;
+		console.log('Max presented increased ('+this.card.activity+') !!!');
 	}
 
 

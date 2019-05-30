@@ -267,10 +267,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.recorder.setGain(+data.options.mic);
     this.playmedia.setVolume(+data.options.volume);
     this.global_volume = +data.options.volume;
-    this.playmedia.setRate(0.8 + (parseInt(data.options.expertlevel)*0.04));
+    this.playmedia.setRate(0.8 + (parseInt(data.options.expertlevel)*0.08));
     this.cs.setScheme(+data.options.screencolor);
     this.Option.setLanguage(data.options.language);
-
+    this.Option.setOptions(data.options);
     //  Check if start position is setted
     if(typeof data.start !== 'undefined' && !this.sidetripmode) this.start_position = data.start;
     

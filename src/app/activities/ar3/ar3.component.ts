@@ -4,6 +4,7 @@ import { Ar1Component } from '../ar1/ar1.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { OptionService } from '../../services/option.service';
 
 @Component({
   selector: 'app-ar3',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Ar3Component extends Ar1Component implements OnInit {
 
-  constructor(private ar3el:ElementRef, private ar3sn: DomSanitizer, private ar3pm: PlaymediaService, private ar3log: LoggingService, private ar3cs: ColorschemeService) {
-  	super(ar3el, ar3sn, ar3pm, ar3log, ar3cs);
+  constructor(private ar3el:ElementRef, 
+			  private ar3sn: DomSanitizer, 
+			  private ar3pm: PlaymediaService, 
+			  private ar3log: LoggingService, 
+			  private ar3cs: ColorschemeService,
+			  private opar3: OptionService) {
+  	super(ar3el, ar3sn, ar3pm, ar3log, ar3cs, opar3);
   }
 
   ngOnInit() {
@@ -35,8 +41,12 @@ export class Ar3Component extends Ar1Component implements OnInit {
 		//	Set current card header
 		this.current_header = this.card.header;
 
-		this.max_presented = this.card.content.length;
+		//this.max_presented = this.card.content.length;
 
+		//	Define number of repetitions
+		this.max_repetitions = this.card.content.length;
+		let op = this.opar3.getOptions();
+		this.max_presented = this.getMaxPresented(this.max_repetitions, op);
 
 		//	User input phase
 		this.uinputph = '';

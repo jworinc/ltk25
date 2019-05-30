@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { OptionService } from '../../services/option.service';
 
 @Component({
   selector: 'app-ar2',
@@ -13,7 +14,12 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Ar2Component extends BaseComponent implements OnInit {
 
-    constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private ar2log: LoggingService, private ar2cs: ColorschemeService) {
+		constructor(private elm:ElementRef, 
+								private sanitizer: DomSanitizer, 
+								private playmedia: PlaymediaService, 
+								private ar2log: LoggingService, 
+								private ar2cs: ColorschemeService,
+								private op: OptionService) {
   		super(elm, sanitizer, playmedia, ar2log, ar2cs);
     } 
 
@@ -30,8 +36,12 @@ export class Ar2Component extends BaseComponent implements OnInit {
 		//	Set current card header
 		this.current_header = this.card.header;
 
-		this.max_presented = this.card.content.length;
-
+		//this.max_presented = this.card.content.length;
+		
+		//	Define number of repetitions
+		this.max_repetitions = this.card.content.length;
+		let op = this.op.getOptions();
+		this.max_presented = this.getMaxPresented(this.max_repetitions, op);
 
 		//	User input phase
 		this.uinputph = '';

@@ -4,6 +4,7 @@ import { BasebwComponent } from '../basebw/basebw.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { OptionService } from '../../services/option.service';
 
 @Component({
   selector: 'app-bw2',
@@ -13,7 +14,12 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 
-  constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService, private bw2log: LoggingService, private bw2cs: ColorschemeService) {
+	constructor(private element:ElementRef, 
+							private sz: DomSanitizer, 
+							private pms: PlaymediaService, 
+							private bw2log: LoggingService, 
+							private bw2cs: ColorschemeService,
+							private op: OptionService) {
   	super(element, sz, pms, bw2log, bw2cs);
   }
 
@@ -27,8 +33,13 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 	//this.setCardId();
 	this.card = this.data;
 	this.current_header = this.card.header;
-	this.max_presented = this.card.content.length;
+	//this.max_presented = this.card.content.length;
 
+	//	Define number of repetitions
+	this.max_repetitions = this.card.content.length;
+	let op = this.op.getOptions();
+	this.max_presented = this.getMaxPresented(this.max_repetitions, op);
+	
 	this.setCard();
 
 	//	User answer phases, letters, sounds and vowel sound, rec, listen, compare, finish

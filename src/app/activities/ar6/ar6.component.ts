@@ -4,6 +4,7 @@ import { Ar5Component } from '../ar5/ar5.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { OptionService } from '../../services/option.service';
 
 @Component({
   selector: 'app-ar6',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Ar6Component extends Ar5Component implements OnInit, DoCheck {
 
-  constructor(private ar6el:ElementRef, private ar6sn: DomSanitizer, private ar6pm: PlaymediaService, private ar6log: LoggingService, private ar6cs: ColorschemeService) {
-  	super(ar6el, ar6sn, ar6pm, ar6log, ar6cs);
+	constructor(private ar6el:ElementRef, 
+							private ar6sn: DomSanitizer, 
+							private ar6pm: PlaymediaService, 
+							private ar6log: LoggingService, 
+							private ar6cs: ColorschemeService,
+							private opar6: OptionService) {
+  	super(ar6el, ar6sn, ar6pm, ar6log, ar6cs, opar6);
   }
 
   public index_for_required_letter: number = -1;
@@ -34,7 +40,12 @@ export class Ar6Component extends Ar5Component implements OnInit, DoCheck {
 	this.card = this.data;
 	//	Set current card header
 	this.current_header = this.card.header;
-	this.max_presented = this.card.content.length;
+	//this.max_presented = this.card.content.length;
+
+	//	Define number of repetitions
+	this.max_repetitions = this.card.content.length;
+	let op = this.opar6.getOptions();
+	this.max_presented = this.getMaxPresented(this.max_repetitions, op);
 
 	this.setCard();
 
