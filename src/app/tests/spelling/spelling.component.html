@@ -1,0 +1,33 @@
+<section class="test-slide-item custom-slide">
+
+<div class="row common-div">
+  <div class="col-2 left-side"><h1>{{data.position + 1}}.</h1></div>
+
+  <div class="col-10">
+
+    <div class="row cust-row">
+
+      <div class="col-12">
+          <h4>{{data?.description}}</h4>
+      </div>
+    </div>
+
+    <!-- <div class="text-center">
+        <span *ngFor="let word of words" class="ques_span"><span>{{word}}</span><input class="ques_ip" type="text"></span>
+    </div> -->
+    <div class="temp">
+      <div *ngIf="ind < data.content.length ? true: false" class="text-center word-cls row cust-row vert-mid" [ngClass]=" result?.length <= 6 ? 'answer-div': '' ">
+          <span [innerHTML]="content | bindhtml"></span><!--<input class="ques_ip" type="text">-->
+      </div>
+
+      <div class="row cust-row word-row">
+        <div class="col-4" *ngFor="let res of result">
+            <p class="p_design" [ngClass]="res.isCorrect ? 'correct_answer': 'wrong_answer'">{{res?.word}}<span class="float-right"><i class="fa" [ngClass]="res.isCorrect ? 'fa-check': 'fa-times'" aria-hidden="true"></i></span></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</section>

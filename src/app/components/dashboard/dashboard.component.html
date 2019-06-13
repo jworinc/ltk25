@@ -12,7 +12,7 @@
 			<h1>{{ student.name }}</h1>
             <h4>{{ student.sid_message }}</h4>
 		</div>
-		<div class="row ltk-breaks-list">
+		<div class="row ltk-breaks-list" [hidden]="show_notebook || show_grammar || show_testing">
 	        <div class="col-md-12">
 	            <div class="tab" role="tabpanel">
 	                <!-- Nav tabs -->
@@ -548,15 +548,27 @@
 
 	            </div>
 	        </div>
-	    </div>
+        </div>
+        <div class="row zoom-frame" style="margin: 0; height: 600px" [hidden]="!show_notebook && !show_grammar && !show_testing">
+            <!-- Notebook   -->
+            <app-notebook [show]="show_notebook" [scale]="scale" [hidden]="!show_notebook"></app-notebook>
 
+            <!-- Grammar   -->
+            <app-grammar [show]="show_grammar" [scale]="scale" [hidden]="!show_grammar"></app-grammar>
+
+            <!-- Testing -->
+            <app-showtesting [show]="show_testing" [scale]="scale" [hidden]="!show_testing"></app-showtesting>
+        </div>    
     </div>
 
     <!--  Menu background   -->
     <app-msmenu (sidetripmode)="onSidetripmode($event)"
                 (closemenu)="onCloseMenu()"
                 (showsettings)="onShowSettings()"
-                (showfeedback)="onShowFeedback()" 
+                (showfeedback)="onShowFeedback()"
+                (shownotebook)="onShowNotebook()"
+                (showgrammar)="onShowGrammar()"
+                (showtesting)="onShowTesting()" 
                 [lu]="current_lesson_title"
                 [show_tool_pages_list]="false"
                 [show_menu_open_button]="true">

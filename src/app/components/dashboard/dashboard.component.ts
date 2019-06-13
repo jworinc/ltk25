@@ -1,9 +1,10 @@
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataloaderService } from '../../services/dataloader.service';
 import { SnotifyService } from 'ng-snotify';
 import { TranslateService } from '@ngx-translate/core';
 import { OptionService } from '../../services/option.service';
+import { NotebookComponent } from '../notebook/notebook.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -50,6 +51,15 @@ export class DashboardComponent implements OnInit {
 
   public current_lesson = 0;
   public cl: any = {};
+  public scale = 1;
+  public slide_scale = 0.96;
+  public mode = 'dual';
+
+  public show_notebook: boolean = false;
+  public show_grammar: boolean = false;
+  public show_testing: boolean = false;
+
+  @ViewChild(NotebookComponent) nb: NotebookComponent;
 
   constructor(
   	private DL: DataloaderService,
@@ -76,7 +86,13 @@ export class DashboardComponent implements OnInit {
         }
     );
 
+    //  Init window size
     this.innerWidth = window.innerWidth;
+
+    //  Swith layout according to window size
+    if(this.innerWidth <= 1024){
+      this.mode = 'single';
+    }
 
     this.Option.change_language_event.subscribe(()=>{
       console.log('Change language event.');
@@ -89,6 +105,7 @@ export class DashboardComponent implements OnInit {
   onResize(event) {
     this.innerWidth = window.innerWidth;
     this.updateBreaks();
+    this.scale = this.defineCurrentScale();
   }
 
   setLesson(l) {
@@ -320,6 +337,63 @@ export class DashboardComponent implements OnInit {
     this.sidetripmode = false;
   }
 
+  defineCurrentScale() {
 
+    //  Calc initial scale to fit card on the page
+    //  Take width of 90% available card space
+    let zb = this.el.nativeElement.querySelector('.zoom-frame');
+    if(zb === null) return 1;
+    let z = zb.clientWidth*this.slide_scale;
+
+    
+    //  Default double cards width
+    let cbi = null;
+    this.el.nativeElement.querySelectorAll('.card-block-item').forEach((e)=>{
+      if(e.clientWidth !== 0 && e.clientHeight !== 0) cbi = e;
+    });
+    if(cbi === null) return 1;
+    let c = cbi.clientWidth;
+    if(this.mode === 'single') {
+      c = 400;
+    }
+      
+    if((z/c * cbi.clientHeight) > zb.clientHeight){
+      z = zb.clientHeight*this.slide_scale;
+      c = cbi.clientHeight;
+    }
+    
+
+    let scale = z/c;
+    if(scale > 2.4) scale = 2.4;
+    return scale;
+  }
+
+  onShowGrammar(){
+    this.show_notebook = false;
+    this.show_testing = false;
+    this.show_grammar = !this.show_grammar;
+    console.log("Show grammar.");
+    let that= this;
+    setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
+  }
+
+  onShowNotebook(){
+    console.log("Show Notebook.");
+    this.show_grammar = false;
+    this.show_testing = false;
+    let that = this;
+    this.show_notebook = !this.show_notebook;
+    this.nb.lesson_num = this.student.lu;
+    setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
+  }
+
+  //  Show Testing
+  onShowTesting() {
+    this.show_notebook = false;
+    this.show_grammar = false;
+    this.show_testing = !this.show_testing;
+    let that= this;
+    setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
+  }
 
 }

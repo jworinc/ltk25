@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import "./app/activities/base/base.component.scss";
+@import "./app/tests/basetest/basetest.component.scss";
 
 html, body{
 	height: 100%;

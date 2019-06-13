@@ -128,5 +128,36 @@ export class DataloaderService {
     }).pipe(share());
   }
 
+  
+  getSightWords() {
+    return this.http.get(`${this.base_url}/sightwords`, {
+        headers: this.Token.getAuthHeader()
+      }).pipe(share());
+  }
+
+  getNotebookWords(){
+    // return this.http.post(`${this.base_url}/card`, c, {
+    //   headers: this.Token.getAuthHeader()
+    // }).pipe(share());
+  }
+
+  getGrammarTopics(){
+    return this.http.get(`${this.base_url}/grammar/topics`, {
+      headers: this.Token.getAuthHeader()
+    }).pipe(share());
+  }
+
+  getGrammarContent(id){
+    return this.http.get(`${this.base_url}/grammar/rule/`+id, {
+      headers: this.Token.getAuthHeader()
+    }).pipe(share());
+  }
+  
+  getTest() {
+    return this.http.get(`${this.base_url}/testing`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+  }
+
 
 }

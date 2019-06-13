@@ -150,6 +150,7 @@ body{
     flex-flow: column nowrap;
     position: relative;
     height: 100%;
+    overflow: hidden;
 }
 .book-top-toolbar .publication-title, 
 .book-top-toolbar .divider, 

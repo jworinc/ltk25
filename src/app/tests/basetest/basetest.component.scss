@@ -1,0 +1,28 @@
+.test-wrapper-slide{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    transition: transform 240ms ease, opacity 120ms linear !important;
+    transform-style: preserve-3d;
+    pointer-events: none;
+}
+.test-slide-item{
+    display: flex;
+    flex-flow: column;
+    position: relative;
+    width: 94%;
+    height: 95%;
+    background-color: white;
+    box-shadow: 2px 2px 3px #777;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    border-radius: 4px;
+}
+@media screen and (max-width: 1024px){
+    .card-ar1-syllable {
+        line-height: 1em;
+        height: 40px;
+    }
+}

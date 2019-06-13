@@ -1,0 +1,68 @@
+<!--
+<div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+[ngClass]="{'blinkhighlight': blinknext}"></div>
+-->
+
+<div class="card-block-item card-style-obj-single" [ngStyle]="nblayout">
+    <div class="row desktop-layout">
+        <div class="col-12 head-title">
+            <h5 class="text-center">Grammar Handbook</h5>
+          </div>
+      <div class="col-2 div-content" style="background: #B4DDF7;">
+        <div><p><b>Topics</b></p></div>
+        <div *ngFor="let topic of filtered_topic;let i = index;">
+          <p class="topics" [ngClass]=" i == ind ? 'selected-topic':''" (click)="getSubtopics(topic,i)">{{i+1}}. {{topic}}</p>
+        </div>
+      </div>
+
+      <div class="col-2 div-content" style="background: #DBF1FF;">
+        <div><p><b>Subtopics</b></p></div>
+        <div *ngFor="let topic of filtered_subtopic;let i = index;">
+          <p class="topics subtopic-item" [ngClass]=" i == subtopic_index ? 'selected-subtopic':''" (click)="getDescription(topic.topic,topic.subtopic, i,topic.id)">{{i+1}}. {{topic?.subtopic}}</p>
+        </div>
+      </div>
+
+      <div class="col-8 div-content">
+          <div><p><b>Description</b></p></div>
+          <div id='app-is-loading-screen' [hidden]="description?.content !== undefined || subtopic_index === -1" style='display: flex; text-align: center; justify-content: center; margin-top: 50px;position: relative;'><img src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PGxpbmVhckdyYWRpZW50IGlkPSdGYXN0TG9hZGluZ0luZGljYXRvci1saW5lYXJHcmFkaWVudCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnIHgxPScxLjc4MDQnIHkxPScxNi4wMzc5JyB4Mj0nMzAuMTQzOScgeTI9JzE2LjAzNzknPjxzdG9wIG9mZnNldD0nMC40MTY5JyBzdG9wLWNvbG9yPScjQ0RDRkQyJy8+PHN0b3Agb2Zmc2V0PScwLjkzNzYnIHN0b3AtY29sb3I9J3JnYmEoMjQ4LDI0OCwyNDksMCknLz48L2xpbmVhckdyYWRpZW50PjxjaXJjbGUgY3g9JzE2JyBjeT0nMTYnIHI9JzEyLjcnIHN0eWxlPSdmaWxsOiBub25lOyBzdHJva2U6IHVybCgjRmFzdExvYWRpbmdJbmRpY2F0b3ItbGluZWFyR3JhZGllbnQpOyBzdHJva2Utd2lkdGg6IDI7Jz48L2NpcmNsZT48L3N2Zz4=' alt='' style="width: 36px; height: 36px;" /></div>
+        <div *ngIf="description?.content == undefined ?false:true" [innerHTML]="description?.content | bindhtml"></div>
+      </div>
+
+    </div>
+
+
+    <!--Mobile Layout-->
+    <div class="mobile-layout">
+      <div class="row head-title">
+          <div class="col-2" (click)="getMenu()">
+              <div class="hamb"></div>
+              <div class="hamb"></div>
+              <div class="hamb"></div>
+          </div>
+          <div class="col-10">
+            {{title}}
+          </div>
+      </div>
+      <div class="row content-row">
+          <div *ngIf="description?.content == undefined ?true:false" class="col-12 mobile-topic"  @slideleft>
+            <div *ngFor="let topic of filtered_topic;let i = index;" class="mobile-topic-item">
+              <!-- <p class="topics selected-topic" [ngClass]=" i == ind ? 'selected-topic':''" (click)="getSubtopics(topic,i)">{{i+1}}. {{topic}} <span class="float-right arrow-ic"><i [hidden]=" i == ind && isActive ? true: false" class="fas fa-chevron-down"></i><i  [hidden]=" i == ind && isActive ? false: true" class="fas fa-chevron-up"></i></span></p> -->
+              <p class="topics selected-topic" [ngClass]=" i == ind ? 'selected-topic':''" (click)="getSubtopics(topic,i)">{{i+1}}. {{topic}} <span [hidden]=" i == ind && isActive ? true: false"  class="float-right arrow-ic"><i class="fas fa-chevron-down"></i></span><span [hidden]=" i == ind && isActive ? false: true" class="float-right arrow-ic"><i class="fas fa-chevron-up"></i></span></p>
+
+              <div *ngIf=" i == ind && isActive ? true: false" style="background: #cedae787;">
+                <div *ngFor="let topic of filtered_subtopic;let i = index;" class="mobile-subtopic-item">
+                  <p class="topics mobile-subtopic" [ngClass]=" i == subtopic_index ? 'selected-subtopic':''" (click)="getDescription(topic.topic,topic.subtopic, i,topic.id)">{{i+1}}. {{topic?.subtopic}}</p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+          <div *ngIf="description?.content == undefined ?false:true" class="div-content"><b>Description</b>
+            <div [innerHTML]="description?.content | bindhtml"></div>
+          </div>
+      </div>
+    </div>
+
+</div>

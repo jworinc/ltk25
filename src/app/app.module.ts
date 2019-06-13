@@ -94,6 +94,17 @@ import { IdmComponent } from './activities/idm/idm.component';
 import { Wl1Component } from './activities/wl1/wl1.component';
 import { Bs1Component } from './activities/bs1/bs1.component';
 
+import { NotebookComponent } from './components/notebook/notebook.component';
+import { GrammarComponent } from './components/grammar/grammar.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { ShowtestingComponent } from './components/showtesting/showtesting.component';
+import { AuditoryComponent } from './tests/auditory/auditory.component';
+import { ComprehensionComponent } from './tests/comprehension/comprehension.component';
+import { TestDirective } from './directives/test.directive';
+import { BasetestComponent } from './tests/basetest/basetest.component';
+import { SpellingComponent } from './tests/spelling/spelling.component';
+
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -169,10 +180,19 @@ export function HttpLoaderFactory(http: HttpClient) {
     Rw1Component,
     IdmComponent,
     Wl1Component,
-    Bs1Component
+    Bs1Component,
+    NotebookComponent,
+    GrammarComponent,
+    BasetestComponent,
+    ShowtestingComponent,
+    AuditoryComponent,
+    ComprehensionComponent,
+    TestDirective,
+    SpellingComponent,
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
@@ -194,7 +214,8 @@ export function HttpLoaderFactory(http: HttpClient) {
   Ar6Component, Or1Component, Or2Component, Or3Component, Or4Component, Bw1Component, Bw2Component, Bw3Component, Bw5Component,
   Bw6Component, Bw7Component, SypComponent, DiwComponent, GscComponent, Rp1Component, Rp2Component, GwmComponent, SiwComponent,
   GwfComponent, GqwComponent, DisComponent, SplComponent, GdnComponent, GcpComponent, GcsComponent, GisComponent, GmuComponent,
-  GnbComponent, GslComponent, GsmComponent, GssComponent, Rw1Component, IdmComponent, Wl1Component, Bs1Component ],
+  GnbComponent, GslComponent, GsmComponent, GssComponent, Rw1Component, IdmComponent, Wl1Component, Bs1Component, AuditoryComponent,
+  ComprehensionComponent, SpellingComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

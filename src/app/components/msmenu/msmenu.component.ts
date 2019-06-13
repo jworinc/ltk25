@@ -21,6 +21,9 @@ export class MsmenuComponent implements OnInit {
   @Output() public closemenu = new EventEmitter<boolean>();
   @Output() public showsettings = new EventEmitter<boolean>();
   @Output() public showfeedback = new EventEmitter<boolean>();
+  @Output() public shownotebook = new EventEmitter<boolean>();
+  @Output() public showgrammar = new EventEmitter<boolean>();
+  @Output() public showtesting = new EventEmitter<boolean>();
   @Input() public lu: string;
   @Input() public show_tool_pages_list: boolean;
   @Input() public show_menu_open_button: boolean;
@@ -94,11 +97,28 @@ export class MsmenuComponent implements OnInit {
   }
 
   showSettingsModal() {
+    this.playmedia.stop();
     this.showsettings.emit();
   }
 
   showFeedbackModal() {
+    this.playmedia.stop();
     this.showfeedback.emit();
+  }
+
+  showNotebook() {
+    this.playmedia.stop();
+    this.shownotebook.emit();
+  }
+
+  showGrammar() {
+    this.playmedia.stop();
+    this.showgrammar.emit();
+  }
+
+  showTesting() {
+    this.playmedia.stop();
+    this.showtesting.emit();
   }
 
   fullscreenMax() {

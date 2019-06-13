@@ -13,8 +13,11 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 import { CardDirective } from '../../directives/card.directive';
 import { CardItem } from '../../card-item';
 import { CardComponent } from '../card/card.component';
+import { NotebookComponent } from '../notebook/notebook.component';
+import { ShowtestingComponent } from '../showtesting/showtesting.component';
 import { Howl, Howler } from 'howler';
 import * as $ from 'jquery';
+import { GrammarComponent } from '../grammar/grammar.component';
 
 @Component({
   selector: 'app-lesson',
@@ -56,6 +59,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public slide_scale = 0.96;
 
   @ViewChild(CardDirective) appCard: CardDirective;
+  @ViewChild(NotebookComponent) nb: NotebookComponent;
+  @ViewChild(ShowtestingComponent) sht: ShowtestingComponent;
+  @ViewChild(GrammarComponent) grm: GrammarComponent;
 
   public cards: CardItem[];
   public downloaded_cards = [];
@@ -98,6 +104,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public playstop_event: EventEmitter<any> = new EventEmitter();
   public good_btn: EventEmitter<any> = new EventEmitter();
   public bad_btn: EventEmitter<any> = new EventEmitter();
+
+  public show_notebook: boolean = false;
+  public show_grammar: boolean = false;
+  public show_testing: boolean = false;
 
   constructor(
     private DL: DataloaderService,
@@ -572,13 +582,16 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
     //  Calc initial scale to fit card on the page
     //  Take width of 90% available card space
-    let zb = this.el.nativeElement.querySelector('.zoom-card-body');
+    let zb = this.el.nativeElement.querySelector('.zoom-frame');
     if(zb === null) return 1;
     let z = zb.clientWidth*this.slide_scale;
 
     
     //  Default double cards width
-    let cbi = this.el.nativeElement.querySelector('.card-block-item');
+    let cbi = null;
+    this.el.nativeElement.querySelectorAll('.card-block-item').forEach((e)=>{
+      if(e.clientWidth !== 0 && e.clientHeight !== 0) cbi = e;
+    });
     if(cbi === null) return 1;
     let c = cbi.clientWidth;
     if(this.mode === 'single') {
@@ -595,7 +608,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     if(scale > 2.4) scale = 2.4;
     return scale;
   }
-
+  
   //  Logging comand end
   loggingEndCommand(sc, cb=()=>{}) {
 
@@ -668,10 +681,41 @@ export class LessonComponent implements OnInit, AfterViewInit {
     setTimeout(function(){ that.navigation_switch_flag = false; }, 300);
 
     //  Check if lesson was not started yet, start it
-    if(!this.global_start){
+    if(!this.global_start && !this.show_grammar && !this.show_notebook && !this.show_testing){
       this.startLesson();
       return;
     }
+
+    
+    //  Check if add-ons is opened, direct next event to this add ons
+    if(this.show_grammar || this.show_notebook || this.show_testing){
+      if(this.show_testing){
+        //this.sht.next();
+        this.show_testing = false;
+        if(!this.global_start){
+          this.show_start_screen = true;
+        }
+      }
+      if(this.show_notebook){
+        if(this.nb.isNotebook){
+          this.show_notebook = false;
+          if(!this.global_start){
+            this.show_start_screen = true;
+          }
+        } else {
+          this.nb.enter();
+        }
+      }
+      if(this.show_grammar){
+        //this.grm.enter();
+        this.show_grammar = false;
+        if(!this.global_start){
+          this.show_start_screen = true;
+        }
+      }
+      return;
+    }
+
 
     //  if global rights for next card is not setted, return. This means that card is not
     //  fully completed or there are some errors in user input data (validation method of the card return false)
@@ -896,10 +940,31 @@ export class LessonComponent implements OnInit, AfterViewInit {
   enter() {
 
     //  Check cards and sent enter event to active card
-    for(let i in this.ccs){
-      let c = this.ccs[i];
-      if(c.instance.isActive()){
-        c.instance.enter(false); 
+    //  in case if any other component is hidden
+    if(!this.show_grammar && !this.show_notebook && !this.show_testing){
+      for(let i in this.ccs){
+        let c = this.ccs[i];
+        if(c.instance.isActive()){
+          c.instance.enter(false); 
+        }
+      }
+    } else {
+      if(this.show_testing){
+        this.sht.enter();
+      }
+      if(this.show_notebook){
+        if(this.nb.isNotebook){
+          this.show_notebook = false;
+          if(!this.global_start){
+            this.show_start_screen = true;
+          }
+        } else {
+          this.nb.enter();
+        }
+        
+      }
+      if(this.show_grammar){
+        //this.grm.enter();
       }
     }
 
@@ -1090,6 +1155,49 @@ export class LessonComponent implements OnInit, AfterViewInit {
   onGoNextCard() {
     this.onCloseWarncomplete();
     this.switchToNextCard();
+  }
+
+  onShowGrammar(){
+    this.show_notebook = false;
+    this.show_testing = false;
+    this.show_grammar = !this.show_grammar;
+    console.log("Show grammar.");
+    let that= this;
+    setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
+    if(this.mode === 'single') this.onCloseMenu();
+    if(!this.global_start){
+      if(this.show_grammar) this.show_start_screen = false;
+      if(!this.show_grammar) this.show_start_screen = true;
+    }
+  }
+
+  onShowNotebook(){
+    console.log("Show Notebook.");
+    this.show_grammar = false;
+    this.show_testing = false;
+    let that = this;
+    this.show_notebook = !this.show_notebook;
+    this.nb.lesson_num = this.student.lu;
+    setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
+    if(this.mode === 'single') this.onCloseMenu();
+    if(!this.global_start){
+      if(this.show_notebook) this.show_start_screen = false;
+      if(!this.show_notebook) this.show_start_screen = true;
+    }
+  }
+
+  //  Show Testing
+  onShowTesting() {
+    this.show_notebook = false;
+    this.show_grammar = false;
+    this.show_testing = !this.show_testing;
+    let that= this;
+    setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
+    if(this.mode === 'single') this.onCloseMenu();
+    if(!this.global_start){
+      if(this.show_testing) this.show_start_screen = false;
+      if(!this.show_testing) this.show_start_screen = true;
+    }
   }
 
 

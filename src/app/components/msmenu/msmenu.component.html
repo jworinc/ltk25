@@ -25,7 +25,11 @@
                 <span class='tool-sidebar-button tool-sidebar-fullscreen-max' (click)='fullscreenMax()' title="{{ 'fullscreen_max' | translate }}" [hidden]="fullscreen_mode"></span>
                 <span class='tool-sidebar-button tool-sidebar-fullscreen-min' (click)='fullscreenMin()' title="{{ 'fullscreen_min' | translate }}" [hidden]="!fullscreen_mode"></span>
                 <!--    Notebook    -->
-                <span class='tool-sidebar-button tool-sidebar-notebook-button' title="{{ 'notebook' | translate }}"></span>
+                <span class='tool-sidebar-button tool-sidebar-notebook-button' (click)='showNotebook()' title="{{ 'notebook' | translate }}"></span>
+                <!--    Grammar    -->
+                <span class='tool-sidebar-button tool-sidebar-grammar-button' (click)='showGrammar()' title="{{ 'grammar' | translate }}"></span>
+                <!--    Testing    -->
+                <span class='tool-sidebar-button tool-sidebar-testing-button' (click)='showTesting()' title="{{ 'testing' | translate }}"></span>
     		    <!--    Reports    -->
     		    <span class='tool-sidebar-button tool-sidebar-mail-button' (click)='location("/reports")' title="{{ 'reports' | translate }}"></span>
 
