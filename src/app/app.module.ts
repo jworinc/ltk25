@@ -93,6 +93,7 @@ import { Rw1Component } from './activities/rw1/rw1.component';
 import { IdmComponent } from './activities/idm/idm.component';
 import { Wl1Component } from './activities/wl1/wl1.component';
 import { Bs1Component } from './activities/bs1/bs1.component';
+import { CccComponent } from './activities/ccc/ccc.component';
 
 import { NotebookComponent } from './components/notebook/notebook.component';
 import { GrammarComponent } from './components/grammar/grammar.component';
@@ -181,6 +182,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     IdmComponent,
     Wl1Component,
     Bs1Component,
+    CccComponent,
     NotebookComponent,
     GrammarComponent,
     BasetestComponent,
@@ -215,7 +217,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   Bw6Component, Bw7Component, SypComponent, DiwComponent, GscComponent, Rp1Component, Rp2Component, GwmComponent, SiwComponent,
   GwfComponent, GqwComponent, DisComponent, SplComponent, GdnComponent, GcpComponent, GcsComponent, GisComponent, GmuComponent,
   GnbComponent, GslComponent, GsmComponent, GssComponent, Rw1Component, IdmComponent, Wl1Component, Bs1Component, AuditoryComponent,
-  ComprehensionComponent, SpellingComponent ],
+  ComprehensionComponent, SpellingComponent, CccComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
