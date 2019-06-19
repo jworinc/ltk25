@@ -42,6 +42,13 @@ export class RequestInterceptor implements HttpInterceptor {
           this.router.navigateByUrl('/login');
           this.Token.remove();
         }
+        if(err.status === 402 && !this.noaccess_status_sent){
+          this.noaccess_status_sent = true;
+          alert('You don\'t meet any membership plan or your usage period is expired!');
+          this.Auth.changeAuthStatus(false);
+          this.router.navigateByUrl('/login');
+          this.Token.remove();
+        }
       }
     });
   }
