@@ -172,6 +172,7 @@
                     (showgrammar)="onShowGrammar()"
                     (showtesting)="onShowTesting()"
                     [lu]="current_lesson_title"
+                    [last_uncomplete] = "student.lu"
                     [show_tool_pages_list]="show_tool_pages_list"
                     [show_menu_open_button]="false"
                     *ngIf="main_app_screen"></app-msmenu>

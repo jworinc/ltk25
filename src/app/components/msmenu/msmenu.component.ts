@@ -6,6 +6,7 @@ import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { OptionService } from '../../services/option.service';
 import { PlaymediaService } from '../../services/playmedia.service';
+import { LoggingService } from '../../services/logging.service';
 
 @Component({
   selector: 'app-msmenu',
@@ -25,6 +26,7 @@ export class MsmenuComponent implements OnInit {
   @Output() public showgrammar = new EventEmitter<boolean>();
   @Output() public showtesting = new EventEmitter<boolean>();
   @Input() public lu: string;
+  @Input() public last_uncomplete: number;
   @Input() public show_tool_pages_list: boolean;
   @Input() public show_menu_open_button: boolean;
 
@@ -35,6 +37,7 @@ export class MsmenuComponent implements OnInit {
     translate: TranslateService,
     private Option: OptionService,
     private playmedia: PlaymediaService,
+    private logging: LoggingService,
     private lcn: Location
   ) {
         // this language will be used as a fallback when a translation isn't found in the current language
@@ -75,6 +78,17 @@ export class MsmenuComponent implements OnInit {
       this.Auth.changeAuthStatus(false);
       this.router.navigateByUrl('/login');
       this.Token.remove();
+    }
+    else if(p === '/lesson'){
+      console.log('Log lesson timeon event.');
+      this.logging.lessonTimeon(this.last_uncomplete)
+          .subscribe(
+            data => {},
+            error => {
+              console.log(error);
+            }
+          );
+      this.router.navigateByUrl('/home');
     } else {
       this.router.navigateByUrl('/home');
     }

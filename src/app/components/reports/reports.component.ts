@@ -140,8 +140,8 @@ export class ReportsComponent implements OnInit {
 
 	    this.Option.setLanguage(data.options.language);
 	    
-      	this.current_lesson_title = this.getCurrentLessonTitle(data.last_uncomplete);
-	    
+      this.current_lesson_title = this.getCurrentLessonTitle(data.last_uncomplete);
+			this.lu = data.last_uncomplete;
 	    
 	}
 
