@@ -149,6 +149,26 @@ html, body, .book-container, #main-app-screen, .tool-window{
     z-index: 100;
 }
 
+.lesson-ponter-arrow{
+    display: flex;
+    flex-flow: column;
+    position: absolute;
+    width: 30px;
+    height: 100px;
+    left: 1064px;
+    top: 424px;
+    color: lightgreen;
+    transition: top 0.3s ease, opacity 0.7s ease;
+    font-size: 60px;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+}
+.pointerhilight{
+    background-color: #05FF05;
+}
+
 @media screen and (max-width: 767px) {
     
     .lesson-desc-tab{

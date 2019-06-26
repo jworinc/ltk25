@@ -528,7 +528,7 @@
                         <!-- Go button -->
                         <div class='col-md-4 subtab goto-lesson-subtab' *ngIf="cl.theme">
                             <h2>{{ 'go_to_lesson' | translate }}</h2>
-                            <button class='btn btn-success' (click)="showLesson(current_lesson)">{{ 'go_to_lesson' | translate }}</button>
+                            <button class='btn btn-success button-with-theme' (click)="showLesson(current_lesson)">{{ 'go_to_lesson' | translate }} ></button>
                         </div>
 
 
@@ -540,7 +540,7 @@
                         <!-- Go button -->
                         <div class='col-md-6 subtab goto-lesson-subtab' *ngIf="!cl.theme">
                             <h2>{{ 'go_to_lesson' | translate }}</h2>
-                            <button class='btn btn-success' (click)="showLesson(current_lesson)">{{ 'go_to_lesson' | translate }}</button>
+                            <button class='btn btn-success button-without-theme' (click)="showLesson(current_lesson)">{{ 'go_to_lesson' | translate }} ></button>
                         </div>
 
                     </div>
@@ -558,7 +558,11 @@
 
             <!-- Testing -->
             <app-showtesting [show]="show_testing" [scale]="scale" [hidden]="!show_testing"></app-showtesting>
-        </div>    
+        </div>
+        
+        <!--  Lesson pointer arrow  -->
+        <div class="lesson-ponter-arrow" [ngStyle]="arrow_pointer"><i class="fas fa-arrow-down"></i></div>
+
     </div>
 
     <!--  Menu background   -->

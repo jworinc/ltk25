@@ -59,6 +59,12 @@ export class DashboardComponent implements OnInit {
   public show_grammar: boolean = false;
   public show_testing: boolean = false;
 
+  public arrow_pointer: any = {
+    opacity: 0,
+    top: '-200px',
+    left: '-200px'
+  };
+
   @ViewChild(NotebookComponent) nb: NotebookComponent;
 
   constructor(
@@ -113,6 +119,8 @@ export class DashboardComponent implements OnInit {
     for(let i in this.lessons){
       if(parseInt(this.lessons[i].number) === parseInt(l)) this.cl = this.lessons[i];
     }
+    let that = this;
+    setTimeout(()=>{ that.showLessonArrowPointer(); }, 400);
   }
 
   handleStudentInfo(data){
@@ -394,6 +402,65 @@ export class DashboardComponent implements OnInit {
     this.show_testing = !this.show_testing;
     let that= this;
     setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
+  }
+
+
+  public pointer_cycle = null;
+  showLessonArrowPointer() {
+    let target = null;
+    if(this.cl.theme) {
+      target = this.el.nativeElement.querySelector('.button-with-theme');
+    } else {
+      target = this.el.nativeElement.querySelector('.button-without-theme');
+    }
+
+    //console.log(target);
+    if(target){
+      /*
+      let parentOffset = target.offsetParent;
+      let totalLeft = target.offsetLeft;
+      let totalTop = target.offsetTop;
+      let totalHeight = target.clientHeight;
+      let totalWidth = target.clientWidth;
+      while(typeof parentOffset.offsetParent !== 'undefined' && parentOffset.offsetParent){
+        totalLeft += parentOffset.offsetLeft;
+        totalTop += parentOffset.offsetTop;
+        parentOffset = parentOffset.offsetParent;
+      };
+
+      console.log('Left:  ' + totalLeft + '   Top:  ' + totalTop + '  Height:  ' + totalHeight + '  Width:  ' + totalWidth);
+
+      
+      that.arrow_pointer = {
+        opacity: 1,
+        top: (totalTop - 120) + 'px',
+        left: (totalLeft + (totalWidth/2) - 15) + 'px'
+      }
+      */
+      let page = this.el.nativeElement.querySelector('#main-app-screen');
+      page.scrollTop = page.scrollHeight - window.innerHeight;
+      target.classList.add('pointerhilight');
+      let that = this;
+      clearTimeout(this.pointer_cycle);
+      this.pointer_cycle = setTimeout(()=>{
+        /*
+        that.arrow_pointer = {
+          opacity: 0,
+          top: '-200px',
+          left: '-200px'
+        }
+        */
+        target.classList.remove('pointerhilight');
+        that.pointer_cycle = setTimeout(()=>{
+          target.classList.add('pointerhilight');
+          that.pointer_cycle = setTimeout(()=>{
+            target.classList.remove('pointerhilight');
+          }, 600);
+        }, 600);
+      }, 600);
+
+    }
+
   }
 
 }
