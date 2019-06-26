@@ -144,5 +144,8 @@
 	"go_to_lesson" : "Go to the lesson",
 	"theme" : "Theme",
 	"grammar" : "Grammar",
-	"testing" : "Testing"
+	"testing" : "Testing",
+	"idiom" : "Idiom",
+	"literal_translation" : "Literal translation",
+	"native_meaning" : "Native meaning"
 }

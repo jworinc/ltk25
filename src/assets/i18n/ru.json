@@ -144,5 +144,8 @@
 	"go_to_lesson" : "Перейти к уроку",
 	"theme" : "Тема",
 	"grammar" : "Грамматика",
-	"testing" : "Tестирование"
+	"testing" : "Tестирование",
+	"idiom" : "Идиома",
+	"literal_translation" : "Дословный перевод",
+	"native_meaning" : "Родной смысл"
 }
