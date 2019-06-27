@@ -11,16 +11,28 @@
 
   <div class="row cust-row">
     <div class="sen-parts">
-      <div class="col-sm-5 sen-p sen-begin" [ngClass]="{'showitem': show_sentence_begin}">
+      <div class="col-sm-5 sen-p sen-begin" [ngClass]="{'showitem': show_sentence_begin}" [hidden]="this.uinputph === 'finish'">
         <span [innerHTML]="current_sentence | bindhtml" [attr.data-ind]='i_sentence_begin' app-playsentence></span>
       </div>
       <div class="col-sm-1 sen-p sen-sn" [ngClass]="{'showitem': show_sentence_var}">+</div>
-      <div class="col-sm-5 sen-p sen-variant" [ngClass]="{'showitem': show_sentence_var}">
+      <div class="col-sm-5 sen-p sen-variant" [ngClass]="{'showitem': show_sentence_var}" [hidden]="this.uinputph === 'finish'">
         <span [innerHTML]="current_variant | bindhtml" [attr.data-ind]='i_sentence_var' app-playsentence></span>
       </div>
     </div>
     <div class="col-sm-12 sen-ready-list">
-      <span class="sentence" *ngFor="let s of s_pull; let ks = index" [ngStyle]="s.style"
+      <span class="sentence" *ngFor="let s of s_pull; let ks = index" [ngStyle]="s.style" [hidden]="currentinnerWidth <= 1024">
+          <div class="sen-begin">
+            <span [innerHTML]="s.beg | bindhtml" [attr.data-ind]='(s.ind*10)+s.ind+4' app-playsentence></span>
+          </div>
+          <div class="col-sm-1">+</div>
+          <div class="sen-variant">
+            <span [innerHTML]="s.var | bindhtml" [attr.data-ind]='(s.ind*10)+s.ind+5' app-playsentence></span>
+          </div>
+          <div class="col-sm-12">
+            <span [innerHTML]="s.sen | bindhtml" [attr.data-ind]='s.ind' app-playsentence></span>
+          </div>
+      </span>
+      <span class="sentence" *ngFor="let s of s_pull; let ks = index" [ngStyle]="s.style" [hidden]="currentinnerWidth > 1024"
         [innerHTML]="s.sen | bindhtml" [attr.data-ind]='s.ind' app-playsentence></span>
       
     </div>

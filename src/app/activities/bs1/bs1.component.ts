@@ -45,7 +45,8 @@ export class Bs1Component extends BaseComponent implements OnInit {
 		public i_sentence_var = 2;
 		public s_pull = [];
 		public ss: any;
-		public row_height = 34;
+		public row_height = 57;
+		public currentinnerWidth = 0;
 
     ngOnInit() {
 			console.log(this.data);
@@ -54,7 +55,9 @@ export class Bs1Component extends BaseComponent implements OnInit {
       this.cn = this.data.content;
       if(window.innerWidth <= 1024){
 				this.row_height = 19;
+
 			}
+			this.currentinnerWidth = window.innerWidth;
 		}
 		
 		validate() {
@@ -131,7 +134,33 @@ export class Bs1Component extends BaseComponent implements OnInit {
 			//	Add all sentences to a single pull
 			for(let i in this.cn[0].variants){
 				let c = this.cn[0].variants[i];
-				this.s_pull.push({sen: this.cn[0].beginning + ' ' + c, ind: parseInt(i)+3, style: {'top': '-60px', 'opacity': '0'}});
+				/*
+				if(window.innerWidth > 1024){
+					this.s_pull.push({
+						sen: `<div class="sen-p sen-begin">
+										<span>${this.cn[0].beginning}</span>
+									</div>
+									<div class="col-sm-1 sen-p sen-sn">+</div>
+									<div class="sen-p sen-variant">
+										<span>${c}</span>
+									</div>
+									<div class="col-sm-12">
+										<span>${this.cn[0].beginning + ' ' + c}</span>
+									</div>`, 
+						ind: parseInt(i)+3, 
+						style: {'top': '-60px', 'opacity': '0'}
+					});
+				} else {
+					this.s_pull.push({sen: this.cn[0].beginning + ' ' + c, ind: parseInt(i)+3, style: {'top': '-60px', 'opacity': '0'}});
+				}
+				*/
+				this.s_pull.push({
+					sen: this.cn[0].beginning + ' ' + c, 
+					ind: parseInt(i)+3, 
+					style: {'top': '-60px', 'opacity': '0'},
+					beg: this.cn[0].beginning,
+					var: c
+				});
 			}
 
 			//	Compile sentence after short delay, that will needed for angular to build a markup
@@ -176,7 +205,10 @@ export class Bs1Component extends BaseComponent implements OnInit {
 				this.show_var_timer = setTimeout(()=>{
 					if(that.isActive()){
 						that.ss[1].playSentenceByIndex(2, ()=>{
-							that.blinkEnter();
+							setTimeout(()=>{
+								that.blinkEnter();
+								that.eslCustomInstructions('ResultInst', ()=>{});
+							}, 1000);
 						});
 					}
 				}, 1000);
