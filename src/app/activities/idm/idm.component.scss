@@ -96,7 +96,7 @@ span.show-maining span {
     left: 0;
     bottom: 0;
     top: 30%;
-    line-height: 22px;
+    line-height: 33px;
     width: 100%
 }
 span.show-maining {
@@ -172,7 +172,8 @@ span.show-maining {
         min-height: 65px;       
     }
     span.show-maining span {
-        font-size: 12px;        
+        font-size: 12px;  
+        line-height: 22px;      
     }
     .word-box, .phoneme-box, .sentence-box{       
         margin-top: -5px;
