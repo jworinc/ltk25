@@ -80,6 +80,7 @@
     font-weight: 600;
     padding: 6px;
     margin-right: -1px;
+    position: relative;
 }
 .phoneme-header, .sentence-header{
     display: block;
@@ -170,6 +171,39 @@ span.word-native {
     bottom: 0;
     font-size: 12px;
 }
+.click-to-play-wrap{
+    display: block;
+    position: absolute;
+    width: 336px;
+    height: 30px;
+    top: 122px;
+    left: 50%;
+    margin-left: -208px;
+    background-color: darkblue;
+    color: white;
+    border-radius: 15px;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 1px;
+    z-index: 10;
+    font-size: 18px;
+}
+.click-to-play-pointer{
+    display: block;
+    position: absolute;
+    width: 20px;
+    height: 10px;
+    background-color: darkblue;
+    top: 85%;
+    left: 39%;
+    transform: skewX(68deg) rotate(153deg);
+    z-index: 1;
+}
+.click-to-play-text{
+    display: block;
+    position: relative;
+    z-index: 100;
+}
 
 
 @media only screen and (max-width:1024px)
@@ -233,5 +267,15 @@ span.word-native {
     }
     .word-next-button, .word-prev-button{
         top: 81%;
+    }
+    .click-to-play-wrap{
+        width: 204px;
+        height: 20px;
+        top: 37px;
+        margin-left: -125px;
+        font-size: 11px;
+    }
+    .click-to-play-pointer {
+        top: 65%;
     }
 }

@@ -28,7 +28,12 @@
         <span class='phoneme-header'>Pronounce</span>
         <span *ngFor='let ph of cn.breakdown.split("-"); let kph = index' class='phoneme-syllable'>
           <span *ngFor='let l of ph.split(","); let kl=index' [attr.playsyl]='kph' [attr.playpos]='kl'>{{ l }}</span>
+          
         </span>
+        <div class="click-to-play-wrap">
+          <span class="click-to-play-text">{{ 'click_to_play' | translate }}</span>
+          <div class="click-to-play-pointer"></div>
+        </div>
       </div>
       <div class='sentence-box'>
         <span class='sentence-header'>Sample sentence</span>

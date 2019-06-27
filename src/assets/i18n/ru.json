@@ -147,5 +147,6 @@
 	"testing" : "Tестирование",
 	"idiom" : "Идиома",
 	"literal_translation" : "Дословный перевод",
-	"native_meaning" : "Родной смысл"
+	"native_meaning" : "Родной смысл",
+	"click_to_play" : "Нажмите, чтобы воспроизвести!"
 }
