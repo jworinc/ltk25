@@ -560,11 +560,15 @@ export class BaseComponent implements OnInit, CardComponent {
 		let that = this;
 		this.pm.stop();
 		if(!this.validate()){
-			if(!silent){
+			if(!silent && this.getUserInputString() !== ''){
 				this.pm.sound('_STNQR', function(){ 
 					 that.result(); that.enableNextCard(); that.clearUserInput(); that.play_card_description_busy = false; //scope.playCardDescription();
 				}, 0);
-			} else {
+			} 
+			else if(!silent && this.getUserInputString() === ''){
+				this.repeat();
+			}
+			else {
 				that.result(); that.enableNextCard(); that.clearUserInput(); that.play_card_description_busy = false; //scope.playCardDescription();
 			}
 		} else {

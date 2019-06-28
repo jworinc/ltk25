@@ -205,6 +205,10 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 			}
 			return;
 		}
+		else if((this.uinputph === 'vowel' || this.uinputph === 'letters' || this.uinputph === 'sounds') && this.input_data === ''){
+			this.repeat();
+			return;
+		}
 		
 		this.pms.stop();
 		if(!this.validate()){

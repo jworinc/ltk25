@@ -234,7 +234,10 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 			}
 			return;
 		}
-
+		else if(this.uinputph === 'syllable' && this.input_data === ''){
+			this.repeat();
+			return;
+		}
 
 		this.pms.stop();
 		if(!this.validate()){

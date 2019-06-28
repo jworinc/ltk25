@@ -325,6 +325,10 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 			}
 			return;
 		}
+		else if((this.uinputph === 'digraf' || this.uinputph === 'letters' || this.uinputph === 'sounds') && this.input_data === ''){
+			this.repeat();
+			return;
+		}
 		
 		this.pms.stop();
 		if(!this.validate()){

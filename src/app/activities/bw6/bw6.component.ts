@@ -347,7 +347,9 @@ export class Bw6Component extends Bw3Component implements OnInit {
 			}
 			return;
 		}
-
+		else if(this.uinputph === 'question' && this.input_data === ''){
+			this.repeat();
+		}
 		if(this.uinputph === 'finish'){
 			that.enableNextCard();
 		}

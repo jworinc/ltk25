@@ -345,11 +345,15 @@ export class Ar2Component extends BaseComponent implements OnInit {
 		let that = this;
 		this.playmedia.stop();
 		if(!this.validate()){
-			if(!silent){
+			if(!silent && this.getUserInputString() !== ''){
 				this.playmedia.sound('_STNQR', function(){ 
 					that.enableNextCard(); that.clearUserInput(); that.play_card_description_busy = false; //scope.playCardDescription();
 				}, 0);
-			} else {
+			} 
+			else if(!silent && this.getUserInputString() === ''){
+				this.repeat();
+			}
+			else {
 				that.enableNextCard(); that.clearUserInput(); that.play_card_description_busy = false; //scope.playCardDescription();
 			}
 		} else {
