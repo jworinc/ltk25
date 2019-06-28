@@ -109,6 +109,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public show_grammar: boolean = false;
   public show_testing: boolean = false;
 
+  public start_button_animation: any = null;
+
   constructor(
     private DL: DataloaderService,
     private notify: SnotifyService,
@@ -171,7 +173,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.Option.change_language_event.subscribe(()=>{
       console.log('Change language event.');
       this.translate.use(this.Option.getLocale());
-    })
+    });
 
   }
 
@@ -475,6 +477,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
         }
         
       }
+
+      //  Blink start button
+      this.blinkStartButton();
       
   }
 
@@ -482,6 +487,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.show_start_screen = false;
     let that = this;
     if(!this.recorder.recorder_init_ready) this.recorder.init();
+    clearInterval(this.start_button_animation);
     function enableLesson(){
         that.global_start = true;
         that.setGlobalStart(true);
@@ -934,6 +940,19 @@ export class LessonComponent implements OnInit, AfterViewInit {
         }, 400);
       }, 400);
     }, 400);
+
+  }
+  
+  blinkStartButton(){
+    
+    let that = this;
+    let stbtn = this.el.nativeElement.querySelector('.main-app-start-btn');
+    this.start_button_animation = setInterval(()=>{
+     
+        stbtn.classList.toggle('startbuttonhilight');
+      
+    }, 1200);
+    
 
   }
 

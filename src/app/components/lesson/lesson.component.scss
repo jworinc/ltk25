@@ -915,6 +915,10 @@ body{
     text-align: left;
     padding-left: 15px;
     padding-right: 30px;
+    transition: all 1.2s ease;
+}
+.startbuttonhilight{
+    background-color: #548EE5;
 }
 .main-app-start-lesson-icon{
     background-image: url(../../../assets/img/play_icon_start.png);
