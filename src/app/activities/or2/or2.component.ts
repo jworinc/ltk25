@@ -54,6 +54,12 @@ export class Or2Component extends BaseorComponent implements OnInit {
     this.disableNextSlide();
 
     this.blinkOnlyNext();
+
+    //  Blink enter button to play sentence
+    let that = this;
+    setTimeout(()=>{
+      that.blinkEnter();
+    }, 2000);
   }
 
   repeat(){
@@ -118,6 +124,16 @@ export class Or2Component extends BaseorComponent implements OnInit {
       
     }
   }
+
+  //	Enter click handler
+	enter() {
+		if(this.uinputph === 'finish'){
+			this.playCorrectSound();
+			this.enableNextCard();
+		} else {
+			this.psn.playSentenceByIndex(this.sentence_index);
+		}
+	}
 
 
 
