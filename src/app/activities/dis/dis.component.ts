@@ -410,8 +410,10 @@ export class DisComponent extends BaseComponent implements OnInit {
 		//	Check if input data length bigger that 0
 		if(n <= 0) return;
 
+		let pr = /[\.\?\!]/;
+
 		//	Check if user complete answer
-		if(this.answer_sent.toLowerCase() === value.toLowerCase()){
+		if(this.answer_sent.toLowerCase().replace(pr, '') === value.toLowerCase().replace(pr, '')){
 			//	Save errors
 			this.result();
 			this.playWordAccordingToUserInput();
