@@ -111,26 +111,41 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 		this.card_instance = q.title.replace(/\(/ig, '').replace(/\)/ig, '');
 		this.expected_string = q.title;
 
-		this.variants = this.shuffle(this.expected);
+		//	Prepare variants
+		this.prepVariants();
 
 	}
+
+	//	Prepare variants
+	prepVariants() {
+		this.variants = this.shuffle(this.expected).slice(0, 3);
+		//	Check if we don't have answer in variants
+		if(this.variants.indexOf(this.expected[this.current_set]) < 0) {
+			//	remove one word and push right answer instead
+			this.variants = this.variants.slice(0, this.variants.length - 1);
+			this.variants.push(this.expected[this.current_set]);
+			this.variants = this.shuffle(this.variants);
+		}
+		
+	}	
 
 	showNextSentence() {
 		let that = this;
 		if(this.current_set < this.sentences.length - 1){
 			this.current_set++;
 			this.current_sentence = this.sentences[this.current_set];
-    		this.variants = this.shuffle(this.expected);
+    	//	Prepare variants
+			this.prepVariants();
 
-    		//	Logging
-    		let q = this.card.content[0].parts[this.current_set];
-    		this.card_object = 'Sentence';
+			//	Logging
+			let q = this.card.content[0].parts[this.current_set];
+			this.card_object = 'Sentence';
 			this.card_instance = q.title.replace(/\(/ig, '').replace(/\)/ig, '');
 			this.expected_string = q.title;
 			this.current_presented++;
 
-    		this.user_answer_received_flag = false;
-    		this.elm.nativeElement.querySelector('.gwf-answer-right').style.display = 'none';
+			this.user_answer_received_flag = false;
+			this.elm.nativeElement.querySelector('.gwf-answer-right').style.display = 'none';
 			this.elm.nativeElement.querySelector('.gwf-answer-wrong').style.display = 'none';
 			setTimeout(function(){ that.blinkAP(); }, 400);
 			setTimeout(function(){
