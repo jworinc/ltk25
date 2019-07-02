@@ -66,18 +66,21 @@ export class Bw6Component extends Bw3Component implements OnInit {
 
   }
 
-  	public expected_suffix: any;
-  	public expected_suffix_sound: any;
-  	public answer_sound: any;
-  	public expected_digraf: any;
+	public expected_suffix: any;
+	public expected_suffix_sound: any;
+	public answer_sound: any;
+	public expected_digraf: any;
 
-    setCard() {
+	setCard() {
 				
 		this.input_data = '';
 		this.answer_word = '';
 		this.display_answer_word = '';
 		let content = '';
+		
+		this.bw6el.nativeElement.querySelector('.bw3-letters-wrap').style.transition = 'opacity 0s ease';
 		this.bw6el.nativeElement.querySelector('.bw3-letters-wrap').style.opacity = '0';
+
 		this.uinputph = 'rec';
 		this.main_description_part_played = false;
 
@@ -89,8 +92,8 @@ export class Bw6Component extends Bw3Component implements OnInit {
 
 		//	The regular expressions for different conditions ()
 		let r = null;
-		if(typeof this.card.content[0].SkillBase !== 'undefined' && this.card.content[0].SkillBase.length > 0){
-			let sb = this.card.content[0].SkillBase[0].pointer_to_value;
+		if(typeof this.card.content[ci].SkillBase !== 'undefined' && this.card.content[ci].SkillBase !== ''){
+			let sb = this.card.content[ci].SkillBase;
 			if(sb === 'vt'){
 				r = /au|augh|aw|ea|ee|ei|eigh|eu|ew|ex|ie|igh|oi|oo|ou|ow|oy|ue|ui/ig;
 			}
@@ -103,8 +106,8 @@ export class Bw6Component extends Bw3Component implements OnInit {
 			else if(sb === 'wf'){
 				r = /ald|alk|all|alm|alt/ig;
 			}
-			else if(sb === 'ED'){
-				r = /d|t/ig;
+			else if(sb === 'ED' || sb === 'ed' || sb === 'edd' || sb === 'edt'){
+				r = /ed/ig;
 			}
 			else if(sb === 'num'){
 				r = /eth|ion|teen|th|ty|y/ig;
@@ -127,7 +130,10 @@ export class Bw6Component extends Bw3Component implements OnInit {
 			let cn = this.card.content[ci].parts[i];
 			syl += cn;
 			this.answer_word += cn.replace(/\-/ig, '');
-			if(cn.match(r) !== null) this.expected_suffix_sound = this.card.content[ci].pronounce[i].replace(/\-/ig, '');
+			if(cn.match(r) !== null){
+				this.expected_suffix_sound = this.card.content[ci].pronounce[i].replace(/\-/ig, '');
+				this.expected_suffix = cn.replace(/\-/ig, '');
+			}
 
 		}
 
@@ -142,7 +148,7 @@ export class Bw6Component extends Bw3Component implements OnInit {
 		for(let i in this.syllables) {
 			let s = this.syllables[i];
 			if(s.match(r) !== null){
-				this.expected_suffix = s.match(r)[0];
+				//this.expected_suffix = s.match(r)[0];
 				this.expected = this.expected_string = s;
 			}
 		}
@@ -153,6 +159,13 @@ export class Bw6Component extends Bw3Component implements OnInit {
 		} else {
 			this.answer_sound = this.answer_word;
 		}
+
+		let that = this;
+		setTimeout(()=>{
+			that.bw6el.nativeElement.querySelector('.bw3-letters-wrap').style.transition = 'opacity 0.4s ease';
+		}, 700);
+			
+
 	}
 
 	//	Callback for show card event
@@ -194,9 +207,9 @@ export class Bw6Component extends Bw3Component implements OnInit {
 				
 			});
 			//	In some cases we must play word and sound. To define when play what, check description containe string (SkillWave) or (word)
-			if(this.card.content[0].Question[0].pointer_to_value.match(/\(SkillWave\)/ig) !== null)
+			if(this.card.content[0].Question[0].audio.match(/setlot6/ig) !== null)
 				this.bw6pm.sound('_S'+this.expected_suffix_sound, function(){});
-			else if(this.card.content[0].Question[0].pointer_to_value.match(/\(word\)/ig) !== null)
+			else if(this.card.content[0].Question[0].audio.match(/setlo12|setlotw|setwwi/ig) !== null)
 				this.bw6pm.word(this.answer_sound, function(){});
 		}
 		//	Phase 1 rec instructions, if mic is enabled
@@ -245,22 +258,22 @@ export class Bw6Component extends Bw3Component implements OnInit {
 			});
 			if(typeof this.card.content[this.current_card_instance].skill !== 'undefined'){
 				let skill = this.card.content[this.current_card_instance].skill;
-				if(typeof this.card.content[0].SkillA !== 'undefined' && this.card.content[0].SkillA.length > 0 && skill === this.card.content[0].SkillA[0].pointer_to_value){
+				if(typeof this.card.content[0].SkillA !== 'undefined' && this.card.content[0].SkillA.length > 0 && skill === this.card.content[0].SkillA[0].pointer_to_value && typeof this.card.content[0].RespIfIncorrectA !== 'undefined'){
 					resp_key = "RespIfIncorrectA";
 				}
-				else if(typeof this.card.content[0].SkillB !== 'undefined' && this.card.content[0].SkillB.length > 0 && skill === this.card.content[0].SkillB[0].pointer_to_value){
+				else if(typeof this.card.content[0].SkillB !== 'undefined' && this.card.content[0].SkillB.length > 0 && skill === this.card.content[0].SkillB[0].pointer_to_value && typeof this.card.content[0].RespIfIncorrectB !== 'undefined'){
 					resp_key = "RespIfIncorrectB";
 				}
-				else if(typeof this.card.content[0].SkillC !== 'undefined' && this.card.content[0].SkillC.length > 0 && skill === this.card.content[0].SkillC[0].pointer_to_value){
+				else if(typeof this.card.content[0].SkillC !== 'undefined' && this.card.content[0].SkillC.length > 0 && skill === this.card.content[0].SkillC[0].pointer_to_value && typeof this.card.content[0].RespIfIncorrectC !== 'undefined'){
 					resp_key = "RespIfIncorrectC";
 				}
-				else if(typeof this.card.content[0].SkillD !== 'undefined' && this.card.content[0].SkillD.length > 0 && skill === this.card.content[0].SkillD[0].pointer_to_value){
+				else if(typeof this.card.content[0].SkillD !== 'undefined' && this.card.content[0].SkillD.length > 0 && skill === this.card.content[0].SkillD[0].pointer_to_value && typeof this.card.content[0].RespIfIncorrectD !== 'undefined'){
 					resp_key = "RespIfIncorrectD";
 				}
-				else if(typeof this.card.content[0].SkillE !== 'undefined' && this.card.content[0].SkillE.length > 0 && skill === this.card.content[0].SkillE[0].pointer_to_value){
+				else if(typeof this.card.content[0].SkillE !== 'undefined' && this.card.content[0].SkillE.length > 0 && skill === this.card.content[0].SkillE[0].pointer_to_value && typeof this.card.content[0].RespIfIncorrectE !== 'undefined'){
 					resp_key = "RespIfIncorrectE";
 				}
-				else if(typeof this.card.content[0].SkillF !== 'undefined' && this.card.content[0].SkillF.length > 0 && skill === this.card.content[0].SkillF[0].pointer_to_value){
+				else if(typeof this.card.content[0].SkillF !== 'undefined' && this.card.content[0].SkillF.length > 0 && skill === this.card.content[0].SkillF[0].pointer_to_value && typeof this.card.content[0].RespIfIncorrectF !== 'undefined'){
 					resp_key = "RespIfIncorrectF";
 				}
 				else {
