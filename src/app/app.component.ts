@@ -36,4 +36,9 @@ export class AppComponent {
     this.playmedia.stop();
   }
 
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(ev:any) {
+    this.playmedia.immidiateClickSound();
+  }
+
 }

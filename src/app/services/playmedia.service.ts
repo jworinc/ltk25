@@ -218,6 +218,30 @@ export class PlaymediaService {
 		return this.opt.pauseOnInstruction();
 	}
 
+	immidiateClickSound() {
+		let props = {
+			src: this.ltkmediaurl + '/storage/app/public/audio/ltkmedia/MOUSEUP.mp3',
+			autoplay: false,
+			loop: false,
+			volume: this.volume,
+			rate: this.rate,
+			html5: false,
+		}
+
+		//	Init word sound
+		let sound = new Howl(props);
+
+		//	Play sound if it already loaded
+		if(sound.state() === 'loaded') sound.play();
+		else{
+			//	If sound is not loaded yet, play it when ready
+			sound.on('load', function(){
+				sound.play();
+			});
+		}
+
+	}
+
 
 
 }
