@@ -39,6 +39,12 @@ export class IdmComponent extends BaseComponent implements OnInit {
     */
     this.wblength = this.card.content.length;
     this.initViewStates();
+
+    //	Prev button press event
+    this.prev_btn.subscribe(()=>{
+      if(that.isActive()) that.showPrevWord();
+    });
+
   }
   
   public current_number: any;
@@ -66,10 +72,22 @@ export class IdmComponent extends BaseComponent implements OnInit {
           e.style.opacity = '1';
         });
       }, 10);
+
+      that.disableNextSlide();
+
       //	Play card description
       this.playCardDescription();
         
-			this.prevent_dubling_flag = true;
+      this.prevent_dubling_flag = true;
+      
+      this.showPrev();
+
+      this.cw = 0;
+      this.uinputph = 'review';
+      this.resetViewStates();
+      this.updateWordblocks();
+      this.updateViewStates();
+      
 		}
 		
   }
@@ -95,7 +113,9 @@ export class IdmComponent extends BaseComponent implements OnInit {
 
   next() {
     if(this.isActive()){
-      this.enableNextSlide();
+      let cw = this.cw;
+      if(this.wbvs[cw].view === 'sentence') this.enableNextSlide();
+      else this.disableNextSlide();
       this.showNextWord();
     }
 
@@ -112,6 +132,13 @@ export class IdmComponent extends BaseComponent implements OnInit {
   initViewStates() {
     for(let i = 0; i < this.wblength; i++){
       this.wbvs.push({view: 'word'});
+    }
+  }
+
+  //  Reset Word blocks view states
+  resetViewStates() {
+    for(let i = 0; i < this.wblength; i++){
+      if(typeof this.wbvs[i].view !== 'undefined') this.wbvs[i].view = 'word';
     }
   }
 
@@ -237,7 +264,10 @@ export class IdmComponent extends BaseComponent implements OnInit {
     if(vs.view === 'word'){
       this.cw--;
       //  Check overhead
-      if(this.cw < 0) this.cw = 0;
+      if(this.cw < 0){
+        this.cw = 0;
+        this.movePrev();
+      }
       //  Update word blocks
       this.updateWordblocks();
     }
@@ -245,6 +275,7 @@ export class IdmComponent extends BaseComponent implements OnInit {
     else {
       this.showPrevView();
     }
+
 
   }
 

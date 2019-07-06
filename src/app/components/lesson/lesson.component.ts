@@ -93,6 +93,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public rui_button_hint: boolean = false;
   public rui_button_clear: boolean = false;
   public rui_button_goodbad: boolean = false;
+  public rui_button_prev: boolean = false;
   public page_is_loading_screen: boolean = true;
   public main_app_screen: boolean = false;
   public beep_start_sound: any;
@@ -104,6 +105,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public playstop_event: EventEmitter<any> = new EventEmitter();
   public good_btn: EventEmitter<any> = new EventEmitter();
   public bad_btn: EventEmitter<any> = new EventEmitter();
+  public prev_btn: EventEmitter<any> = new EventEmitter();
 
   public show_notebook: boolean = false;
   public show_grammar: boolean = false;
@@ -334,6 +336,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
       (<CardComponent>componentRef.instance).playstop_event = this.playstop_event;
       (<CardComponent>componentRef.instance).good_btn = this.good_btn;
       (<CardComponent>componentRef.instance).bad_btn = this.bad_btn;
+      (<CardComponent>componentRef.instance).prev_btn = this.prev_btn;
       
       (<CardComponent>componentRef.instance).mnext.subscribe(function(){
         that.moveNext();
@@ -363,6 +366,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
       (<CardComponent>componentRef.instance).show_hint.subscribe(function(){
         that.showHint(); 
+      });
+
+      (<CardComponent>componentRef.instance).show_prev.subscribe(function(){
+        that.showPrev(); 
       });
 
       (<CardComponent>componentRef.instance).show_clear.subscribe(function(){
@@ -1025,6 +1032,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_hint = false;
     this.rui_button_clear = false;
     this.rui_button_goodbad = false;
+    this.rui_button_prev = false;
   }
 
   //  Change option button from hint to clear
@@ -1032,6 +1040,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_hint = false;
     this.rui_button_clear = true;
     this.rui_button_goodbad = false;
+    this.rui_button_prev = false;
   }
 
   //  Change option button from clear to hint
@@ -1039,7 +1048,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_hint = true;
     this.rui_button_clear = false;
     this.rui_button_goodbad = false;
-    
+    this.rui_button_prev = false;
   }
 
   //  Change option button to good/bad
@@ -1047,7 +1056,15 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_hint = false;
     this.rui_button_clear = false;
     this.rui_button_goodbad = true;
-    
+    this.rui_button_prev = false;
+  }
+
+  //  Change option button to prev
+  showPrev(){
+    this.rui_button_hint = false;
+    this.rui_button_clear = false;
+    this.rui_button_goodbad = false;
+    this.rui_button_prev = true;
   }
 
   setCurrentCardId(id) {
@@ -1141,6 +1158,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   bad() {
     this.bad_btn.emit();
+  }
+
+  prev() {
+    this.prev_btn.emit();
   }
 
   onCloseMenu() {

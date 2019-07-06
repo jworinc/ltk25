@@ -57,6 +57,7 @@ export class BaseComponent implements OnInit, CardComponent {
 	@Input() playstop_event: any;
 	@Input() good_btn: any;
 	@Input() bad_btn: any;
+	@Input() prev_btn: any;
 	@Input() sidetripmode: boolean;
 	@Input() global_start: boolean;
 
@@ -90,6 +91,7 @@ export class BaseComponent implements OnInit, CardComponent {
 	@Output() option_hide = new EventEmitter<boolean>();
 	@Output() show_good_bad = new EventEmitter<boolean>();
 	@Output() show_hint = new EventEmitter<boolean>();
+	@Output() show_prev = new EventEmitter<boolean>();
 	@Output() show_clear = new EventEmitter<boolean>();
 	@Output() set_card_id = new EventEmitter<number>();
 	@Output() disable_next_slide = new EventEmitter<boolean>();
@@ -412,6 +414,10 @@ export class BaseComponent implements OnInit, CardComponent {
 
   showHint() {
   	this.show_hint.emit();
+	}
+	
+	showPrev() {
+  	this.show_prev.emit();
   }
 
   showClear() {

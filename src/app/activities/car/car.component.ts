@@ -24,80 +24,80 @@ export class CarComponent extends BaseComponent implements OnInit {
   	this.current_number = +this.data.cross_number;
   	this.card_id = this.data.id;
   	this.setCardNumber();
-	//this.setCardId();
-	this.card = this.data;
+		//this.setCardId();
+		this.card = this.data;
 
-	this.current_header = this.card.header;
+		this.current_header = this.card.header;
 
-	//	Create list of word/image content of the card
-	let content = '';
-	for(let i = 0; i < this.data.content.length; i++) {
+		//	Create list of word/image content of the card
+		let content = '';
+		for(let i = 0; i < this.data.content.length; i++) {
 
-		//	Get current list item
-		let c = this.data.content[i];
+			//	Get current list item
+			let c = this.data.content[i];
 
-		//	Parse the word
-		//	Word consists of normall letters and highlighted letters
-		//	normall letters simply stored as array items
-		//	highlighted letters wrapped in '|a|' construction
-		//	word array example ['s', '|a|', 'fe']
-		//	second element in array is highlighted
-		let word = '';
-		for(let j = 0; j < c.word.length; j++) {
-			let w = c.word[j];
-			let hc = typeof c.highlightcolor !== 'undefined' ? c.highlightcolor : '#000000';
-			if(/\|*\|/.test(w)){
-				let sw = w.substr(1, w.length - 2);
-				c.word_letters = this.word_letters = sw;
-				this.answer_word += sw;
-				word += "<span class='card-content-intensified-t1' style='color: "+hc+"; text-shadow: 0 0 3px "+hc+";'>"+sw+"</span>";
-			} else {
-				word += w;
-				this.answer_word += w;
+			//	Parse the word
+			//	Word consists of normall letters and highlighted letters
+			//	normall letters simply stored as array items
+			//	highlighted letters wrapped in '|a|' construction
+			//	word array example ['s', '|a|', 'fe']
+			//	second element in array is highlighted
+			let word = '';
+			for(let j = 0; j < c.word.length; j++) {
+				let w = c.word[j];
+				let hc = typeof c.highlightcolor !== 'undefined' ? c.highlightcolor : '#000000';
+				if(/\|*\|/.test(w)){
+					let sw = w.substr(1, w.length - 2);
+					c.word_letters = this.word_letters = sw;
+					this.answer_word += sw;
+					word += "<span class='card-content-intensified-t1' style='color: "+hc+"; text-shadow: 0 0 3px "+hc+";'>"+sw+"</span>";
+				} else {
+					word += w;
+					this.answer_word += w;
+				}
 			}
+
+			c.word_parsed = word;
+			c.wcstyles={
+				'color': c.wordcolor,
+				'text-shadow': '0 0 3px ' + c.wordcolor
+			}
+
+			//	Redirect path of images to single media source ltk.cards
+					if(typeof c.img !== 'undefined' && c.img !== '' && !/^http/i.test(c.img)){
+							c.img = this.sp.mediastorage + c.img;
+					}
+
+
 		}
 
-		c.word_parsed = word;
-		c.wcstyles={
-			'color': c.wordcolor,
-			'text-shadow': '0 0 3px ' + c.wordcolor
-		}
+		let that = this;
 
-		//	Redirect path of images to single media source ltk.cards
-        if(typeof c.img !== 'undefined' && c.img !== '' && !/^http/i.test(c.img)){
-            c.img = this.sp.mediastorage + c.img;
-        }
+		//	Stop recording listner
+		this.recstop_event.subscribe(() => {
+			if(that.isActive() && typeof that.uinputph !== 'undefined' && that.uinputph === 'rec'){
+				that.uinputph = 'listen';
+				setTimeout(function(){ that.playContentDescription(); }, 500);
+			}
+		});
 
+		//	Start playing listner
+		this.playstop_event.subscribe(() => {
+			if(that.isActive() && typeof that.uinputph !== 'undefined' && that.uinputph === 'listen'){
+				that.uinputph = 'compare';
+				setTimeout(function(){ that.playContentDescription(); }, 500);
+			}
+		});
 
-	}
+		//	Good button press event
+		this.good_btn.subscribe(()=>{
+			that.good();
+		});
 
-	let that = this;
-
-	//	Stop recording listner
-	this.recstop_event.subscribe(() => {
-		if(that.isActive() && typeof that.uinputph !== 'undefined' && that.uinputph === 'rec'){
-			that.uinputph = 'listen';
-			setTimeout(function(){ that.playContentDescription(); }, 500);
-		}
-	});
-
-	//	Start playing listner
-	this.playstop_event.subscribe(() => {
-		if(that.isActive() && typeof that.uinputph !== 'undefined' && that.uinputph === 'listen'){
-			that.uinputph = 'compare';
-			setTimeout(function(){ that.playContentDescription(); }, 500);
-		}
-	});
-
-	//	Good button press event
-	this.good_btn.subscribe(()=>{
-		that.good();
-	});
-
-	//	Bad button press event
-	this.bad_btn.subscribe(()=>{
-		that.bad();
-	});
+		//	Bad button press event
+		this.bad_btn.subscribe(()=>{
+			that.bad();
+		});
 
   }
 

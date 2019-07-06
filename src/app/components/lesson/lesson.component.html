@@ -112,6 +112,7 @@
                         </span>
                         <span class='zoom-card-sequence-clear' *ngIf='rui_button_clear' (click)='clear();' title="{{ 'clear_input' | translate }}"></span>
                         <span class='zoom-card-sequence-hint' *ngIf='rui_button_hint' (click)='hint();' title="{{ 'show_hint' | translate }}"></span>
+                        <span class='zoom-card-sequence-prev' *ngIf='rui_button_prev' (click)='prev();' title="{{ 'move_to_prev' | translate }}"></span>
                         <span class='zoom-card-sequence-enter' (click)='enter();' title="{{ 'enter_answer' | translate }}" [ngClass]="{'blinkhighlight': blinkenter}"></span>
                         <span class='zoom-card-next' (click)='moveNext()' title="{{ 'move_to_next' | translate }}" [ngClass]="{'blinkhighlight': blinknextnavbtn}"></span>
 
@@ -133,6 +134,7 @@
                             </span>
                             <span class='zoom-card-sequence-clear' *ngIf='rui_button_clear' (click)='clear();' title="{{ 'clear_input' | translate }}"></span>
                             <span class='zoom-card-sequence-hint' *ngIf='rui_button_hint' (click)='hint();' title="{{ 'show_hint' | translate }}"></span>
+                            <span class='zoom-card-sequence-prev' *ngIf='rui_button_prev' (click)='prev();' title="{{ 'move_to_prev' | translate }}"></span>
                             <span class='zoom-card-sequence-enter' (click)='enter();' title="{{ 'enter_answer' | translate }}" [ngClass]="{'blinkhighlight': blinkenter}"></span>
                         </span>       
                     </span>

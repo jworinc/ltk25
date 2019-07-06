@@ -148,5 +148,6 @@
 	"idiom" : "Idiom",
 	"literal_translation" : "Literal translation",
 	"native_meaning" : "Native meaning",
-	"click_to_play" : "Click to play!"
+	"click_to_play" : "Click to play!",
+	"move_to_prev" : "Move to the previous card"
 }

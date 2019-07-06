@@ -53,6 +53,13 @@ export class Rw1Component extends BaseComponent implements OnInit {
       }
     }
 
+    
+    //	Prev button press event
+    this.prev_btn.subscribe(()=>{
+      if(that.isActive()) that.showPrevWord();
+    });
+
+
   }
   
   public current_number: any;
@@ -76,7 +83,14 @@ export class Rw1Component extends BaseComponent implements OnInit {
       //	Play card description
       this.playCardDescription();
         
-			this.prevent_dubling_flag = true;
+      this.prevent_dubling_flag = true;
+      this.showPrev();
+      this.disableNextSlide();
+      this.cw = 0;
+      this.uinputph = 'review';
+      this.resetViewStates();
+      this.updateWordblocks();
+      this.updateViewStates();
 		}
 		
   }
@@ -85,7 +99,10 @@ export class Rw1Component extends BaseComponent implements OnInit {
     
       let that = this;
       this.eslCustomInstructions('NextInst', ()=>{
-        setTimeout(()=>{ that.playWord(that.card.content[that.cw].wavename); }, 500);
+        setTimeout(()=>{ 
+          that.playWord(that.card.content[that.cw].wavename);
+          that.blinkOnlyNext();
+        }, 500);
       });
     
   }
@@ -102,6 +119,13 @@ export class Rw1Component extends BaseComponent implements OnInit {
   initViewStates() {
     for(let i = 0; i < this.wblength; i++){
       this.wbvs.push({view: 'word'});
+    }
+  }
+
+  //  Reset Word blocks view states
+  resetViewStates() {
+    for(let i = 0; i < this.wblength; i++){
+      if(typeof this.wbvs[i].view !== 'undefined') this.wbvs[i].view = 'word';
     }
   }
 
@@ -182,6 +206,16 @@ export class Rw1Component extends BaseComponent implements OnInit {
 
   }
 
+  next() {
+    if(this.isActive()){
+      let cw = this.cw;
+      if(this.wbvs[cw].view === 'sentence' && cw >= this.wbvs.length) this.enableNextSlide();
+      else this.disableNextSlide();
+      this.showNextWord();
+    }
+
+  }
+
   //  Click event handler, go to the next word block
   showNextWord() {
 
@@ -228,7 +262,12 @@ export class Rw1Component extends BaseComponent implements OnInit {
     if(vs.view === 'word'){
       this.cw--;
       //  Check overhead
-      if(this.cw < 0) this.cw = 0;
+      if(this.cw < 0) {
+        this.cw = 0;
+        this.enableNextSlide();
+        this.movePrev();
+        return;
+      }
       //  Update word blocks
       this.updateWordblocks();
       this.repeat();
@@ -237,7 +276,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
     else {
       this.showPrevView();
     }
-
+    this.uinputph = 'review';
+    this.disableNextSlide();
   }
 
   //  Click event handler, down view

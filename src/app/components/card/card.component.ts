@@ -9,6 +9,7 @@ export interface CardComponent {
   option_hide: any;
   show_good_bad: any;
   show_hint: any;
+  show_prev: any;
   show_clear: any;
   set_card_id: any;
   global_recorder: boolean;
@@ -21,6 +22,7 @@ export interface CardComponent {
   playstop_event: any;
   good_btn: any;
   bad_btn: any;
+  prev_btn: any;
   disable_next_slide: any;
   enable_next_slide: any;
   global_start: boolean;
