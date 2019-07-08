@@ -315,6 +315,7 @@ export class BaseComponent implements OnInit, CardComponent {
 
 
   moveNext() {
+		this.enableNextSlide();
   	this.mnext.emit();
   }
 
