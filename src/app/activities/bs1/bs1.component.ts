@@ -107,15 +107,18 @@ export class Bs1Component extends BaseComponent implements OnInit {
 		//	Card hide hook
 		hide() {
 			this.prevent_dubling_flag = false;
+			if(this.uinputph !== 'finish') this.uinputph = 'enablenext';
 			//	Hide option buttons
 			this.optionHide();
 		}
 
 		repeat() {
 			if(this.cn[0].variants.length - 1 > this.sentence_index){
-				this.ss.map((s)=>{ 
-					s.stop(); 
-				});
+				if(typeof this.ss !== 'undefined'){
+					this.ss.map((s)=>{ 
+						s.stop(); 
+					});
+				}
 				//this.nextSentence(this.sentence_index);
 				//this.blinkEnter();
 				this.playContentDescription();
@@ -171,6 +174,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 				}
 				that.showFirstPartOfSentence();
 			}, 10);
+			this.uinputph = 'ressentence';
 		}
 
 		nextSentence(i) {
@@ -182,6 +186,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 				that.ss[1].compileSentence();
 				that.showFirstPartOfSentence();
 			}, 20);
+			this.uinputph = 'ressentence';
 		}
 
 		showFirstPartOfSentence() {
@@ -207,7 +212,10 @@ export class Bs1Component extends BaseComponent implements OnInit {
 						that.ss[1].playSentenceByIndex(2, ()=>{
 							setTimeout(()=>{
 								that.blinkEnter();
-								that.eslCustomInstructions('ResultInst', ()=>{});
+								that.uinputph = 'enablenext';
+								that.eslCustomInstructions('ResultInst', ()=>{
+									
+								});
 							}, 1000);
 						});
 					}
@@ -229,6 +237,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 		}
 
 		enter() {
+			if(this.uinputph !== 'enablenext' && this.uinputph !== 'finish') return;
 			let that = this;
 			this.show_sentence_begin = false;
 			this.show_sentence_var = false;
@@ -242,6 +251,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 			if(this.cn[0].variants.length - 1 > this.sentence_index){
 				//this.show_sentences.push(this.current_sentence + ' ' + this.current_variant);
 				this.sentence_index++;
+				this.uinputph = 'ressentence';
 				let that = this;
 				this.enter_timer = setTimeout(()=>{ if(that.isActive()) that.nextSentence(that.sentence_index); }, 1500);
 			} else {

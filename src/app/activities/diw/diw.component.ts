@@ -131,10 +131,10 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 	//	Enter click handler
 	enter() {
 		if(this.uinputph === 'finish'){
-			this.playCorrectSound();
+			if(this.getUserInputString() !== '') this.playCorrectSound();
 			this.enableNextCard();
 		} else {
-			this.playmedia.sound('_STNQR', function(){});
+			if(this.getUserInputString() !== '') this.playmedia.sound('_STNQR', function(){});
 		}
 	}
 
@@ -161,7 +161,7 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 	prehide() {
 		this.playmedia.stop();
 		this.play_card_description_busy = false;
-
+		this.setGlobalDesc('');
 		//	Clear activity log timer, to prevent sending many begin tags when user switch cards very fast (less than 2sec)
 		clearTimeout(this.activity_log_timer);
 

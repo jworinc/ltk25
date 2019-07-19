@@ -8,7 +8,8 @@
     <div class='word-box'>
       <div class="idm-word">
         <label>{{ 'idiom' | translate }}</label>
-        <span>{{ cn.idiom }}</span>
+        <span [attr.data-ind]='555666777901' 
+				[innerHTML]='cn.idiom | bindhtml' app-playsentence></span>
       </div>
       <div class="idm-native-img">
         <img [hidden]='!cn.image' [src]='cn.image ? playmedia.ltkmediaurl + cn.image : ""' alt='' />
@@ -17,7 +18,7 @@
     <div class='phoneme-box' [attr.wordblock]="cnkey">      
       <div class="idm-native">
         <label>{{ 'literal_translation' | translate }}</label>
-        <span>{{cn.idiom_native}}</span>
+        <span>{{ cn.idiom_native }}</span>
     </div>
       <div class="idm-native-img">
         <img [hidden]='!cn.image' [src]='cn.image ? playmedia.ltkmediaurl + cn.image : ""' alt='' />
@@ -27,7 +28,8 @@
       <div class='word-box'>
         <div class="idm-word">
           <label>{{ 'idiom' | translate }}</label>
-          <span>{{ cn.idiom }}</span>
+          <span [attr.data-ind]='555666777902' 
+          [innerHTML]='cn.idiom | bindhtml' app-playsentence></span>
         </div>
         <div class="idm-native">
             <label>{{ 'literal_translation' | translate }}</label>

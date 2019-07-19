@@ -74,29 +74,65 @@ export class PlaysentenceDirective {
 		this.elmt.nativeElement.innerHTML = this.origin_text;
 	}
 
+	public marked_words = [];
+	getMarkedQuantity(word){
+		let q = 0;
+		for(let i in this.marked_words){
+			if(this.marked_words[i] === word) q++;
+		}
+		return q;
+	}
 	markTheWord(){
 		//	RegExp for seaching HTML tags in text
 		let html = /<[\w\s\d=\"\;\:\-\.\/]*>/ig;
 		//	RegExp find extra spaces
 		let space_to_one = /[\s]+/g;
 		//	RegExp to find punctuation characters
-		let punctuation = /[\,\:\;\"\u2000-\u2060]/g;
+		let punctuation = /[\,\:\;\"\-\u2000-\u2060]/g;
 		//	RegExp to find dots
 		let dots = /\./g;
 		let wrr = this.origin_text.replace(html, '').replace(space_to_one, ' ').replace(punctuation, '').replace(dots, ' ').split(' ');
 		let wr = [];
 		for(let i in wrr){
-			if(wrr[i] !== '') wr.push(wrr[i]);
+			if(wrr[i] !== '') wr.push(wrr[i].replace(/[\!\?\.]/, ''));
 		}
-		//let before = wr.slice(0, this.current_play - 1);
-		let on = wr.slice(this.current_play - 1, this.current_play);
-		//let after = wr.slice(this.current_play);
-		//let nw = before.join(' ');
-		let reg = new RegExp('\\b'+on[0]+'(?!\=)\\b', 'g');
-		let nw = this.origin_text.replace(reg, '<span class=\'playsentence-hilight\'>'+on[0]+'</span>');
-		//if(on.length > 0) nw += ' <span class=\'playsentence-hilight\'>' + on[0] + '</span> ';
-		//if(after.length > 0) nw += after.join(' ');
 		
+		let on = wr.slice(this.current_play - 1, this.current_play);
+		let reg = new RegExp('\\b'+on[0]+'(?!\=)\\b');
+		let nw = '';
+		//	For the second and more time mark
+		let n = this.getMarkedQuantity(on[0]);
+		//	Prevent doublings
+		if(n > 0){
+			// (?<=[\w\s\W\S]*(cab){1}[\w\s\W\S]*)\bcab\b
+			//reg = new RegExp('(?<=[\\w\\s\\W\\S]*('+on[0]+'){'+n+'}[\\w\\s\\W\\S]*)\\b'+on[0]+'(?!\=)\\b');
+
+			//	Get index of required word
+			let i = 0;
+			let st = this.origin_text;
+			for(let k = 0; k < n; k++) {
+				//	Get first index in the string
+				let j = st.search(reg);
+				st = st.slice(j+on[0].length, st.length - 1);
+				i += j+on[0].length;
+			}
+
+			//	Get before and after parts
+			let bef = this.origin_text.slice(0, i);
+			let aft = this.origin_text.slice(i, this.origin_text.length);
+
+			//	Replace required word in after part with marked bg
+			aft = aft.replace(reg, '<span class=\'playsentence-hilight\'>'+on[0]+'</span>');
+
+			//	Get result row
+			nw = bef + aft;
+
+		} else {
+			nw = this.origin_text.replace(reg, '<span class=\'playsentence-hilight\'>'+on[0]+'</span>');
+		}
+		
+		
+		this.marked_words.push(on[0]);
 		this.elmt.nativeElement.innerHTML = nw;
 
 		//	Start timer to remove mark
@@ -113,6 +149,7 @@ export class PlaysentenceDirective {
 		if(this.play_busy) return;
 		this.play_busy = true;
 		this.current_play = 0;
+		this.marked_words = [];
 		this.current_play++;
 		this.markTheWord();
 		let that = this;

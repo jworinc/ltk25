@@ -228,6 +228,7 @@ export class Ar2Component extends BaseComponent implements OnInit {
 			}
 			this.prevent_dubling_flag = true;
 			this.showHint();
+			this.input_data = 0;
 		}
 		
 	}
@@ -345,12 +346,12 @@ export class Ar2Component extends BaseComponent implements OnInit {
 		let that = this;
 		this.playmedia.stop();
 		if(!this.validate()){
-			if(!silent && this.getUserInputString() !== ''){
+			if(!silent && this.getUserInputString() !== 0){
 				this.playmedia.sound('_STNQR', function(){ 
 					that.enableNextCard(); that.clearUserInput(); that.play_card_description_busy = false; //scope.playCardDescription();
 				}, 0);
 			} 
-			else if(!silent && this.getUserInputString() === ''){
+			else if(!silent && this.getUserInputString() === 0){
 				this.repeat();
 			}
 			else {
@@ -360,7 +361,7 @@ export class Ar2Component extends BaseComponent implements OnInit {
 
 			//	Check if we shown all card instances
 			if(that.current_presented >= that.max_presented){
-				if(!silent){
+				if(!silent && this.getUserInputString() !== 0){
 					this.playCorrectSound(function(){ 
 						that.enableNextCard();
 					});

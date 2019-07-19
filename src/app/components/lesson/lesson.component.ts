@@ -112,6 +112,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public show_testing: boolean = false;
 
   public start_button_animation: any = null;
+  public lesson_finished: boolean = false;
 
   constructor(
     private DL: DataloaderService,
@@ -511,7 +512,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
             });
 
         that.updateLesson();
-
+        that.lesson_finished = false;
       }
 
       let wait_audio_ctx_counter = 0;
@@ -997,7 +998,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   repeat() {
-
+    if(this.lesson_finished) return;
     //  Check cards and sent enter event to active card
     for(let i in this.ccs){
       let c = this.ccs[i];
@@ -1131,6 +1132,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
       setTimeout(function(){
         that.el.nativeElement.querySelector('.main-app-finish-lesson-screen').style.opacity = '1'; 
       }, 700);
+      this.lesson_finished = true;
+      this.global_header = '';
     } else {
       if(!this.sidetripmode){
         this.logging.lessonTimeon(this.student.lu)

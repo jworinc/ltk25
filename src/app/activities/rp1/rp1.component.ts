@@ -100,10 +100,10 @@ export class Rp1Component extends BaseComponent implements OnInit {
 	//	Enter click handler
 	enter() {
 		if(this.uinputph === 'finish'){
-			this.playCorrectSound();
+			if(this.getUserInputString() !== '') this.playCorrectSound();
 			this.enableNextCard();
 		} else {
-			this.playmedia.sound('_STNQR', function(){});
+			if(this.getUserInputString() !== '') this.playmedia.sound('_STNQR', function(){});
 		}
 	}
 
@@ -172,7 +172,7 @@ export class Rp1Component extends BaseComponent implements OnInit {
 			this.setGlobalDesc(this.card.content[0].desc);
 			this.blinkRec();
 			this.playmedia.sound(this.card.content[0].RecInst[0].audio, function(){});
-			this.playLetterOrSound(this.audios[this.current_letter], function(){});
+			//this.playLetterOrSound(this.audios[this.current_letter], function(){});
 		}
 		//	Phase 1 rec instructions, if mic is disabled
 		if(typeof this.card.content[0].RecInst !== 'undefined' && this.card.content[0].RecInst.length > 0 && this.uinputph === 'rec' && !this.global_recorder){
@@ -212,6 +212,7 @@ export class Rp1Component extends BaseComponent implements OnInit {
 					}, 1500);
 				} else {
 					that.uinputph = 'finish';
+					that.playCorrectSound();
 					that.enableMoveNext();
 					that.enter();
 				}

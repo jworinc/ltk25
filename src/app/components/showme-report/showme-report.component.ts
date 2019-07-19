@@ -192,8 +192,13 @@ export class ShowmeReportComponent implements OnInit {
 
     }
 
-
     public current_lesson = 0;
+    public _lu = -1;
+    @Input('lu')
+    set lu(lu: any) {
+    	this._lu = lu;
+      this.updateReport();
+    }
     public lessons: any;
     public errors = [];
 
@@ -258,10 +263,13 @@ export class ShowmeReportComponent implements OnInit {
 
     //  Get errors quantity for particular command from lesson state dataset
     getCommandErrors(com, ls) {
+      let out = 0;
       for(let i in ls){
         let l = ls[i];
-        if(l.command === com) return parseInt(l.error_quantity);
+        //if(l.command === com) return parseInt(l.error_quantity);
+        if(l.command === com) out += l.errors.length / 2;
       }
+      return out;
     }
 
     //  Get errors quantity for particular command from lesson state dataset
@@ -270,6 +278,16 @@ export class ShowmeReportComponent implements OnInit {
         let l = ls[i];
         if(l.command === com) return parseInt(l.complete);
       }
+    }
+
+    //  Get presented quantity for particular command from lesson state dataset
+    getCommandPresented(com, ls) {
+      let out = 0;
+      for(let i in ls){
+        let l = ls[i];
+        if(l.command === com) out += parseInt(l.presented);
+      }
+      return out;
     }
 
     showmeUpdateCallback(data) {
@@ -286,16 +304,28 @@ export class ShowmeReportComponent implements OnInit {
 
           //  Calc percent of successfully completed activities ((total - errors) / total) + 5
           //  where 5 is a minimum from which starts chart for particular activity
-          let total = parseInt(data.result[i]);
+          //let total = parseInt(data.result[i]);
+          
+          //  Error weight in report
+          let error_weight = 0.7;
+
+          let total = this.getCommandPresented(i, data.lesson_state);
           let errors = this.getCommandErrors(i, data.lesson_state);
           let complete = this.getCommandComplete(i, data.lesson_state);
           let d = 5;
-          if(errors > 0){
-            d = Math.floor(((total - errors) / total)*100);
+          if(errors > 0 && complete > 90){
+            d = Math.floor(((total - (errors*error_weight)) / total)*100);
             if(d < 5) d = 5;
           }
-          else if(errors === 0 && complete === 0){
+          else if(errors > 0 && complete < 90){
+            d = Math.floor(((total - (errors*error_weight)) / total)*80);
+            if(d < 5) d = 5;
+          }
+          else if(errors === 0 && complete === 0 && total <= 1){
             d = 5;
+          }
+          else if(errors === 0 && complete === 0 && total > 1){
+            d = 5 + total*5;
           } else {
             d = 100;
           }
@@ -316,9 +346,16 @@ export class ShowmeReportComponent implements OnInit {
 
     getLessonsCallback(data) {
       this.lessons = data;
-      if(this.current_lesson === 0 && data.length > 0 && typeof data[0] === 'string'){
+      if(this._lu === 0 && data.length > 0 && typeof data[0] === 'string'){
         this.current_lesson = data[0];
         this.updateLesson();
+      }
+      //  Set last complete lesson
+      else if(this._lu > 0 && data.length >= this._lu-1 && typeof data[this._lu-2] === 'string'){
+        this.current_lesson = data[this._lu-2];
+        this.updateLesson();
+      } else {
+        return;
       }
       
     }

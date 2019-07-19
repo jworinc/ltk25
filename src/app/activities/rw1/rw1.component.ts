@@ -357,4 +357,12 @@ export class Rw1Component extends BaseComponent implements OnInit {
     }
   } 
 
+  checkForName(word) {
+
+    let res = /[A-Z]+/.test(word.substr(0, 1));
+    //console.log('Check for name ('+word+'): '+res);
+    return res;
+
+  }
+
 }

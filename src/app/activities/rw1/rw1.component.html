@@ -10,7 +10,7 @@
         <div class="row cust-word-img">
           <div [ngClass]="!cn.content[0].img ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-sx-6'" (click)="playWord(cn.wavename)">           
               <div class='word mb-2'>{{ cn.title }}</div>
-              <span class='word-native' [hidden]="!cn.translations">{{ cn.translations ? cn.translations[0] : ''}}</span>                      
+              <span class='word-native' [hidden]="!cn.translations || checkForName(cn.title)">{{ cn.translations ? cn.translations[0] : ''}}</span>                      
           </div>
           <div class="col-md-6" [hidden]='!cn.content[0].img'>
             <div class="img-parent">

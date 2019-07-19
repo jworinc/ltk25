@@ -299,6 +299,10 @@ export class SypComponent extends BaseComponent implements OnInit {
 		if((this.syp_card_word !== '' || this.syp_card_picture !== '' || this.syp_card_animation.length !== 0) && typeof itm !== 'undefined' && itm.type !== 'syncroplay') 
 			this.first_instruction_in_a_card = false;
 
+		//	Process exceptions for some lessons, there is no needed to pause on first instruction
+		//	Lesson 28 position 12
+		if(this.card.lesson === "lesson 028" && this.card.position === 12) this.first_instruction_in_a_card = false;
+
 	}
 
 
@@ -393,6 +397,11 @@ export class SypComponent extends BaseComponent implements OnInit {
 			if(this.current_comand >= this.cmds.length) {
 				//if(this.isActive()) this.setDescription();
 				this.syp_card_played = true;
+				if(this.temp_inidesc !== ''){
+					this.syp_card_inidesc += '<p>' + this.temp_inidesc + '</p>';
+					this.temp_inidesc = '';
+				}
+				
 				return;
 			} else {
 				this.SYPComandProcessor();
@@ -431,11 +440,14 @@ export class SypComponent extends BaseComponent implements OnInit {
 
 	enter() {
 		if(this.disable_enter_btn && this.uinputph !== 'finish') return;
-		if(this.uinputph === 'finish'){
+		if(this.uinputph === 'finish' && this.getUserInputString() !== ''){
 			let that = this;
 			this.playCorrectSound(function(){ 
 				that.enableNextCard();
 			});
+		}
+		if(this.uinputph === 'finish' && this.getUserInputString() === ''){
+			this.enableNextCard();
 		}
 		else if(this.uinputph === 'waitforuser') {
 			this.setDescription();

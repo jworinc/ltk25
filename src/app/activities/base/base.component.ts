@@ -582,7 +582,7 @@ export class BaseComponent implements OnInit, CardComponent {
 
 			//	Check if we shown all card instances
 			if(that.current_presented >= that.max_presented){
-				if(!silent){
+				if(!silent && this.getUserInputString() !== ''){
 					this.playCorrectSound(function(){ 
 						that.enableNextCard();
 					});
@@ -597,7 +597,7 @@ export class BaseComponent implements OnInit, CardComponent {
 	prehide(){
 		this.pm.stop();
 		this.play_card_description_busy = false;
-
+		this.setGlobalDesc('');
 		//	Clear activity log timer, to prevent sending many begin tags when user switch cards very fast (less than 2sec)
 		clearTimeout(this.activity_log_timer);
 

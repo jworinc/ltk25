@@ -74,6 +74,7 @@ export class BasearComponent extends BaseComponent implements OnInit {
 			}
 			this.prevent_dubling_flag = true;
 			this.showHint();
+			this.clearUserInput();
 		}
 		
 	}

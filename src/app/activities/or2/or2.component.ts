@@ -128,7 +128,7 @@ export class Or2Component extends BaseorComponent implements OnInit {
   //	Enter click handler
 	enter() {
 		if(this.uinputph === 'finish'){
-			this.playCorrectSound();
+			//this.playCorrectSound();
 			this.enableNextCard();
 		} else {
 			this.psn.playSentenceByIndex(this.sentence_index);

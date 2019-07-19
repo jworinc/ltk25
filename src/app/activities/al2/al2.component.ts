@@ -130,6 +130,7 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 	public hint_busy: boolean = false;
 	public cn = [];
 	public exp_arr = [];
+	public set_cursor_interval: any = null;
 	
 	setCard() {
 
@@ -263,6 +264,7 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 				let inps = this.elm.nativeElement.querySelector('input[data-pos="'+index+'"]');
 				if(inps !== null){
 					set_focus = true;
+					let that = this;
 					setTimeout(function() { inps.focus(); }, 100);
 				}
 				
@@ -276,6 +278,18 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 			});
 		}
 
+	}
+
+	//	Check input element for focus or data
+	checkForInputFocus() {
+		let out = false;
+
+		let aEl = document.activeElement;
+		this.elm.nativeElement.querySelectorAll('input').forEach((e)=>{
+			if(e == aEl) out = true;
+		});
+
+		return out;
 	}
 
 	//	Clear wrong inputs
@@ -317,8 +331,27 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 			}
 			this.prevent_dubling_flag = true;
 			this.showHint();
+			let that = this;
+			clearInterval(this.set_cursor_interval);
+			this.set_cursor_interval = setInterval(()=>{
+				if(!that.checkForInputFocus())
+					that.setFocus();
+			}, 2000);
 		}
 		
+	}
+
+	//	Callback for hide card event
+	hide() {
+		this.prevent_dubling_flag = false;
+
+		//	Stop play, reset stop play cycle
+		this.playmedia.stop();
+		//clearTimeout(this.play_stop_cycle_timer);
+		this.play_card_description_busy = false;
+		//	Hide option buttons
+		this.optionHide();
+		clearInterval(this.set_cursor_interval);
 	}
 
 	playRightAnswer(){

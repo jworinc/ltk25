@@ -10,7 +10,7 @@ export class ColorschemeService {
     public current_set = 0;
 	public schemes = [
 		{card: '#FFFFFF'},
-		{card: '#2E328E'},
+		{card: '#5961F9'},
 		{card: '#076FB6'},
 		{card: '#39B1BC'},
 		{card: '#FF91F0'},

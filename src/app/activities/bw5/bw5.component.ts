@@ -148,6 +148,7 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 				this.enableMoveNext();
 			}
 			this.prevent_dubling_flag = true;
+			this.input_data = '';
 		}
 		
 	}
@@ -192,38 +193,41 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 		  return Observable.create((observer) => {
 
 		  	that.element.nativeElement.querySelector('.bw1-word-wrap').style.opacity = '1';
-			let i = that.card.content[0].instructions[iindex];
-			that.card.content[0].desc = i.pointer_to_value;
-			that.setGlobalDesc(i.pointer_to_value);
-    		if(typeof i.audio !== 'undefined' && i.audio !== ''){
-    			setTimeout(function(){
-	    			that.pms.sound(i.audio, function(){});
-	    			that.pms.word(that.answer_word, function(){
-	    				observer.next(0); observer.complete();
-	    			});
-	    		}, 1000);
-    		}
-    		iindex++;
-    		that.main_description_part_played = true;
+				let i = that.card.content[0].instructions[iindex];
+				that.card.content[0].desc = i.pointer_to_value;
+				that.setGlobalDesc(i.pointer_to_value);
+					if(typeof i.audio !== 'undefined' && i.audio !== ''){
+						setTimeout(function(){
+							that.pms.sound(i.audio, function(){});
+							that.pms.word(that.answer_word, function(){
+								observer.next(0); observer.complete();
+							});
+						}, 1000);
+					}
+					iindex++;
+					that.main_description_part_played = true;
 
-		  });
+				});
 		}));
 
 		//	Play third part instruction with required word
 		pr1.subscribe((finalResult) => {
-		  	let i = that.card.content[0].instructions[iindex];
-			that.card.content[0].desc = i.pointer_to_value;
-			that.setGlobalDesc(i.pointer_to_value);
-    		if(typeof i.audio !== 'undefined' && i.audio !== ''){
-    			setTimeout(function(){
-	    			that.pms.sound(i.audio, function(){});
-	    			that.pms.word(that.answer_word, function(){
-	    				setTimeout(function(){ that.playContentDescription(); }, 1000);
-	    				
-			    	});
-			    }, 1000);
-    		}
-    		iindex++;
+			if(that.card.content[0].instructions.length > iindex){
+				let i = that.card.content[0].instructions[iindex];
+				that.card.content[0].desc = i.pointer_to_value;
+				that.setGlobalDesc(i.pointer_to_value);
+				if(typeof i.audio !== 'undefined' && i.audio !== ''){
+					setTimeout(function(){
+						that.pms.sound(i.audio, function(){});
+						that.pms.word(that.answer_word, function(){
+							setTimeout(function(){ that.playContentDescription(); }, 1000);
+							
+						});
+					}, 1000);
+				}
+				iindex++;
+			} else setTimeout(function(){ that.playContentDescription(); }, 1000);
+		  
 
 
 		});

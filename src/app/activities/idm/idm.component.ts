@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PlaysentenceDirective } from '../../directives/playsentence.directive';
 
 @Component({
   selector: 'app-idm',
@@ -12,6 +13,8 @@ import { ColorschemeService } from '../../services/colorscheme.service';
   host: {'class': 'book-wrapper-slide'}
 })
 export class IdmComponent extends BaseComponent implements OnInit {
+
+  @ViewChild(PlaysentenceDirective) psn;
 
   constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private idmlog: LoggingService, private rw1cs: ColorschemeService) {
   	super(elm, sanitizer, playmedia, idmlog, rw1cs);
@@ -98,7 +101,15 @@ export class IdmComponent extends BaseComponent implements OnInit {
       let that = this;
       if(this.wbvs[cw].view === 'word') this.eslCustomInstructions('NextInst', ()=>{
         that.disableNextSlide();
-        that.blinkOnlyNext();
+        //that.blinkOnlyNext();
+        //	After setting card story we have to wait before angular process playwords directive
+        setTimeout(()=>{
+          let d = that.psn;
+          d.playSentenceByIndex(555666777901, ()=>{});
+          d.end_callback = ()=>{
+            that.blinkOnlyNext();
+          }
+        }, 20);
       });
       else if(this.wbvs[cw].view === 'pronounce') this.eslCustomInstructions('TransInst', ()=>{
         that.disableNextSlide();
@@ -114,7 +125,10 @@ export class IdmComponent extends BaseComponent implements OnInit {
   next() {
     if(this.isActive()){
       let cw = this.cw;
-      if(this.wbvs[cw].view === 'sentence') this.enableNextSlide();
+      if(this.wbvs[cw].view === 'sentence') {
+        this.enableNextSlide();
+        this.uinputph = 'finish';
+      }
       else this.disableNextSlide();
       this.showNextWord();
     }
@@ -284,7 +298,11 @@ export class IdmComponent extends BaseComponent implements OnInit {
     let cw = this.cw;
     //  Check current view state and switch down
     if(this.wbvs[cw].view === 'word') this.wbvs[cw].view = 'pronounce';
-    else if(this.wbvs[cw].view === 'pronounce') this.wbvs[cw].view = 'sentence';
+    else if(this.wbvs[cw].view === 'pronounce') {
+      this.wbvs[cw].view = 'sentence';
+      this.uinputph = 'finish';
+      this.enableMoveNext();
+    }
     this.updateViewStates();
   }
 

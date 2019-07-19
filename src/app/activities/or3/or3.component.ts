@@ -82,7 +82,9 @@ export class Or3Component extends BaseorComponent implements OnInit, DoCheck {
 				//	Check if last
 				if(parseInt(i) >= ric.length - 1){
 					this.pms.sound(a.audio, function(){
-	    				that.setFocus();
+							that.setFocus();
+							that.element.nativeElement.querySelector('.or3-question-word-input').value = "";
+							that.element.nativeElement.querySelector('.or3-question-word-input').style.backgroundColor = 'white';
 	    			});
 				} else {
 					this.pms.sound(a.audio, function(){
@@ -126,6 +128,7 @@ export class Or3Component extends BaseorComponent implements OnInit, DoCheck {
 						that.instruction2_flag = false;
 						that.next();
 						that.input_data = '';
+						
 					});
 	
 				}

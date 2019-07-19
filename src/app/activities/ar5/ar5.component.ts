@@ -121,6 +121,7 @@ export class Ar5Component extends BasearComponent implements OnInit, DoCheck {
 			}
 			this.prevent_dubling_flag = true;
 			this.showHint();
+			this.input_data = '';
 		}
 		
 	}

@@ -133,6 +133,7 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 				this.enableMoveNext();
 			}
 			this.prevent_dubling_flag = true;
+			this.input_data = '';
 
 		}
 		

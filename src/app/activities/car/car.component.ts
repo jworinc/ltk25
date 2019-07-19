@@ -132,7 +132,7 @@ export class CarComponent extends BaseComponent implements OnInit {
 	enter(silent) {
 		let sl = silent || false;
 		if(this.uinputph === 'finish'){
-			if(!sl) this.playCorrectSound(()=>{});
+			if(!sl && this.getUserInputString() !== '') this.playCorrectSound(()=>{});
 			this.enableNextCard();
 		}
 	}
@@ -141,6 +141,7 @@ export class CarComponent extends BaseComponent implements OnInit {
 	good() {
 		if(this.uinputph === 'question'){
 			this.uinputph = 'finish';
+			this.playCorrectSound();
 			this.enter(false);
 		}
 	}
@@ -190,7 +191,10 @@ export class CarComponent extends BaseComponent implements OnInit {
 	//	Overload default repeat and play last uncomplete question
 	public lastUncomplete = null;
 	repeat() {
-		this.playContentDescription();
+		//this.playContentDescription();
+		this.playmedia.stop();
+		this.uinputph = 'rec';
+		this.playCardDescription();
 	}
 
 	playAnswerLetters(cb) {

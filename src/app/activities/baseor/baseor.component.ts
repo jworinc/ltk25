@@ -64,7 +64,8 @@ export class BaseorComponent extends BaseComponent implements OnInit {
 			this.playCorrectSound();
 			this.enableNextCard();
 		} else {
-			this.playmedia.sound('_STNQR', function(){});
+			if(this.getUserInputString() !== '') this.playmedia.sound('_STNQR', function(){});
+			else this.repeat();
 		}
 	}
 

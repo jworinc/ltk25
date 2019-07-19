@@ -184,6 +184,7 @@ export class Bw6Component extends Bw3Component implements OnInit {
 				this.enableMoveNext();
 			}
 			this.prevent_dubling_flag = true;
+			this.input_data = '';
 		}
 		
 	}
@@ -332,6 +333,9 @@ export class Bw6Component extends Bw3Component implements OnInit {
 	}
 
 	repeat() {
+		//this.playContentDescription();
+		this.bw6pm.stop();
+		this.uinputph = 'rec';
 		this.playContentDescription();
 	}
 	
@@ -340,7 +344,7 @@ export class Bw6Component extends Bw3Component implements OnInit {
 	//	angular watcher creates a problem in this case, so this action must be approved by user with click enter button
 	enter() {
 		let that = this;
-		
+		this.bw6pm.stop();
 		if(this.uinputph === 'question' && this.input_data !== ''){
 			if(this.input_data.toLowerCase() === this.expected_suffix.toLowerCase()){
 				this.uinputph = 'finish';

@@ -582,9 +582,10 @@ margin: 3px 2px;display: inline-block;text-align:center;}
 }
 
 .or4-question-variants{
-    display: block;
+    display: flex;
     position: relative;
     flex-shrink: 0;
+    align-items: center;
 }
 .or4-correct-answer{
     display: block;
@@ -598,7 +599,7 @@ margin: 3px 2px;display: inline-block;text-align:center;}
     width: 23px;
     height: 23px;
     float: left;
-    top: 7px;
+    /*top: 1px;*/
 }
 .or4-question-variants span{
     display: block;
@@ -621,7 +622,7 @@ margin: 3px 2px;display: inline-block;text-align:center;}
         width: 20px;
         height: 20px;
         float: left;
-        top: 2px;
+        /*top: -4px;*/
     }
 
 }

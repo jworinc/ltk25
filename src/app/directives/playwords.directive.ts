@@ -17,7 +17,7 @@ export class PlaywordsDirective {
 	//	RegExp find extra spaces
 	public space_to_one = /[\s]+/g;
 	//	RegExp to find punctuation characters
-	public punctuation = /[\,\:\;\"\!\?\'\u2000-\u2060]/g;
+	public punctuation = /[\,\:\;\"\!\?\'\-\u2000-\u2060]/g;
 	//	RegExp to find dots
 	public dots = /\./g;
 

@@ -124,6 +124,7 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 				this.enableMoveNext();
 			}
 			this.prevent_dubling_flag = true;
+			this.input_data = '';
 		}
 		
 	}

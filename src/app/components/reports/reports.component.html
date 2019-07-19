@@ -16,7 +16,7 @@
             <div class="col-xl-12 tutor-report-body">
 
                 <div class="tutor-report-body-container" *ngIf="showme_report">
-                    <app-showme-report style="display:block;height:100%;" id="modal3" [update]='showme_update'></app-showme-report>
+                    <app-showme-report style="display:block;height:100%;" id="modal3" [update]='showme_update' [lu]='lu'></app-showme-report>
                 </div>
                 <div class="tutor-report-body-container" *ngIf="progress_report">
                     <app-progress-report class="" id="modal4" [update]='progress_update'></app-progress-report>

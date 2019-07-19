@@ -221,6 +221,7 @@ export class Ar1Component extends BaseComponent implements OnInit {
 			}
 			this.prevent_dubling_flag = true;
 			this.showHint();
+			this.clearUserInput();
 		}
 		
 	}
@@ -484,7 +485,7 @@ export class Ar1Component extends BaseComponent implements OnInit {
 
 			//	Check if we shown all card instances
 			if(that.current_presented >= that.max_presented){
-				if(!silent){
+				if(!silent && this.getUserInputString() !== ''){
 					this.playCorrectSound(function(){ 
 						that.enableNextCard();
 					});
