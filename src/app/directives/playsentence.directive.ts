@@ -88,7 +88,7 @@ export class PlaysentenceDirective {
 		//	RegExp find extra spaces
 		let space_to_one = /[\s]+/g;
 		//	RegExp to find punctuation characters
-		let punctuation = /[\,\:\;\"\-\u2000-\u2060]/g;
+		let punctuation = /[\,\:\;\"\-\(\)\u2000-\u2060]/g;
 		//	RegExp to find dots
 		let dots = /\./g;
 		let wrr = this.origin_text.replace(html, '').replace(space_to_one, ' ').replace(punctuation, '').replace(dots, ' ').split(' ');

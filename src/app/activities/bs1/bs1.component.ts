@@ -33,6 +33,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
     public cn:any;
     public show_variants;
 		public header = "";
+		public subtitle = "";
 		public uinputph = 'sentence';
 		public senstarted = false;
 		
@@ -51,7 +52,8 @@ export class Bs1Component extends BaseComponent implements OnInit {
     ngOnInit() {
 			console.log(this.data);
 			this.card = this.data;
-      this.header = this.data.content[0].header;
+			this.header = this.data.content[0].header;
+			this.subtitle = this.data.content[0].subtitle;
       this.cn = this.data.content;
       if(window.innerWidth <= 1024){
 				this.row_height = 19;
@@ -113,7 +115,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 		}
 
 		repeat() {
-			if(this.cn[0].variants.length - 1 > this.sentence_index){
+			if(this.cn.length - 1 > this.sentence_index){
 				if(typeof this.ss !== 'undefined'){
 					this.ss.map((s)=>{ 
 						s.stop(); 
@@ -131,37 +133,18 @@ export class Bs1Component extends BaseComponent implements OnInit {
 			let that = this;
 			this.senstarted = true;
 			//	Add sentence to layout
-			this.current_sentence = this.cn[0].beginning;
-			this.current_variant = this.cn[0].variants[i];
+			this.current_sentence = this.cn[0].intro;
+			this.current_variant = this.cn[0].var;
 
 			//	Add all sentences to a single pull
-			for(let i in this.cn[0].variants){
-				let c = this.cn[0].variants[i];
-				/*
-				if(window.innerWidth > 1024){
-					this.s_pull.push({
-						sen: `<div class="sen-p sen-begin">
-										<span>${this.cn[0].beginning}</span>
-									</div>
-									<div class="col-sm-1 sen-p sen-sn">+</div>
-									<div class="sen-p sen-variant">
-										<span>${c}</span>
-									</div>
-									<div class="col-sm-12">
-										<span>${this.cn[0].beginning + ' ' + c}</span>
-									</div>`, 
-						ind: parseInt(i)+3, 
-						style: {'top': '-60px', 'opacity': '0'}
-					});
-				} else {
-					this.s_pull.push({sen: this.cn[0].beginning + ' ' + c, ind: parseInt(i)+3, style: {'top': '-60px', 'opacity': '0'}});
-				}
-				*/
+			for(let i in this.cn){
+				let c = this.cn[i].var;
+				let b = this.cn[i].intro;
 				this.s_pull.push({
-					sen: this.cn[0].beginning + ' ' + c, 
+					sen: b + ' ' + c, 
 					ind: parseInt(i)+3, 
 					style: {'top': '-60px', 'opacity': '0'},
-					beg: this.cn[0].beginning,
+					beg: b,
 					var: c
 				});
 			}
@@ -171,6 +154,9 @@ export class Bs1Component extends BaseComponent implements OnInit {
 				that.ss = that.psns.toArray();
 				for(let i in that.ss){
 					that.ss[i].compileSentence();
+					that.ss[i].end_callback = ()=>{
+						that.uinputph = 'enablenext';
+					}
 				}
 				that.showFirstPartOfSentence();
 			}, 10);
@@ -180,9 +166,10 @@ export class Bs1Component extends BaseComponent implements OnInit {
 		nextSentence(i) {
 			let that = this;
 			//	Add sentence to layout
-			this.current_sentence = this.cn[0].beginning;
-			this.current_variant = this.cn[0].variants[i];
+			this.current_sentence = this.cn[i].intro;
+			this.current_variant = this.cn[i].var;
 			setTimeout(()=>{
+				that.ss[0].compileSentence();
 				that.ss[1].compileSentence();
 				that.showFirstPartOfSentence();
 			}, 20);
@@ -248,7 +235,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 			clearTimeout(this.show_var_timer);
 			clearTimeout(this.enter_timer);
 			this.recalcSentPositions();
-			if(this.cn[0].variants.length - 1 > this.sentence_index){
+			if(this.cn.length - 1 > this.sentence_index){
 				//this.show_sentences.push(this.current_sentence + ' ' + this.current_variant);
 				this.sentence_index++;
 				this.uinputph = 'ressentence';
