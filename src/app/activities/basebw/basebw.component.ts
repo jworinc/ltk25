@@ -439,7 +439,7 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 			let del = 400;
 			let ml = 0;
 			this.elm.nativeElement.querySelector('.bw1-letter').style.backgroundColor = '#C69C6D';
-			this.elm.nativeElement.querySelector('.bw1-letter[data-index="'+ml+'"]').style.backgroundColor = 'yellow';
+			this.elm.nativeElement.querySelector('.bw1-letter[data-index="'+ml+'"]').style.backgroundColor = '#00ADEF';
 			for(let i in this.letters) {
 				let p = '_S' + this.letters[i]; p = p.replace('-', '');
 				//	Check if we play the last sound, switch user input phase to next and play next instructions
@@ -453,7 +453,7 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 					this.playmedia.sound(p, function(){
 						ml++;
 						that.elm.nativeElement.querySelector('.bw1-letter[data-index="'+(ml-1)+'"]').style.backgroundColor = '#C69C6D';
-						that.elm.nativeElement.querySelector('.bw1-letter[data-index="'+ml+'"]').style.backgroundColor = 'yellow';
+						that.elm.nativeElement.querySelector('.bw1-letter[data-index="'+ml+'"]').style.backgroundColor = '#00ADEF';
 						
 					}, del);
 				}

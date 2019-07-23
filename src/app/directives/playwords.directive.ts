@@ -93,7 +93,8 @@ export class PlaywordsDirective {
 					//	Mark clicked word and clear mark on rest of the words
 					//angular.element('span[data-playw]').css('background-color', 'transparent');
 					that.resetWordBackground();
-					pw.style.backgroundColor = 'yellow';
+					pw.style.backgroundColor = '#00ADEF';
+					that.pms.stop();
 					that.pms.word(an, ()=>{});
 					
 				};

@@ -161,8 +161,10 @@ export class Ar6Component extends Ar5Component implements OnInit, DoCheck {
 				}
 				
 			} 
-			else that.disableMoveNext();
-
+			else {
+				that.enter();
+				that.disableMoveNext();
+			}
 		}
 	}
 

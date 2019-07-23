@@ -243,20 +243,20 @@ export class Ar5Component extends BasearComponent implements OnInit, DoCheck {
 		//	appropriate sound for aech letter
 		this.play_stop_cycle_timer = setTimeout(function() {
 			that.hint_3_letter_1 = {
-    			'background-color': 'yellow'
+    			'background-color': '#00ADEF'
     		}
     		
     		that.pms.sound('_S'+that.letter_1, function(){});
     		that.play_stop_cycle_timer = setTimeout(function() {
     			that.hint_3_letter_2 = {
-	    			'background-color': 'yellow'
+	    			'background-color': '#00ADEF'
 	    		}
 	    		that.hint_3_letter_1 = {};
 	    		
 	    		that.pms.sound('_S'+that.letter_2, function(){});
 	    		that.play_stop_cycle_timer = setTimeout(function() {
 	    			that.hint_3_letter_3 = {
-		    			'background-color': 'yellow'
+		    			'background-color': '#00ADEF'
 		    		}
 		    		that.hint_3_letter_2 = {};
 		    		
@@ -279,7 +279,7 @@ export class Ar5Component extends BasearComponent implements OnInit, DoCheck {
 				    		});
 				    	} else {
 				    		that.hint_3_letter_4 = {
-				    			'background-color': 'yellow'
+				    			'background-color': '#00ADEF'
 				    		}
 				    		
 				    		let l4 = that.letter_4;
@@ -342,7 +342,10 @@ export class Ar5Component extends BasearComponent implements OnInit, DoCheck {
 				this.showCycleFromLetters();
 				this.handleLetterFocus();
 			} 
-			else this.disableMoveNext();
+			else{
+				this.enter();
+				this.disableMoveNext();
+			} 
 
 		}
 	}

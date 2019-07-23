@@ -365,7 +365,7 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 				this.element.nativeElement.querySelectorAll('.bw1-letter').forEach((e)=>{
 					e.style.backgroundColor = '#C69C6C';
 				});
-				this.element.nativeElement.querySelector('.bw1-letter[data-index="'+ml+'"]').style.backgroundColor = 'yellow';
+				this.element.nativeElement.querySelector('.bw1-letter[data-index="'+ml+'"]').style.backgroundColor = '#00ADEF';
 				//	Check if we play the last sound, switch user input phase to next and play next instructions
 				if(parseInt(i) === this.card.content[this.current_card_instance].pronounce.length - 1){
 					this.pms.sound(p, function(){
@@ -384,7 +384,7 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 						that.element.nativeElement.querySelectorAll('.bw1-letter').forEach((e)=>{
 							e.style.backgroundColor = '#C69C6C';
 						});
-						that.element.nativeElement.querySelector('.bw1-letter[data-index="'+ml+'"]').style.backgroundColor = 'yellow';
+						that.element.nativeElement.querySelector('.bw1-letter[data-index="'+ml+'"]').style.backgroundColor = '#00ADEF';
 					}, del);
 				}
 			}
