@@ -41,7 +41,7 @@
         </div>
         <div class="idm-meaning-native">
             <label>{{ 'native_meaning' | translate }}</label>
-            <span>{{cn.meaning_native}}</span>
+            <span>{{cn.meaning_native?cn.meaning_native:cn.idiom_native}}</span>
         </div>
       </div>  
     </div>
