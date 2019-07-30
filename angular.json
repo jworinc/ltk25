@@ -24,6 +24,9 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
+              "src/.htaccess",
+              "src/beep.mp3",
+              "src/recorderWorker.js",
               "src/assets"
             ],
             "styles": [
