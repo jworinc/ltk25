@@ -1,0 +1,7 @@
+<section class="test-result-item">
+  <div class="res result-header">{{ header }}</div>
+  <div class="res result-bar" [ngClass]="_value>=80?'success':_value<80&&_value>=35?'normal':'bad'">
+    <span class="value-bar" [ngStyle]="bar_style" [ngClass]="_value>=80?'successb':_value<80&&_value>=35?'normalb':'badb'"></span>
+  </div>
+  <div class="res result-value" [ngClass]="_value>=80?'success':_value<80&&_value>=35?'normal':'bad'">{{ _value }}{{ units }}</div>
+</section>

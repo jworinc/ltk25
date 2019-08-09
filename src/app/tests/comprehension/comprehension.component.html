@@ -1,34 +1,7 @@
 <section class="test-slide-item">
 
-    <!-- <div class="row cust-row">
-        <div class="col-12">
-            <h2>{{data?.description}}</h2>
-        </div>
-      </div>
-  
-    <div class="row cust-row">
-      <div class="col-12">
-          <h4>{{card?.sentence}}</h4>
-      </div>
-    </div>
-
-    <div class="row cust-row">
-      <div class="col-4" *ngFor="let word of card?.variants">
-          <p class="p_design" (click)="getAnswer(word)">{{word}}</p>
-      </div>
-    </div>
-    
-    <div class="row answer">
-      <div *ngIf="isAnswered == 1 ? true: false" class="col-12">
-          <p class="p_design">Right Answer</p>
-      </div>
-      <div *ngIf="isAnswered == 0 ? true: false" class="col-12">
-          <p class="p_design wrong">Wrong Answer</p>
-      </div>
-    </div> -->
-
     <div class="row common-div">
-        <div class="col-2 left-side"><h1>{{data.position + 1}}.</h1></div>
+        <div class="col-2 left-side"><h1>{{data.position}}.</h1></div>
         
         <div class="col-10">
         
@@ -48,7 +21,10 @@
 
             <div class="row cust-row">
                 <div class="col-4" *ngFor="let res of result">
-                    <p class="p_design" [ngClass]="res.isCorrect ? 'correct_answer': 'wrong_answer'">{{res?.word}}<span class="float-right"><i class="fa" [ngClass]="res.isCorrect ? 'fa-check': 'fa-times'" aria-hidden="true"></i></span></p>
+                    <p class="p_design" [ngClass]="res.isCorrect ? 'correct_answer': 'wrong_answer'">{{res?.answer}}<span class="float-right"><i class="fa" [ngClass]="res.isCorrect ? 'fa-check': 'fa-times'" aria-hidden="true"></i></span></p>
+                </div>
+                <div class="col-4" *ngFor="let res of result">
+                    <p class="p_design" [hidden]="res.isCorrect" [ngClass]="!res.isCorrect ? 'correct_answer': 'wrong_answer'">{{res?.expected}}<span class="float-right"><i class="fa" [ngClass]="!res.isCorrect ? 'fa-check': 'fa-times'" aria-hidden="true"></i></span></p>
                 </div>
             </div>
         
@@ -57,15 +33,6 @@
                     <p class="p_design" (click)="getAnswer(word)">{{word}}</p>
                 </div>
             </div>
-        
-            <!-- <div *ngIf="isResult" class="row">
-            <div class="col-12">
-                <p class="p_design">Right : <span>{{count}}</span></p>
-            </div>
-            <div class="col-12">
-                <p class="p_design wrong">Wrong : <span>{{card.length - count}}</span></p>
-            </div>
-            </div> -->
         
         </div>
     </div>

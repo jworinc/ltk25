@@ -1,3 +1,20 @@
 .reports-placement-report{
 	padding: 10px;
 }
+.test-details{
+	display: flex;
+    position: relative;
+    margin: 7px 0;
+	border-bottom: solid rgb(238, 212, 212) 1px;
+	justify-content: center;
+}
+.test-details span{
+	display: flex;
+	min-width: 33.3333%;
+	flex: 0 0 33.3333%;
+	align-items: center;
+	justify-content: center;
+}
+.test-details-header{
+	font-weight: 800;
+}

@@ -149,5 +149,12 @@
 	"literal_translation" : "дослівний переклад",
 	"native_meaning" : "рідний сенс",
 	"click_to_play" : "Натисніть, щоб грати!",
-	"move_to_prev" : "Перейти до попередньої картки"
+	"move_to_prev" : "перейти до попередньої картки",
+	"all_words" : "Всі слова",
+	"learned_words" : "Вивчені слова",
+	"ltk_stu_tests" : "LTK Тести Студента",
+	"student_score" : "Оцінка",
+	"student_details" : "Деталі",
+	"test_details" : "Деталі тесту",
+	"word_or_sentence" : "Слово або Речення"
 }

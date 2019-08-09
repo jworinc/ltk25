@@ -44,6 +44,7 @@ import { IdmComponent } from '../activities/idm/idm.component';
 import { Wl1Component } from '../activities/wl1/wl1.component';
 import { Bs1Component } from '../activities/bs1/bs1.component';
 import { CccComponent } from '../activities/ccc/ccc.component';
+import { TstComponent } from '../activities/tst/tst.component';
  
 @Injectable({
   providedIn: 'root'
@@ -104,6 +105,7 @@ export class CardbuilderService {
       if(c.type === 'wl1') out.push(new CardItem(Wl1Component, c));
       if(c.type === 'bs1') out.push(new CardItem(Bs1Component, c));
       if(c.type === 'ccc') out.push(new CardItem(CccComponent, c));
+      if(c.type === 'tst') out.push(new CardItem(TstComponent, c));
     }
 
     return out;

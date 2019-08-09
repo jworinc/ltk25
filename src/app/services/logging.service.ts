@@ -99,6 +99,23 @@ export class LoggingService {
 		return Math.round(perf * 100) / 100;
 	}
 
+	//	Logging command end
+	testEnd(instance, position, errlog, presented, l, complete) {
+		
+		let data = {
+			'instance': instance,
+			'position': position,
+			'log': errlog,
+			'lesson': l,
+			'complete': complete
+		}
+
+		return this.http.post(`${this.base_url}/u/logging/test/end`, data, {
+			headers: this.Token.getAuthHeader()
+		}).pipe(share());
+
+	}
+
 
 
 

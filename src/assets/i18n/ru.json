@@ -149,5 +149,12 @@
 	"literal_translation" : "Дословный перевод",
 	"native_meaning" : "Родной смысл",
 	"click_to_play" : "Нажмите, чтобы воспроизвести!",
-	"move_to_prev" : "Перейти к предидущей карте"
+	"move_to_prev" : "Перейти к предидущей карте",
+	"all_words" : "Все слова",
+	"learned_words" : "Изученные слова",
+	"ltk_stu_tests" : "LTK Тесты студента",
+	"student_score" : "Оценка",
+	"student_details" : "Детали",
+	"test_details" : "Детали теста",
+	"word_or_sentence" : "Слово или Предложение"
 }

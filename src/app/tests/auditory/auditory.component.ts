@@ -17,6 +17,8 @@ export class AuditoryComponent extends BasetestComponent implements OnInit {
   public ind = 0;
   public count = 0;
   public isResult:boolean = false;
+  public type = '';
+  public test_complete = false;
 
   public result:any= [];
 
@@ -25,6 +27,8 @@ export class AuditoryComponent extends BasetestComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.card = this.data;
+    this.type = this.data.type;
   }
 
   show() {
@@ -36,20 +40,28 @@ export class AuditoryComponent extends BasetestComponent implements OnInit {
     this.count = 0;
     this.isResult = false;
     this.result = [];
+    this.test_complete = false;
     this.getWords();
   }
 
   getWords(){
     this.pms.word(this.card[this.ind].answer.wavename,function(){});
     this.words = this.card[this.ind].words;
+    this.presented++;
   }
 
   getNext(){
     this.ind++;
     if(this.ind < this.card.length)
     this.getWords();
-    else
-    setTimeout(()=>{ this.next(); }, 2000);
+    else{
+      let that = this;
+      this.test_complete = true;
+      setTimeout(()=>{
+        that.next(); 
+      }, 2000);
+    }
+    
   }
 
   getResult(){
@@ -61,14 +73,19 @@ export class AuditoryComponent extends BasetestComponent implements OnInit {
     if(this.result.length != this.card.length){
       if(answer ===  this.card[this.ind].answer.title){
         //this.count++;
-        data = { "isCorrect" : true, "word":answer}
+        data = { "isCorrect" : true, "answer": answer, "expected": this.card[this.ind].answer.title}
       }else{
-        data = { "isCorrect" : false, "word":answer}
+        data = { "isCorrect" : false, "answer": answer, "expected": this.card[this.ind].answer.title};
+        this.wrong++;
       }
       this.result.push(data);
       this.getNext();
     }
     
+  }
+
+  getTestResult() {
+    if(this.test_complete) this.saveResults({type: this.type, presented: this.presented, wrong: this.wrong, results: this.result});
   }
 
   enter(){

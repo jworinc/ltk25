@@ -9,6 +9,7 @@ import { share } from 'rxjs/operators';
 export class DataloaderService {
 
   private base_url = 'https://api.ltk.cards/api';
+  public lu = 10;
 
   constructor(
     private http: HttpClient, 
@@ -31,11 +32,25 @@ export class DataloaderService {
     return this.http.get(`${this.base_url}/locales`)
   }
 
+  setLastUncompleteLesson(data) {
+      console.log('--------------DataLoader Service------------------');
+      console.log('Last uncomplete student lesson: ' + (+data.last_uncomplete));
+      this.lu = +data.last_uncomplete;
+  }
+
   //  Loads base student info for dashboard
   getStudentInfo() {
-    return this.http.get(`${this.base_url}/u/studentinfo`, {
+    let ss = this.http.get(`${this.base_url}/u/studentinfo`, {
       headers: this.Token.getAuthHeader()
-    })
+    });
+    let that = this;
+    ss.subscribe(
+      data => this.setLastUncompleteLesson(data),
+      error => {
+        console.log('Student Info load error:');
+        console.log(error);
+      });
+    return ss;
   }
 
   //	Loads lessons list for current student
@@ -154,7 +169,7 @@ export class DataloaderService {
   }
   
   getTest() {
-    return this.http.get(`${this.base_url}/testing`, {
+    return this.http.get(`${this.base_url}/testing/${this.lu}`, {
         headers: this.Token.getAuthHeader()
       }).toPromise();
   }

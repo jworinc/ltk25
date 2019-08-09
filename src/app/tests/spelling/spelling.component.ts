@@ -19,12 +19,14 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
   public isResult:boolean = false;
 
   public result:any= [];
+  public test_complete = false;
 
   constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService) { 
     super(element, sz, pms);
   }
 
   ngOnInit() {
+    this.card = this.data;
   }
 
   show() {
@@ -32,13 +34,9 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
     // this.card = this.data['content'];
     this.ind = 0;
     this.result = [];
+    this.test_complete = false;
     this.getWords();
-    // //this.pms.word(this.data['description'],function(){});
-    // console.log(this.card);
-    // this.ind = 0;
-    // this.count = 0;
-    // this.isResult = false;
-    // this.getWords();
+    
   }
 
   // getWords(){
@@ -50,40 +48,28 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
     this.ind++;
     if(this.ind < this.data.content.length)
     this.getWords();
-    else
-    setTimeout(()=>{ this.next(); }, 2000);
+    else{
+      let that = this;
+      this.test_complete = true;
+      setTimeout(()=>{
+        //that.saveResults({type: that.card.type, presented: that.presented, wrong: that.wrong});
+        that.next(); 
+      }, 2000);
+    }
+    
   }
 
   getResult(){
       this.isResult = true;
   }
 
-  // getAnswer(answer){
-  //   let data;
-  //   if(this.result.length != this.card.length){
-  //     if(answer ===  this.card[this.ind].answer.title){
-  //       //this.count++;
-  //       data = { "isCorrect" : true, "word":answer}
-  //     }else{
-  //       data = { "isCorrect" : false, "word":answer}
-  //     }
-  //     this.result.push(data);
-  //     //this.getNext();
-  //   }
-    
-  // }
-
   public content = '';
   public r: any;
   public entered_val = '';
   getWords(){
     this.content = '';
-    //console.log(word);
-    //console.log(word.search(/\|{1}[A-Za-z]+\|{1}/));
-
-    let content = '';
-
     
+    let content = '';
 
 		//	Digraph test regex
 		let r = null;
@@ -121,17 +107,19 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
       inps.oninput = (e)=>{
         //that.enter(e);
         this.entered_val = e.target.value;
-        //this.getAnswer();
+        this.getAnswer();
       };
-      
+
       inps.style.backgroundColor = 'rgb(114, 90, 63)';
 
     },10);
 
+    this.presented++;
+
   }
 
   enter(){
-    this.getAnswer();
+    //this.getAnswer();
   }
 
   getAnswer() {
@@ -144,11 +132,12 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
 
       if(this.entered_val === this.data.content[this.ind].missing){
         console.log("true");
-        data = { "isCorrect" : true, "word":this.words.replace(/,/g , "")}
+        data = { "isCorrect" : true, "word":this.words.replace(/,/g , ""), "answer": this.entered_val, "expected": this.data.content[this.ind].missing};
         
       }else{
         console.log("false");
-        data = { "isCorrect" : false, "word":this.words.replace(/,/g , "")}
+        data = { "isCorrect" : false, "word":this.words.replace(/,/g , ""), "answer": this.entered_val, "expected": this.data.content[this.ind].missing};
+        this.wrong++;
       }
       this.result.push(data);
 
@@ -157,5 +146,13 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
     
 
   }
+
+  
+  getTestResult() {
+    if(this.test_complete) this.saveResults({type: this.card.type, presented: this.presented, wrong: this.wrong, results: this.result});
+  }
+
+
+
 
 }

@@ -31,13 +31,17 @@
         float: left;
         font-weight: 800;
     }
+    .col-4{
+        padding: 2px;
+    }
 }
 
 .p_design{
     margin: 3px;
     border: 1px solid;
-    padding: 10px;
-    font-size: 22px;
+    padding: 5px;
+    padding-bottom: 7px;
+    font-size: 16px;
     border-radius: 8px;
     background-color: #0071BD;
     color: #fff;
@@ -89,9 +93,27 @@
     }
     .col-4{
         padding: 0;
+        line-height: 1;
     }
     .p_design{
-        padding: 6px;
-        font-size: 16px; 
+        padding: 2px 4px;
+        padding-bottom: 3px;
+        font-size: 12px;
+    }
+    .cust-row h4 {
+        margin: 4px 0;
+        font-size: 14px;
+    }
+    .word-row {
+        position: absolute;
+        bottom: 0px;
+        padding: 2px 0;
+        background-color: #F4F4F4;
+    }
+    .answer-div .col-4{
+        padding: 0;
+    }
+    .answer-div .p_design{
+        margin: 1px;
     }
 }

@@ -20,9 +20,25 @@
     align-items: center;
     border-radius: 4px;
 }
+.test-slide-item .card-ar1-syllable {
+    padding: 5px 1px;
+    height: 65px;
+    line-height: 1.1em;
+    margin-right: 2px;
+    margin-left: 2px;
+    font-size: 40px;
+}
 @media screen and (max-width: 1024px){
     .card-ar1-syllable {
         line-height: 1em;
         height: 40px;
+    }
+    .test-slide-item .card-ar1-syllable {
+        padding: 2px 1px;
+        height: 45px;
+        line-height: 1.1em;
+        margin-right: 2px;
+        margin-left: 2px;
+        font-size: 32px;
     }
 }

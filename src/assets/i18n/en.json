@@ -149,5 +149,12 @@
 	"literal_translation" : "Literal translation",
 	"native_meaning" : "Native meaning",
 	"click_to_play" : "Click to play!",
-	"move_to_prev" : "Move to the previous card"
+	"move_to_prev" : "Move to the previous card",
+	"all_words" : "All Words",
+	"learned_words" : "Learned Words",
+	"ltk_stu_tests" : "LTK Students Tests",
+	"student_score" : "Student Score",
+	"student_details" : "Details",
+	"test_details" : "Test Details",
+	"word_or_sentence" : "Word or Sentence"
 }

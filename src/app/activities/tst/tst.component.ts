@@ -1,81 +1,113 @@
-import { Component, OnInit, Input, ViewChild, ComponentFactoryResolver, AfterViewInit } from '@angular/core';
-import { TestComponent } from '../test/test.component';
+import { Component, OnInit, Input, ElementRef, ComponentFactoryResolver, ViewChild} from '@angular/core';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { BaseComponent } from '../base/base.component';
+import { PlaymediaService } from '../../services/playmedia.service';
+import { LoggingService } from '../../services/logging.service';
+import { ColorschemeService } from '../../services/colorscheme.service';
+import { TestComponent } from '../../components/test/test.component';
 import { TestDirective } from '../../directives/test.directive';
 import { DataloaderService } from '../../services/dataloader.service';
 import { TestbuilderService } from '../../services/testbuilder.service';
-//import { LessonComponent } from '../lesson/lesson.component';
 
 @Component({
-  selector: 'app-showtesting',
-  templateUrl: './showtesting.component.html',
-  styleUrls: ['./showtesting.component.scss'],
-  host: {'class': 'testing-wrapper-slide'},
+  selector: 'app-tst',
+  templateUrl: './tst.component.html',
+  styleUrls: ['./tst.component.scss'],
+  host: {'class': 'book-wrapper-slide'}
 })
-export class ShowtestingComponent implements OnInit, AfterViewInit {
+export class TstComponent extends BaseComponent implements OnInit {
 
+  constructor(private elm:ElementRef, 
+              private sanitizer: DomSanitizer, 
+              private playmedia: PlaymediaService, 
+              private tstlog: LoggingService, 
+              private tstcs: ColorschemeService,
+              private dl: DataloaderService,
+              private tb: TestbuilderService,
+              private componentFactoryResolver: ComponentFactoryResolver,) {
+  	super(elm, sanitizer, playmedia, tstlog, tstcs);
+  }
+
+  public uinputph = 'teststart';
   public _show: any;
-  public _scale: number;
   public layout: any;
   public tstdata: any;
   public cts: any;
   public ctestpos: number = 0;
   public max: number = 0;
   public min: number = 0;
+  public test_results: any = [];
 
   public global_header = "";
   public global_desc = "";
-
-  public test_results: any = [];
   public test_started: boolean = false;
   public test_log_sent = false;
-  public uinputph = 'teststart';
-  public complete = 0;
-
-  @Input('show')
-  set show(show: boolean) {
-    this._show = show;
-    
-    if(!show){
-      this.tstdata = null;
-      this.layout = {
-        'transform': 'scale('+this._scale+', '+this._scale+')',
-        'opacity': 0
-      }
-      this.complete = 0;
-      this.uinputph = 'teststart';
-      this.ctestpos = 0;
-    }
-    else {
-      let that = this;
-      setTimeout(()=>{
-        that.getTest();
-      }, 1500);
-      this.updateLayout();
-    }
-  }
-  @Input('scale')
-  set scsale(scale: number) {
-    this._scale = scale;
-    this.updateLayout();
-  }
 
   @ViewChild(TestDirective) appTest: TestDirective;
 
-  constructor(
-      private dl: DataloaderService,
-      private tb: TestbuilderService,
-      private componentFactoryResolver: ComponentFactoryResolver,
-      //private le: LessonComponent
-  ) { }
-
   ngOnInit() {
+  	this.setHeader();
+    this.card = this.data;
+    this.activity_log_sent = true;
+  }
+
+  //	Validation of user input
+  validate() {
+    if(this.uinputph === 'finish')
+    return true;
+    else return false;
+  }
+
+  //	Prevent performing of show function twice in some cases
+  public prevent_dubling_flag: boolean = false;
+
+  //	Callback for show card event
+  show() {
+    //	If card is active and it is not dubling
+    if(this.isActive() && !this.prevent_dubling_flag){
+      //	If user not enter valid data yet
+      if(!this.validate()) {
+        
+        //	Play card description
+        //this.playCardDescription();
+        this.disableMoveNext();
+
+        let that = this;
+        if(!this.test_started){
+          setTimeout(()=>{
+            that.getTest();
+          }, 1500);
+        }
+        this.updateLayout();
+        this.activity_log_sent = true;
+        this.test_log_sent = false;
+        this.ctestpos = 0;
+        this.complete = 0;
+        this.uinputph = 'teststart';
+        this.updateTests();
+      } else {
+        this.enableMoveNext();
+      }
+      this.prevent_dubling_flag = true;
+    }
     
   }
 
-  ngAfterViewInit() {
-
+  hide() {
+    this.prevent_dubling_flag = false;
+    //	Hide option buttons
+    this.optionHide();
   }
 
+  //	Used to play task word and sound exactly after instructions play finished
+  playContentDescription() {
+    
+  }
+
+  clearResults() {
+    this.tb.clearResults(this.test_results);
+  }
+  
   //  Load test
   async getTest() {
     let data = await this.dl.getTest();
@@ -104,8 +136,10 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
     this.tstdata = td;
     this.max = this.tstdata.length - 1;
     let cards = this.tb.getTests(td);
+    
     let that = this;
     this.cts = [];
+    this.test_started = true;
 
     let viewContainerRef = this.appTest.viewContainerRef;
     viewContainerRef.clear();
@@ -148,7 +182,7 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
 
   //  Update test layout
   updateLayout(){
-
+    /*
     if(this._show){
       this.layout = {
         'transform': 'scale('+this._scale+', '+this._scale+')',
@@ -160,7 +194,7 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
         'opacity': 0
       }
     }
-
+    */
   }
 
   //  Update tests
@@ -217,5 +251,8 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
       }
     }
   }
+
+
+
 
 }

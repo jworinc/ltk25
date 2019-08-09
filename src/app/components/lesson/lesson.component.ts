@@ -299,6 +299,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
       this.current_lesson_title = this.getCurrentLessonTitle(this.n);
       this.start_position = 0;
       console.log('Run sidetrip, start position setted to start!');
+      //  Setup lesson for testing
+      this.DL.lu = +this.n;
     }
     
   }
@@ -642,6 +644,25 @@ export class LessonComponent implements OnInit, AfterViewInit {
         cb();
       }
     }
+
+    //  Logging of test results
+
+    else if(typeof sc.card.activity !== 'undefined' && typeof sc.card.position !== 'undefined' && typeof sc.test_log_sent !== 'undefined' && !sc.test_log_sent) {
+      //if(!this.sidetripmode){
+        this.logging.testEnd(sc.card.activity, sc.card.position, sc.test_results, sc.current_presented, this.DL.lu, sc.complete)
+          .subscribe(
+            data => { cb(); },
+            error => {
+              console.log(error);
+              this.notify.error('Logging End Test status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
+            }
+          );
+      //} else {
+      //  cb();
+      //S}
+      sc.clearResults();
+    }
+
     //cb();
   }
 

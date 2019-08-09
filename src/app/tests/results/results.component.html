@@ -1,0 +1,12 @@
+<section class="test-slide-item">
+  <!--
+  <p *ngFor="let r of card.content.results">
+    {{ r.desc }} - wrong: {{ r.wrong }} - total: {{ r.presented }}
+  </p>
+  -->
+
+  <app-test-result-item *ngFor="let r of card.content.results" 
+        [header]="r.desc" [value]="getValue(r)" [units]="'%'">
+  </app-test-result-item>
+
+</section>

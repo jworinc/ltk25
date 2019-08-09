@@ -12,6 +12,9 @@ import { ShowtestingComponent } from 'src/app/components/showtesting/showtesting
 export class BasetestComponent implements OnInit, TestComponent {
 
   public _cpos: number;
+  public presented = 0;
+  public wrong = 0;
+  public card: any;
 
   @Input('cpos')
 	set cpos(cpos: number) {
@@ -23,7 +26,8 @@ export class BasetestComponent implements OnInit, TestComponent {
   @Output() mnext = new EventEmitter<boolean>();
 	@Output() mprev = new EventEmitter<boolean>();
   @Output() set_global_desc = new EventEmitter<any>();
-	@Output() set_global_header = new EventEmitter<any>();
+  @Output() set_global_header = new EventEmitter<any>();
+  @Output() save_results = new EventEmitter<any>();
   
   public data: any;
 
@@ -115,10 +119,19 @@ export class BasetestComponent implements OnInit, TestComponent {
     return this.data.pos === this._cpos;
   }
 
+  getTestResult() {
+
+  }
+
   next(){
+    //this.getTestResult();
     console.log("I am next");
     this.mnext.emit();
+    this.pm.stop();
+  }
 
+  saveResults(r) {
+    this.save_results.emit(r);
   }
 
 }

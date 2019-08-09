@@ -105,6 +105,10 @@ import { ComprehensionComponent } from './tests/comprehension/comprehension.comp
 import { TestDirective } from './directives/test.directive';
 import { BasetestComponent } from './tests/basetest/basetest.component';
 import { SpellingComponent } from './tests/spelling/spelling.component';
+import { TstComponent } from './activities/tst/tst.component';
+import { IntroComponent } from './tests/intro/intro.component';
+import { ResultsComponent } from './tests/results/results.component';
+import { TestResultItemComponent } from './components/test-result-item/test-result-item.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -191,6 +195,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     ComprehensionComponent,
     TestDirective,
     SpellingComponent,
+    TstComponent,
+    IntroComponent,
+    ResultsComponent,
+    TestResultItemComponent,
   ],
   imports: [
     BrowserModule,
@@ -217,7 +225,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   Bw6Component, Bw7Component, SypComponent, DiwComponent, GscComponent, Rp1Component, Rp2Component, GwmComponent, SiwComponent,
   GwfComponent, GqwComponent, DisComponent, SplComponent, GdnComponent, GcpComponent, GcsComponent, GisComponent, GmuComponent,
   GnbComponent, GslComponent, GsmComponent, GssComponent, Rw1Component, IdmComponent, Wl1Component, Bs1Component, AuditoryComponent,
-  ComprehensionComponent, SpellingComponent, CccComponent ],
+  ComprehensionComponent, SpellingComponent, CccComponent, TstComponent, IntroComponent, ResultsComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
