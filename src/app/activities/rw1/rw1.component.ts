@@ -378,12 +378,36 @@ export class Rw1Component extends BaseComponent implements OnInit {
   }
 
   playDefaultSampleSentence() {
+    let ssw = this.elm.nativeElement.querySelectorAll('.ss-default span');
+    let firstp = [];
+    let secondp = [];
+    let def_timer = null;
+    //if(ssw.length > 0) firstp = ssw[0];
+    //if(ssw.length > 1) secondp = ssw[1];
+    for(let i in ssw){
+      if(parseInt(i)%2 === 0) firstp.push(ssw[i]);
+      else secondp.push(ssw[i]);
+    }
+    firstp.map((e)=>{ if(typeof e !== 'undefined' && typeof e.classList !== 'undefined') e.classList.add('playsentence-hilight'); });
     let that = this;
     this.eslCustomInstructions('NextInst', ()=>{
+      clearTimeout(def_timer);
+      firstp.map((e)=>{ if(typeof e !== 'undefined' && typeof e.classList !== 'undefined') e.classList.remove('playsentence-hilight'); });
+      secondp.map((e)=>{ if(typeof e !== 'undefined' && typeof e.classList !== 'undefined') e.classList.add('playsentence-hilight'); });
+      def_timer = setTimeout(()=>{
+        secondp.map((e)=>{ if(typeof e !== 'undefined' && typeof e.classList !== 'undefined') e.classList.remove('playsentence-hilight'); });
+      }, 2000);
       setTimeout(()=>{ 
         that.playWord(that.card.content[that.cw].wavename);
       }, 500);
     });
+
+    def_timer = setTimeout(()=>{
+      firstp.map((e)=>{ if(typeof e !== 'undefined' && typeof e.classList !== 'undefined') e.classList.remove('playsentence-hilight'); });
+      secondp.map((e)=>{ if(typeof e !== 'undefined' && typeof e.classList !== 'undefined') e.classList.remove('playsentence-hilight'); });
+    }, 2000);
+
+
   }
 
 }

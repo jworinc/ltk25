@@ -42,7 +42,7 @@
             <img [hidden]='!cn.content[0].img' [src]='cn.content[0].img ? playmedia.ltkmediaurl + cn.content[0].img : ""' alt='' />
         </span>
         <span class='sample-sentence' [hidden]="!cn.content[0].sentence" [innerHTML]="cn.content[0].sentence | bindhtml" app-playsentence [attr.data-ind]="'sent_'+cnkey"></span>
-        <span class='sample-sentence' [hidden]="cn.content[0].sentence" (click)="playDefaultSampleSentence()">This is word {{ cn.title }}.</span>
+        <span class='sample-sentence ss-default' [hidden]="cn.content[0].sentence" (click)="playDefaultSampleSentence()"><span>This is word</span>&nbsp;<span><b>{{ cn.title }}</b></span>.</span>
       </div>
     </div>
 
