@@ -206,6 +206,18 @@ export class Rw1Component extends BaseComponent implements OnInit {
 
   }
 
+  //  When rw card is not finished, and user try to go next, lesson will show warn complete message
+  //  in this case next slide is enabled and behaviour of next arrow button changed to default, not switch word
+  //  so user is unable to finish card because it impossible. To prevent this issue, when user close warn complete
+  //  disable next slide and change next arrow button to review words state
+  onCloseWarnComplete() {
+    if(this.isActive()){
+      let cw = this.cw;
+      if(this.wbvs[cw].view === 'sentence' && cw >= this.wbvs.length) this.enableNextSlide();
+      else this.disableNextSlide();
+    }
+  }
+
   next() {
     if(this.isActive()){
       let cw = this.cw;
@@ -264,7 +276,7 @@ export class Rw1Component extends BaseComponent implements OnInit {
       //  Check overhead
       if(this.cw < 0) {
         this.cw = 0;
-        this.enableNextSlide();
+        //this.enableNextSlide();
         this.movePrev();
         return;
       }
@@ -363,6 +375,15 @@ export class Rw1Component extends BaseComponent implements OnInit {
     //console.log('Check for name ('+word+'): '+res);
     return res;
 
+  }
+
+  playDefaultSampleSentence() {
+    let that = this;
+    this.eslCustomInstructions('NextInst', ()=>{
+      setTimeout(()=>{ 
+        that.playWord(that.card.content[that.cw].wavename);
+      }, 500);
+    });
   }
 
 }

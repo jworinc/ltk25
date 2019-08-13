@@ -1213,6 +1213,13 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   onCloseWarncomplete() {
+    //  Check cards and sent enter event to active card
+    for(let i in this.ccs){
+      let c = this.ccs[i];
+      if(c.instance.isActive() && typeof c.instance.onCloseWarnComplete !== 'undefined'){
+        c.instance.onCloseWarnComplete();
+      }
+    }
     this.show_warncomplete_modal = false;
   }
 
