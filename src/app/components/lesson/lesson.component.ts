@@ -300,7 +300,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
       this.start_position = 0;
       console.log('Run sidetrip, start position setted to start!');
       //  Setup lesson for testing
-      this.DL.lu = +this.n;
+      //  Subscription execution issue, to keep sequence and set last uncomplete in a right order
+      //  set lu for sidetrip with some delay
+      let that = this;
+      setTimeout(()=>{ that.DL.lu = +that.n; }, 20);
     }
     
   }

@@ -156,5 +156,18 @@
 	"student_score" : "Оценка",
 	"student_details" : "Детали",
 	"test_details" : "Детали теста",
-	"word_or_sentence" : "Слово или Предложение"
+	"word_or_sentence" : "Слово или Предложение",
+	"ttest_will_measure" : "Этот тест покажет ваш прогресс.",
+	"ppress_continue" : "Пожалуйста, нажмите Продолжить, чтобы начать тестирование.",
+	"prev_testing_btn" : "Назад",
+	"continue_testing_btn" : "Продолжить",
+	"finish_testing_btn" : "Конец",
+	"next_testing_btn" : "Вперед",
+	"clck_onthe_word" : "Нажмите на слово, которое вы слышите.",
+	"chs_thebest_word" : "Выберите лучшее слово, чтобы завершить предложение.",
+	"type_missing_letter" : "Введите пропущенную букву в слове.",
+	"auditory_test" : "Аудирование",
+	"comprehension_test" : "Тест на понимание",
+	"spelling_test" : "Орфографический тест",
+	"of": "из"
 }

@@ -5,24 +5,25 @@ import { ComprehensionComponent } from '../tests/comprehension/comprehension.com
 import { SpellingComponent } from '../tests/spelling/spelling.component';
 import { IntroComponent } from '../tests/intro/intro.component';
 import { ResultsComponent } from '../tests/results/results.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TestbuilderService {
 
-  constructor() { }
+  constructor(private translation: TranslateService) { }
 
   public ttypes = [
-      {type: 'aud', desc: 'Auditory Test'},
-      {type: 'cmp', desc: 'Comprehension Test'},
-      {type: 'spl', desc: 'Spelling Test'}
+      {type: 'aud', desc: 'Auditory Test', trans: 'auditory_test'},
+      {type: 'cmp', desc: 'Comprehension Test', trans: 'comprehension_test'},
+      {type: 'spl', desc: 'Spelling Test', trans: 'spelling_test'}
   ];
 
   public results = [];
 
   getDescription(type) {
-    for(let i in this.ttypes) if(this.ttypes[i].type === type) return this.ttypes[i].desc;
+    for(let i in this.ttypes) if(this.ttypes[i].type === type) return this.translation.instant(this.ttypes[i].trans);
     return '';
   }
 

@@ -21,11 +21,11 @@
     <!-- Test content navigation -->
     <div class="tc-nav">
       <div class="tc-nav-panel">
-        <span class="tc-nav-item tc-nav-prev" (click)="mvPrev()" [hidden]="ctestpos === 0 || ctestpos >= max">PREV</span>
-        <span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos !== 0" (click)="mvNext()">Continue</span>
-        <span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos < max" (click)="moveNext()">Finish</span>
-        <span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos === 0 || ctestpos >= max">{{ ctestpos }} of {{ max-1 }}</span>
-        <span class="tc-nav-item tc-nav-next" (click)="mvNext()" [hidden]="ctestpos === 0 || ctestpos >= max">NEXT</span>
+        <span class="tc-nav-item tc-nav-prev" (click)="mvPrev()" [hidden]="ctestpos === 0 || ctestpos >= max"><!--PREV-->{{ 'prev_testing_btn' | translate }}</span>
+        <span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos !== 0" (click)="mvNext()"><!--Continue-->{{ 'continue_testing_btn' | translate }}</span>
+        <span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos < max" (click)="moveNext()"><!--Finish-->{{ 'finish_testing_btn' | translate }}</span>
+        <span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos === 0 || ctestpos >= max">{{ ctestpos }} <!--of-->{{ 'of' | translate }} {{ max-1 }}</span>
+        <span class="tc-nav-item tc-nav-next" (click)="mvNext()" [hidden]="ctestpos === 0 || ctestpos >= max"><!--NEXT-->{{ 'next_testing_btn' | translate }}</span>
       </div>
     </div>
 

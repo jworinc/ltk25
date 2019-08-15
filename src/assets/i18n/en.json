@@ -156,5 +156,18 @@
 	"student_score" : "Student Score",
 	"student_details" : "Details",
 	"test_details" : "Test Details",
-	"word_or_sentence" : "Word or Sentence"
+	"word_or_sentence" : "Word or Sentence",
+	"ttest_will_measure" : "This test will measure your progress so far.",
+	"ppress_continue" : "Please press Continue to begin a test.",
+	"prev_testing_btn" : "PREV",
+	"continue_testing_btn" : "Continue",
+	"finish_testing_btn" : "Finish",
+	"next_testing_btn" : "NEXT",
+	"clck_onthe_word" : "Click on the word that you hear.",
+	"chs_thebest_word" : "Choose the best word to complete the sentence.",
+	"type_missing_letter" : "Type missing letter in the word.",
+	"auditory_test" : "Auditory Test",
+	"comprehension_test" : "Comprehension Test",
+	"spelling_test" : "Spelling Test",
+	"of": "of"
 }
