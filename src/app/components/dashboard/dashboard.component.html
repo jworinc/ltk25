@@ -557,7 +557,7 @@
             <app-grammar [show]="show_grammar" [scale]="scale" [hidden]="!show_grammar"></app-grammar>
 
             <!-- Testing -->
-            <app-showtesting [show]="show_testing" [scale]="scale" [hidden]="!show_testing"></app-showtesting>
+            <app-showtesting [show]="show_testing" [scale]="scale" [hidden]="!show_testing" (closetesting)="onCloseTesting()"></app-showtesting>
         </div>
         
         <!--  Lesson pointer arrow  -->

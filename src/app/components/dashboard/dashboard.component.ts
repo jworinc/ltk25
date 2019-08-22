@@ -404,6 +404,14 @@ export class DashboardComponent implements OnInit {
     setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
   }
 
+  onCloseTesting() {
+    this.show_notebook = false;
+    this.show_grammar = false;
+    this.show_testing = false;
+    let that= this;
+    setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
+  }
+
 
   public pointer_cycle = null;
   showLessonArrowPointer() {

@@ -1274,6 +1274,19 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
   }
 
+  onCloseTesting() {
+    this.show_notebook = false;
+    this.show_grammar = false;
+    this.show_testing = false;
+    let that= this;
+    setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
+    if(this.mode === 'single') this.onCloseMenu();
+    if(!this.global_start){
+      if(this.show_testing) this.show_start_screen = false;
+      if(!this.show_testing) this.show_start_screen = true;
+    }
+  }
+
 
 
 

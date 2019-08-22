@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, ViewChild, ComponentFactoryResolver, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ComponentFactoryResolver, AfterViewInit, EventEmitter, Output } from '@angular/core';
 import { TestComponent } from '../test/test.component';
 import { TestDirective } from '../../directives/test.directive';
 import { DataloaderService } from '../../services/dataloader.service';
 import { TestbuilderService } from '../../services/testbuilder.service';
+import { LoggingService } from '../../services/logging.service';
 //import { LessonComponent } from '../lesson/lesson.component';
 
 @Component({
@@ -31,11 +32,13 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
   public uinputph = 'teststart';
   public complete = 0;
 
+  @Output() closetesting = new EventEmitter<boolean>();
   @Input('show')
   set show(show: boolean) {
     this._show = show;
     
     if(!show){
+      this.saveTestResultsToLog();
       this.tstdata = null;
       this.layout = {
         'transform': 'scale('+this._scale+', '+this._scale+')',
@@ -44,9 +47,11 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
       this.complete = 0;
       this.uinputph = 'teststart';
       this.ctestpos = 0;
+      
     }
     else {
       let that = this;
+      this.test_log_sent = false;
       setTimeout(()=>{
         that.getTest();
       }, 1500);
@@ -65,7 +70,7 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
       private dl: DataloaderService,
       private tb: TestbuilderService,
       private componentFactoryResolver: ComponentFactoryResolver,
-      //private le: LessonComponent
+      private logging: LoggingService,
   ) { }
 
   ngOnInit() {
@@ -188,6 +193,7 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
     } else {
       this.uinputph = 'finish';
       this.complete = 100;
+      this.close();
     }
 
   }
@@ -216,6 +222,40 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
         c.instance.enter(false); 
       }
     }
+  }
+
+  close(){
+		this._show = false;
+		//this.saveTestResultsToLog();
+		this.closetesting.emit();
+  }
+  
+  saveTestResultsToLog() {
+    let sc = null;
+    for(let i in this.cts){
+      let c = this.cts[i];
+      if(c.instance.isActive()){
+        sc = c.instance; 
+      }
+    }
+    if(typeof sc !== 'undefined' && sc !== null && typeof sc.card.position !== 'undefined'  && !this.test_log_sent) {
+      //if(!this.sidetripmode){
+        this.test_log_sent = true;
+        this.logging.testEnd('TST', sc.card.position, this.test_results, this.ctestpos, this.dl.lu, this.complete)
+          .subscribe(
+            data => { console.log('Testing >>>>>>>>>>  Test Results Saved!'); console.log(data); },
+            error => {
+              console.log(error);
+              alert('Logging End Test status: ' + error.status + ' ' + error.statusText);
+            }
+          );
+      //} 
+      this.clearResults();
+    }
+  }
+
+  clearResults() {
+    this.tb.clearResults(this.test_results);
   }
 
 }
