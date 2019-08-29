@@ -386,12 +386,18 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 		let that = this;
 		let hletter = 0;
 		let pr = this.card.content[this.current_card_instance].parts;
-
+		let pm_word_immidiate_stop = this.pms.immidiate_stop_event.subscribe(()=>{
+			pm_word_immidiate_stop.unsubscribe();
+			that.play_word_busy_flag = false;
+			hletter = 0;
+			that.display_answer_word = that.hilightWordLetter(pr, hletter);
+			that.clearUserInput();
+		});
 		//	Play word
 		this.pms.word(this.answer_word, function(){
 			//	Start hilight letters when word play will complete
 			that.display_answer_word = that.hilightWordLetter(pr, hletter);
-			
+			pm_word_immidiate_stop.unsubscribe();
 		});
 
 		//	Play pronuncuation of the word
@@ -399,7 +405,13 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 
 			//	Delay before play each sound
 			let del = 400;
-
+			let pm_immidiate_stop = this.pms.immidiate_stop_event.subscribe(()=>{
+				pm_immidiate_stop.unsubscribe();
+				that.play_word_busy_flag = false;
+				hletter = 0;
+				that.display_answer_word = that.hilightWordLetter(pr, hletter);
+				that.clearUserInput();
+			});
 			for(let i in this.card.content[this.current_card_instance].pronounce) {
 				let p = '_S' + this.card.content[this.current_card_instance].pronounce[i]; p = p.replace('-', '');
 
@@ -413,7 +425,7 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 						}
 						that.play_word_busy_flag = false;
 						that.display_answer_word = that.answer_word;
-						
+						pm_immidiate_stop.unsubscribe();
 					}, del);
 				} else {
 					this.pms.sound(p, function(){
@@ -466,6 +478,7 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 	
 	//	Enter click handler
 	//	Overload of default function, wait when user split the word to syllables and play response correct or not
+	public answer_syllable_received = false;
 	enter() {
 		let that = this;
 		
@@ -486,17 +499,33 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 			} else {
 
 				//	Log user error
-				this.card_object = 'Word';
-				this.card_instance = this.expected_string;
-				this.result();
-
+				if(!this.answer_syllable_received){
+					this.card_object = 'Word';
+					this.card_instance = this.expected_string;
+					this.result();
+					this.answer_syllable_received = true;
+					setTimeout(()=>{ that.answer_syllable_received = false; }, 1000);
+				}
+				this.pms.stop();
 				this.respIfIncorrect();
 				
 			}
 			return;
 		}
+		/*
 		else if(this.uinputph === 'finish'){
 			this.enableNextCard();
+		}
+		*/
+		else if(this.uinputph === 'finish' && this.current_presented >= this.max_presented){
+			this.pms.stop();
+			if(this.getUserInputString() !== ''){
+				this.playCorrectSound(function(){ 
+					that.enableNextCard();
+				});
+			} else {
+				that.enableNextCard();
+			}
 		}
 		else if(this.uinputph === 'sylhelp'){
 			this.finishOrContinueBW();

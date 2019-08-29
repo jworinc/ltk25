@@ -216,6 +216,7 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 
 	//	Enter click handler
 	//	Overload of default function, wait when user enter r-controlled syllable and play response correct or not
+	public answer_syllable_received = false;
 	enter() {
 		let that = this;
 		
@@ -226,21 +227,36 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 				this.playContentDescription();
 			} else {
 				//	Log user error
-				this.card_object = 'Sound';
-				this.card_instance = this.answer_word;
-				this.result();
-				
+				if(!this.answer_syllable_received){
+					this.card_object = 'Sound';
+					this.card_instance = this.answer_word;
+					this.result();
+					this.answer_syllable_received = true;
+					setTimeout(()=>{ that.answer_syllable_received = false; }, 1000);
+				}
+				this.pms.stop();
 				this.respIfIncorrect();
 				
 			}
 			return;
 		}
-		else if(this.uinputph === 'syllable' && this.input_data === ''){
+		else if((this.uinputph === 'syllable' || this.uinputph === 'letters' || this.uinputph === 'sounds' || this.uinputph === 'compare') && this.input_data === ''){
+			this.pms.stop();
 			this.repeat();
 			return;
 		}
-
-		this.pms.stop();
+		
+		if(this.uinputph === 'finish' && this.current_presented >= this.max_presented){
+			this.pms.stop();
+			if(this.getUserInputString() !== ''){
+				this.playCorrectSound(function(){ 
+					that.enableNextCard();
+				});
+			} else {
+				that.enableNextCard();
+			}
+		}
+		/*
 		if(!this.validate()){
 			this.pms.sound('_STNQR', function(){ 
 				that.enableNextCard(); that.clearUserInput(); that.play_card_description_busy = false; that.playCardDescription();
@@ -251,6 +267,7 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 				//this.playRightAnswer();
 			});
 		}
+		*/
 		
 	}
 
@@ -263,11 +280,18 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 		let hletter = 0;
 		let pr = this.card.content[this.current_card_instance].parts;
 		let that = this;
+		let pm_word_immidiate_stop = this.pms.immidiate_stop_event.subscribe(()=>{
+			pm_word_immidiate_stop.unsubscribe();
+			that.play_word_busy_flag = false;
+			hletter = 0;
+			that.display_answer_word = that.hilightWordLetter(pr, hletter);
+			that.clearUserInput();
+		});
 		//	Play word
 		this.pms.word(this.answer_word, function(){
 			//	Start hilight letters when word play will complete
 			that.display_answer_word = that.hilightWordLetter(pr, hletter);
-			
+			pm_word_immidiate_stop.unsubscribe();
 		});
 
 		//	Play pronuncuation of the word
@@ -276,6 +300,13 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 			//	Delay before play each sound
 			let del = 400;
 			let hletter = 0;
+			let pm_immidiate_stop = this.pms.immidiate_stop_event.subscribe(()=>{
+				pm_immidiate_stop.unsubscribe();
+				that.play_word_busy_flag = false;
+				hletter = 0;
+				that.display_answer_word = that.hilightWordLetter(pr, hletter);
+				that.clearUserInput();
+			});
 			for(let i in this.card.content[this.current_card_instance].pronounce) {
 				let p = '_S' + this.card.content[this.current_card_instance].pronounce[i]; p = p.replace('-', '');
 				
@@ -285,6 +316,7 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 						if(that.uinputph === 'compare'){
 							that.uinputph = 'finish';
 							setTimeout(function(){ 
+								pm_immidiate_stop.unsubscribe();
 								that.finishOrContinueBW(function(){ that.playCardDescription(); });
 							}, del*2);
 						}
@@ -304,9 +336,11 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 		}
 	}
 	
+	ngDoCheck() {}
 
 	//	Watch if user type any data
-	ngDoCheck() {
+	//ngDoCheck() {
+	valueChange($event){
 	    //const change = this.differ.diff(this.input_data);
 	    if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
 

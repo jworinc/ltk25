@@ -65,6 +65,8 @@ export class DashboardComponent implements OnInit {
     left: '-200px'
   };
 
+  public lang_change_event: any;
+
   @ViewChild(NotebookComponent) nb: NotebookComponent;
 
   constructor(
@@ -100,11 +102,15 @@ export class DashboardComponent implements OnInit {
       this.mode = 'single';
     }
 
-    this.Option.change_language_event.subscribe(()=>{
+    this.lang_change_event = this.Option.change_language_event.subscribe(()=>{
       console.log('Change language event.');
       this.translate.use(this.Option.getLocale());
     })
 
+  }
+
+  ngOnDestroy() {
+    this.lang_change_event.unsubscribe();
   }
 
   @HostListener('window:resize', ['$event'])

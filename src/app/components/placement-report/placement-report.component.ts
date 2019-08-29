@@ -30,10 +30,14 @@ export class PlacementReportComponent implements OnInit {
     public tests: any;
     public cdetails: any;
     public show_test_details: boolean;
+    public report_pcm_ready: boolean = false;
+    public report_tst_ready: boolean = false;
 
     @Input('update')
     set update(update: boolean) {
       this._update = update;
+      this.report_tst_ready = false;
+      this.report_pcm_ready = false;
       this.refreshReport();
     }
 
@@ -50,7 +54,8 @@ export class PlacementReportComponent implements OnInit {
       }
 
       this.tests = data.testing;
-
+      this.report_tst_ready = true;
+      this.report_pcm_ready = true;
     }
   }
 

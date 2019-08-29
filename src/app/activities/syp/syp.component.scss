@@ -1,7 +1,10 @@
 /***********************************************	SYP block styling **************************************************/
 
 .card-content-body-wrap-syp{
-	display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column nowrap;
     position: relative;
     width: 100%;
     height: 100%;
@@ -45,14 +48,19 @@
     flex-flow: column;
     align-items: center;
     align-content: center;
-    justify-content: space-evenly;
     font-size: 19px;
     color: darkblue;
-    line-height: 1em;
+    line-height: 1.4em;
     padding: 10px;
     font-weight: 400;
     margin: 0;
     opacity: 0;
+    overflow-y: auto;
+    justify-content: flex-start;
+    min-height: 20%;
+    max-height: 85%;
+    height: auto;
+    margin-top: -70px;
 }
 .syp-card-init-desc p{
     margin: 0;
@@ -73,7 +81,10 @@
 	    height: 71%;
 	    top: 9%;
 	    font-size: 94px;
-	    line-height: 1.1;
+        line-height: 1.1;
+        margin-top: -11px;
+        height: auto;
+        max-height: 71%;
 	}
 	.syp-description{
 		position: relative;
@@ -87,11 +98,14 @@
 	}
     .syp-card-init-desc{
         font-size: 10px;
-        line-height: 0.8;
+        line-height: 1.2;
     }
     .syp-card-init-desc p{
         padding: 0;
         margin: 0;
+    }
+    .card-content-body-wrap-syp {
+        justify-content: space-between;
     }
 
 }

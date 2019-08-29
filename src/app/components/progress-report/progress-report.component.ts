@@ -15,11 +15,13 @@ export class ProgressReportComponent implements OnInit {
     private translation: TranslateService,
   ) { }
 
-  	public _update: boolean;
+    public _update: boolean;
+    public report_ready: boolean = false;
 
     @Input('update')
     set update(update: boolean) {
-    	this._update = update;
+      this._update = update;
+      this.report_ready = false;
       this.refreshReport();
     }
 
@@ -50,8 +52,8 @@ export class ProgressReportComponent implements OnInit {
         let hours = Math.floor(d/60);
         let mins = Math.floor(d%60);
         let out = '';
-        if(hours > 0) out += hours + this.translation.instant('time_h')+' ';
-        out += mins + this.translation.instant('time_mins');
+        if(hours > 0) out += hours + ' ' + this.translation.instant('time_h')+' ';
+        out += mins + ' ' + this.translation.instant('time_mins');
         return out;
         
     }
@@ -63,7 +65,7 @@ export class ProgressReportComponent implements OnInit {
             this.reports.push({lesson: data.result[i].alias, end: data.result[i].end, timeson: data.result[i].timeson, duration: this.getDurationString(data.result[i].duration)});
           }
           this.total = this.calcTotal(data.result);
-          
+          this.report_ready = true;
         }
     };
 

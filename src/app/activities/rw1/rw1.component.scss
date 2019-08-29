@@ -13,7 +13,7 @@
     line-height: 96px; 
 }
 .word{
-    font-size: 60px; 
+    font-size: 36px; 
 }
 .word-box img{
     max-height: none;
@@ -138,6 +138,7 @@ span.word-native {
        height: 100px;
        width: 100%;
        max-width: 500px;
+       overflow-y: auto;
    }
        
 .btn-translate {
@@ -216,14 +217,15 @@ span.word-native {
         max-width: 345px;
     }
     .word{
-        font-size: 35px; 
+        font-size: 20px; 
     }
     .word-box{
         line-height: 1; 
     }
     .word-box img{
-        max-height: 124px;
-        max-width: 240px;
+        max-height: 100px;
+        max-width: 160px;
+        
     }
     .phoneme-header, .sentence-header{
         margin-bottom: 22px;

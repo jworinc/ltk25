@@ -351,10 +351,13 @@ export class ShowmeReportComponent implements OnInit {
         this.updateLesson();
       }
       //  Set last complete lesson
-      else if(this._lu > 0 && data.length >= this._lu-1 && typeof data[this._lu-2] === 'string'){
-        this.current_lesson = data[this._lu-2];
+      else if(this._lu > 0 && data.length > 0){
+        for(let i in data){
+          if(parseInt(data[i]) === this._lu) this.current_lesson = data[i];
+        }
         this.updateLesson();
       } else {
+        alert('Unable to find last lesson.');
         return;
       }
       

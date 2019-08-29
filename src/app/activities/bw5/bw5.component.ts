@@ -309,31 +309,51 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 	//	Enter click handler
 	//	Overload of default function, the target is to catch moment when user enter the digraph
 	//	angular watcher creates a problem in this case, so this action must be approved by user with click enter button
+	public answer_digraf_received = false;
+	public enable_handle_digraf = false;
 	enter() {
 		let that = this;
 		
-		if(this.uinputph === 'digraf' && this.input_data !== ''){
+		if(this.uinputph === 'digraf' && this.input_data !== '' && this.enable_handle_digraf){
 			if(this.input_data.toLowerCase() === this.expected_digraf.toLowerCase()){
 				this.uinputph = 'rec';
+				this.enable_handle_digraf = false;
 				this.playContentDescription();
 				
 			} else {
 
 				//	Log user error
-				this.card_object = 'Question';
-				this.card_instance = this.expected_string = 'Enter the letters for the digraph in the word. ' + this.answer_word + ' ('+this.expected+')';
-				this.result();
+				if(!this.answer_digraf_received){
+					this.card_object = 'Question';
+					this.card_instance = this.expected_string = 'Enter the letters for the digraph in the word. ' + this.answer_word + ' ('+this.expected+')';
+					this.result();
+					this.answer_digraf_received = true;
+					setTimeout(()=>{ that.answer_digraf_received = false; }, 1000);
+				}
 
+				this.pms.stop();
 				this.respIfIncorrect();
 				
 			}
 			return;
 		}
 		else if((this.uinputph === 'digraf' || this.uinputph === 'letters' || this.uinputph === 'sounds') && this.input_data === ''){
+			this.pms.stop();
 			this.repeat();
 			return;
 		}
 		
+		if(this.uinputph === 'finish' && this.current_presented >= this.max_presented){
+			this.pms.stop();
+			if(this.getUserInputString() !== ''){
+				this.playCorrectSound(function(){ 
+					that.enableNextCard();
+				});
+			} else {
+				that.enableNextCard();
+			}
+		}
+		/*
 		this.pms.stop();
 		if(!this.validate()){
 			this.pms.sound('_STNQR', function(){ 
@@ -344,6 +364,7 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 				that.enableNextCard();
 			});
 		}
+		*/
 	}
 
 	public play_pronouce_busy_flag: boolean = false;
@@ -360,6 +381,14 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 			//	Delay before play each sound
 			let del = 400;
 			let ml = 0;
+			let pm_immidiate_stop = this.pms.immidiate_stop_event.subscribe(()=>{
+				pm_immidiate_stop.unsubscribe();
+				that.play_pronouce_busy_flag = false;
+				that.element.nativeElement.querySelectorAll('.bw1-letter').forEach((e)=>{
+					e.style.backgroundColor = '#C69C6C';
+				});
+				that.clearUserInput();
+			});
 			for(let i in this.card.content[this.current_card_instance].pronounce) {
 				let p = '_S' + this.card.content[this.current_card_instance].pronounce[i]; p = p.replace('-', '');
 				this.element.nativeElement.querySelectorAll('.bw1-letter').forEach((e)=>{
@@ -377,6 +406,7 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 						that.element.nativeElement.querySelectorAll('.bw1-letter').forEach((e)=>{
 							e.style.backgroundColor = '#C69C6C';
 						});
+						pm_immidiate_stop.unsubscribe();
 					}, del);
 				} else {
 					this.pms.sound(p, function(){
@@ -462,10 +492,11 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 		}
 	}
 
-
+	ngDoCheck() {}
 
 	//	Watch if user type any data
-	ngDoCheck() {
+	//ngDoCheck() {
+	valueChange($event){
 	    //const change = this.differ.diff(this.input_data);
 	    if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
 
@@ -502,6 +533,10 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 					
 					this.respIfIncorrect();
 				}
+			}
+
+			if(this.uinputph === 'digraf' && this.input_data !== ''){
+				this.enable_handle_digraf = true;
 			}
 			
 			//	Validate user input and decide enable or not next card

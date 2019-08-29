@@ -367,19 +367,21 @@ export class SypComponent extends BaseComponent implements OnInit {
 					
 					//	Prepare initial description for card
 					let mr = /^[A-Z]+$/;
-					if(!mr.test(c.pointer_to_value) && c.audio.split('')[0] === '_' && c.pointer_to_value.length > 16) {
-						if(this.temp_inidesc !== ''){
-							this.syp_card_inidesc += '<p>' + this.temp_inidesc + '</p>';
-							this.temp_inidesc = '';
-						}
+					//if(!mr.test(c.pointer_to_value) && c.audio.split('')[0] === '_' && c.pointer_to_value.length > 16) {
+					//	if(this.temp_inidesc !== ''){
+					//		this.syp_card_inidesc += '<p>' + this.temp_inidesc + '</p>';
+					//		this.temp_inidesc = '';
+					//	}
+					//	this.syp_card_inidesc += '<p>' + c.pointer_to_value.replace('...', '') + '</p>';
+					//}
+					//else if(!mr.test(c.pointer_to_value) && c.audio.split('')[0] === '_' && c.pointer_to_value.length <= 16) {
+					if(!mr.test(c.pointer_to_value) && c.audio.split('')[0] === '_') {
+						//this.temp_inidesc += c.pointer_to_value.replace('...', '') + ' ';
 						this.syp_card_inidesc += '<p>' + c.pointer_to_value.replace('...', '') + '</p>';
 					}
-					else if(!mr.test(c.pointer_to_value) && c.audio.split('')[0] === '_' && c.pointer_to_value.length <= 16) {
-						this.temp_inidesc += c.pointer_to_value.replace('...', '') + ' ';
-					}
 					//	Check if last add it to description list
-					if(this.current_comand === this.cmds.length-1 && this.temp_inidesc !== '') 
-						this.syp_card_inidesc += '<p>' + this.temp_inidesc + '</p>';
+					//if(this.current_comand === this.cmds.length-1 && this.temp_inidesc !== '') 
+					//	this.syp_card_inidesc += '<p>' + this.temp_inidesc + '</p>';
 
 				} else {
 					this.current_comand++;

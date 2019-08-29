@@ -15,11 +15,13 @@ export class DetailReportComponent implements OnInit {
     private translation: TranslateService,
   ) { }
 
-  	public _update: boolean;
+    public _update: boolean;
+    public report_ready: boolean = false;
 
     @Input('update')
     set update(update: boolean) {
-    	this._update = update;
+      this._update = update;
+      this.report_ready = false;
       this.refreshReport();
     }
 
@@ -38,7 +40,7 @@ export class DetailReportComponent implements OnInit {
           let r = data.result[i];
           this.reports.push({lesson: r.lesson, activity: r.activity, expected: r.expected, answer: r.answer, hintlevel: r.hintlevel, end: r.end});
         }
-        
+        this.report_ready = true;
       }
     };
 

@@ -169,5 +169,6 @@
 	"auditory_test" : "Auditory Test",
 	"comprehension_test" : "Comprehension Test",
 	"spelling_test" : "Spelling Test",
-	"of": "of"
+	"of": "of",
+	"choose_a_lesson": "Choose a lesson"
 }

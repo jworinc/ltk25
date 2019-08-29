@@ -26,6 +26,7 @@ export class AppComponent {
     if(ev.target.visibilityState === 'hidden'){
       console.log('VisibilityChange event');
       this.playmedia.stop();
+      this.playmedia.immidiate_stop_event.emit();
     }
     
   }
@@ -34,6 +35,7 @@ export class AppComponent {
   onBlurChange(ev:any) {
     console.log('Blur Change event');
     this.playmedia.stop();
+    this.playmedia.immidiate_stop_event.emit();
   }
 
   @HostListener('document:click', ['$event'])

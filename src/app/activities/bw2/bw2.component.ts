@@ -21,7 +21,9 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 							private bw2cs: ColorschemeService,
 							private op: OptionService) {
   	super(element, sz, pms, bw2log, bw2cs);
-  }
+	}
+	
+	public enable_handle_vowel: boolean = false;
 
   ngOnInit() {
 
@@ -89,7 +91,6 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 			this.pms.sound(this.card.content[0].Question2[0].audio, function(){
 				that.setFocus();
 				that.input_data = '';
-				
 			});
 		}
 		//	Phase 3 vowel sound
@@ -189,9 +190,11 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 	enter() {
 		let that = this;
 		
-		if(this.uinputph === 'vowel' && this.input_data !== ''){
+		if(this.uinputph === 'vowel' && this.input_data !== '' && this.enable_handle_vowel){
+			this.pms.stop();
 			if(this.input_data.toLowerCase() === this.expected){
 				this.uinputph = 'rec';
+				this.enable_handle_vowel = false;
 				this.playContentDescription();
 				
 			} else {
@@ -200,16 +203,17 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 				this.card_object = 'Question';
 				this.card_instance = this.expected_string = 'Enter the base word without the added "s". ' + this.answer_word + ' ('+this.expected+')';
 				this.result();
-
+				this.input_data = '';
 				this.respIfIncorrect();
 			}
 			return;
 		}
-		else if((this.uinputph === 'vowel' || this.uinputph === 'letters' || this.uinputph === 'sounds') && this.input_data === ''){
+		else if((this.uinputph === 'vowel' || this.uinputph === 'letters' || this.uinputph === 'sounds' || this.uinputph === 'compare') && this.input_data === ''){
+			this.pms.stop();
 			this.repeat();
 			return;
 		}
-		
+		/*
 		this.pms.stop();
 		if(!this.validate()){
 			this.pms.sound('_STNQR', function(){ 
@@ -220,63 +224,83 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 				that.enableNextCard();
 			});
 		}
+		*/
+
+		if(this.uinputph === 'finish' && this.current_presented >= this.max_presented){
+			this.pms.stop();
+			if(this.getUserInputString() !== ''){
+				this.playCorrectSound(function(){ 
+					that.enableNextCard();
+				});
+			} else {
+				that.enableNextCard();
+			}
+		}
+
 	}
 
+	ngDoCheck() {}
 
 	//	Watch if user type any data
-	ngDoCheck() {
+	//ngDoCheck() {
+	valueChange($event){
 	    //const change = this.differ.diff(this.input_data);
-	    if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
-
-	    	this.old_input_data = JSON.stringify(this.input_data);
+	    //if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
+			if(this.isActive()) {
+	    	//this.old_input_data = JSON.stringify(this.input_data);
 
 	    	let that = this;
+				this.pms.stop();
+				//	When current phase is letters, check if num letters match with user input and switch to next
+				if(this.uinputph === 'letters' && this.input_data !== ''){
+					if(this.input_data == this.expected){
+						this.askNumSounds();
+					} else {
+						//	Log user error
+						this.card_object = 'Question';
+						this.card_instance = this.expected_string = 'How Many Letters? ' + this.answer_word + ' ('+this.expected+')';
+						this.result();
 
-			//	When current phase is letters, check if num letters match with user input and switch to next
-			if(this.uinputph === 'letters' && this.input_data !== ''){
-				if(this.input_data == this.expected){
-					this.askNumSounds();
-				} else {
-					//	Log user error
-					this.card_object = 'Question';
-					this.card_instance = this.expected_string = 'How Many Letters? ' + this.answer_word + ' ('+this.expected+')';
-					this.result();
-
-					this.respIfIncorrect();
-				}
-			}
-			//	Check if user input correct word without 's'/'es'
-			if(this.uinputph === 'sounds' && this.input_data !== ''){
-				if(+this.input_data === this.expected){
-					this.uinputph = 'vowel'; // in this type of card we asked to enter word without plurals
-					this.expected = '';
-					for(let i in this.card.content[this.current_card_instance].parts) {
-						let p = this.card.content[this.current_card_instance].parts[i];
-						if(parseInt(i) === this.card.content[this.current_card_instance].parts.length - 1) break;
-						this.expected += p;
+						this.respIfIncorrect();
 					}
-					//this.playContentDescription();
-					this.playCardDescription();
-					return;
-				} else {
-
-					//	Log user error
-					this.card_object = 'Question';
-					this.card_instance = this.expected_string = 'How Many Sounds? ' + this.answer_word + ' ('+this.expected+')';
-					this.result();
-
-					this.respIfIncorrect();
 				}
-			}
-			
-			//	Validate user input and decide enable or not next card
-			if(this.validate()){
-				this.enableMoveNext();
+				//	Check if user input correct word without 's'/'es'
+				if(this.uinputph === 'sounds' && this.input_data !== ''){
+					if(+this.input_data === this.expected){
+						this.uinputph = 'vowel'; // in this type of card we asked to enter word without plurals
+						this.expected = '';
+						//this.input_data = '';
+						for(let i in this.card.content[this.current_card_instance].parts) {
+							let p = this.card.content[this.current_card_instance].parts[i];
+							if(parseInt(i) === this.card.content[this.current_card_instance].parts.length - 1) break;
+							this.expected += p;
+						}
+						//this.playContentDescription();
+						this.playCardDescription();
+						return;
+					} else {
+
+						//	Log user error
+						this.card_object = 'Question';
+						this.card_instance = this.expected_string = 'How Many Sounds? ' + this.answer_word + ' ('+this.expected+')';
+						this.result();
+
+						this.respIfIncorrect();
+					}
+				}
+
+				if(this.uinputph === 'vowel' && this.input_data !== ''){
+					this.enable_handle_vowel = true;
+				}
+				
+				//	Validate user input and decide enable or not next card
+				if(this.validate()){
+					this.enableMoveNext();
+
+				}
+				else this.disableMoveNext();
 
 			}
-			else this.disableMoveNext();
-
-	    }
 	    
 	}
 

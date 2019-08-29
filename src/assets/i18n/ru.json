@@ -169,5 +169,6 @@
 	"auditory_test" : "Аудирование",
 	"comprehension_test" : "Тест на понимание",
 	"spelling_test" : "Орфографический тест",
-	"of": "из"
+	"of": "из",
+	"choose_a_lesson": "Выберите урок"
 }

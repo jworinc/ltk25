@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Howl, Howler } from 'howler';
 import { OptionService } from './option.service';
 import { DataloaderService } from './dataloader.service';
@@ -10,9 +10,10 @@ export class PlaymediaService {
 
    constructor(private opt: OptionService, private dl: DataloaderService) { 
 		this.ltkmediaurl = opt.getMediaStorage();
+		this.immidiate_stop_event = new EventEmitter<boolean>();
    }
 
-  	public play_sequence = [];
+  public play_sequence = [];
 	public play_sound = null;
 	public play_disable_flag = false;
 	public play_reset_disable_timer = null;
@@ -24,6 +25,7 @@ export class PlaymediaService {
 	public rate = 1;
 	public sounds_buffer = [];
 	public ltkmediaurl = '';
+	public immidiate_stop_event: any;
 
 	setDisable() {
 		clearTimeout(this.play_reset_disable_timer);

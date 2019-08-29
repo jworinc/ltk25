@@ -426,7 +426,7 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 
 	
 	playPronounce(cb = ()=>{}){
-
+		
 		if(this.play_pronouce_busy_flag) return;
 		this.play_pronouce_busy_flag = true;
 
@@ -438,6 +438,12 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 			//	Delay before play each sound
 			let del = 400;
 			let ml = 0;
+			let pm_immidiate_stop = this.playmedia.immidiate_stop_event.subscribe(()=>{
+				pm_immidiate_stop.unsubscribe();
+				that.play_pronouce_busy_flag = false;
+				that.elm.nativeElement.querySelector('.bw1-letter[data-index="'+ml+'"]').style.backgroundColor = '#C69C6D';
+				that.clearUserInput();
+			})
 			this.elm.nativeElement.querySelector('.bw1-letter').style.backgroundColor = '#C69C6D';
 			this.elm.nativeElement.querySelector('.bw1-letter[data-index="'+ml+'"]').style.backgroundColor = '#00ADEF';
 			for(let i in this.letters) {
@@ -448,6 +454,7 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 						if(typeof callback !== 'undefined') setTimeout(function(){ callback(); }, del*2);
 						that.play_pronouce_busy_flag = false;
 						that.elm.nativeElement.querySelector('.bw1-letter[data-index="'+ml+'"]').style.backgroundColor = '#C69C6D';
+						pm_immidiate_stop.unsubscribe();
 					}, del);
 				} else {
 					this.playmedia.sound(p, function(){
@@ -492,16 +499,45 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 		return before + '<span class="hilight-pronounce-letter">' + target + '</span>' + after;
 	}
 
+	ngDoCheck() {}
+
+	enter() {
+		if((this.uinputph === 'letters' || this.uinputph === 'sounds' || this.uinputph === 'vowel') && this.input_data === '') {
+			this.playmedia.stop();
+			this.repeat();
+			return;
+		}
+		//else if((this.uinputph === 'letters' || this.uinputph === 'sounds' || this.uinputph === 'vowel') && this.input_data !== ''){
+		//	this.valueChange(null);
+		//	return;
+		//}
+		//	Check if we shown all card instances
+		let that = this;
+		if(this.uinputph === 'finish' && this.current_presented >= this.max_presented){
+			this.playmedia.stop();
+			if(this.getUserInputString() !== ''){
+				this.playCorrectSound(function(){ 
+					that.enableNextCard();
+				});
+			} else {
+				that.enableNextCard();
+			}
+		}
+	}
+
 	//	Watch if user type any data
-	ngDoCheck() {
+	//ngDoCheck() {
+	valueChange($event){
 		if(!this.isActive()) return;
 		//console.log('bw onchange');
 	    //const change = this.differ.diff(this.input_data);
-	    if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
+	    //if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
+		if(this.isActive()) {
+	    	//this.old_input_data = JSON.stringify(this.input_data);
 
-	    	this.old_input_data = JSON.stringify(this.input_data);
-
-	    	let that = this;
+				let that = this;
+				
+				this.playmedia.stop();
 
 			//	When current phase is letters, check if num letters match with user input and switch to next
 			if(this.uinputph === 'letters' && this.input_data !== ''){
@@ -553,7 +589,7 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 			}
 			else this.disableMoveNext();
 
-	    }
+	  }
 	    
 	}
 

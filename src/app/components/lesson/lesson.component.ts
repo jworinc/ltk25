@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ViewChild, ComponentFactoryResolver, AfterViewInit, ViewEncapsulation, ElementRef, OnDestroy, EventEmitter } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { DataloaderService } from '../../services/dataloader.service';
 import { SnotifyService } from 'ng-snotify';
 import { TranslateService } from '@ngx-translate/core';
@@ -18,6 +18,7 @@ import { ShowtestingComponent } from '../showtesting/showtesting.component';
 import { Howl, Howler } from 'howler';
 import * as $ from 'jquery';
 import { GrammarComponent } from '../grammar/grammar.component';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-lesson',
@@ -114,6 +115,11 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public start_button_animation: any = null;
   public lesson_finished: boolean = false;
 
+  public route_change_event: any;
+  public color_change_event: any;
+  public student_info_event: any;
+  public lang_change_event: any;
+
   constructor(
     private DL: DataloaderService,
     private notify: SnotifyService,
@@ -140,7 +146,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
     //  Init studetn information
-    this.DL.getStudentInfo().subscribe(
+    this.student_info_event = this.DL.getStudentInfo();
+    this.student_info_event.subscribe(
         data => this.handleStudentInfo(data),
         error => {
           console.log(error);
@@ -168,20 +175,37 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
     });
 
-    this.cs.onChange().subscribe(()=>{
+    this.color_change_event = this.cs.onChange().subscribe(()=>{
       console.log('Change color scheme event.');
       if(this.global_start) this.refreshLesson();
     });
 
-    this.Option.change_language_event.subscribe(()=>{
+    this.lang_change_event = this.Option.change_language_event.subscribe(()=>{
       console.log('Change language event.');
       this.translate.use(this.Option.getLocale());
     });
 
+    let that = this;
+
+    this.route_change_event = this.router.events.pipe(filter(event => event instanceof NavigationStart)).subscribe((e) => {
+        if(that.router.getCurrentNavigation().previousNavigation.extractedUrl.toString() === "/lesson"){
+          if(!this.end_lesson_flag){
+            console.log('Router Event. Try to save current user results');
+            this.urgentLeaveLesson();
+            alert('Do you want to leave this lesson?');
+          }
+        }
+        
+      });
+     
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+    this.route_change_event.unsubscribe();
+    this.lang_change_event.unsubscribe();
+    this.color_change_event.unsubscribe();
+    //this.student_info_event.unsubscribe();
   }
 
 
@@ -237,17 +261,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
   //  Stop active log when user leave card page
   @HostListener('window:beforeunload', ['$event'])
   onBeforeUnload(event) {
-    if(!this.end_lesson_flag){
-        if(!this.sidetripmode){
-          this.logging.lessonTimeon(this.student.lu)
-          .subscribe(
-            data => {},
-            error => {
-              console.log(error);
-              this.notify.error('Lesson Timeon status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
-            }
-          );
-        }
+      
+      if(!this.end_lesson_flag){
+        this.urgentLeaveLesson();
         let dialogText = 'Do you want to leave this lesson?';
         event.returnValue = dialogText;
         return dialogText;
@@ -260,6 +276,33 @@ export class LessonComponent implements OnInit, AfterViewInit {
       if(event.keyCode == 37) this.movePrev();
       if(event.keyCode == 39) this.moveNext();
       if(event.keyCode == 13) this.enter();
+  }
+
+  urgentLeaveLesson() {
+    
+      if(!this.end_lesson_flag && !this.sidetripmode){
+
+        let sc = this.getChildCardScope(this.current_id);
+        if(typeof sc !== 'undefined' && sc !== null && typeof sc.prehide !== 'undefined'){
+          sc.prehide();
+        } 
+        if(typeof sc !== 'undefined' && sc !== null && typeof sc.hide !== 'undefined'){
+
+          this.loggingEndCommand(sc);
+
+          sc.hide();
+        } 
+
+        this.logging.lessonTimeon(this.student.lu)
+        .subscribe(
+          data => {},
+          error => {
+            console.log(error);
+            this.notify.error('Lesson Timeon status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
+          }
+        );
+      }
+    
   }
 
   getCurrentLessonTitle(lu){

@@ -342,34 +342,55 @@ export class Bw6Component extends Bw3Component implements OnInit {
 	//	Enter click handler
 	//	Overload of default function, the target is to catch moment when user enter the digraph
 	//	angular watcher creates a problem in this case, so this action must be approved by user with click enter button
+	public answer_question_received = false;
 	enter() {
 		let that = this;
 		this.bw6pm.stop();
 		if(this.uinputph === 'question' && this.input_data !== ''){
 			if(this.input_data.toLowerCase() === this.expected_suffix.toLowerCase()){
-				this.uinputph = 'finish';
-				that.playCorrectSound(function(){});
-				this.playRespAtEnd();
+				that.finishOrContinueBW(function(){ that.playCardDescription(); });
+				//this.uinputph = 'finish';
+				//that.playCorrectSound(function(){});
+				//this.playRespAtEnd();
 
 			} else {
 				
 				//	Log user error
-				this.card_object = 'Sound';
-				this.card_instance = this.answer_word;
-				this.result();
+				if(!this.answer_question_received){
+					this.card_object = 'Sound';
+					this.card_instance = this.answer_word;
+					this.result();
+					this.answer_question_received = true;
+					setTimeout(()=>{ that.answer_question_received = false; }, 1000);
+				}
 				
-				that.enableNextCard(); that.clearUserInput();
+				that.clearUserInput();
+				this.bw6pm.stop();
 				this.respIfIncorrect();
 				
 			}
 			return;
 		}
 		else if(this.uinputph === 'question' && this.input_data === ''){
+			this.bw6pm.stop();
 			this.repeat();
+			that.clearUserInput();
 		}
+		if(this.uinputph === 'finish' && this.current_presented >= this.max_presented){
+			this.bw6pm.stop();
+			if(this.getUserInputString() !== ''){
+				this.playCorrectSound(function(){ 
+					that.enableNextCard();
+				});
+			} else {
+				that.enableNextCard();
+			}
+		}
+		/*
 		if(this.uinputph === 'finish'){
 			that.enableNextCard();
 		}
+		*/
 		
 	}
 
@@ -410,6 +431,13 @@ export class Bw6Component extends Bw3Component implements OnInit {
 			//	Delay before play each sound
 			let del = 400;
 			let ml = 0;
+			let pm_immidiate_stop = this.bw6pm.immidiate_stop_event.subscribe(()=>{
+				pm_immidiate_stop.unsubscribe();
+				that.play_pronouce_busy_flag = false;
+				hletter = 0;
+				that.display_answer_word = that.hilightWordLetter(pr, hletter);
+				that.clearUserInput();
+			});
 			for(let i in this.card.content[this.current_card_instance].pronounce) {
 				let p = '_S' + this.card.content[this.current_card_instance].pronounce[i]; p = p.replace('-', '');
 				//	Check if we play the last sound, switch user input phase to next and play next instructions
@@ -418,7 +446,7 @@ export class Bw6Component extends Bw3Component implements OnInit {
 						if(typeof callback !== 'undefined') setTimeout(function(){ callback(); }, del*2);
 						that.play_pronouce_busy_flag = false;
 						that.display_answer_word = that.answer_word;
-						
+						pm_immidiate_stop.unsubscribe();
 					}, del);
 				} else {
 					this.bw6pm.sound(p, function(){
@@ -433,8 +461,11 @@ export class Bw6Component extends Bw3Component implements OnInit {
 		}
 	}
 
+	ngDoCheck() {}
+
 	//	Watch if user type any data
-	ngDoCheck() {
+	//ngDoCheck() {
+	valueChange($event){
 	    //const change = this.differ.diff(this.input_data);
 	    if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
 

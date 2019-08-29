@@ -29,13 +29,17 @@ export class ReportsComponent implements OnInit {
 
     	this.updateReports();
 
-	    this.Option.change_language_event.subscribe(()=>{
+	    this.lang_change_event = this.Option.change_language_event.subscribe(()=>{
 	      console.log('Change language event.');
 	      this.translate.use(this.Option.getLocale());
 	    })
-    }
+		}
+		
+		ngOnDestroy() {
+			this.lang_change_event.unsubscribe();
+		}
 
-    //angular.element($window).bind('resize', function(){ mainAppScreenHeight(); });
+  public lang_change_event: any;
 
 	public show_tool_pages_list: boolean = true;
 

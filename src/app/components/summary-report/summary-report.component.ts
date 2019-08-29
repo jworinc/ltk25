@@ -19,10 +19,12 @@ export class SummaryReportComponent implements OnInit {
     public current_lesson = 0;
     public lessons = [];
     public reports = [];
+    public report_ready: boolean = false;
 
     @Input('update')
     set update(update: boolean) {
-    	this._update = update;
+      this._update = update;
+      this.report_ready = false;
       this.refreshReport();
     }
 
@@ -48,7 +50,7 @@ export class SummaryReportComponent implements OnInit {
           if(typeof r.complete !== 'undefined' && r.complete !== 'ND') complete = r.complete + '%';
           this.reports.push({lesson: r.lesson, command: r.command, start: r.start, last: r.last, timeson: r.timeson, time: r.time, perf: r.perf, complete: complete});
         }
-        
+        this.report_ready = true;
       }
     };
 
