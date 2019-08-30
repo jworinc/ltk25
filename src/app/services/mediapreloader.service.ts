@@ -345,13 +345,13 @@ export class MediapreloaderService {
 			let m = media.media[i];
 
 			//	Check if empty
-			if(m === "" || m === " ") continue;
+			if(m === "" || m === " " || m === "_s" || m === "_S") continue;
 
 			let url = this.options.getMediaStorage();
 
 			//	Check first letter to define is media sound or word
 			let fl = m.substring(0, 1);
-			let sl = m.substring(2, 3).toUpperCase();;
+			let sl = m.substring(2, 3).toUpperCase();
 			if(fl === '_'){
 				url += '/storage/app/public/audio/ltkmedia/_' + sl + '/'+m.toUpperCase()+'.mp3';
 			} else {
