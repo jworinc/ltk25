@@ -169,6 +169,19 @@
 	"auditory_test" : "Auditory Test",
 	"comprehension_test" : "Comprehension Test",
 	"spelling_test" : "Spelling Test",
-	"of": "of",
-	"choose_a_lesson": "Choose a lesson"
+	"of" : "of",
+	"choose_a_lesson" : "Choose a lesson",
+	"lets_test" : "Let's take a Test",
+	"take_a_test" : "Take a Test",
+	"i_have_account" : "I have an account",
+	"your_level" : "Your level",
+	"start_ltk_from" : "Start LTK from",
+	"r_to_see_level" : "You have completed the test! To see the details, recommendations and to improve your language skills please ensure the e-mail you have entered is correct.",
+	"register_request" : "Register",
+	"t_ch_e_further" : "Thanks! We will send you further instructions to your email.",
+	"correct" : "Correct",
+	"see_a_result" : "See a result",
+	"email" : "E-mail",
+	"your_name" : "Your name",
+	"please_enter_email" : "Please, enter your email!"
 }

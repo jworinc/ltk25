@@ -15,11 +15,29 @@
 				<td>{{ er.expected }}</td>
 				<td>{{ er.actual_input }}</td>
 				<td></td>
-      </tr>
-      <tr>
+			</tr>
+			<tr [hidden]="placement.results.length === 0">
+					<td>{{ 'placement_test' | translate }}</td>
+					<td><span class='btn btn-success' (click)="showTestDetails(placement.details)">{{ 'student_details' | translate }}</span></td>
+					<td></td>
+					<td></td>
+			</tr>
+      		<tr [hidden]="placement.errors.length === 0">
 				<td>{{ 'errors_made' | translate }}: {{ placement.wrong_answers }}</td>
 				<td>{{ 'word_groups_presented' | translate }}: {{ placement.total }}</td>
 				<td>{{ 'assigned_lesson' | translate }}: {{ placement.lesson }}</td>
+				<td>{{ placement.end }}</td>
+			</tr>
+			<tr [hidden]="placement.results.length === 0">
+				<td>{{ 'your_level' | translate }}: {{ placement.level }}</td>
+				<td></td>
+				<td>{{ 'start_ltk_from' | translate }}:&nbsp;Break&nbsp;{{ placement.break }}</td>
+				<td>{{ placement.end }}</td>
+			</tr>
+			<tr [hidden]="placement.errors.length !== 0 || placement.results.length !== 0">
+				<td>{{ 'errors_made' | translate }}: -</td>
+				<td>{{ 'word_groups_presented' | translate }}: -</td>
+				<td>{{ 'assigned_lesson' | translate }}: -</td>
 				<td>{{ placement.end }}</td>
 			</tr>
 		</tbody>
@@ -64,13 +82,15 @@
 				<div class="test-details test-details-header">
 					<span>{{ 'student_entered' | translate }}</span>
 					<span>{{ 'expected' | translate }}</span>
-					<span [hidden]="(cdetails && !cdetails[0].word && !cdetails[0].sentence) || !cdetails">{{ 'word_or_sentence' | translate }}</span>
+					<!--<span [hidden]="(cdetails && !cdetails[0].word && !cdetails[0].sentence) || !cdetails">{{ 'word_or_sentence' | translate }}</span>-->
+					<span>{{ 'word_or_sentence' | translate }}</span>
 				</div>
 				<div class="test-details" *ngFor="let dtl of cdetails">
 					<span [hidden]="!dtl.answer">{{ dtl.answer }}</span>
 					<span [hidden]="!dtl.expected">{{ dtl.expected }}</span>
 					<span [hidden]="!dtl.sentence">{{ dtl.sentence }}</span>
 					<span [hidden]="!dtl.word">{{ dtl.word }}</span>
+					<span [hidden]="dtl.word || dtl.sentence">-</span>
 				</div>
 			</div>
 			<div class="modal-footer">

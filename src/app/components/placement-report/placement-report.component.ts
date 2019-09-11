@@ -21,7 +21,9 @@ export class PlacementReportComponent implements OnInit {
       total: 0,
       lesson: 0,
       end: '-',
-      errors: []
+      errors: [],
+      results: [],
+      details: []
     }
   }
 
@@ -47,10 +49,29 @@ export class PlacementReportComponent implements OnInit {
   placementUpdateCallback(data) {
     console.log(data);
     if(typeof data === 'object'){
-      
-      if(typeof data.placement.wrong_answers !== 'undefined' && typeof data.placement.right_answer !== undefined){
-        this.placement = data.placement;
+      this.placement = data.placement;
+      if(typeof data.placement.wrong_answers !== 'undefined' && 
+          typeof data.placement.right_answer !== 'undefined' && 
+          data.placement.wrong_answers !== null &&
+          data.placement.right_answer !== null){
+        
         this.placement.total = parseInt(data.placement.wrong_answers) + parseInt(data.placement.right_answer);
+      } else this.placement.total = 0;
+
+      //  Create details list for new placement test
+      this.placement.details = [];
+      if(this.placement.results.length > 0){
+        for(let i in this.placement.results){
+          let br = this.placement.results[i];
+          for(let n in br){
+            let t = br[n];
+            if(typeof t.details !== 'undefined' && t.details.length > 0){
+              for(let k in t.details){
+                this.placement.details.push(t.details[k]);
+              }
+            }
+          }
+        }
       }
 
       this.tests = data.testing;
@@ -84,6 +105,10 @@ export class PlacementReportComponent implements OnInit {
       if(d && !d.isCorrect) {
         this.cdetails.push(d);
       }
+    }
+
+    if(this.cdetails.length === 0){
+      this.cdetails.push({answer: "-", expected: "-", isCorrect: false});
     }
 
     this.show_test_details = true;
