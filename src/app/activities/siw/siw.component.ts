@@ -59,6 +59,8 @@ export class SiwComponent extends Or1Component implements OnInit {
 	});
   }
 
-
+  repeat() {
+	this.playCardDescription();
+  }
 
 }

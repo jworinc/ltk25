@@ -148,6 +148,7 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
+				this.input_data = '';
 				
 			} else {
 				this.enableMoveNext();

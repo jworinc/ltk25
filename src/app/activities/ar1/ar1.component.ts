@@ -496,19 +496,34 @@ export class Ar1Component extends BaseComponent implements OnInit {
 		}
 	}
 
+	public block_input_filter = false;
+
 	catchUserInput(e) {
 		if(this.isActive() && typeof e !== 'undefined' && e !== null && this.old_input_data !== e.target.value){
-	    	
-    		//e.target.style.backgroundColor = 'white';
-    		this.input_data = e.target.value;
-    		if(this.input_data === "") return;
-    		this.input_data = this.input_data.toLowerCase();
+	    //this.block_input_filter = true;
+			//e.target.style.backgroundColor = 'white';
+			console.log('User input: '+ e.target.value);
+			
+			if(e.target.value.length > 1){
+				e.target.value = e.target.value.split('')[0];
+				return;
+			}
+			
+			this.input_data = e.target.value;
+			if(this.input_data === "" || this.block_input_filter) return;
+			this.block_input_filter = true;
+			
+			let that = this;
+			setTimeout(()=>{ that.block_input_filter = false; }, 700);
+
+			this.input_data = this.input_data.toLowerCase();
 			this.input_data = this.input_data.split('')[0];
+			e.target.value = this.input_data;
+			
+			
 			
 			//	Get user answer
 			let result = this.input_data;
-
-			let that = this;
 
 			//	If user input is wrong, mark part with light coral color
 			if(result !== this.expected && this.input_data !== null && this.input_data !== ''){

@@ -6,9 +6,9 @@
 <div class="card-block-item card-style-obj-single card-block-gwm">
     <div class='card-content-body-wrap-gsc'>
 		<div class='gsc-user-input gwm-user-input'>
-			<span class='gwm-answer-wrap' *ngFor='let a of answers; let ka=index' [attr.data-index]='ka'>
-				<span class='gwm-user-answer' [ngClass]="{'gschilight': a !== expected[ka]}">{{ a }}</span>
-				<span class='gwm-rigth-answer' *ngIf='a !== expected[ka]'>{{ expected[ka] }}</span>
+			<span class='gwm-answer-wrap' *ngFor='let a of answer_for_display; let ka=index' [attr.data-index]='ka'>
+				<span class='gwm-user-answer' [ngClass]="{'gschilight': a.word !== a.expected}">{{ a.word }}</span>
+				<span class='gwm-rigth-answer' *ngIf='a.word !== a.expected'>{{ a.expected }}</span>
 			</span>
 		</div>
 		<div class='diw-hint-letters gsc-letters gwm-words'>

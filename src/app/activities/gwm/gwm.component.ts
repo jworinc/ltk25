@@ -44,6 +44,7 @@ export class GwmComponent extends BaseComponent implements OnInit {
 	public words = [];
 
 	public answers = [];
+	public answer_for_display = [];
 	public audios = [];
 	public expected = [];
 	public display_result: any;
@@ -72,18 +73,6 @@ export class GwmComponent extends BaseComponent implements OnInit {
 	getExpectedString() {
 		return this.expected_string;
 	}
-
-	//	Enter click handler
-	/*
-	enter() {
-		if(this.uinputph === 'finish'){
-			this.playCorrectSound();
-			this.enableNextCard();
-		} else {
-			this.playmedia.sound('_STNQR', function(){});
-		}
-	}
-	*/
 
 	repeat(){
 		if(this.uinputph !== 'finish'){
@@ -170,6 +159,9 @@ export class GwmComponent extends BaseComponent implements OnInit {
 		if(this.words[ind] !== this.words[this.current_word]) this.result();
 
 		this.answers.push(this.words[ind]);
+		this.answer_for_display.push({word: this.words[ind], expected: this.words[this.current_word]});
+
+		if(this.answer_for_display.length > 4) this.answer_for_display.shift();
 
 		this.getWords();
 

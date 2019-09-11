@@ -22,21 +22,21 @@ export class Or4Component extends Or3Component implements OnInit, DoCheck {
     ngOnInit() {
     	this.setHeader();
 	  	this.current_number = +this.data.cross_number;
-		this.card_id = this.data.id;
-		this.setCardNumber();
-		//this.setCardId();
+			this.card_id = this.data.id;
+			this.setCardNumber();
+			//this.setCardId();
 
-		this.card = this.data;
-		
-		this.current_header = this.card.header;
+			this.card = this.data;
+			
+			this.current_header = this.card.header;
 
-		this.setCard();
+			this.setCard();
 
-		//	After setting card story we have to wait before angular process playwords directive
-		setTimeout(()=>{
-			let d = this.pwds;
-			d.initText();
-		}, 100);
+			//	After setting card story we have to wait before angular process playwords directive
+			setTimeout(()=>{
+				let d = this.pwds;
+				d.initText();
+			}, 100);
     }
 
     //	Enter click handler
@@ -83,8 +83,28 @@ export class Or4Component extends Or3Component implements OnInit, DoCheck {
 		}
 	}
 
+	//	Callback for show card event
+	show() {
+		//	If card is active and it is not dubling
+		if(this.isActive() && !this.prevent_dubling_flag){
+			//	If user not enter valid data yet
+			if(!this.validate()) {
+				
+				//	Play card description
+				this.playCardDescription();
+				this.disableMoveNext();
+				
+			} else {
+				this.enableMoveNext();
+			}
+			this.prevent_dubling_flag = true;
+			//this.showHint();
+		}
+		
+	}
 
-    repeat() {
+
+  repeat() {
 		if(this.uinputph === 'finish'){
 			this.enableNextCard();
 			return;

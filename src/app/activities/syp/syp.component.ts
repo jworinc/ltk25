@@ -293,7 +293,7 @@ export class SypComponent extends BaseComponent implements OnInit {
 			//'display': 'flex'
 		}
 		//	Show fade in animation for init description
-		if(this.syp_card_word === '' && this.syp_card_picture === '' && this.syp_card_animation.length === 0 && typeof itm !== 'undefined' && itm.type !== 'syncroplay')
+		if(this.syp_card_word === '' && this.syp_card_picture === '' && this.syp_card_animation.length === 0 && typeof itm !== 'undefined' && (itm.type !== 'syncroplay' || (itm.type === 'syncroplay' && itm.content === 'WaitForUser')) )
 			that.inidesc_styling = {'opacity': '1'};
 		//	Skip pause after first instruction in case when content displayed, not init desc
 		if((this.syp_card_word !== '' || this.syp_card_picture !== '' || this.syp_card_animation.length !== 0) && typeof itm !== 'undefined' && itm.type !== 'syncroplay') 

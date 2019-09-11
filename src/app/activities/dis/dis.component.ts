@@ -185,6 +185,7 @@ export class DisComponent extends BaseComponent implements OnInit {
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
+				this.input_data = '';
 				
 			} else {
 				this.enableMoveNext();
