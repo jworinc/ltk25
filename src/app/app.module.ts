@@ -109,6 +109,7 @@ import { TstComponent } from './activities/tst/tst.component';
 import { IntroComponent } from './tests/intro/intro.component';
 import { ResultsComponent } from './tests/results/results.component';
 import { TestResultItemComponent } from './components/test-result-item/test-result-item.component';
+import { CustomfieldService } from './services/customfield.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -218,7 +219,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [DataloaderService, TokenService, AuthService, BeforeLoginService, AfterLoginService,
   { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
     SnotifyService, OptionService, CardbuilderService, PlaymediaService, RecorderService, MediapreloaderService, 
-    LoggingService, ColorschemeService,
+    LoggingService, ColorschemeService, CustomfieldService
     { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true } ],
   entryComponents: [ Al1Component, CarComponent, Al2Component, Ar1Component, Ar2Component, Ar3Component, Ar4Component, Ar5Component,
   Ar6Component, Or1Component, Or2Component, Or3Component, Or4Component, Bw1Component, Bw2Component, Bw3Component, Bw5Component,
