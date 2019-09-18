@@ -110,6 +110,7 @@ import { IntroComponent } from './tests/intro/intro.component';
 import { ResultsComponent } from './tests/results/results.component';
 import { TestResultItemComponent } from './components/test-result-item/test-result-item.component';
 import { CustomfieldService } from './services/customfield.service';
+import { CfcComponent } from './activities/cfc/cfc.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -200,6 +201,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     IntroComponent,
     ResultsComponent,
     TestResultItemComponent,
+    CfcComponent,
   ],
   imports: [
     BrowserModule,
@@ -226,7 +228,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   Bw6Component, Bw7Component, SypComponent, DiwComponent, GscComponent, Rp1Component, Rp2Component, GwmComponent, SiwComponent,
   GwfComponent, GqwComponent, DisComponent, SplComponent, GdnComponent, GcpComponent, GcsComponent, GisComponent, GmuComponent,
   GnbComponent, GslComponent, GsmComponent, GssComponent, Rw1Component, IdmComponent, Wl1Component, Bs1Component, AuditoryComponent,
-  ComprehensionComponent, SpellingComponent, CccComponent, TstComponent, IntroComponent, ResultsComponent ],
+  ComprehensionComponent, SpellingComponent, CccComponent, TstComponent, IntroComponent, ResultsComponent, CfcComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
