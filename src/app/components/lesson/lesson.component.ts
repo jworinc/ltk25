@@ -10,6 +10,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { MediapreloaderService } from '../../services/mediapreloader.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { CustomfieldService } from '../../services/customfield.service';
 import { CardDirective } from '../../directives/card.directive';
 import { CardItem } from '../../card-item';
 import { CardComponent } from '../card/card.component';
@@ -134,7 +135,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
     private playmedia: PlaymediaService,
     private preloader: MediapreloaderService,
     private logging: LoggingService,
-    private cs: ColorschemeService
+    private cs: ColorschemeService,
+    private cf: CustomfieldService
   ) {
         // this language will be used as a fallback when a translation isn't found in the current language
         this.translate.setDefaultLang(Option.getFallbackLocale());
@@ -506,6 +508,11 @@ export class LessonComponent implements OnInit, AfterViewInit {
         this.cpos = parseInt(data.cards[1].pos);
       }
 
+      if(typeof data.custom_fields !== 'undefined') this.cf.setFields(data.custom_fields);
+
+      //  Check for start and end custom fields in lesson
+      if(this.cf.has_start_lesson) this.cpos = this.cf.addStartCardToLesson(this.downloaded_cards, this.cpos); this.card_total = this.downloaded_cards.length;
+      if(this.cf.has_end_lesson) this.cf.addEndCardToLesson(this.downloaded_cards); this.card_total = this.downloaded_cards.length;
 
       //  Opacity fade in animation
       let that = this;
