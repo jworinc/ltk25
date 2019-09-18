@@ -134,12 +134,12 @@ export class CustomfieldService {
       audio: [],
       comment: "Custom field card lesson end",
       content: [this.getEndLesson()],
-      cross_number: lcp,
-      display_number: lcp,
+      cross_number: lcp+1,
+      display_number: lcp+1,
       id: 0,
       lesson: "",
-      pos: lcp,
-      position: lcp,
+      pos: lcp+1,
+      position: lcp+1,
       type: "cfc"
     }
 
