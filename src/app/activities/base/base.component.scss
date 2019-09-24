@@ -611,6 +611,11 @@ margin: 3px 2px;display: inline-block;text-align:center;}
     margin: 0;
 }
 
+.card-content-body-wrap-ccc img{
+    max-width: 100%;
+    max-height: 100%;
+}
+
 @media screen and (max-width: 1024px) {
 
     .syp-card-init-desc p{
