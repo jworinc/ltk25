@@ -25,6 +25,7 @@ export class MsmenuComponent implements OnInit {
   @Output() public shownotebook = new EventEmitter<boolean>();
   @Output() public showgrammar = new EventEmitter<boolean>();
   @Output() public showtesting = new EventEmitter<boolean>();
+  @Output() public showhelp = new EventEmitter<boolean>();
   @Input() public lu: string;
   @Input() public last_uncomplete: number;
   @Input() public show_tool_pages_list: boolean;
@@ -173,6 +174,11 @@ export class MsmenuComponent implements OnInit {
         this.fullscreen_mode = false;
       }
     }
+  }
+
+  showHelp() {
+    this.playmedia.stop();
+    this.showhelp.emit();
   }
 
 }

@@ -40,6 +40,7 @@ import { BindhtmlPipe } from './pipes/bindhtml.pipe';
 import { MediapreloaderService } from './services/mediapreloader.service';
 import { LoggingService } from './services/logging.service';
 import { ColorschemeService } from './services/colorscheme.service';
+import { HelpService } from './services/help.service';
 
 import { CardDirective } from './directives/card.directive';
 import { Al1Component } from './activities/al1/al1.component';
@@ -111,6 +112,7 @@ import { ResultsComponent } from './tests/results/results.component';
 import { TestResultItemComponent } from './components/test-result-item/test-result-item.component';
 import { CustomfieldService } from './services/customfield.service';
 import { CfcComponent } from './activities/cfc/cfc.component';
+import { HelpTooltipComponent } from './components/help-tooltip/help-tooltip.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -202,6 +204,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ResultsComponent,
     TestResultItemComponent,
     CfcComponent,
+    HelpTooltipComponent,
   ],
   imports: [
     BrowserModule,
@@ -221,7 +224,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [DataloaderService, TokenService, AuthService, BeforeLoginService, AfterLoginService,
   { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
     SnotifyService, OptionService, CardbuilderService, PlaymediaService, RecorderService, MediapreloaderService, 
-    LoggingService, ColorschemeService, CustomfieldService,
+    LoggingService, ColorschemeService, CustomfieldService, HelpService,
     { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true } ],
   entryComponents: [ Al1Component, CarComponent, Al2Component, Ar1Component, Ar2Component, Ar3Component, Ar4Component, Ar5Component,
   Ar6Component, Or1Component, Or2Component, Or3Component, Or4Component, Bw1Component, Bw2Component, Bw3Component, Bw5Component,

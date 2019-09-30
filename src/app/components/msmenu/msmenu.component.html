@@ -42,7 +42,7 @@
                 <!-- /Feedback button -->
 
     		    <!--    Help    -->
-    		    <span class='tool-sidebar-button tool-sidebar-help-button' title="{{ 's_help' | translate }}"></span>
+    		    <span class='tool-sidebar-button tool-sidebar-help-button' (click)='showHelp()' title="{{ 's_help' | translate }}"></span>
     		    <!--    Exit    -->
     		    <span class='tool-sidebar-button tool-sidebar-exit-button' (click)='logout($event)' title="{{ 'logout' | translate }}"></span>
     		    <!--    LTK    -->

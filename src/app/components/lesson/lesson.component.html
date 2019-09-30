@@ -173,6 +173,7 @@
                     (shownotebook)="onShowNotebook()"
                     (showgrammar)="onShowGrammar()"
                     (showtesting)="onShowTesting()"
+                    (showhelp)="showHelp()"
                     [lu]="current_lesson_title"
                     [last_uncomplete] = "student.lu"
                     [show_tool_pages_list]="show_tool_pages_list"
@@ -198,6 +199,9 @@
     <app-warncomplete [hidden]="!show_warncomplete_modal"
                       (closewarncomplete)="onCloseWarncomplete()"
                       (gonextcard)="onGoNextCard()"></app-warncomplete>
+
+    <!-- Help tooltips -->
+    <app-help-tooltip [pos]="1" [selector]="'.tool-sidebar-options-button'"></app-help-tooltip>
 
         
 </div>

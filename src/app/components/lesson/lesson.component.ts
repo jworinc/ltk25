@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild, ComponentFactoryResolver, AfterViewInit, ViewEncapsulation, ElementRef, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ComponentFactoryResolver, AfterViewInit, ViewEncapsulation, ElementRef, OnDestroy, EventEmitter, QueryList, ViewChildren } from '@angular/core';
 import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { DataloaderService } from '../../services/dataloader.service';
 import { SnotifyService } from 'ng-snotify';
@@ -11,6 +11,7 @@ import { MediapreloaderService } from '../../services/mediapreloader.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { CustomfieldService } from '../../services/customfield.service';
+import { HelpService } from '../../services/help.service';
 import { CardDirective } from '../../directives/card.directive';
 import { CardItem } from '../../card-item';
 import { CardComponent } from '../card/card.component';
@@ -20,6 +21,7 @@ import { Howl, Howler } from 'howler';
 import * as $ from 'jquery';
 import { GrammarComponent } from '../grammar/grammar.component';
 import { filter } from 'rxjs/operators';
+import { HelpTooltipComponent } from '../help-tooltip/help-tooltip.component';
 
 @Component({
   selector: 'app-lesson',
@@ -64,6 +66,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   @ViewChild(NotebookComponent) nb: NotebookComponent;
   @ViewChild(ShowtestingComponent) sht: ShowtestingComponent;
   @ViewChild(GrammarComponent) grm: GrammarComponent;
+  @ViewChildren(HelpTooltipComponent) helps !: QueryList<HelpTooltipComponent>;
 
   public cards: CardItem[];
   public downloaded_cards = [];
@@ -136,7 +139,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
     private preloader: MediapreloaderService,
     private logging: LoggingService,
     private cs: ColorschemeService,
-    private cf: CustomfieldService
+    private cf: CustomfieldService,
+    private hs: HelpService
   ) {
         // this language will be used as a fallback when a translation isn't found in the current language
         this.translate.setDefaultLang(Option.getFallbackLocale());
@@ -1469,6 +1473,13 @@ export class LessonComponent implements OnInit, AfterViewInit {
   disableSidetrip() {
     this.end_lesson_flag = true;
     this.router.navigateByUrl('/home');
+  }
+
+  showHelp() {
+    //alert('help');
+    let e = this.el.nativeElement;
+    let h = this.helps;
+    
   }
 
 
