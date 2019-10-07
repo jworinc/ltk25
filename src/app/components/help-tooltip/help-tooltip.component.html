@@ -1,1 +1,9 @@
-
+<canvas id="mask-canvas" [attr.width]="current_width" [attr.height]="current_height"></canvas>
+<div class="help-item-description" [ngStyle]="descposition" 
+    [ngClass]="{'align-top-left': align_top_left, 'align-top-right': align_top_right, 'align-bottom-left': align_bottom_left, 'align-bottom-right': align_bottom_right, 'align-center-left': align_center_left, 'align-center-right': align_center_right, 'align-center-bottom': align_center_bottom, 'align-center-top': align_center_top}">
+    {{ content | translate }}
+    <div class="help-item-pointer" [hidden]="!align_center_top && !align_center_bottom && !align_center_left && !align_center_right && !align_top_left && !align_top_right && !align_bottom_left && !align_bottom_right"
+        [ngClass]="{'align-top-left': align_top_left, 'align-top-right': align_top_right, 'align-bottom-left': align_bottom_left, 'align-bottom-right': align_bottom_right, 'align-center-left': align_center_left, 'align-center-right': align_center_right, 'align-center-bottom': align_center_bottom, 'align-center-top': align_center_top}">
+        <span class="help-item-pointer-item"></span>
+    </div>
+</div>

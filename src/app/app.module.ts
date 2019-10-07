@@ -113,6 +113,7 @@ import { TestResultItemComponent } from './components/test-result-item/test-resu
 import { CustomfieldService } from './services/customfield.service';
 import { CfcComponent } from './activities/cfc/cfc.component';
 import { HelpTooltipComponent } from './components/help-tooltip/help-tooltip.component';
+import { HelpComponent } from './components/help/help.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -205,6 +206,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TestResultItemComponent,
     CfcComponent,
     HelpTooltipComponent,
+    HelpComponent,
   ],
   imports: [
     BrowserModule,

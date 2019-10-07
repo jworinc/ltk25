@@ -140,7 +140,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     private logging: LoggingService,
     private cs: ColorschemeService,
     private cf: CustomfieldService,
-    private hs: HelpService
+    public hs: HelpService
   ) {
         // this language will be used as a fallback when a translation isn't found in the current language
         this.translate.setDefaultLang(Option.getFallbackLocale());
@@ -216,7 +216,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
 
   ngAfterViewInit() {
-
+    //  Setup help context
+    this.hs.setItems(this.helps.toArray());
+    this.hs.setRootElement(this.el.nativeElement);
   }
 
   updateLesson() {
@@ -1476,9 +1478,21 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   showHelp() {
-    //alert('help');
-    let e = this.el.nativeElement;
-    let h = this.helps;
+
+    //  Close menu on mobile before show help
+    if(this.mode === 'single') {
+      this.onCloseMenu();
+      let that = this;
+      //  Wait until menu will be closed
+      setTimeout(()=>{
+        //  Prepare and show help mask to choose required element
+        that.hs.prepareHelp();
+      }, 400);
+    } else {
+      //  Prepare and show help mask to choose required element
+      this.hs.prepareHelp();
+    }
+
     
   }
 

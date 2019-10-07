@@ -183,5 +183,13 @@
 	"see_a_result" : "See a result",
 	"email" : "E-mail",
 	"your_name" : "Your name",
-	"please_enter_email" : "Please, enter your email!"
+	"please_enter_email" : "Please, enter your email!",
+	"ok" : "OK",
+	"help": "Help",
+	"click_on_element" : "Click on element you are interested in.",
+	"help_lesson_header_desc" : "Here displays your current lesson.",
+	"help_option_desc" : "Here you can change settings of application.",
+	"help_chat_desc" : "Use this button to access chat and communicate with other students and teachers.",
+	"help_rec_btn_desc" : "Hold this button to record your voice.",
+	"help_repeat_btn_desc" : "Use this button to repeat last instruction."
 }

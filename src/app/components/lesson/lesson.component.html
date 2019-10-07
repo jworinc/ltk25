@@ -107,14 +107,14 @@
 
                         <!-- <span class='zoom-card-sequence-hint' (click)='hint();'></span> -->
                         <span class='zoom-card-sequence-goodbad' *ngIf='rui_button_goodbad' [ngClass]="{'blinkhighlight': blinkgoodbad}">
-                            <span class='zoom-card-sequence-good' (click)='good();' title="{{ 'good_btn' | translate }}"></span>
+                            <span class='zoom-card-sequence-good zoom-card-sequence-good-mobile' (click)='good();' title="{{ 'good_btn' | translate }}"></span>
                             <span class='zoom-card-sequence-bad' (click)='bad();' title="{{ 'bad_btn' | translate }}"></span>
                         </span>
-                        <span class='zoom-card-sequence-clear' *ngIf='rui_button_clear' (click)='clear();' title="{{ 'clear_input' | translate }}"></span>
-                        <span class='zoom-card-sequence-hint' *ngIf='rui_button_hint' (click)='hint();' title="{{ 'show_hint' | translate }}"></span>
-                        <span class='zoom-card-sequence-prev' *ngIf='rui_button_prev' (click)='prev();' title="{{ 'move_to_prev' | translate }}"></span>
-                        <span class='zoom-card-sequence-enter' (click)='enter();' title="{{ 'enter_answer' | translate }}" [ngClass]="{'blinkhighlight': blinkenter}"></span>
-                        <span class='zoom-card-next' (click)='moveNext()' title="{{ 'move_to_next' | translate }}" [ngClass]="{'blinkhighlight': blinknextnavbtn}"></span>
+                        <span class='zoom-card-sequence-clear zoom-card-sequence-clear-mobile' *ngIf='rui_button_clear' (click)='clear();' title="{{ 'clear_input' | translate }}"></span>
+                        <span class='zoom-card-sequence-hint zoom-card-sequence-hint-mobile' *ngIf='rui_button_hint' (click)='hint();' title="{{ 'show_hint' | translate }}"></span>
+                        <span class='zoom-card-sequence-prev zoom-card-sequence-prev-mobile' *ngIf='rui_button_prev' (click)='prev();' title="{{ 'move_to_prev' | translate }}"></span>
+                        <span class='zoom-card-sequence-enter zoom-card-sequence-enter-mobile' (click)='enter();' title="{{ 'enter_answer' | translate }}" [ngClass]="{'blinkhighlight': blinkenter}"></span>
+                        <span class='zoom-card-next zoom-card-next-mobile' (click)='moveNext()' title="{{ 'move_to_next' | translate }}" [ngClass]="{'blinkhighlight': blinknextnavbtn}"></span>
 
                     </span>
                     <!-- Card Sequence buttons for mobile layout -->
@@ -129,13 +129,13 @@
                     <span class='zoom-card-sequence-buttons'>
                         <span class='zoom-card-sequence-buttons-wrap'>
                             <span class='zoom-card-sequence-goodbad' *ngIf='rui_button_goodbad' [ngClass]="{'blinkhighlight': blinkgoodbad}">
-                                <span class='zoom-card-sequence-good' (click)='good();' title="{{ 'good_btn' | translate }}"></span>
-                                <span class='zoom-card-sequence-bad' (click)='bad();' title="{{ 'bad_btn' | translate }}"></span>
+                                <span class='zoom-card-sequence-good zoom-card-sequence-good-desktop' (click)='good();' title="{{ 'good_btn' | translate }}"></span>
+                                <span class='zoom-card-sequence-bad zoom-card-sequence-bad-desktop' (click)='bad();' title="{{ 'bad_btn' | translate }}"></span>
                             </span>
-                            <span class='zoom-card-sequence-clear' *ngIf='rui_button_clear' (click)='clear();' title="{{ 'clear_input' | translate }}"></span>
-                            <span class='zoom-card-sequence-hint' *ngIf='rui_button_hint' (click)='hint();' title="{{ 'show_hint' | translate }}"></span>
-                            <span class='zoom-card-sequence-prev' *ngIf='rui_button_prev' (click)='prev();' title="{{ 'move_to_prev' | translate }}"></span>
-                            <span class='zoom-card-sequence-enter' (click)='enter();' title="{{ 'enter_answer' | translate }}" [ngClass]="{'blinkhighlight': blinkenter}"></span>
+                            <span class='zoom-card-sequence-clear zoom-card-sequence-clear-desktop' *ngIf='rui_button_clear' (click)='clear();' title="{{ 'clear_input' | translate }}"></span>
+                            <span class='zoom-card-sequence-hint zoom-card-sequence-hint-desktop' *ngIf='rui_button_hint' (click)='hint();' title="{{ 'show_hint' | translate }}"></span>
+                            <span class='zoom-card-sequence-prev zoom-card-sequence-prev-desktop' *ngIf='rui_button_prev' (click)='prev();' title="{{ 'move_to_prev' | translate }}"></span>
+                            <span class='zoom-card-sequence-enter zoom-card-sequence-enter-desktop' (click)='enter();' title="{{ 'enter_answer' | translate }}" [ngClass]="{'blinkhighlight': blinkenter}"></span>
                         </span>       
                     </span>
                     <!-- Card Sequence Buttons -->
@@ -201,7 +201,39 @@
                       (gonextcard)="onGoNextCard()"></app-warncomplete>
 
     <!-- Help tooltips -->
-    <app-help-tooltip [pos]="1" [selector]="'.tool-sidebar-options-button'"></app-help-tooltip>
+    <app-help [hidden]="!hs.mask"></app-help>
+    <app-help-tooltip [pos]="11" [audio]="'_SHDYCL'" [selector]="'.tool-sidebar-lesson-header'" [content]="'help_lesson_header_desc'" [align]="'align-top-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="1" [audio]="'_SHYCCSOA'" [selector]="'.tool-sidebar-options-button'" [content]="'help_option_desc'" [align]="'align-center-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="2" [audio]="'_SUTBTACAC'" [selector]="'.tool-sidebar-keyboard-button'" [content]="'help_chat_desc'" [align]="'align-center-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="12" [audio]="''" [selector]="'.tool-sidebar-sidetrip-button'" [content]="'help_sidetrip_desc'" [align]="'align-center-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="13" [audio]="''" [selector]="'.tool-sidebar-fullscreen-max'" [content]="'help_fullscreen_desc'" [align]="'align-center-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="14" [audio]="''" [selector]="'.tool-sidebar-notebook-button'" [content]="'help_notebook_desc'" [align]="'align-center-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="15" [audio]="''" [selector]="'.tool-sidebar-testing-button'" [content]="'help_testing_desc'" [align]="'align-center-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="16" [audio]="''" [selector]="'.tool-sidebar-mail-button'" [content]="'help_reports_desc'" [align]="'align-center-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="17" [audio]="''" [selector]="'.tool-sidebar-feedback-btn'" [content]="'help_feedback_desc'" [align]="'align-center-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="18" [audio]="''" [selector]="'.tool-sidebar-help-button'" [content]="'help_helpsdbar_desc'" [align]="'align-center-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="19" [audio]="''" [selector]="'.tool-sidebar-exit-button'" [content]="'help_exitsdbar_desc'" [align]="'align-bottom-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="20" [audio]="''" [selector]="'.tool-sidebar-ltk-button'" [content]="'help_ltksdbar_desc'" [align]="'align-bottom-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="3" [audio]="''" [selector]="'.zoom-card-next-button-wrap'" [content]="'help_next_btn_desc'" [align]="'align-center-right'"></app-help-tooltip>
+    <app-help-tooltip [pos]="5" [audio]="''" [selector]="'.main-app-start-btn'" [content]="'help_start_btn_desc'" [align]="'align-center-bottom'"></app-help-tooltip>
+    <app-help-tooltip [pos]="6" [audio]="''" [selector]="'.top-toolbar-listen'" [content]="'help_listen_btn_desc'" [align]="'align-center-top'"></app-help-tooltip>
+    <app-help-tooltip [pos]="7" [audio]="'_SHTBTRYV'" [selector]="'.card-content-rec-button'" [content]="'help_rec_btn_desc'" [align]="'align-top-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="8" [audio]="'_SUTBTRLI'" [selector]="'.top-toolbar-repeat'" [content]="'help_repeat_btn_desc'" [align]="'align-top-right'"></app-help-tooltip>
+    <app-help-tooltip [pos]="21" [audio]="''" [selector]="'.bottom-description-box'" [content]="'help_subtitles_desc'" [align]="'align-center-bottom'"></app-help-tooltip>
+    <!--<app-help-tooltip [pos]="22" [audio]="''" [selector]="'.bookwrapperactive .card-block-item'" [content]="'help_lessoncard_desc'" [align]="'align-center-bottom'"></app-help-tooltip>-->
+    <app-help-tooltip [pos]="4" [audio]="''" [selector]="'.zoom-card-sequence-enter-desktop'" [content]="'help_enter_btn_desc'" [align]="'align-center-right'"></app-help-tooltip>
+    <app-help-tooltip [pos]="10" [audio]="''" [selector]="'.zoom-card-sequence-prev-desktop'" [content]="'help_prev_btn_desc'" [align]="'align-bottom-right'"></app-help-tooltip>
+    <app-help-tooltip [pos]="23" [audio]="''" [selector]="'.zoom-card-sequence-hint-desktop'" [content]="'help_hint_btn_desc'" [align]="'align-center-right'"></app-help-tooltip>
+    <app-help-tooltip [pos]="25" [audio]="''" [selector]="'.zoom-card-sequence-good-desktop'" [content]="'help_good_btn_desc'" [align]="'align-center-right'"></app-help-tooltip>
+    <app-help-tooltip [pos]="26" [audio]="''" [selector]="'.zoom-card-sequence-bad-desktop'" [content]="'help_bad_btn_desc'" [align]="'align-center-right'"></app-help-tooltip>
+    <app-help-tooltip [pos]="27" [audio]="''" [selector]="'.zoom-card-sequence-clear-desktop'" [content]="'help_clear_btn_desc'" [align]="'align-center-right'"></app-help-tooltip>
+    <app-help-tooltip [pos]="28" [audio]="''" [selector]="'.zoom-card-sequence-enter-mobile'" [content]="'help_enter_btn_desc'" [align]="'align-center-bottom'"></app-help-tooltip>
+    <app-help-tooltip [pos]="29" [audio]="''" [selector]="'.zoom-card-sequence-prev-mobile'" [content]="'help_prev_btn_desc'" [align]="'align-bottom-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="30" [audio]="''" [selector]="'.zoom-card-sequence-hint-mobile'" [content]="'help_hint_btn_desc'" [align]="'align-bottom-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="31" [audio]="''" [selector]="'.zoom-card-sequence-good-mobile'" [content]="'help_good_btn_desc'" [align]="'align-bottom-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="32" [audio]="''" [selector]="'.zoom-card-sequence-bad-mobile'" [content]="'help_bad_btn_desc'" [align]="'align-bottom-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="33" [audio]="''" [selector]="'.zoom-card-sequence-clear-mobile'" [content]="'help_clear_btn_desc'" [align]="'align-bottom-left'"></app-help-tooltip>
+    <app-help-tooltip [pos]="34" [audio]="''" [selector]="'.zoom-card-next-mobile'" [content]="'help_next_btn_desc'" [align]="'align-bottom-right'"></app-help-tooltip>
+    <app-help-tooltip [pos]="24" [audio]="''" [selector]="'.sidetrip-mode'" [content]="'help_sidetrip_msg_desc'" [align]="'align-center-top'"></app-help-tooltip>
 
-        
 </div>
