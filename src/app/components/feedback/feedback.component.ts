@@ -24,6 +24,7 @@ export class FeedbackComponent implements OnInit {
      this._show = show;
      this.initFeedback();
   }
+  @Input() card_descriptor: string = '';
 
   ngOnInit() {
 
@@ -33,7 +34,8 @@ export class FeedbackComponent implements OnInit {
         like: 0,
         dislike: 0,
         category: 'no',
-        message: ''
+        message: '',
+        card_descriptor: ''
     }
 
     //  Init clean feedback object
@@ -42,7 +44,8 @@ export class FeedbackComponent implements OnInit {
             like: 0,
             dislike: 0,
             category: 'no',
-            message: ''
+            message: '',
+            card_descriptor: ''
         }
         this.success_result = false;
     }
@@ -61,7 +64,8 @@ export class FeedbackComponent implements OnInit {
       alert('Please fill in form before saving!');
       return;
     }
-		console.log(this.feedback);
+    console.log(this.feedback);
+    this.feedback.card_descriptor = this.card_descriptor;
         let that = this;
         this.dl.saveFeedback(this.feedback).subscribe(
 		        data => { that.save_feedback_started = false; that.success_result = true; },

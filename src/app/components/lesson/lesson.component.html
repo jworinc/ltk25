@@ -99,6 +99,10 @@
                                 </span>
                             </span>
 
+                            <!-- Card lesson position activity tag -->
+                            <span class='lesson-position-activity-tag' [hidden]="card_descriptor.lesson==0&&card_descriptor.position==0&&card_descriptor.activity==''">
+                                #{{ card_descriptor.lesson }}-{{ card_descriptor.position }}:{{ card_descriptor.activity }}</span>
+
                         </div>
 
                     </div><!--     Container for slides    -->
@@ -191,7 +195,8 @@
 
     <!--    Feedback window   -->
     <app-feedback  [show]='show_feedback_modal' 
-                   [hidden]="!show_feedback_modal" 
+                   [hidden]="!show_feedback_modal"
+                   [card_descriptor]="'#'+card_descriptor.lesson+'-'+card_descriptor.position+':'+card_descriptor.activity"
                    (closefeedback)="onCloseFeedback()"></app-feedback>
 
     <!--    Warn not complete card window   -->

@@ -121,6 +121,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public student_info_event: any;
   public lang_change_event: any;
 
+  public card_descriptor = {
+    lesson: 0,
+    position: 0,
+    activity: ''
+  }
+
   constructor(
     private DL: DataloaderService,
     private notify: SnotifyService,
@@ -222,7 +228,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.setCurrentScale(this.scale);
     this.setCurrentCardPosition(this.cpos);
     let that = this;
-    setTimeout(()=>{ that.refreshNav(); }, 100);
+    setTimeout(()=>{ that.refreshNav(); that.setCurrentCardDescriptor(); }, 100);
     //this.setGlobalRecorder(true);
     this.setSidetripMode(this.sidetripmode);
     this.setGlobalStart(this.global_start);
@@ -338,10 +344,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
     if(!this.sidetripmode){
       this.loadCards(this.student.lu);
       this.current_lesson_title = this.getCurrentLessonTitle(this.student.lu);
+      this.card_descriptor.lesson = this.student.lu;
       console.log('Run normally, start position setted to '+this.start_position+'!');
     } else {
       this.loadCards(this.n);
       this.current_lesson_title = this.getCurrentLessonTitle(this.n);
+      this.card_descriptor.lesson = this.n;
       this.start_position = 0;
       console.log('Run sidetrip, start position setted to start!');
       //  Setup lesson for testing
@@ -873,6 +881,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
     //  Preload media
     let that = this;
     setTimeout(()=>{ that.preloader.loadCard(this.cpos); }, 1600);
+
+    this.setCurrentCardDescriptor();
+    
   }
 
   movePrev() {
@@ -914,7 +925,22 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.cpos--;
     this.setCurrentCardPosition(this.cpos);
     this.refreshNav(); 
+
+    this.setCurrentCardDescriptor();
     
+  }
+
+  setCurrentCardDescriptor() {
+    let that = this;
+    setTimeout(()=>{
+      that.card_descriptor.position = that.cpos;
+      let sc = this.getChildCardScope(that.current_id);
+      if(typeof sc !== 'undefined' && sc !== null && typeof sc.card !== 'undefined'){
+        that.card_descriptor.activity = sc.card.activity;
+      } else {
+        that.card_descriptor.activity = '';
+      }
+    }, 200);
   }
 
   disableNextSlide() {

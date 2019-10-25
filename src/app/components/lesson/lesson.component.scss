@@ -1092,6 +1092,16 @@ body{
     height: 70%;
 }
 
+.lesson-position-activity-tag{
+    display: block;
+    position: absolute;
+    z-index: 2200;
+    bottom: 5px;
+    right: 5px;
+    color: grey;
+    font-size: 10px;
+}
+
 
 @media screen and (max-width: 1024px) {
    
