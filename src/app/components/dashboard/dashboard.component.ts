@@ -5,6 +5,8 @@ import { SnotifyService } from 'ng-snotify';
 import { TranslateService } from '@ngx-translate/core';
 import { OptionService } from '../../services/option.service';
 import { NotebookComponent } from '../notebook/notebook.component';
+import { AuthService } from '../../services/auth.service';
+import { TokenService } from '../../services/token.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -75,7 +77,9 @@ export class DashboardComponent implements OnInit {
     private translate: TranslateService,
     private Option: OptionService,
     private router: Router,
-    private el: ElementRef
+    private el: ElementRef,
+    private Auth: AuthService,
+    private Token: TokenService
   ) {
         // this language will be used as a fallback when a translation isn't found in the current language
         this.translate.setDefaultLang(Option.getFallbackLocale());
@@ -91,6 +95,9 @@ export class DashboardComponent implements OnInit {
         error => {
           console.log(error);
           this.notify.error('Student info load status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
+          this.Auth.changeAuthStatus(false);
+          this.router.navigateByUrl('/login');
+          this.Token.remove();
         }
     );
 

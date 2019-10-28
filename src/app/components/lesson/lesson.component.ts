@@ -11,6 +11,8 @@ import { MediapreloaderService } from '../../services/mediapreloader.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { CustomfieldService } from '../../services/customfield.service';
+import { AuthService } from '../../services/auth.service';
+import { TokenService } from '../../services/token.service';
 import { CardDirective } from '../../directives/card.directive';
 import { CardItem } from '../../card-item';
 import { CardComponent } from '../card/card.component';
@@ -142,7 +144,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
     private preloader: MediapreloaderService,
     private logging: LoggingService,
     private cs: ColorschemeService,
-    private cf: CustomfieldService
+    private cf: CustomfieldService,
+    private Auth: AuthService,
+    private Token: TokenService
   ) {
         // this language will be used as a fallback when a translation isn't found in the current language
         this.translate.setDefaultLang(Option.getFallbackLocale());
@@ -160,6 +164,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
         error => {
           console.log(error);
           this.notify.error('Student info load status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
+          this.Auth.changeAuthStatus(false);
+          this.router.navigateByUrl('/login');
+          this.Token.remove();
         }
     );
 
