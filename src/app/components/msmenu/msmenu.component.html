@@ -17,9 +17,11 @@
             <div class='tool-sidebar-scroll-wrap' style="display: flex; flex-flow: column; width: 100%; min-height: 450px; height: 100%;" >
     		    <!--    Options     -->
     		    <span class='tool-sidebar-button tool-sidebar-options-button' (click)='showSettingsModal()' title="{{ 'settings' | translate }}"></span>
-    		    <!--    Chatroom    -->
+                <!--    Chatroom    -->
+                <!--
     		    <span class='tool-sidebar-button tool-sidebar-keyboard-button' title="{{ 'chatroom' | translate }}" (click)='location("/start_messages")' ></span>
-    		    <!--    Sidetrip    -->
+                -->
+                <!--    Sidetrip    -->
     		    <span class='tool-sidebar-button tool-sidebar-sidetrip-button' (click)='toggleSidetrip()' title="{{ 'st_mode' | translate }}"></span>
                 <!--    Fullscreen    -->
                 <span class='tool-sidebar-button tool-sidebar-fullscreen-max' (click)='fullscreenMax()' title="{{ 'fullscreen_max' | translate }}" [hidden]="fullscreen_mode"></span>
