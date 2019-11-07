@@ -1,9 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
+import { GlobalErrorHandler } from './error-handler';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
@@ -40,6 +41,7 @@ import { BindhtmlPipe } from './pipes/bindhtml.pipe';
 import { MediapreloaderService } from './services/mediapreloader.service';
 import { LoggingService } from './services/logging.service';
 import { ColorschemeService } from './services/colorscheme.service';
+import { ErrorLogService } from './services/error-log.service';
 
 import { CardDirective } from './directives/card.directive';
 import { Al1Component } from './activities/al1/al1.component';
@@ -221,8 +223,9 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [DataloaderService, TokenService, AuthService, BeforeLoginService, AfterLoginService,
   { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
     SnotifyService, OptionService, CardbuilderService, PlaymediaService, RecorderService, MediapreloaderService, 
-    LoggingService, ColorschemeService, CustomfieldService,
-    { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true } ],
+    LoggingService, ColorschemeService, CustomfieldService, ErrorLogService,
+    { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
+    { provide: ErrorHandler, useClass: GlobalErrorHandler } ],
   entryComponents: [ Al1Component, CarComponent, Al2Component, Ar1Component, Ar2Component, Ar3Component, Ar4Component, Ar5Component,
   Ar6Component, Or1Component, Or2Component, Or3Component, Or4Component, Bw1Component, Bw2Component, Bw3Component, Bw5Component,
   Bw6Component, Bw7Component, SypComponent, DiwComponent, GscComponent, Rp1Component, Rp2Component, GwmComponent, SiwComponent,

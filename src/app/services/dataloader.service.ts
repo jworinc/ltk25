@@ -10,6 +10,7 @@ export class DataloaderService {
 
   private base_url = 'https://api.ltk.cards/api';
   public lu = 10;
+  public card_descriptor = 'none';
 
   constructor(
     private http: HttpClient, 

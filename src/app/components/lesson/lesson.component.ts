@@ -328,6 +328,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
      
   }
 
+  getCardDescriptor() {
+    return '#'+this.card_descriptor.lesson+'-'+this.card_descriptor.position+':'+this.card_descriptor.activity;
+  }
+
   //  Handle loaded student info
   handleStudentInfo(data){
     console.log('Student Info:');
@@ -947,6 +951,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
       } else {
         that.card_descriptor.activity = '';
       }
+
+      //  Store updated descriptor to DataLoader service to share it between other components
+      that.DL.card_descriptor = that.getCardDescriptor();
+
     }, 200);
   }
 
