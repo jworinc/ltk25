@@ -39,7 +39,8 @@
         <span class='sentence-header'>Sample sentence</span>
         <span class='word-box-sentence' (click)="playWord(cn.wavename)">
             <span class='word'>{{ cn.title }}</span>
-            <img [hidden]='!cn.content[0].img' [src]='cn.content[0].img ? playmedia.ltkmediaurl + cn.content[0].img : ""' alt='' />
+            <img [hidden]='!cn.content[0].img || cn.sentence_image' [src]='cn.content[0].img ? playmedia.ltkmediaurl + cn.content[0].img : ""' alt='' />
+            <img [hidden]='!cn.sentence_image' [src]='cn.sentence_image ? playmedia.ltkmediaurl + cn.sentence_image : ""' alt='' />
         </span>
         <!--
         <span class='sample-sentence' [hidden]="!cn.content[0].sentence" [innerHTML]="cn.content[0].sentence | bindhtml" app-playsentence [attr.data-ind]="'sent_'+cnkey"></span>
