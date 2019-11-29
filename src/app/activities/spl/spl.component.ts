@@ -91,7 +91,8 @@ export class SplComponent extends BaseComponent implements OnInit {
 		hide() {
 			this.prevent_dubling_flag = false;
 			//	Hide option buttons
-    		this.optionHide();
+			this.optionHide();
+			this.enterHide();
     		//	Clear content finish delay timer
     		clearTimeout(this.content_timeout);
 		}

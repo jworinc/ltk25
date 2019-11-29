@@ -112,6 +112,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 			if(this.uinputph !== 'finish') this.uinputph = 'enablenext';
 			//	Hide option buttons
 			this.optionHide();
+			this.enterHide();
 		}
 
 		repeat() {
@@ -197,6 +198,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 				this.show_var_timer = setTimeout(()=>{
 					if(that.isActive()){
 						that.ss[1].playSentenceByIndex(2, ()=>{
+							that.showEnter();
 							setTimeout(()=>{
 								that.blinkEnter();
 								that.uinputph = 'enablenext';
@@ -244,7 +246,9 @@ export class Bs1Component extends BaseComponent implements OnInit {
 			} else {
 				this.uinputph = 'finish';
 				//this.playCorrectSound(function(){});
-				this.eslCustomInstructions('RespAtEnd');
+				this.eslCustomInstructions('RespAtEnd', ()=>{
+					that.moveNext();			
+				});
 				this.enableNextCard();
 			}
 		}

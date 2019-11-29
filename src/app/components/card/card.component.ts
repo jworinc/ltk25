@@ -7,10 +7,12 @@ export interface CardComponent {
   blink_good_bad: any;
   default_waves: any;
   option_hide: any;
+  enter_hide: any;
   show_good_bad: any;
   show_hint: any;
   show_prev: any;
   show_clear: any;
+  show_enter: any;
   set_card_id: any;
   global_recorder: boolean;
   sidetripmode: boolean;

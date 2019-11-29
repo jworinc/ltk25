@@ -130,6 +130,7 @@ export class Rp1Component extends BaseComponent implements OnInit {
 		this.prevent_dubling_flag = false;
 		//	Hide option buttons
 		this.optionHide();
+		this.enterHide();
 	}
 
 	setFocus(){

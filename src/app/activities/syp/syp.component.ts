@@ -103,6 +103,7 @@ export class SypComponent extends BaseComponent implements OnInit {
 		}
 		//	Hide option buttons
 		this.optionHide();
+		this.enterHide();
 		this.prevent_dubling_flag = false;
 	}
 
@@ -117,12 +118,14 @@ export class SypComponent extends BaseComponent implements OnInit {
 	handleNextDescStep() {
 		this.disable_enter_btn = false;
 		//	Check if it is first instruction with long read
+		/*
 		if(this.first_instruction_in_a_card){
 			this.blinkEnter();
 			this.uinputph = 'waitforuser';
 			this.first_instruction_in_a_card = false;
 			return;
 		}
+		*/
 
 		//	Check if next buffer item is not syncroplay/waitforuser or option is not set, skip wait stuff
 		let next = this.desc_buffer[0];

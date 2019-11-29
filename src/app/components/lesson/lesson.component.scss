@@ -647,6 +647,9 @@ body{
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
+    border-style: solid;
+    border-width: 5px;
+    border-color: transparent;
 }
 .top-toolbar-repeat, .top-toolbar-listen, .top-toolbar-rec{
     height: 70%;
@@ -982,6 +985,7 @@ body{
     text-align: center;
     align-items: center;
     font-size: 18px;
+    font-weight: 600;
     box-shadow: 0 0 3px #000;
     border-bottom-style: solid;
     border-color: #333;
@@ -1075,8 +1079,19 @@ body{
     position: relative;
 }
 .blinkhighlight{
+    /*
     opacity: 0.6 !important;
     background-color: rgba(100, 255, 100, 0.9) !important;
+    */
+    /*
+    opacity: 1 !important;
+    background-color: rgb(15, 255, 15) !important;
+    */
+    border-style: solid !important;
+    border-width: 5px !important;
+    border-color: rgb(252, 86, 86) !important;
+    border-radius: 4px !important;
+    box-sizing: content-box !important;
 }
 
 .tool-sidebar-open-icon-top{

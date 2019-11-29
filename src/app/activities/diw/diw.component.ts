@@ -176,6 +176,7 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 		this.prevent_dubling_flag = false;
 		//	Hide option buttons
 		this.optionHide();
+		this.enterHide();
 	}
 
 	setFocus(){

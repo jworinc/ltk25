@@ -351,6 +351,7 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 		this.play_card_description_busy = false;
 		//	Hide option buttons
 		this.optionHide();
+		this.enterHide();
 		clearInterval(this.set_cursor_interval);
 	}
 

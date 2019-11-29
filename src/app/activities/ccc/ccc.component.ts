@@ -83,6 +83,7 @@ export class CccComponent extends BaseComponent implements OnInit {
 		this.prevent_dubling_flag = false;
 		//	Hide option buttons
 		this.optionHide();
+		this.enterHide();
 		//	Clear content finish delay timer
 		clearTimeout(this.content_timeout);
 	}

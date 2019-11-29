@@ -98,6 +98,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public rui_button_clear: boolean = false;
   public rui_button_goodbad: boolean = false;
   public rui_button_prev: boolean = false;
+  public rui_button_enter: boolean = false;
   public page_is_loading_screen: boolean = true;
   public main_app_screen: boolean = false;
   public beep_start_sound: any;
@@ -430,6 +431,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
         that.optionHide(); 
       });
 
+      (<CardComponent>componentRef.instance).enter_hide.subscribe(function(){
+        that.enterHide(); 
+      });
+
       (<CardComponent>componentRef.instance).show_good_bad.subscribe(function(){
         that.showGoodBad(); 
       });
@@ -444,6 +449,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
       (<CardComponent>componentRef.instance).show_clear.subscribe(function(){
         that.showClear();
+      });
+
+      (<CardComponent>componentRef.instance).show_enter.subscribe(function(){
+        that.showEnter();
       });
 
       (<CardComponent>componentRef.instance).set_card_id.subscribe(function(e){
@@ -1149,6 +1158,11 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_clear = false;
     this.rui_button_goodbad = false;
     this.rui_button_prev = false;
+    //this.rui_button_enter = false;
+  }
+
+  enterHide() {
+    this.rui_button_enter = false;
   }
 
   //  Change option button from hint to clear
@@ -1157,6 +1171,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_clear = true;
     this.rui_button_goodbad = false;
     this.rui_button_prev = false;
+    //this.rui_button_enter = false;
   }
 
   //  Change option button from clear to hint
@@ -1165,6 +1180,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_clear = false;
     this.rui_button_goodbad = false;
     this.rui_button_prev = false;
+    //this.rui_button_enter = false;
   }
 
   //  Change option button to good/bad
@@ -1173,6 +1189,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_clear = false;
     this.rui_button_goodbad = true;
     this.rui_button_prev = false;
+    //this.rui_button_enter = false;
   }
 
   //  Change option button to prev
@@ -1181,6 +1198,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_clear = false;
     this.rui_button_goodbad = false;
     this.rui_button_prev = true;
+    //this.rui_button_enter = false;
+  }
+
+  //  Show enter button
+  showEnter(){
+    this.rui_button_enter = true;
   }
 
   setCurrentCardId(id) {

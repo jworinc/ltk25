@@ -89,10 +89,12 @@ export class BaseComponent implements OnInit, CardComponent {
 	@Output() blinkrec = new EventEmitter<boolean>();
 	@Output() blinkplay = new EventEmitter<boolean>();
 	@Output() option_hide = new EventEmitter<boolean>();
+	@Output() enter_hide = new EventEmitter<boolean>();
 	@Output() show_good_bad = new EventEmitter<boolean>();
 	@Output() show_hint = new EventEmitter<boolean>();
 	@Output() show_prev = new EventEmitter<boolean>();
 	@Output() show_clear = new EventEmitter<boolean>();
+	@Output() show_enter = new EventEmitter<boolean>();
 	@Output() set_card_id = new EventEmitter<number>();
 	@Output() disable_next_slide = new EventEmitter<boolean>();
 	@Output() enable_next_slide = new EventEmitter<boolean>();
@@ -409,20 +411,28 @@ export class BaseComponent implements OnInit, CardComponent {
   	this.option_hide.emit();
   }
 
+  enterHide() {
+	this.enter_hide.emit();
+  }
+
   showGoodBad() {
   	this.show_good_bad.emit();
   }
 
   showHint() {
   	this.show_hint.emit();
-	}
+  }
 	
-	showPrev() {
+  showPrev() {
   	this.show_prev.emit();
   }
 
   showClear() {
   	this.show_clear.emit();
+  }
+
+  showEnter() {
+	this.show_enter.emit();
   }
 
   setGlobalDesc(d: any) {
@@ -615,6 +625,7 @@ export class BaseComponent implements OnInit, CardComponent {
 		this.play_card_description_busy = false;
 		//	Hide option buttons
 		this.optionHide();
+		this.enterHide();
 	}
 
 	repeat() {
