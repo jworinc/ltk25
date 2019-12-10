@@ -348,9 +348,11 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 			if(this.getUserInputString() !== ''){
 				this.playCorrectSound(function(){ 
 					that.enableNextCard();
+					that.moveNext();
 				});
 			} else {
 				that.enableNextCard();
+				that.moveNext();
 			}
 		}
 		/*
@@ -424,6 +426,7 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 	//	Used to play task word and sound exactly after instructions play finished
 	playContentDescription() {
 		let that = this;
+		this.enterHide();
 		//	Phase 1 how many letters
 		if(typeof this.card.content[0].Question1 !== 'undefined' && this.card.content[0].Question1.length > 0 && this.uinputph === 'letters'){
 			this.lastUncomplete = this.card.content[0].Question1[0];
@@ -450,6 +453,7 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 			this.lastUncomplete = this.card.content[0].Question3[0];
 			this.card.content[0].desc = this.card.content[0].Question3[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].Question3[0].pointer_to_value);
+			this.showEnter();
 			this.pms.sound(this.card.content[0].Question3[0].audio, function(){
 				that.setFocus();
 				that.input_data = '';

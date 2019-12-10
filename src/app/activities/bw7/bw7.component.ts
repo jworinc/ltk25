@@ -260,6 +260,7 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 
 		let that = this;
 		let del = 400;
+		this.enterHide();
 		//	Phase 4 rec instructions, if mic is enabled
 		if(typeof this.card.content[0].RecInst !== 'undefined' && this.card.content[0].RecInst.length > 0 && this.uinputph === 'rec' && this.global_recorder){
 			this.lastUncomplete = this.card.content[0].RecInst[0];
@@ -494,7 +495,7 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 				this.split_syllables_show = true;
 			
 				that.playCorrectSound(function(){
-					//this.enableNextCard();
+					that.finishOrContinueBW();
 				});
 			} else {
 
@@ -522,9 +523,11 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 			if(this.getUserInputString() !== ''){
 				this.playCorrectSound(function(){ 
 					that.enableNextCard();
+					that.moveNext();
 				});
 			} else {
 				that.enableNextCard();
+				that.moveNext();
 			}
 		}
 		else if(this.uinputph === 'sylhelp'){
@@ -537,6 +540,7 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 	splitLoop() {
 
 		let that = this;
+		this.showEnter();
 
 		//	Play the first loop instruction in sequence
 		const pr1 = Observable.create((observer) => {
@@ -596,6 +600,7 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 		let descs = [];
 		let di = 0;
 		let that = this;
+		this.enterHide();
 		for(let i in this.card.content[0].Rule1){
 			let r = this.card.content[0].Rule1[i];
 			descs.push(r.pointer_to_value);
@@ -603,6 +608,7 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 				di++;
 				that.card.content[0].desc = descs[di];
 				that.setGlobalDesc(that.card.content[0].desc);
+				if(that.card.content[0].Rule1.length-1 === di) that.enter();
 			});
 		}
 		this.card.content[0].desc = descs[di];

@@ -106,7 +106,7 @@ export class CarComponent extends BaseComponent implements OnInit {
 	public current_header = '';
 	
 	//	User answer phases, rec, listen, compare, split to syllables, finish
-	public uinputph = 'rec';
+	public uinputph = 'start';
 
 	//	Define current card number
 	public current_number = 0;
@@ -141,8 +141,12 @@ export class CarComponent extends BaseComponent implements OnInit {
 	good() {
 		if(this.uinputph === 'question'){
 			this.uinputph = 'finish';
-			this.playCorrectSound();
-			this.enter(false);
+			let that = this;
+			this.playCorrectSound(()=>{
+				that.moveNext();
+			});
+			//this.enter(false);
+			
 		}
 	}
 
@@ -161,20 +165,17 @@ export class CarComponent extends BaseComponent implements OnInit {
 	show() {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
-			//	If user not enter valid data yet
-			if(!this.validate()) {
+			
+			//	Play card description
+			//this.playContentDescription();
+			this.uinputph = 'rec';
+			this.playCardDescription();
+			this.disableMoveNext();
 				
-				//	Play card description
-				//this.playContentDescription();
-				this.playCardDescription();
-				this.disableMoveNext();
-				
-			} else {
-				this.enableMoveNext();
-			}
+			
 			this.prevent_dubling_flag = true;
 
-			if(this.global_recorder) this.showGoodBad();
+			//if(this.global_recorder) this.showGoodBad();
 		}
 		
 	}
@@ -334,6 +335,7 @@ export class CarComponent extends BaseComponent implements OnInit {
 			this.lastUncomplete = this.card.content[0].Questions[0];
 			this.card.content[0].desc = this.card.content[0].Questions[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].Questions[0].pointer_to_value);
+			if(this.global_recorder) this.showGoodBad();
 			this.playmedia.sound(this.card.content[0].Questions[0].audio, function(){
 				
 				that.blinkGoodBad();
@@ -365,6 +367,7 @@ export class CarComponent extends BaseComponent implements OnInit {
 		}
 		//	Phase 3 compare instructions
 		else if(typeof this.card.content[0].CompInst !== 'undefined' && this.card.content[0].CompInst.length > 0 && this.uinputph === 'compare'){
+			
 			this.lastUncomplete = this.card.content[0].CompInst[0];
 			this.card.content[0].desc = this.card.content[0].CompInst[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].CompInst[0].pointer_to_value);

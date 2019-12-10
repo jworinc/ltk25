@@ -133,6 +133,11 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 		if(this.uinputph === 'finish'){
 			if(this.getUserInputString() !== '') this.playCorrectSound();
 			this.enableNextCard();
+			let that = this;
+			this.playCorrectSound(()=>{
+				that.moveNext();
+			});
+			
 		} else {
 			if(this.getUserInputString() !== '') this.playmedia.sound('_STNQR', function(){});
 		}
@@ -143,20 +148,25 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()) {
+			//if(!this.validate()) {
 				
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
+				this.disableNextSlide();
 				this.input_data = '';
 				
-			} else {
-				this.enableMoveNext();
-			}
+			//} else {
+			//	this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 			this.showHint();
 		}
 		
+	}
+
+	next() {
+		this.enter();
 	}
 
 	prehide() {
@@ -188,11 +198,11 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 
 	//	Overload default repeat and play last uncomplete question
 	repeat() {
-		if(this.uinputph === 'finish'){
-			this.playCorrectSound();
-			this.enableNextCard();
-			return;
-		}
+		//if(this.uinputph === 'finish'){
+		//	this.playCorrectSound();
+		//	this.enableNextCard();
+		//	return;
+		//}
 		let scope = this;
 		//	Check if we have RepInst instance
 		if(typeof this.card.content[0].RepInst !== 'undefined' && this.card.content[0].RepInst.length > 0){

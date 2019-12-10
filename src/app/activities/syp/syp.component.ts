@@ -47,7 +47,7 @@ export class SypComponent extends BaseComponent implements OnInit {
 	
 	public syp_card_played = false;
 
-	public uinputph = 'play';
+	public uinputph = 'start';
 
 	public syp_card_picture = '';
 
@@ -66,6 +66,8 @@ export class SypComponent extends BaseComponent implements OnInit {
 
 	public disable_enter_btn: boolean = false;
 
+	public animation_delay_timer: any = null;
+
 	//	Prevent performing of show function twice in some cases
 	public prevent_dubling_flag = false;
 
@@ -74,7 +76,7 @@ export class SypComponent extends BaseComponent implements OnInit {
 
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
-
+			clearTimeout(this.animation_delay_timer);
 			//	Stop play any media before show new card
 			this.playmedia.stop();
 
@@ -82,12 +84,17 @@ export class SypComponent extends BaseComponent implements OnInit {
 			if(this.validate()) {
 				this.enableMoveNext();
 			}
+			if(this.uinputph !== 'start'){
+				this.repeat();
+				return;
+			}
+			this.uinputph = 'play';
 			this.prevent_dubling_flag = true;
 			this.current_comand = 0;
 			if(!this.syp_card_played) this.SYPComandProcessor();
 			else{
 				let that = this;
-				setTimeout(()=>{ that.setDescription(); }, 100);
+				this.animation_delay_timer = setTimeout(()=>{ that.setDescription(); }, 100);
 			}
 		}
 		
@@ -105,6 +112,8 @@ export class SypComponent extends BaseComponent implements OnInit {
 		this.optionHide();
 		this.enterHide();
 		this.prevent_dubling_flag = false;
+		this.playmedia.stop();
+		clearTimeout(this.animation_delay_timer);
 	}
 
 	//	Validate user answer
@@ -138,6 +147,7 @@ export class SypComponent extends BaseComponent implements OnInit {
 
 		//	Now we sure that next item is not wait, also we have to ensure that next item is not last
 		if(this.desc_buffer.length !== 0){
+			this.showEnter();
 			this.blinkEnter();
 			this.uinputph = 'waitforuser';
 		} else {
@@ -159,7 +169,10 @@ export class SypComponent extends BaseComponent implements OnInit {
 		if(this.desc_buffer.length === 0){
 			//	Allow move next
 			this.uinputph = 'finish';
-			this.enableNextCard();
+			//this.enableNextCard();
+			this.enableMoveNext();
+			let that = this;
+			this.animation_delay_timer = setTimeout(()=>{ that.moveNext(); }, 1000);
 		}
 
 		let itm = this.desc_buffer.shift();
@@ -205,7 +218,7 @@ export class SypComponent extends BaseComponent implements OnInit {
 			console.log('Show picture - ' + itm.content);
 			
 			this.current_description++;
-			setTimeout(function(){ that.setDescription(); }, 1);
+			this.animation_delay_timer = setTimeout(function(){ that.setDescription(); }, 1);
 
 		}
 		else if(typeof itm !== 'undefined' && typeof itm.type !== 'undefined' && itm.type === 'animation'){
@@ -216,7 +229,7 @@ export class SypComponent extends BaseComponent implements OnInit {
 			console.log('Show picture - ' + itm.content);
 			
 			this.current_description++;
-			setTimeout(function(){ that.setDescription(); }, this.animation_delay);
+			this.animation_delay_timer = setTimeout(function(){ that.setDescription(); }, this.animation_delay);
 
 		}
 		else if(typeof itm !== 'undefined' && typeof itm.type !== 'undefined' && (itm.type === 'letter' || itm.type === 'word')){
@@ -225,10 +238,10 @@ export class SypComponent extends BaseComponent implements OnInit {
 			this.syp_card_picture = '';
 			this.syp_card_animation = [];
 			this.syp_card_word = itm.content;
-			this.playmedia.word(itm.content, function(){
+			//this.playmedia.word(itm.content, function(){
 				that.setDescription();
 				
-			}, 600);
+			//}, 600);
 			
 		}
 		else if(typeof itm !== 'undefined' && typeof itm.type !== 'undefined' && itm.type === 'syncroplay'){
@@ -239,53 +252,54 @@ export class SypComponent extends BaseComponent implements OnInit {
 					if(this.desc_buffer[i].type !== 'syncroplay') remaining_syp = false;
 				}
 				if(!remaining_syp){
+					this.showEnter();
 					this.blinkEnter();
 					this.uinputph = 'waitforuser';
 				} else {
-					setTimeout(function(){ that.setDescription(); }, 2);
+					this.animation_delay_timer = setTimeout(function(){ that.setDescription(); }, 2);
 				}
 				
 			} 
 			else if(itm.content === 'UnloadPicture'){
 				
-				setTimeout(function(){ that.setDescription(); }, 2);
+				this.animation_delay_timer = setTimeout(function(){ that.setDescription(); }, 2);
 			}
 			else if(itm.content === 'UnloadText'){
 				this.card.content[0].desc = '';
 				this.setGlobalDesc('');
-				setTimeout(function(){ that.setDescription(); }, 2);
+				this.animation_delay_timer = setTimeout(function(){ that.setDescription(); }, 2);
 			}
 			else if(itm.content === 'Animation2'){
 				this.animation_delay = 2000;
 				
-				setTimeout(function(){ that.setDescription(); }, 2);
+				this.animation_delay_timer = setTimeout(function(){ that.setDescription(); }, 2);
 			}
 			else if(itm.content === 'Animation1'){
 				this.animation_delay = 1000;
 				
-				setTimeout(function(){ that.setDescription(); }, 2);
+				this.animation_delay_timer = setTimeout(function(){ that.setDescription(); }, 2);
 			}
 			else if(itm.content === 'Animation.5'){
 				this.animation_delay = 500;
 				
-				setTimeout(function(){ that.setDescription(); }, 2);
+				this.animation_delay_timer = setTimeout(function(){ that.setDescription(); }, 2);
 			}
 			else if(itm.content === 'Animation.3'){
 				this.animation_delay = 300;
 				
-				setTimeout(function(){ that.setDescription(); }, 2);
+				this.animation_delay_timer = setTimeout(function(){ that.setDescription(); }, 2);
 			}
 			else if(itm.content === 'Delay1'){
-				setTimeout(function(){ that.setDescription(); }, 1000);
+				this.animation_delay_timer = setTimeout(function(){ that.setDescription(); }, 1000);
 			}
 			else if(itm.content === 'Delay2'){
-				setTimeout(function(){ that.setDescription(); }, 2000);
+				this.animation_delay_timer = setTimeout(function(){ that.setDescription(); }, 2000);
 			}
 			else if(itm.content === 'Delay5'){
-				setTimeout(function(){ that.setDescription(); }, 5000);
+				this.animation_delay_timer = setTimeout(function(){ that.setDescription(); }, 5000);
 			}
 			else {
-				setTimeout(function(){ that.setDescription(); }, 2);
+				this.animation_delay_timer = setTimeout(function(){ that.setDescription(); }, 2);
 			}
 		}
 

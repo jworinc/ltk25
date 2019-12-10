@@ -109,7 +109,10 @@ export class Rw1Component extends BaseComponent implements OnInit {
 
   repeat() {
     if(this.uinputph === 'finish'){
-      this.eslCustomInstructions('RespAtEnd');
+      let that = this;
+      this.eslCustomInstructions('RespAtEnd', ()=>{
+        that.moveNext();
+      });
       return;
     }
     this.playContentDescription();

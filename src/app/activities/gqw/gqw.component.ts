@@ -87,18 +87,23 @@ export class GqwComponent extends BaseComponent implements OnInit {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()) {
+			//if(!this.validate()) {
 				
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
+				this.disableNextSlide();
 				
-			} else {
-				this.enableMoveNext();
-			}
+			//} else {
+			//	this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 		}
 		
+	}
+
+	next() {
+		this.repeat();
 	}
 
 	hide() {
@@ -205,7 +210,7 @@ export class GqwComponent extends BaseComponent implements OnInit {
 	//	Enter click handler
 	enter() {
 		if(this.uinputph === 'finish'){
-			this.enableNextCard();
+			this.enableNextCard(); this.moveNext();
 		} 
 	}
 

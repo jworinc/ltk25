@@ -518,9 +518,11 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 			if(this.getUserInputString() !== ''){
 				this.playCorrectSound(function(){ 
 					that.enableNextCard();
+					that.moveNext();
 				});
 			} else {
 				that.enableNextCard();
+				that.moveNext();
 			}
 		}
 	}

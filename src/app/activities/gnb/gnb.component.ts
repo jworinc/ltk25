@@ -62,6 +62,7 @@ export class GnbComponent extends BaseComponent implements OnInit {
     public current_set = 0;
     public expected_string: any;
     public current_blend: any;
+    public move_next_timer: any = null;
     
     //	Validation of user input
     validate() {
@@ -103,6 +104,7 @@ export class GnbComponent extends BaseComponent implements OnInit {
           this.enableMoveNext();
         }
         this.prevent_dubling_flag = true;
+        clearTimeout(this.move_next_timer);
       }
       
     }
@@ -178,6 +180,10 @@ export class GnbComponent extends BaseComponent implements OnInit {
     enter() {
       if(this.uinputph === 'finish'){
         this.enableNextCard();
+        let that = this;
+        this.move_next_timer = setTimeout(()=>{
+          that.moveNext();
+        }, 1000);
       } 
     }
   

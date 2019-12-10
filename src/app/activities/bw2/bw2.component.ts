@@ -98,6 +98,7 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 			this.lastUncomplete = this.card.content[0].Question3[0];
 			this.card.content[0].desc = this.card.content[0].Question3[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].desc);
+			this.showEnter();
 			this.pms.sound(this.card.content[0].Question3[0].audio, function(){
 				that.setFocus();
 				that.input_data = '';
@@ -109,6 +110,7 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 			this.lastUncomplete = this.card.content[0].RecInst[0];
 			this.card.content[0].desc = this.card.content[0].RecInst[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].desc);
+			this.enterHide();
 			this.blinkRec();
 			this.pms.sound(this.card.content[0].RecInst[0].audio, function(){});
 		}
@@ -231,9 +233,11 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 			if(this.getUserInputString() !== ''){
 				this.playCorrectSound(function(){ 
 					that.enableNextCard();
+					that.moveNext();
 				});
 			} else {
 				that.enableNextCard();
+				that.moveNext();
 			}
 		}
 

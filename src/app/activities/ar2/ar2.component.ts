@@ -47,7 +47,7 @@ export class Ar2Component extends BaseComponent implements OnInit {
 		this.uinputph = '';
 
 
-		this.setCard();
+		//this.setCard();
     }
 
 
@@ -200,13 +200,14 @@ export class Ar2Component extends BaseComponent implements OnInit {
 		this.input_data = btn;
 		
 		//	Validate user answer and enable next slide if it's allright
-		if(this.validate()) this.enableMoveNext();
+		if(this.validate()) this.disableMoveNext();
 		else {
 			//	Log user error
 			this.card_object = 'Question';
 			this.card_instance = this.expected_string = 'How Many Syllables? ' + this.answer_word + ' ('+this.expected+')';
 			this.result();
 			this.disableMoveNext();
+			this.enter();
 		}
 		this.checkIfComplete();
 
@@ -217,20 +218,27 @@ export class Ar2Component extends BaseComponent implements OnInit {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()) {
-				
+			//if(!this.validate()) {
+				this.current_presented = 1;
+				this.current_card_instance = 0;
+				this.elm.nativeElement.querySelector('.card-syllables-body-wrap-ar2').style.opacity = '0';
+				this.setCard();
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
-				
-			} else {
-				this.enableMoveNext();
-			}
+				this.disableNextSlide();
+			//} else {
+			//	this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 			this.showHint();
 			this.input_data = 0;
 		}
 		
+	}
+
+	next() {
+		if(this.current_presented < this.max_presented) this.repeat();
 	}
 	
 	//	Used to play task word and sound exactly after instructions play finished
@@ -302,6 +310,7 @@ export class Ar2Component extends BaseComponent implements OnInit {
 
 								//	Continue with next word
 								that.current_card_instance++;
+								that.input_data = 0;
 								that.setCard();
 								setTimeout(function(){ 
 									that.current_presented++; 
@@ -326,12 +335,13 @@ export class Ar2Component extends BaseComponent implements OnInit {
 					that.setGlobalDesc(fst.pointer_to_value);
 					if(typeof fst.audio !== 'undefined' && fst.audio !== ''){
 						that.playmedia.sound(fst.audio, function(){});
-						that.playmedia.word(that.answer_word, function(){ that.enter(); });
+						that.playmedia.word(that.answer_word, function(){ that.enableNextSlide(); that.moveNext(); });
 					}
 				}
 			}
 		}
 		//	If current card is active
+		/*
 		if(this.isActive()){
 			let scope = this;
 			//	Validate user input and decide enable or not next card
@@ -339,6 +349,7 @@ export class Ar2Component extends BaseComponent implements OnInit {
 				else scope.disableMoveNext();
 			
 		}
+		*/
 		
 	}
 

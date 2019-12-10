@@ -43,7 +43,7 @@ export class Or2Component extends BaseorComponent implements OnInit {
 
     }
     
-    this.answer_word = this.words[this.current_word];
+    
     
     this.sentence_index = Math.floor(Math.random() * 100000);
 
@@ -89,17 +89,18 @@ export class Or2Component extends BaseorComponent implements OnInit {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()) {
-				
+			//if(!this.validate()) {
+        this.current_word = 0;
+        this.answer_word = this.words[this.current_word];
 				//	Play card description
 				//this.playContentDescription();
 				this.playCardDescription();
         this.disableMoveNext();
         
 				
-			} else {
-				this.enableMoveNext();
-			}
+			//} else {
+			//	this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 		}
 		

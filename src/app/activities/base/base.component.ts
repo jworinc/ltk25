@@ -47,6 +47,7 @@ export class BaseComponent implements OnInit, CardComponent {
 	public current_hint_level = 0;
 	public complete = 0;
 	public max_repetitions = 10;
+	public move_next_timer: any = null;
 
     @Input() data: any;
     @Input() default_waves: any;
@@ -399,7 +400,7 @@ export class BaseComponent implements OnInit, CardComponent {
 			
 			if(this.validate()){
 				this.enableMoveNext();
-				this.blinkNextNavButtons();
+				//this.blinkNextNavButtons();
 			}
 			else this.disableMoveNext();
 			
@@ -454,9 +455,10 @@ export class BaseComponent implements OnInit, CardComponent {
 	//	Set description
 	this.card.content[0].desc = i.pointer_to_value;
 	this.setGlobalDesc(i.pointer_to_value);
+	this.pm.stop();
 	//	Play sound
 	if(typeof i.audio !== 'undefined' && i.audio !== '')
-		this.pm.sound(i.audio, cb, 1);
+		this.pm.sound(i.audio, cb, 400);
   }
 
   show() {
@@ -579,14 +581,14 @@ export class BaseComponent implements OnInit, CardComponent {
 		if(!this.validate()){
 			if(!silent && this.getUserInputString() !== ''){
 				this.pm.sound('_STNQR', function(){ 
-					 that.result(); that.enableNextCard(); that.clearUserInput(); that.play_card_description_busy = false; //scope.playCardDescription();
+					 that.result(); that.clearUserInput(); that.play_card_description_busy = false; //scope.playCardDescription();
 				}, 0);
 			} 
 			else if(!silent && this.getUserInputString() === ''){
 				this.repeat();
 			}
 			else {
-				that.result(); that.enableNextCard(); that.clearUserInput(); that.play_card_description_busy = false; //scope.playCardDescription();
+				that.result(); that.clearUserInput(); that.play_card_description_busy = false; //scope.playCardDescription();
 			}
 		} else {
 
@@ -594,10 +596,10 @@ export class BaseComponent implements OnInit, CardComponent {
 			if(that.current_presented >= that.max_presented){
 				if(!silent && this.getUserInputString() !== ''){
 					this.playCorrectSound(function(){ 
-						that.enableNextCard();
+						that.enableNextCard(); that.moveNext();
 					});
 				} else {
-					that.enableNextCard();
+					that.enableNextCard(); that.moveNext();
 				}
 			}
 		}
@@ -626,6 +628,7 @@ export class BaseComponent implements OnInit, CardComponent {
 		//	Hide option buttons
 		this.optionHide();
 		this.enterHide();
+		clearTimeout(this.move_next_timer);
 	}
 
 	repeat() {

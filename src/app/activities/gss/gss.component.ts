@@ -31,6 +31,7 @@ export class GssComponent extends BaseComponent implements OnInit {
     public input_data: any;
     public expected_string: any;
     public uinputph = 'start';
+    public move_next_timer: any = null;
 
   	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gsslog: LoggingService, private gsscs: ColorschemeService) {
   	  	super(elm, sanitizer, playmedia, gsslog, gsscs);
@@ -160,6 +161,8 @@ export class GssComponent extends BaseComponent implements OnInit {
           this.enableMoveNext();
         }
         this.prevent_dubling_flag = true;
+        this.showEnter();
+        clearTimeout(this.move_next_timer);
       }
       
     }
@@ -168,7 +171,7 @@ export class GssComponent extends BaseComponent implements OnInit {
       this.playmedia.word(this.play_word, function(){
       });
 
-      if(this.isAnswered)
+      if(this.isAnswered) //this.nextWord();
       this.blinkEnter();
 
       if(this.isAnswered && this.cust_index != this.data.content.length){
@@ -268,6 +271,13 @@ export class GssComponent extends BaseComponent implements OnInit {
         this.card.content[0].instructions = [];
         this.card.content[0].instructions[0] = this.instruct.content[this.instruct.content.length-1];
         this.playCardDescription();
+      } else {
+        this.enableNextCard();
+        let that = this;
+        this.move_next_timer = setTimeout(()=>{
+          that.moveNext();
+        }, 2000);
+        
       }
     }
 

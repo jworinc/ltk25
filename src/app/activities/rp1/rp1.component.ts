@@ -102,6 +102,7 @@ export class Rp1Component extends BaseComponent implements OnInit {
 		if(this.uinputph === 'finish'){
 			if(this.getUserInputString() !== '') this.playCorrectSound();
 			this.enableNextCard();
+			this.moveNext();
 		} else {
 			if(this.getUserInputString() !== '') this.playmedia.sound('_STNQR', function(){});
 		}

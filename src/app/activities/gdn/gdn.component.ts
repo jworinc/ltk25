@@ -54,6 +54,7 @@ export class GdnComponent extends BaseComponent implements OnInit {
   public current_set = 0;
   public expected_string: any;
   public current_word: any;
+  public move_next_timeout: any = null;
 
   //	Validation of user input
   validate() {
@@ -109,6 +110,7 @@ export class GdnComponent extends BaseComponent implements OnInit {
     //	Hide option buttons
     this.optionHide();
     this.enterHide();
+    clearTimeout(this.move_next_timeout);
   }
 
   setFocus() {
@@ -117,8 +119,12 @@ export class GdnComponent extends BaseComponent implements OnInit {
 
   //	Enter click handler
   enter() {
+    let that = this;
     if (this.uinputph === 'finish') {
       this.enableNextCard();
+      this.move_next_timeout = setTimeout(()=>{
+        that.moveNext();
+      }, 1000);
     }
   }
 

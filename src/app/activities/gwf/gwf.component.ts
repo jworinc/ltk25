@@ -163,7 +163,7 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 		} else {
 			this.uinputph = 'finish';
 			this.showResults();
-			this.enter();
+			//this.enter();
 		}
 	}
 
@@ -190,6 +190,7 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 		if(this.uinputph === 'finish'){
 			//this.playCorrectSound();
 			this.enableNextCard();
+			this.moveNext();
 		} else {
 			//playmedia.sound('_STNQR', function(){});
 		}
@@ -199,6 +200,7 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 		if(this.uinputph === 'finish'){
 			this.playCorrectSound();
 			this.enableNextCard();
+			this.moveNext();
 			return;
 		}
 		
@@ -338,9 +340,13 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 		this.elm.nativeElement.querySelector('.gsc-results').style.display = 'block';
 
 		//	Play chimes
-		this.playmedia.action('CHIMES', function(){
+		//this.playmedia.action('CHIMES', function(){
 			
-		}, 300);
+		//}, 300);
+		let that = this;
+		this.playCorrectSound(()=>{
+			that.enter();
+		})
 
 	}
 

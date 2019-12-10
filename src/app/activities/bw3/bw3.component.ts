@@ -135,6 +135,7 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 		//	Play the first instruction insequence
 		function instructionFirst() {
 			let that = this;
+			this.showEnter();
 			this.lastUncomplete = this.card.content[0].instructions[0];
 			let i = this.card.content[0].instructions[0];
 			this.card.content[0].desc = i.pointer_to_value;
@@ -161,7 +162,7 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 	playContentDescription() {
 
 		let that = this;
-		
+		this.enterHide();
 		//	Phase 4 rec instructions, if mic is enabled
 		if(typeof this.card.content[0].RecInst !== 'undefined' && this.card.content[0].RecInst.length > 0 && this.uinputph === 'rec' && this.global_recorder){
 			this.lastUncomplete = this.card.content[0].RecInst[0];
@@ -251,9 +252,11 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 			if(this.getUserInputString() !== ''){
 				this.playCorrectSound(function(){ 
 					that.enableNextCard();
+					that.moveNext();
 				});
 			} else {
 				that.enableNextCard();
+				that.moveNext();
 			}
 		}
 		/*

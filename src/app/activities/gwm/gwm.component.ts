@@ -194,6 +194,7 @@ export class GwmComponent extends BaseComponent implements OnInit {
 	enter() {
 		if(this.uinputph === 'finish'){
 			this.enableNextCard();
+			this.moveNext();
 		} 
 	}
 

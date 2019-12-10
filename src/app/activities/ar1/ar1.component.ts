@@ -212,19 +212,26 @@ export class Ar1Component extends BaseComponent implements OnInit {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()) {
+			//if(!this.validate()) {
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
-			} else {
-				this.enableMoveNext();
-			}
+				this.disableNextSlide();
+			//} else {
+				//this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 			this.showHint();
 			this.clearUserInput();
 		}
 		
 	}
+
+	
+	next() {
+		this.enter();
+	}
+	
 
 	//	Callback for hide card event
 	hidden() {
@@ -487,7 +494,7 @@ export class Ar1Component extends BaseComponent implements OnInit {
 			if(that.current_presented >= that.max_presented){
 				if(!silent && this.getUserInputString() !== ''){
 					this.playCorrectSound(function(){ 
-						that.enableNextCard();
+						that.enableNextSlide(); that.moveNext();
 					});
 				} else {
 					that.enableNextCard();
@@ -585,7 +592,7 @@ export class Ar1Component extends BaseComponent implements OnInit {
 			}
 			
 			//	Validate user input and decide enable or not next card
-			if(this.validate()) this.enableMoveNext();
+			if(this.validate()) this.disableMoveNext();
 			else this.disableMoveNext();
 	    	
 	    }

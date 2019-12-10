@@ -166,6 +166,10 @@ export class DisComponent extends BaseComponent implements OnInit {
 		if(this.uinputph === 'finish'){
 			if(this.getUserInputString() !== '') this.playCorrectSound();
 			this.enableNextCard();
+			let that = this;
+			this.playCorrectSound(()=>{
+				that.moveNext();
+			});
 		} else {
 			if(this.getUserInputString() !== '') this.playmedia.sound('_STNQR', function(){});
 		}
@@ -180,21 +184,28 @@ export class DisComponent extends BaseComponent implements OnInit {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()) {
+			//if(!this.validate()) {
 				
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
+				this.disableNextSlide();
 				this.input_data = '';
 				
-			} else {
-				this.enableMoveNext();
-			}
+			//} else {
+			//	this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 			this.showHint();
 		}
 		
 	}
+
+	
+	next() {
+		this.enter();
+	}
+
 
 	prehide() {
 		this.playmedia.stop();

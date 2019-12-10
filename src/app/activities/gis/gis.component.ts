@@ -144,6 +144,7 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 			}
 			this.prevent_dubling_flag = true;
 			this.showClear();
+			this.showEnter();
 		}
 		
 	}
@@ -277,6 +278,7 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 			//	Show right answer
 			that.split_syllables_show = true;
 			that.uinputph = 'sylhelp';
+			that.enter();
 		});
 
 	}
@@ -394,8 +396,8 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 				//	Show right answer
 				this.split_syllables_show = true;
 				this.display_result.right++;
-				that.playCorrectSound(function(){
-				});
+				//that.playCorrectSound(function(){
+				//});
 			} else {
 				
 				//	Log user error
@@ -417,8 +419,11 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 				this.lastUncomplete = this.card.content[0].RespAtEnd[0];
 				this.card.content[0].desc = this.card.content[0].RespAtEnd[0].pointer_to_value;
 				this.setGlobalDesc(this.card.content[0].desc);
-				this.blinkWord();
-				this.pms.sound(this.card.content[0].RespAtEnd[0].audio, function(){});
+				//this.blinkWord();
+				this.pms.sound(this.card.content[0].RespAtEnd[0].audio, function(){
+					that.enableNextCard();
+					that.moveNext();
+				});
 				this.showresult = true;
 			}
 		}
@@ -497,6 +502,7 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 				di++;
 				that.card.content[0].desc = descs[di];
 				that.setGlobalDesc(that.card.content[0].desc);
+				if(that.card.content[0].Rule1.length-1 === di) that.enter();
 			});
 		}
 		this.card.content[0].desc = descs[di];

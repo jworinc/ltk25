@@ -58,9 +58,11 @@ export class Or4Component extends Or3Component implements OnInit, DoCheck {
 			if(this.input_data !== '' && this.input_data.toLowerCase() === this.answer_word.toLowerCase()){
 				//	Check if it was last question, finish card
 				if(this.card.content[0].questions.length === this.current_question){
-					this.playCorrectSound();
+					this.playCorrectSound(()=>{
+						that.enableNextCard();
+						that.moveNext();
+					});
 					this.uinputph = 'finish';
-					this.enableNextCard();
 				} else {
 					this.or4pm.action('DING', function(){});
 					setTimeout(function(){
@@ -140,6 +142,7 @@ export class Or4Component extends Or3Component implements OnInit, DoCheck {
 			} else {
 				that.uinputph = 'finish';
 				that.enableNextCard();
+				that.moveNext();
 			}
 		}
 		for(let i in ric){
@@ -182,11 +185,13 @@ export class Or4Component extends Or3Component implements OnInit, DoCheck {
 	}
 
 	next() {
+		if(this.instruction2_flag) this.repeat();
 		if(this.instruction2_flag) return;
 		this.instruction2_flag = true;
 		this.showQuestion();
 		this.nextInstructions();
-		this.enableMoveNext();
+		//this.enableMoveNext();
+		this.showEnter();
 	}
 
 	nextInstructions(){

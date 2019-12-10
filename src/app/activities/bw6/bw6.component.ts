@@ -197,11 +197,13 @@ export class Bw6Component extends Bw3Component implements OnInit {
 	//	Used to play task word and sound exactly after instructions play finished
 	playContentDescription() {
 		let that = this;
+		this.enterHide();
 		//	Phase 4 question
 		if(typeof this.card.content[0].Question !== 'undefined' && this.card.content[0].Question.length > 0 && this.uinputph === 'question'){
 			this.lastUncomplete = this.card.content[0].Question[0];
 			this.card.content[0].desc = this.card.content[0].Question[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].desc);
+			this.showEnter();
 			this.bw6pm.sound(this.card.content[0].Question[0].audio, function(){
 				that.setFocus();
 				that.input_data = '';
@@ -381,9 +383,11 @@ export class Bw6Component extends Bw3Component implements OnInit {
 			if(this.getUserInputString() !== ''){
 				this.playCorrectSound(function(){ 
 					that.enableNextCard();
+					that.moveNext();
 				});
 			} else {
 				that.enableNextCard();
+				that.moveNext();
 			}
 		}
 		/*

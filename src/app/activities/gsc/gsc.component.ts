@@ -131,18 +131,26 @@ export class GscComponent extends BaseComponent implements OnInit {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()) {
+			//if(!this.validate()) {
 				
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
-				
-			} else {
-				this.enableMoveNext();
-			}
+				this.disableNextSlide();
+			//} else {
+			//	this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 		}
 		
+	}
+
+	next() {
+		if(this.uinputph === 'finish'){
+			this.enableNextCard(); this.moveNext();
+		} else {
+			this.repeat();
+		}
 	}
 
 	hide() {
@@ -215,7 +223,7 @@ export class GscComponent extends BaseComponent implements OnInit {
 		//	Play chimes
 		this.playmedia.action('CHIMES', function(){
 			that.uinputph = 'finish';
-			that.enableNextCard();
+			that.enableNextCard(); that.moveNext();
 		}, 300);
 
 	}
@@ -223,7 +231,7 @@ export class GscComponent extends BaseComponent implements OnInit {
 	//	Enter click handler
 	enter() {
 		if(this.uinputph === 'finish'){
-			this.enableNextCard();
+			this.enableNextCard(); this.moveNext();
 		} 
 	}
 

@@ -135,6 +135,7 @@ export class GmuComponent extends BasebwComponent implements OnInit, DoCheck {
           this.enableMoveNext();
         }
         this.prevent_dubling_flag = true;
+        this.showEnter();
       }
        
     }
@@ -383,13 +384,14 @@ export class GmuComponent extends BasebwComponent implements OnInit, DoCheck {
       let that = this;
      
       this.pms.stop(); 
-      if(typeof this.entered_val === 'undefined' || this.entered_val === "") return;
+      
       if(this.uinputph === 'split' && this.entered_val !==""){
+        //if(typeof this.entered_val === 'undefined' || this.entered_val === "") return;
+        
         this.showword= true;
         //	Check result
         if(this.entered_val === this.answer_word){
   
-          
           this.getSplitResult();
           this.entered_val = '';
           //	Show right answer
@@ -398,6 +400,7 @@ export class GmuComponent extends BasebwComponent implements OnInit, DoCheck {
           that.playCorrectSound(function(){
           });
           this.finishOrContinueBW();
+
         } else {
           
           //	Log user error
@@ -421,8 +424,11 @@ export class GmuComponent extends BasebwComponent implements OnInit, DoCheck {
           this.lastUncomplete = this.card.content[0].RespAtEnd[0];
           this.card.content[0].desc = this.card.content[0].RespAtEnd[0].pointer_to_value;
           this.setGlobalDesc(this.card.content[0].desc);
-          this.blinkWord();
-          this.pms.sound(this.card.content[0].RespAtEnd[0].audio, function(){});
+          //this.blinkWord();
+          this.pms.sound(this.card.content[0].RespAtEnd[0].audio, function(){
+            that.enableNextCard();
+					  that.moveNext();
+          });
           this.showresult = true;
         }
       }

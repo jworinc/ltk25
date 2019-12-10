@@ -110,20 +110,25 @@ export class Ar5Component extends BasearComponent implements OnInit, DoCheck {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()) {
+			//if(!this.validate()) {
 				//	Set focus on first empty input element
 				//this.setFocus();
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
-			} else {
-				this.enableMoveNext();
-			}
+				this.disableNextSlide();
+			//} else {
+			//	this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 			this.showHint();
 			this.input_data = '';
 		}
 		
+	}
+
+	next() {
+		this.enter();
 	}
 
 	//	Set focus on empty input

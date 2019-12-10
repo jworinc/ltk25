@@ -61,8 +61,12 @@ export class BaseorComponent extends BaseComponent implements OnInit {
 	//	Enter click handler
 	enter() {
 		if(this.uinputph === 'finish'){
-			this.playCorrectSound();
-			this.enableNextCard();
+			let that = this;
+			this.playCorrectSound(()=>{
+				that.enableNextCard();
+				that.moveNext();
+			});
+			
 		} else {
 			if(this.getUserInputString() !== '') this.playmedia.sound('_STNQR', function(){});
 			else this.repeat();

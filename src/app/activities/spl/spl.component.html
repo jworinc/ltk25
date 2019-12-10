@@ -5,7 +5,10 @@
 
 <div class="card-block-item card-style-obj-single card-block-spl">
   <div class='card-content-body-wrap-spl'>
-		<span class='letters-content-wrap-spl'>{{ display_letters }}</span>
+		<span class='letters-content-wrap-spl'>
+			<span *ngFor="let l of display_letters; let last = last" [attr.data-currentletter]="l"><span class="separate-letter">{{ l }}</span><span *ngIf="!last">, </span></span>
+			
+		</span>
 		<div class='bw1-block bw1-description syp-description'>
 			{{ card.content[0].desc }}
 		</div>

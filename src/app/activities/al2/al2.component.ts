@@ -322,15 +322,18 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()){
+			//if(!this.validate()){
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
-			} else {
-				this.enableMoveNext();
-			}
+				this.disableNextSlide();
+			//} else {
+			//	this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 			this.showHint();
+			this.setCard();
+			this.current_presented = 1;
 			let that = this;
 			clearInterval(this.set_cursor_interval);
 			this.set_cursor_interval = setInterval(()=>{
@@ -339,6 +342,14 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 			}, 2000);
 		}
 		
+	}
+
+	next() {
+		this.enter();
+		if(this.current_presented >= this.max_presented) {
+			this.enableNextSlide();
+			this.moveNext();
+		}
 	}
 
 	//	Callback for hide card event
@@ -457,8 +468,8 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 					}, 300);
 						
 				} else {
-					this.enter();
-					
+					//this.enter();
+					this.playCorrectSound(()=>{ that.moveNext(); });
 				}
 			
 			}

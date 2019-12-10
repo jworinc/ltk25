@@ -60,6 +60,7 @@ public current_number: any;
 public current_set = 0;
 public expected_string: any;
 public current_word: any;
+public move_next_timer: any = null;
 
 //	Validation of user input
 validate() {
@@ -102,6 +103,7 @@ show() {
       this.enableMoveNext();
     }
     this.prevent_dubling_flag = true;
+    clearTimeout(this.move_next_timer);
   }
   
 }
@@ -243,14 +245,16 @@ showResults(){
   //	Play chimes
   this.playmedia.action('CHIMES', function(){
     that.uinputph = 'finish';
-    that.enter();
+    
   }, 300);
  
   this.lastUncomplete = this.card.content[0].RespAtEnd[0];
   this.card.content[0].desc = this.card.content[0].RespAtEnd[0].pointer_to_value;
   this.setGlobalDesc(this.card.content[0].desc);
-  this.blinkWord();
-  this.playmedia.sound(this.card.content[0].RespAtEnd[0].audio, function(){});
+  //this.blinkWord();
+  this.playmedia.sound(this.card.content[0].RespAtEnd[0].audio, function(){
+    that.enter();
+  });
 
   this.elm.nativeElement.querySelector('.cust-div').style.display = 'none';
   this.elm.nativeElement.querySelector('.gsc-results').style.display = 'block';
@@ -302,6 +306,10 @@ showResults(){
 enter() {
   if(this.uinputph === 'finish'){
     this.enableNextCard();
+    let that = this;
+    this.move_next_timer = setTimeout(()=>{
+      that.moveNext();
+    }, 1000);
   } 
 }
 

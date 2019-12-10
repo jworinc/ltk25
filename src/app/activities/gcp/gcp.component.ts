@@ -399,6 +399,7 @@ export class GcpComponent extends BaseComponent implements OnInit {
       if(this.uinputph === 'finish'){
         //this.playCorrectSound();
         this.enableNextCard();
+        this.moveNext();
       } else {
         //playmedia.sound('_STNQR', function(){});
       }

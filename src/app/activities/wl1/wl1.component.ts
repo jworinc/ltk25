@@ -239,7 +239,10 @@ export class Wl1Component extends BaseComponent implements OnInit {
     //  this.addNextWord();
     //}
     if(this.uinputph === 'finish'){
-      this.eslCustomInstructions('RespAtEnd');
+      let that = this;
+      this.eslCustomInstructions('RespAtEnd', ()=>{
+        that.moveNext();
+      });
       return;
     }
     this.playContentDescription();
@@ -293,7 +296,9 @@ export class Wl1Component extends BaseComponent implements OnInit {
         });
         that.elm.nativeElement.querySelector('.gsc-results').style.display = 'block';
         that.enableNextCard();
-        that.eslCustomInstructions('RespAtEnd');
+        that.eslCustomInstructions('RespAtEnd', ()=>{
+          that.moveNext();
+        });
       }, 2000);
       this.uinputph = 'finish';
       

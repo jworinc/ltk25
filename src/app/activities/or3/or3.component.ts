@@ -120,9 +120,12 @@ export class Or3Component extends BaseorComponent implements OnInit, DoCheck {
 				}
 				//	Check if it was last question, finish card
 				if(this.card.content[0].questions.length === this.current_question){
-					this.playCorrectSound();
+					this.playCorrectSound(()=>{
+						that.enableNextCard();
+						that.moveNext();
+					});
 					this.uinputph = 'finish';
-					this.enableNextCard();
+					
 				} else {
 					this.playCorrectSound(()=>{
 						that.instruction2_flag = false;
@@ -159,6 +162,7 @@ export class Or3Component extends BaseorComponent implements OnInit, DoCheck {
 			}
 			this.prevent_dubling_flag = true;
 			this.showHint();
+			
 		}
 		
 	}
@@ -210,11 +214,13 @@ export class Or3Component extends BaseorComponent implements OnInit, DoCheck {
 	
 	//	Next button click handler
 	next() {
+		if(this.instruction2_flag) this.repeat();
 		if(this.instruction2_flag || typeof this.card.content[0].Instructions2 === 'undefined') return;
 		this.instruction2_flag = true;
 		this.nextInstructions();
 		this.showQuestion();
-		this.enableMoveNext();
+		//this.enableMoveNext();
+		this.showEnter();
 	}
 
 	//	Show question

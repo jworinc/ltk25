@@ -650,6 +650,7 @@ body{
     border-style: solid;
     border-width: 5px;
     border-color: transparent;
+    box-sizing: content-box;
 }
 .top-toolbar-repeat, .top-toolbar-listen, .top-toolbar-rec{
     height: 70%;

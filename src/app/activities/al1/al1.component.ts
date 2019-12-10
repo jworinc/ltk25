@@ -128,11 +128,13 @@ export class Al1Component extends BaseComponent implements OnInit {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
+			this.clearUserInput(true);
 			if(!this.validate()){
 				//	Set focus on first empty input element
 				//this.setFocus();
 				//	Play card description
 				this.playCardDescription();
+				this.disableNextSlide();
 			} else {
 				this.enableMoveNext();
 			}
@@ -141,6 +143,14 @@ export class Al1Component extends BaseComponent implements OnInit {
 			this.showHint();
 		}
 		
+	}
+
+	next() {
+		this.enter();
+		if(this.validate()){
+			this.enableNextSlide();
+			this.moveNext();
+		}
 	}
 
 	//	Callback for hide card event
@@ -278,7 +288,7 @@ export class Al1Component extends BaseComponent implements OnInit {
 	}
 	
 	//	Clear wrong inputs
-	clearUserInput() {
+	clearUserInput(all = false) {
 		let parts = [];
 		let that = this;
 		if(typeof this.card !== 'undefined' && this.card.content !== 'undefined' && this.card.content.length > 0){
@@ -291,6 +301,10 @@ export class Al1Component extends BaseComponent implements OnInit {
 			let index = +i;
 			if(parts.length > 0 && parts[index].expected !== '' && parts[index].expected !== d.letter){
 				this.input_data[index].letter = '';
+			}
+			else if(all) {
+				this.input_data[index].letter = '';
+				this.input_data[index].disabled = false;
 			}
 		};
 
@@ -382,9 +396,10 @@ export class Al1Component extends BaseComponent implements OnInit {
 	    	let scope = this;
 			//	Validate user input and decide to enable next card or not
 			if(scope.validate() && !this.inp_data_watcher_doubling) {
-				this.inp_data_watcher_doubling = true;
-				scope.enableMoveNext();
-				setTimeout(function(){ scope.enter(false); }, 1000);
+				//this.inp_data_watcher_doubling = true;
+				scope.enableNextSlide();
+				
+				setTimeout(function(){ scope.playCorrectSound(()=>{ scope.moveNext(); }) }, 1000);
 
 			}
 			else {

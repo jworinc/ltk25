@@ -33,6 +33,7 @@ export class GcsComponent extends BaseComponent implements OnInit {
     public expected_string = '';
     public input_data = '';
     public uinputph = 'question';
+    public after_complete_phase = false;
 
   	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gcslog: LoggingService, private gcscs: ColorschemeService) {
   	  	super(elm, sanitizer, playmedia, gcslog, gcscs);
@@ -237,7 +238,11 @@ export class GcsComponent extends BaseComponent implements OnInit {
         }
 
       }
-
+      if(this.after_complete_phase) {
+        this.after_complete_phase = false;
+        this.enableNextCard();
+        this.moveNext();
+      }
 
     }
 
@@ -248,7 +253,7 @@ export class GcsComponent extends BaseComponent implements OnInit {
             temp = { "audio":this.data['content'][0]['RespAtEnd'][i].audio ,"pointer_to_value":this.data['content'][0]['RespAtEnd'][i].pointer_to_value}
             this.card.content[0].instructions.push(temp);
           }
-
+          this.after_complete_phase = true;
           this.playCardDescription();
     }
 
@@ -284,6 +289,7 @@ export class GcsComponent extends BaseComponent implements OnInit {
           this.enableMoveNext();
         }
         this.prevent_dubling_flag = true;
+        this.after_complete_phase = false;
       }
       
     }
