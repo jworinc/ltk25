@@ -719,8 +719,8 @@ body{
     max-height: 60px;
     max-width: 90px;
     min-height: 24px;
-    border-style: none;
-    border-color: #AAFFAA;
+    /*border-style: none;*/
+    border-color: transparent;
     border-width: 2px;
 }
 .zoom_card_next_hl{
@@ -742,15 +742,17 @@ body{
     display: block;
     position: relative;
     float: left;
-    width: 33.33%;
+    max-width: 27.33%;
     height: 100%;
-    max-width: 1024px;
+    /* max-width: 1024px; */
     min-width: 0;
-    max-height: 100%;
+    max-height: 70%;
     min-height: 0;
     margin: 0;
     background-size: contain;
     background-repeat: no-repeat;
+    box-sizing: content-box;
+    border-width: 5px;
 }
 .main-app-start-lesson-screen, .main-app-finish-lesson-screen, .lesson-not-complete-screen{
     display: flex;
@@ -1263,6 +1265,8 @@ body{
     }
     .zoom-card-sequence-buttons-mobile{
         display: flex;
+        align-items: center;
+        justify-content: space-evenly;
     }
     .zoom-card-sequence-clear{
 	    background-size: contain;
@@ -1304,6 +1308,17 @@ body{
         width: 0px;
         flex-grow: 0;
         cursor: pointer;
+    }
+    .zoom-card-sequence-goodbad {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-evenly;
+        flex-flow: row;
+    }
+    .zoom-card-sequence-goodbad span{
+        width: 50%;
+        max-width: 45%;
+        max-height: 90%;
     }
 
 }  
