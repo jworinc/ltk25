@@ -145,6 +145,7 @@ export class PlaymediaService {
 	}
 
 	word(word, cb, del=1) {
+		if(!word) return;
 		del = del || 1;
 		if(word === ''){
 			console.log('Try to play empty word!');
@@ -156,6 +157,7 @@ export class PlaymediaService {
 	}
 
 	sound(sound, cb, del=1) {
+		if(!sound) return;
 		del = del || 1;
 		if(sound.length < 3){
 			console.log('Try to play empty sound!');
