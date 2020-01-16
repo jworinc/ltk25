@@ -85,6 +85,7 @@ export class BaseComponent implements OnInit, CardComponent {
 	@Output() mnext = new EventEmitter<boolean>();
 	@Output() mprev = new EventEmitter<boolean>();
 	@Output() blinkenter = new EventEmitter<boolean>();
+	@Output() blinkrule = new EventEmitter<boolean>();
 	@Output() blinknextnavbtn = new EventEmitter<boolean>();
 	@Output() blink_good_bad = new EventEmitter<boolean>();
 	@Output() blinkrec = new EventEmitter<boolean>();
@@ -95,6 +96,7 @@ export class BaseComponent implements OnInit, CardComponent {
 	@Output() show_hint = new EventEmitter<boolean>();
 	@Output() show_prev = new EventEmitter<boolean>();
 	@Output() show_clear = new EventEmitter<boolean>();
+	@Output() show_rule = new EventEmitter<boolean>();
 	@Output() show_enter = new EventEmitter<boolean>();
 	@Output() set_card_id = new EventEmitter<number>();
 	@Output() disable_next_slide = new EventEmitter<boolean>();
@@ -432,6 +434,10 @@ export class BaseComponent implements OnInit, CardComponent {
   	this.show_clear.emit();
   }
 
+  showRule() {
+	this.show_rule.emit();
+  }
+
   showEnter() {
 	this.show_enter.emit();
   }
@@ -446,6 +452,10 @@ export class BaseComponent implements OnInit, CardComponent {
 
   blinkEnter() {
   	this.blinkenter.emit();
+  }
+
+  blinkRule() {
+	this.blinkrule.emit();
   }
 
   playCorrectSound(cb: any = ()=>{}) {
@@ -678,6 +688,10 @@ export class BaseComponent implements OnInit, CardComponent {
 
 	clear() {
 
+	}
+
+	rule() {
+		
 	}
 	
 	eslCustomInstructions(name, cb=()=>{}){

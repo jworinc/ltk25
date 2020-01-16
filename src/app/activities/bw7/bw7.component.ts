@@ -73,8 +73,44 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
     public split_letters_show: any;
     public syllables: any;
     public dashes: any;
-    public split_syllables_show: any;
+	public split_syllables_show: any;
+	public hilightsyllables: boolean = false;
 
+	public rules = [
+		{skill: 'cw', rule: 'Rule5'},//
+		{skill: 'fcLE', rule: 'Rule10'},//
+		{skill: 'fcLEex', rule: 'Rule11'},//
+		{skill: 'IaslE', rule: 'Rule9'},//
+		{skill: 'open', rule: 'Rule6'},//
+		{skill: 'openex', rule: 'Rule7'},//
+		{skill: 'rcer', rule: 'Rule7'},//--
+		{skill: 'vcccv', rule: 'Rule3'},//
+		{skill: 'vcccvBG', rule: 'Rule3'},//
+		{skill: 'vcccvBL', rule: 'Rule3'},//
+		{skill: 'vcccvDG', rule: 'Rule3'},//
+		{skill: 'vccv', rule: 'Rule1'},//
+		{skill: 'vce', rule: 'Rule4'},//
+		{skill: 'vcv', rule: 'Rule2'},//
+		{skill: 'vcvY', rule: 'Rule8'},//
+		{skill: 'vtEX', rule: 'Rule11'},//
+		{skill: 'YasSI', rule: 'Rule9'},//
+	];
+
+	getCurrentRule() {
+		let ci = this.current_card_instance;
+		let rf = false;
+		if(typeof this.card.content[ci].skill !== "undefined") {
+			let s = this.card.content[ci].skill;
+			for(let i in this.rules) {
+				if(this.rules[i].skill === s) {
+					rf = true;
+					return this.rules[i].rule;
+				}
+			}
+		}
+		if(!rf) return 'Rule1';
+		
+	}
 
   	setCard() {
 
@@ -144,6 +180,7 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 			let s = this.syllables[i];
 			if(s.match(/air|ar|ear|er|ur|ir|ire|or|ore|rr|ure/ig) !== null) this.expected = s;
 		}
+
 	}
 
 	//	Validate user answer
@@ -237,7 +274,7 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 			    		if(typeof i.audio !== 'undefined' && i.audio !== ''){
 			    			that.pms.sound(i.audio, function(){
 			    				that.uinputph = 'sylhelp';
-			    				that.blinkEnter();
+			    				that.blinkRule();
 			    			});
 	    				}
 	    				
@@ -245,7 +282,7 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 	    			});
 	    		} else  setTimeout(function(){
 	    			that.uinputph = 'sylhelp';
-	    			that.blinkEnter();
+	    			that.blinkRule();
 	    		}, 1);
 	    	} else setTimeout(function(){
 	    		that.uinputph = 'sylhelp';
@@ -261,6 +298,9 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 		let that = this;
 		let del = 400;
 		this.enterHide();
+		this.optionHide();
+		this.showClear();
+		this.hilightsyllables = false;
 		//	Phase 4 rec instructions, if mic is enabled
 		if(typeof this.card.content[0].RecInst !== 'undefined' && this.card.content[0].RecInst.length > 0 && this.uinputph === 'rec' && this.global_recorder){
 			this.lastUncomplete = this.card.content[0].RecInst[0];
@@ -346,7 +386,7 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 			    		if(typeof i.audio !== 'undefined' && i.audio !== ''){
 			    			that.pms.sound(i.audio, function(){
 			    				that.uinputph = 'sylhelp';
-			    				that.blinkEnter();
+			    				that.blinkRule();
 			    				
 			    			});
 	    				}
@@ -355,11 +395,11 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 	    			});
 	    		} else  setTimeout(function(){
 	    			that.uinputph = 'sylhelp';
-	    			that.blinkEnter(); 
+	    			that.blinkRule(); 
 	    		}, 1);
 	    	} else setTimeout(function(){
 	    		that.uinputph = 'sylhelp';
-	    		that.blinkEnter();
+	    		that.blinkRule();
 	    	}, 1);
 
 		});
@@ -482,8 +522,9 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 	public answer_syllable_received = false;
 	enter() {
 		let that = this;
-		
-		if(this.uinputph === 'split' && this.isDashesSetted() && this.split_loop_ready){
+		this.pms.stop();
+		//if(this.uinputph === 'split' && this.isDashesSetted() && this.split_loop_ready){
+		if(this.uinputph === 'split' && this.isDashesSetted()){
 			
 			//	Check result
 			if(this.getSplitResult()){
@@ -509,7 +550,8 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 				}
 				this.pms.stop();
 				this.respIfIncorrect();
-				
+				this.optionHide();
+				this.showRule();
 			}
 			return;
 		}
@@ -594,21 +636,28 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 
 
 	}
+
+	rule() {
+		this.hilightsyllables = !this.hilightsyllables;
+	}
 	
 	playRule(){
 		if(this.uinputph !== 'finish' && this.uinputph !== 'sylhelp') return;
+		if(this.uinputph === 'sylhelp' && !this.hilightsyllables) { this.enter(); return; }
 		let descs = [];
 		let di = 0;
 		let that = this;
 		this.enterHide();
-		for(let i in this.card.content[0].Rule1){
-			let r = this.card.content[0].Rule1[i];
+		let rl = this.getCurrentRule();
+		if(typeof this.card.content[0][rl] === "undefined") rl = 'Rule1';
+		for(let i in this.card.content[0][rl]){
+			let r = this.card.content[0][rl][i];
 			descs.push(r.pointer_to_value);
 			this.pms.sound(r.audio, function(){
 				di++;
 				that.card.content[0].desc = descs[di];
 				that.setGlobalDesc(that.card.content[0].desc);
-				if(that.card.content[0].Rule1.length-1 === di) that.enter();
+				if(that.card.content[0][rl].length <= di) that.enter();
 			});
 		}
 		this.card.content[0].desc = descs[di];

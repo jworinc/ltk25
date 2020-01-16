@@ -15,7 +15,7 @@
 			</span>
 		</span>
 		<span class='bw7-syllables-selector bw7-syllables-selector-syllables' *ngIf='split_syllables_show'>
-			<span class='bw1-letter bw7-letters' *ngFor="let l of syllables; let kl=index" [attr.data-letter]='kl' [ngClass]="{'bw7dash': l==='-'}" (click)="playRule()">
+			<span class='bw1-letter bw7-letters' *ngFor="let l of syllables; let kl=index" [attr.data-letter]='kl' [ngClass]="{'bw7dash': l==='-', 'hilight-syllables': hilightsyllables}" (click)="playRule()">
 				{{ l }}
 				<span class='bw7-dashmark' *ngIf="l === '-'"></span>
 			</span>

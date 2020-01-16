@@ -93,9 +93,11 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public blinkgoodbad: boolean = false;
   public blinkrec: boolean = false;
   public blinkplay: boolean = false;
+  public blinkrule: boolean = false;
 
   public rui_button_hint: boolean = false;
   public rui_button_clear: boolean = false;
+  public rui_button_rule: boolean = false;
   public rui_button_goodbad: boolean = false;
   public rui_button_prev: boolean = false;
   public rui_button_enter: boolean = false;
@@ -421,6 +423,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
         that.blinkEnter(); 
       });
 
+      (<CardComponent>componentRef.instance).blinkrule.subscribe(function(){
+        that.blinkRule(); 
+      });
+
       (<CardComponent>componentRef.instance).blinknextnavbtn.subscribe(function(){
         that.blinkNextNavBtn(); 
       });
@@ -449,6 +455,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
       (<CardComponent>componentRef.instance).show_clear.subscribe(function(){
         that.showClear();
+      });
+
+      (<CardComponent>componentRef.instance).show_rule.subscribe(function(){
+        that.showRule();
       });
 
       (<CardComponent>componentRef.instance).show_enter.subscribe(function(){
@@ -996,6 +1006,25 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   }
 
+  blinkRule() {
+
+    let that = this;
+
+    setTimeout(()=>{
+      that.blinkrule = true;
+      setTimeout(()=>{
+        that.blinkrule = false;
+        setTimeout(()=>{
+          that.blinkrule = true;
+          setTimeout(()=>{
+            that.blinkrule = false;
+          }, 400);
+        }, 400);
+      }, 400);
+    }, 400);
+
+  }
+
   blinkNextNavBtn() {
 
     let that = this;
@@ -1153,9 +1182,20 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
   }
 
+  rule() {
+    //  Check cards and sent enter event to active card
+    for(let i in this.ccs){
+      let c = this.ccs[i];
+      if(c.instance.isActive()){
+        c.instance.rule(); 
+      }
+    }
+  }
+
   optionHide() {
     this.rui_button_hint = false;
     this.rui_button_clear = false;
+    this.rui_button_rule = false;
     this.rui_button_goodbad = false;
     this.rui_button_prev = false;
     //this.rui_button_enter = false;
@@ -1171,7 +1211,16 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_clear = true;
     this.rui_button_goodbad = false;
     this.rui_button_prev = false;
-    //this.rui_button_enter = false;
+    this.rui_button_rule = false;
+  }
+
+  //  Change option button from hint to clear
+  showRule(){
+    this.rui_button_hint = false;
+    this.rui_button_clear = false;
+    this.rui_button_goodbad = false;
+    this.rui_button_prev = false;
+    this.rui_button_rule = true;
   }
 
   //  Change option button from clear to hint
@@ -1180,7 +1229,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_clear = false;
     this.rui_button_goodbad = false;
     this.rui_button_prev = false;
-    //this.rui_button_enter = false;
+    this.rui_button_rule = false;
   }
 
   //  Change option button to good/bad
@@ -1189,7 +1238,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_clear = false;
     this.rui_button_goodbad = true;
     this.rui_button_prev = false;
-    //this.rui_button_enter = false;
+    this.rui_button_rule = false;
   }
 
   //  Change option button to prev
@@ -1198,7 +1247,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_clear = false;
     this.rui_button_goodbad = false;
     this.rui_button_prev = true;
-    //this.rui_button_enter = false;
+    this.rui_button_rule = false;
   }
 
   //  Show enter button

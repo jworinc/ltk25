@@ -12,12 +12,14 @@ export interface CardComponent {
   show_hint: any;
   show_prev: any;
   show_clear: any;
+  show_rule: any;
   show_enter: any;
   set_card_id: any;
   global_recorder: boolean;
   sidetripmode: boolean;
   blinkrec: any;
   blinkplay: any;
+  blinkrule: any;
   recstart_event: any;
   recstop_event: any;
   playstart_event: any;
