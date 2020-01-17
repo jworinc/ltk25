@@ -60,6 +60,8 @@ export class SiwComponent extends Or1Component implements OnInit {
   }
 
   repeat() {
+	this.siwpm.stop();
+	this.play_card_description_busy = false;
 	this.playCardDescription();
   }
 
