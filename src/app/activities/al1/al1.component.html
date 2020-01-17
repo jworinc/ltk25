@@ -5,7 +5,7 @@
 
 <div class="card-block-item card-style-obj-single card-block-al1">
     <div class='card-content-body-wrap-al1'>
-		<input *ngFor='let i of input_data; let ki = index'
+		<input *ngFor='let i of input_data; let ki = index' autocomplete="off"
 			class='card-al1-letter' [attr.data-pos]='ki' (click)='playLetter(ki)'
 			(input)="onUserInput($event, ki)" [ngStyle]='i.mark' (focus)='handleLetterFocus(ki)'>
         <div class='clearfix'></div>

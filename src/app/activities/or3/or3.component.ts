@@ -247,7 +247,7 @@ export class Or3Component extends BaseorComponent implements OnInit, DoCheck {
 			this.expected_string = q.title;
 
 			//	Replace answer word with a input
-			q.title = q.title.replace(ar, '<input type="text" class="or3-question-word-input" id="user-answer-or3" />');
+			q.title = q.title.replace(ar, '<input type="text" autocomplete="off" class="or3-question-word-input" id="user-answer-or3" />');
 			 
 
 			this.element.nativeElement.querySelector('.or3-story-question-wrap').innerHTML = '';

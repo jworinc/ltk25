@@ -13,7 +13,7 @@
 		</span>
 	</div>
 	<div class='bw1-block bw1-user-input'>
-		<input type='text' [(ngModel)]='input_data' (input)="valueChange($event)" />
+		<input autocomplete="off" type='text' [(ngModel)]='input_data' (input)="valueChange($event)" />
 	</div>
 	<div class='bw1-block bw1-description'>
 		{{ card.content[0].desc }}

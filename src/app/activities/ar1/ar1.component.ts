@@ -128,7 +128,7 @@ export class Ar1Component extends BaseComponent implements OnInit {
 
 			//	Create box for digraph
 			if(typeof cn !== 'undefined' && cn !== '' && r.test(cn)) {
-				cn = cn.replace(r, "<input class='card-ar1-digraph-input' id='user_input' type='text' />");
+				cn = cn.replace(r, "<input autocomplete='off' class='card-ar1-digraph-input' id='user_input' type='text' />");
 				content += "<span class='card-ar2-syllable card-ar1-syllable'>"+cn+"</span>";
 			}
 			//	Create box for normal letters
