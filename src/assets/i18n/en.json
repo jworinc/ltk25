@@ -183,5 +183,10 @@
 	"see_a_result" : "See a result",
 	"email" : "E-mail",
 	"your_name" : "Your name",
-	"please_enter_email" : "Please, enter your email!"
+	"please_enter_email" : "Please, enter your email!",
+	"ok" : "OK",
+	"help" : "Help",
+	"click_on_element" : "Click on element you are interested in.",
+	"continue" : "Continue",
+	"snooze" : "Snooze"
 }

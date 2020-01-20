@@ -56,6 +56,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public show_setting_modal: boolean = false;
   public show_feedback_modal: boolean = false;
   public show_warncomplete_modal: boolean = false;
+  public show_snooze: boolean = false;
   public mode = 'dual';
   public cpos: number = 2;
   public scale: number = 0.9;
@@ -131,6 +132,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
     position: 0,
     activity: ''
   }
+
+  public snooze_timer: any = null;
+  public snooze_time = 0;
+  public snooze_delay = 180;
 
   constructor(
     private DL: DataloaderService,
@@ -214,7 +219,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
           }
         }
         
-      });
+    });
+
+    
      
   }
 
@@ -280,7 +287,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   @HostListener('window:beforeunload', ['$event'])
   onBeforeUnload(event) {
       
-      if(!this.end_lesson_flag){
+      if(!this.end_lesson_flag && !this.show_snooze){
         this.urgentLeaveLesson();
         let dialogText = 'Do you want to leave this lesson?';
         event.returnValue = dialogText;
@@ -291,9 +298,21 @@ export class LessonComponent implements OnInit, AfterViewInit {
   //  Handle keydown events
   @HostListener('window:keydown', ['$event'])
   onKeydow(event) {
+      this.resetSnoozeTime();
       if(event.keyCode == 37) this.movePrev();
       if(event.keyCode == 39) this.moveNext();
       if(event.keyCode == 13) this.enter();
+  }
+
+  //  Mouse move events
+  @HostListener('window:mousemove', ['$event'])
+  @HostListener('window:mousedown', ['$event'])
+  @HostListener('window:mouseup', ['$event'])
+  @HostListener('window:touchstart', ['$event'])
+  @HostListener('window:touchend', ['$event'])
+  @HostListener('window:click', ['$event'])
+  onMovement(event) {
+      this.resetSnoozeTime();
   }
 
   urgentLeaveLesson() {
@@ -641,6 +660,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
             }
           );
       }
+
+      //  Start snooze timer
+      this.startSnoozeTimer();
   }
 
   setCurrentCardPosition(pos) {
@@ -1340,6 +1362,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
     this.playmedia.stop();
     this.global_desc = '';
+    this.stopSnoozeTimer();
   }
 
   good() {
@@ -1582,6 +1605,62 @@ export class LessonComponent implements OnInit, AfterViewInit {
   disableSidetrip() {
     this.end_lesson_flag = true;
     this.router.navigateByUrl('/home');
+  }
+
+  startSnoozeTimer() {
+    let that = this;
+    this.snooze_timer = setInterval(function(){
+      that.snooze_time++;
+      if(that.snooze_time >= that.snooze_delay){
+        that.goToSnooze();
+        clearTimeout(that.snooze_timer);
+      } 
+      //else console.log("Snooze time: " + that.snooze_time);
+    }, 1000);
+  }
+
+  stopSnoozeTimer() {
+    this.snooze_time = 0;
+    clearTimeout(this.snooze_timer);
+  }
+
+  continueLesson() {
+    //  Hide Snooze message
+    this.show_snooze = false;
+    this.startSnoozeTimer();
+
+    //  Send activity log begin Lesson message
+    if(!this.sidetripmode){
+      this.logging.lessonBegin(this.student.lu)
+        .subscribe(
+          data => {},
+          error => {
+            console.log(error);
+            this.notify.error('Lesson Begin status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
+          }
+        );
+      
+      let sc = this.getChildCardScope(this.current_id);
+      if(typeof sc !== 'undefined' && sc !== null && typeof sc.render !== 'undefined'){
+        sc.card_begin_flag = false;
+        sc.render();
+      }
+    }
+
+
+
+  }
+
+  resetSnoozeTime() {
+    this.snooze_time = 0;
+  }
+
+  goToSnooze() {
+    //  Show snooze message
+    this.show_snooze = true;
+    this.snooze_time = 0;
+    this.urgentLeaveLesson();
+    clearTimeout(this.snooze_timer);
   }
 
 

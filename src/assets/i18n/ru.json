@@ -183,5 +183,10 @@
 	"see_a_result" : "Посмотреть результат",
 	"email" : "E-mail",
 	"your_name" : "Ваше имя",
-	"please_enter_email" : "Пожалуйста, введите адрес электронной почты!"
+	"please_enter_email" : "Пожалуйста, введите адрес электронной почты!",
+	"ok" : "",
+	"help" : "",
+	"click_on_element" : "",
+	"continue" : "Продолжить",
+	"snooze" : "Сон"
 }

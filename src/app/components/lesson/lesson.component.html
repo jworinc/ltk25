@@ -206,5 +206,8 @@
                       (closewarncomplete)="onCloseWarncomplete()"
                       (gonextcard)="onGoNextCard()"></app-warncomplete>
 
+    <!--    Snooze window    -->
+    <app-snooze [hidden]="!show_snooze"
+                (continue)="continueLesson()"></app-snooze>
         
 </div>
