@@ -114,6 +114,7 @@ import { TestResultItemComponent } from './components/test-result-item/test-resu
 import { CustomfieldService } from './services/customfield.service';
 import { CfcComponent } from './activities/cfc/cfc.component';
 import { SnoozeComponent } from './components/snooze/snooze.component';
+import { WordtranslateDirective } from './directives/wordtranslate.directive';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -206,6 +207,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TestResultItemComponent,
     CfcComponent,
     SnoozeComponent,
+    WordtranslateDirective,
   ],
   imports: [
     BrowserModule,
