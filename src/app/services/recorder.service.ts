@@ -47,17 +47,19 @@ export class RecorderService {
 	    let callback = 'console.log';	//	Default callback
 	    let audio_context = null;		//	Audio context	
 	    let source = null;				//	Source of audio stream
-	    let processor = null;			//	Processor of audio stream
+		let processor = null;			//	Processor of audio stream
+		let navigator = null;
 
 	    this.test_volume_level_flag = false;	//	Disable volume test by default
 
 	    try {
 			// webkit shim, receive audio context cross browser
 			//window.AudioContext = window.AudioContext; || window.webkitAudioContext;
-			//navigator.getUserMedia = (navigator.getUserMedia ||
-			//navigator.webkitGetUserMedia ||
-			//navigator.mozGetUserMedia ||
-			//navigator.msGetUserMedia);
+			navigator = (window as any).navigator;
+			navigator.getUserMedia = (navigator.getUserMedia ||
+											navigator.webkitGetUserMedia ||
+											navigator.mozGetUserMedia ||
+											navigator.msGetUserMedia);
 			window.URL = window.URL;// || window.webkitURL;
 
 			(window as any).AudioContext = (window as any).AudioContext || (window as any).webkitAudioContext;
@@ -174,7 +176,7 @@ export class RecorderService {
 
 
 		//	Request access to the user mic, if success link callback function startUserMedia
-	    if(navigator.mediaDevices.getUserMedia){
+	    if(typeof navigator !== 'undefined' && navigator !== null && typeof navigator.mediaDevices !== 'undefined' && navigator.mediaDevices.getUserMedia){
 		    navigator.mediaDevices.getUserMedia({
 				//audio: {sampleRate: 22050, channelCount: 2, volume: 1.0 }
 				audio: true
