@@ -92,6 +92,8 @@ export class Ar1Component extends BaseComponent implements OnInit {
 	//	User input phase
 	public uinputph: any;
 
+	public hide_translation_icon: boolean = true;
+
 
 	setCard() {
 
@@ -405,9 +407,11 @@ export class Ar1Component extends BaseComponent implements OnInit {
 								that.card.content[0].desc = fst.pointer_to_value;
 								that.setGlobalDesc(fst.pointer_to_value);
 								that.elm.nativeElement.querySelector('.content_right_answer_word').style.opacity = '1';
+								that.hide_translation_icon = false;
 								
 								setTimeout(function(){ 
 									that.elm.nativeElement.querySelector('.content_right_answer_word').style.opacity = '0'; 
+									that.hide_translation_icon = true;
 									that.elm.nativeElement.querySelector('.content_right_missing_letter').style.display = 'block'; 
 									that.elm.nativeElement.querySelector('.content_right_missing_letter').style.opacity = '1';
 									setTimeout(function(){ 
@@ -482,7 +486,7 @@ export class Ar1Component extends BaseComponent implements OnInit {
 					 that.result(); that.enableNextCard(); that.clearUserInput(); that.play_card_description_busy = false; that.setFocus(); //scope.playCardDescription();
 				}, 0);
 			} 
-			else if(!silent && this.getUserInputString() === ''){
+			else if(!silent && this.getUserInputString() === '' && this.uinputph !== "finish"){
 				this.repeat();
 			}
 			else {
@@ -547,18 +551,20 @@ export class Ar1Component extends BaseComponent implements OnInit {
 				e.target.style.borderStyle = 'none';
 				this.elm.nativeElement.querySelector('.content_right_answer_word').style.opacity = '1';
 				this.elm.nativeElement.querySelector('.content_right_answer_word').style.cursor = 'pointer';
+				this.hide_translation_icon = false;
 
 				if(this.current_presented < this.max_presented){
 					this.playmedia.action('CHIMES', function(){
 						that.current_card_instance++;
 						that.elm.nativeElement.querySelector('.content_right_answer_word').style.opacity = '0';
+						that.hide_translation_icon = true;
 						that.elm.nativeElement.querySelector('.content_right_answer_word').style.cursor = 'default';
 						that.setCard();
 						setTimeout(function(){ 
 							that.current_presented++; 
 							that.playContentDescription();
 						}, 300);
-					}, 300);
+					}, 2000);
 						
 				} else {
 					

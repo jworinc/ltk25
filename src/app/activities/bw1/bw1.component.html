@@ -10,7 +10,7 @@
 		</span>
 	</div>
 	<div class='bw1-block bw1-word-wrap'>
-		<span class='bw1-word' (click)='playWord()'>{{ answer_word }} </span>
+		<span class='bw1-word' (click)='playWord()' appWordtranslate>{{ answer_word }} </span>
 	</div>
 	<div class='bw1-block bw1-user-input'>
 		<input autocomplete="off" type='text' [(ngModel)]='input_data' (input)="valueChange($event)" />

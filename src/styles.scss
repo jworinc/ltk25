@@ -38,3 +38,65 @@ body {
 	height: 10px;
 	margin-right: 10px;
 }
+
+.translainable-word, .translainable-word-center{
+	position: relative;
+}
+.translainable-word div, .translainable-word-center div{
+	display: none;
+    position: absolute;
+    left: 100%;
+    top: -9px;
+	width: 18px;
+	min-width: 18px;
+    margin-left: -18px;
+    height: 18px;
+    border-style: solid;
+    border-color: blue;
+    border-width: 1px;
+    border-radius: 2px;
+    color: blue;
+    font-size: 16px;
+	line-height: 15px;
+	text-align: center;
+	transition: all 0.2s ease;
+	background-color: white;
+	z-index: 10100;
+	white-space: nowrap;
+}
+.translainable-word-center div{
+	top: 50%;
+	left: 50%;
+	margin-top: -28px;
+	margin-left: -9px;
+}
+.translainable-word:hover div, .translainable-word-center:hover div{
+	display: block;
+}
+.translainable-word div.translation-expand{
+	min-width: 98% !important;
+	width: auto !important;
+	margin-left: -98% !important;
+}
+.translainable-word-center div.translation-expand-center{
+	min-width: 40% !important;
+	width: auto !important;
+	margin-left: -20% !important;
+}
+.translation-expand-center span{
+	margin: 0 !important;
+}
+.translation-icon-hide{
+	display: none !important;
+}
+@keyframes trrotation {
+	0%   {transform: rotate(0deg);}
+	20%  {transform: rotate(72deg);}
+	40%  {transform: rotate(144deg);}
+	60% {transform: rotate(216deg);}
+	80% {transform: rotate(288deg);}
+	100% {transform: rotate(360deg);}
+}
+span:hover[data-playw] {
+	background-color: rgb(0, 173, 239) !important;
+}

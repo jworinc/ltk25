@@ -68,6 +68,7 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 	});
 
 	this.old_input_data = JSON.stringify(this.input_data);
+	this.element.nativeElement.querySelector('.bw1-word-wrap').style.opacity = '0';
 
   }
 

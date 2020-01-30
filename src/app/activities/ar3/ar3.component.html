@@ -9,7 +9,7 @@
         <span class='clearfix'></span>
     </div>
     <div class='card-content-body-btn-wrap card-content-ar1-answer'
-    	(click)='stopPlay(); answerPlay()' [innerHTML]="right_answer | bindhtml">
+    	(click)='stopPlay(); answerPlay()' [innerHTML]="right_answer | bindhtml" appWordtranslate [iconPosition]="'center'" [iconHide]="hide_translation_icon">
     	<span class='clearfix'></span>
     </div>
 

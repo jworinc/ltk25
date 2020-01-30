@@ -33,6 +33,7 @@ export class OptionService {
   public change_language_event = new EventEmitter<boolean>();
   public last_requested_lang = '';
   public pause_on_instruction: boolean = false;
+  public show_word_translation: boolean = true;
 
   public opt = {
       expertlevel: "2",

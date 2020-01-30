@@ -10,7 +10,7 @@
 			</span>
     </div>
     <div *ngIf=" data.content.length == answered.length? false: true" class='diw-hint-letters gsc-letters gnb-words'>
-      <span>{{temp_word}}</span>
+      <span appWordtranslate>{{temp_word}}</span>
     </div>
     <div *ngIf=" data.content.length == answered.length? false: true" class="word text-center">
       <input type="text" autocomplete="off" class="text-center form-control" [(ngModel)]="entered_val" #focus>

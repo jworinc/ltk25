@@ -5,7 +5,7 @@
 
 <div class="card-block-item card-style-obj-single card-block-gcp">
   <div class="cr-words">
-      <span *ngFor="let w of words; let kw = index" class="cr-letter" (click)="handleAnswer(w)">
+      <span *ngFor="let w of words; let kw = index" class="cr-letter" (click)="handleAnswer(w)" appWordtranslate>
           {{ w }}
       </span>
   </div>

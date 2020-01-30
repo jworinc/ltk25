@@ -5,7 +5,7 @@
 
 <div class="card-block-item card-style-obj-single card-block-gmu">
   <div class='bw1-block bw1-word-wrap gmu-word-wrap' *ngIf="showword && !showresult">
-		<span class='bw1-word' (click)="playWord()" [innerHTML]="display_answer_word | bindhtml"></span>
+		<span class='bw1-word' (click)="playWord()" [innerHTML]="display_answer_word | bindhtml" appWordtranslate></span>
 	</div>
 	<div class='bw1-block bw1-letters-wrap gmu-letters-wrap'  *ngIf="!showresult">
 		<span class='gmu-syllables-selector gmu-syllables-selector-letters'>

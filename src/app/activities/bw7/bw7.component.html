@@ -5,7 +5,7 @@
 
 <div class="card-block-item card-style-obj-single card-block-bw7">
     <div class='bw1-block bw1-word-wrap bw7-word-wrap'>
-		<span class='bw1-word' (click)="playWord()" [innerHTML]="display_answer_word | bindhtml"></span>
+		<span class='bw1-word' (click)="playWord()" [innerHTML]="display_answer_word | bindhtml" appWordtranslate></span>
 	</div>
 	<div class='bw1-block bw1-letters-wrap bw7-letters-wrap' >
 		<span class='bw7-syllables-selector bw7-syllables-selector-letters' *ngIf="split_letters_show">

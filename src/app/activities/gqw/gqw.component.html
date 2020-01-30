@@ -11,7 +11,7 @@
 			</span>
 		</div>
 		<div class='diw-hint-letters gsc-letters gqw-words'>
-			<span *ngFor='let l of words; let kl = index' [attr.data-index]='kl' (click)='addAnswer(kl)'>
+			<span *ngFor='let l of words; let kl = index' [attr.data-index]='kl' (click)='addAnswer(kl)' appWordtranslate>
 			{{ l }}</span>
 		</div>
 		<div class='gsc-results'>

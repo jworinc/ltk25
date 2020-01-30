@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TokenService } from './token.service';
 import { share } from 'rxjs/operators';
+import { empty } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -173,6 +174,17 @@ export class DataloaderService {
     return this.http.get(`${this.base_url}/testing/${this.lu}`, {
         headers: this.Token.getAuthHeader()
       }).toPromise();
+  }
+
+  getTranslation(word, locale = null) {
+    if(typeof word == 'undefined' || word === "") return empty().toPromise();
+    if(!locale) {
+      return this.http.get(`${this.base_url}/service/word/translation/${word}`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+    } else {
+      return this.http.get(`${this.base_url}/service/word/translation/${word}/${locale}`, {}).toPromise();
+    }
   }
 
 
