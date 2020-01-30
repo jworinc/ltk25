@@ -182,7 +182,7 @@ export class DataloaderService {
 
   getTranslation(word, locale = null) {
     if(typeof word == 'undefined' || word === "") return empty().toPromise();
-    if(!locale && !this.Token.loggedIn()) {
+    if(!locale && this.Token.loggedIn()) {
       return this.http.get(`${this.base_url}/service/word/translation/${word}`, {
         headers: this.Token.getAuthHeader()
       }).toPromise();
