@@ -76,6 +76,7 @@ export class OptionService {
         this.current_locale = this.langs[i].locale;
         this.current_language = this.langs[i].lang;
         this.change_language_event.emit();
+        this.dl.setLocale(this.current_locale);
         break;
       }
     }
@@ -87,6 +88,7 @@ export class OptionService {
         this.current_locale = this.langs[i].locale;
         this.current_language = this.langs[i].lang;
         this.change_language_event.emit();
+        this.dl.setLocale(this.current_locale);
         break;
       }
     }

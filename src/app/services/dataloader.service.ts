@@ -12,6 +12,7 @@ export class DataloaderService {
   private base_url = 'https://api.ltk.cards/api';
   public lu = 10;
   public card_descriptor = 'none';
+  public current_locale = 'en';
 
   constructor(
     private http: HttpClient, 
@@ -19,6 +20,9 @@ export class DataloaderService {
   ) { 
     this.base_url = Token.getApiUrl();
   }
+
+  getLocale(){ return this.current_locale; }
+  setLocale(locale) { this.current_locale = locale; }
 
   //	Use login and pass to login user in app
   login(data) {
@@ -178,12 +182,14 @@ export class DataloaderService {
 
   getTranslation(word, locale = null) {
     if(typeof word == 'undefined' || word === "") return empty().toPromise();
-    if(!locale) {
+    if(!locale && !this.Token.loggedIn()) {
       return this.http.get(`${this.base_url}/service/word/translation/${word}`, {
         headers: this.Token.getAuthHeader()
       }).toPromise();
     } else {
-      return this.http.get(`${this.base_url}/service/word/translation/${word}/${locale}`, {}).toPromise();
+      let loc = this.getLocale();
+      if(locale) loc = locale;
+      return this.http.get(`${this.base_url}/service/word/translation/${word}/${loc}`, {}).toPromise();
     }
   }
 
