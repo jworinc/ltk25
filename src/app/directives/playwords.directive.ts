@@ -145,6 +145,7 @@ export class PlaywordsDirective {
 					if(that.in_translation){
 						that.trelm.innerHTML = "";
 						that.trelm.innerText = that.word_translation.translation;
+						that.addPointerSign();
 					}
 				}, 200);
 			}, 10);
@@ -161,6 +162,7 @@ export class PlaywordsDirective {
 				if(that.in_translation) {
 					that.trelm.innerHTML = "";
 					that.trelm.innerText = (data as any).translation;
+					that.addPointerSign();
 				}
 
 
@@ -182,5 +184,15 @@ export class PlaywordsDirective {
 		//this.trelm.appendChild(load);
 	
 	}
+
+	addPointerSign() {
+    
+		let pointer = document.createElement("span");
+		pointer.classList.add("translate-pointer");
+
+		this.trelm.appendChild(pointer);
+		setTimeout(()=>{ pointer.style.top = '60%'; }, 10);
+	}
+	
 
 }

@@ -51,16 +51,16 @@ body {
 	min-width: 18px;
     margin-left: -18px;
     height: 18px;
+    background-color: darkblue;
+    color: white;
+    border-radius: 5px;
     border-style: solid;
-    border-color: blue;
+    border-color: transparent;
     border-width: 1px;
-    border-radius: 2px;
-    color: blue;
     font-size: 16px;
 	line-height: 15px;
 	text-align: center;
 	transition: all 0.2s ease;
-	background-color: white;
 	z-index: 10100;
 	white-space: nowrap;
 }
@@ -99,4 +99,19 @@ body {
 }
 span:hover[data-playw] {
 	background-color: rgb(0, 173, 239) !important;
+}
+.translate-pointer{
+    display: block;
+    position: absolute;
+    width: 23px;
+    max-width: 70%;
+    max-height: 30%;
+    height: 8px;
+    background-color: darkblue;
+    top: 30%;
+    left: 7%;
+    -webkit-transform: skewX(62deg) rotate(152deg);
+    transform: skewX(62deg) rotate(152deg);
+    z-index: -1;
+    transition: top 0.2s ease;
 }

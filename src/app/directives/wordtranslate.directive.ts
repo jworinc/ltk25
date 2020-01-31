@@ -74,6 +74,15 @@ export class WordtranslateDirective {
 		//}, 10);
   }
 
+  addPointerSign() {
+    
+    let pointer = document.createElement("span");
+    pointer.classList.add("translate-pointer");
+
+    this.trelm.appendChild(pointer);
+    setTimeout(()=>{ pointer.style.top = '60%'; }, 10);
+  }
+
   addTranslationIcon() {
     let that = this;
     let parent = document.createElement("div");
@@ -136,6 +145,7 @@ export class WordtranslateDirective {
           if(that.in_translation){
             that.trelm.innerHTML = "";
             that.trelm.innerText = this.word_translation.translation;
+            that.addPointerSign();
           }
         }, 200);
       }, 10);
@@ -152,6 +162,7 @@ export class WordtranslateDirective {
         if(that.in_translation) {
           that.trelm.innerHTML = "";
           that.trelm.innerText = (data as any).translation;
+          that.addPointerSign();
         }
 
 
