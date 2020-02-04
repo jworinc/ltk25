@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="sentence-defination" [hidden]="!cn.definition">
-            <span *ngIf='!showTranslation' class='sample-sentence tranlsation-box'>{{cn.definition}}</span>
+            <span *ngIf='!showTranslation' class='sample-sentence tranlsation-box' [attr.data-ind]='sentence_index' app-playsentence [silentPlay]="true">{{cn.definition}}</span>
             <span *ngIf='showTranslation' class='sample-sentence tranlsation-box'>{{cn.definition_native}}</span>
             <span class="btn-translate" [hidden]="!cn.definition_native" (mouseenter) ="showTranslationStatus($event) "  (mouseleave) ="showTranslationStatus($event)" (click)="showTranslationStatus($event)">Translate</span>
         </div>

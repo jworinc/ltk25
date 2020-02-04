@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PlaysentenceDirective } from '../../directives/playsentence.directive';
 
 @Component({
   selector: 'app-rw1',
@@ -12,6 +13,8 @@ import { ColorschemeService } from '../../services/colorscheme.service';
   host: {'class': 'book-wrapper-slide'}
 })
 export class Rw1Component extends BaseComponent implements OnInit {
+
+  @ViewChildren(PlaysentenceDirective) psn !: QueryList<PlaysentenceDirective>;
 
   constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private rw1log: LoggingService, private rw1cs: ColorschemeService) {
   	super(elm, sanitizer, playmedia, rw1log, rw1cs);
@@ -27,6 +30,7 @@ export class Rw1Component extends BaseComponent implements OnInit {
     this.eventStatus = false;
     console.log(this.data);
     this.current_header = this.card.header;
+    this.sentence_index = Math.floor(Math.random() * 100000);
     let that = this;
     setTimeout(()=>{ 
       that.updateWordblocks(); 
@@ -59,6 +63,7 @@ export class Rw1Component extends BaseComponent implements OnInit {
       if(that.isActive()) that.showPrevWord();
     });
 
+    this.compilePlaySentences();
 
   }
   
@@ -69,6 +74,7 @@ export class Rw1Component extends BaseComponent implements OnInit {
   public showTranslation:any;
   public eventStatus:any;
   public uinputph = 'review';
+  public sentence_index = 0;
   //  Current word
   public cw: number = 0;
 
@@ -228,6 +234,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
       else this.disableNextSlide();
       this.showNextWord();
     }
+
+    //this.compilePlaySentences();
 
   }
 
@@ -409,6 +417,19 @@ export class Rw1Component extends BaseComponent implements OnInit {
       firstp.map((e)=>{ if(typeof e !== 'undefined' && typeof e.classList !== 'undefined') e.classList.remove('playsentence-hilight'); });
       secondp.map((e)=>{ if(typeof e !== 'undefined' && typeof e.classList !== 'undefined') e.classList.remove('playsentence-hilight'); });
     }, 2000);
+
+
+  }
+
+  compilePlaySentences() {
+    let that = this;
+		//	After setting card story we have to wait before angular process playwords directive
+		setTimeout(()=>{
+			that.psn.forEach((d)=>{
+        d.compileSentence();
+      });
+			//
+		}, 20);
 
 
   }

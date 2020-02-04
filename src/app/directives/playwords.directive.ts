@@ -1,4 +1,4 @@
-import { Directive, ElementRef } from '@angular/core';
+import { Directive, ElementRef, Input } from '@angular/core';
 import { PlaymediaService } from '../services/playmedia.service';
 import { OptionService } from '../services/option.service';
 import { DataloaderService } from '../services/dataloader.service';
@@ -19,9 +19,11 @@ export class PlaywordsDirective {
 	//	RegExp find extra spaces
 	public space_to_one = /[\s]+/g;
 	//	RegExp to find punctuation characters
-	public punctuation = /[\,\:\;\"\!\?\'\-\u2000-\u2060]/g;
+	public punctuation = /[\,\:\;\"\!\?\-\u2000-\u2060]/g;
 	//	RegExp to find dots
 	public dots = /\./g;
+	//	RegExp to find slashes
+	public slashes = /[\/\-\_]/g;
 
 	public items: any;
 	
@@ -35,6 +37,8 @@ export class PlaywordsDirective {
 	public trelm: any = null;
 	public in_translation: boolean = false;
 	public current_word: string = '';
+
+	@Input() silentPlay: boolean;
 	
 	initText() {
 		//	Get content of element which words must be playable
@@ -42,7 +46,7 @@ export class PlaywordsDirective {
 		//	Check if nothing in element then go back
 		if(this.innerText === "") return;
 		//	Filter markup to leave only words with spaces as delimiter
-		this.innerText = this.innerText.replace(this.html, '').replace(this.space_to_one, ' ').replace(this.punctuation, '').replace(this.dots, ' ');
+		this.innerText = this.innerText.replace(this.html, '').replace(this.space_to_one, ' ').replace(this.punctuation, '').replace(this.dots, ' ').replace(this.slashes, ' ');
 	  	//	Convert plain words string to array
 		this.words_arr = this.innerText.split(' ');
 
@@ -59,13 +63,15 @@ export class PlaywordsDirective {
 		let w_html = this.elmt.nativeElement.innerHTML;
 		for(let i in this.unique_words){
 			let w = this.unique_words[i];
-			let reg = new RegExp('\\b'+w+'(?!\=)\\b', 'g');
+			let pw = w.replace("'", '');
+			if(/[\d]+/.test(w)) continue;
+			let reg = new RegExp('\\b(?<!\-)'+w+'(?!\=)\\b', 'g');
 			if(this.op.show_word_translation) 
-				w_html = w_html.replace(reg, '<span data-playw="'+w+'" data-click-ev-bound="false" appWordtranslate class="translainable-word">'+
+				w_html = w_html.replace(reg, '<span data-playw="'+pw+'" data-click-ev-bound="false" appWordtranslate class="translainable-word">'+
 												w+
 											 '<div>T</div></span>');
 			else 
-				w_html = w_html.replace(reg, '<span data-playw="'+w+'" data-click-ev-bound="false" appWordtranslate>'+w+'</span>');
+				w_html = w_html.replace(reg, '<span data-playw="'+pw+'" data-click-ev-bound="false" appWordtranslate>'+w+'</span>');
 		}
 		//	Put back updated HTML
 		this.elmt.nativeElement.innerHTML = w_html;
@@ -97,23 +103,25 @@ export class PlaywordsDirective {
 			let pw = elms[e];
 			//	Check if event is not binded yet
 			if(typeof pw !== 'undefined' && typeof pw.attributes !== 'undefined' && pw.attributes["data-click-ev-bound"].value !== "true"){
-				//	Bind onclick event
-				pw.onclick = function(){
-					
-					//	Get name of the file which must be played
-					let an = pw.attributes['data-playw'].value;
-					
-					//	Mark clicked word and clear mark on rest of the words
-					//angular.element('span[data-playw]').css('background-color', 'transparent');
-					that.resetWordBackground();
-					pw.style.backgroundColor = '#00ADEF';
-					that.pms.stop();
-					that.pms.word(an, ()=>{});
-					
-				};
+				if(typeof this.silentPlay === 'undefined' || (typeof this.silentPlay !== 'undefined' && !this.silentPlay)){
+					//	Bind onclick event
+					pw.onclick = function(){
+						
+						//	Get name of the file which must be played
+						let an = pw.attributes['data-playw'].value;
+						
+						//	Mark clicked word and clear mark on rest of the words
+						//angular.element('span[data-playw]').css('background-color', 'transparent');
+						that.resetWordBackground();
+						pw.style.backgroundColor = '#00ADEF';
+						that.pms.stop();
+						that.pms.word(an, ()=>{});
+						
+					};
 
-				//	Mark word as binded with onclick play event
-				pw.setAttribute("data-click-ev-bound", "true");
+					//	Mark word as binded with onclick play event
+					pw.setAttribute("data-click-ev-bound", "true");
+				}
 
 				//	Set click event for translation
 				if(this.op.show_word_translation){
@@ -172,7 +180,7 @@ export class PlaywordsDirective {
 			//  Change translation element to loading
 			this.trelm.innerHTML = "";
 			let load = document.createElement("span");
-			load.innerHTML = "<img src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PGxpbmVhckdyYWRpZW50IGlkPSdGYXN0TG9hZGluZ0luZGljYXRvci1saW5lYXJHcmFkaWVudCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnIHgxPScxLjc4MDQnIHkxPScxNi4wMzc5JyB4Mj0nMzAuMTQzOScgeTI9JzE2LjAzNzknPjxzdG9wIG9mZnNldD0nMC40MTY5JyBzdG9wLWNvbG9yPScjQ0RDRkQyJy8+PHN0b3Agb2Zmc2V0PScwLjkzNzYnIHN0b3AtY29sb3I9J3JnYmEoMjQ4LDI0OCwyNDksMCknLz48L2xpbmVhckdyYWRpZW50PjxjaXJjbGUgY3g9JzE2JyBjeT0nMTYnIHI9JzEyLjcnIHN0eWxlPSdmaWxsOiBub25lOyBzdHJva2U6IHVybCgjRmFzdExvYWRpbmdJbmRpY2F0b3ItbGluZWFyR3JhZGllbnQpOyBzdHJva2Utd2lkdGg6IDI7Jz48L2NpcmNsZT48L3N2Zz4=' alt='' style='display: block; position: relative; margin: auto; margin-top: 1px; width: 14px; height: 14px; line-height: 15px; transition: transform 1s linear; animation-name: trrotation; animation-duration: 1s; animation-iteration-count: infinite;' />";
+			load.innerHTML = "<img src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PGxpbmVhckdyYWRpZW50IGlkPSdGYXN0TG9hZGluZ0luZGljYXRvci1saW5lYXJHcmFkaWVudCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnIHgxPScxLjc4MDQnIHkxPScxNi4wMzc5JyB4Mj0nMzAuMTQzOScgeTI9JzE2LjAzNzknPjxzdG9wIG9mZnNldD0nMC40MTY5JyBzdG9wLWNvbG9yPScjQ0RDRkQyJy8+PHN0b3Agb2Zmc2V0PScwLjkzNzYnIHN0b3AtY29sb3I9J3JnYmEoMjQ4LDI0OCwyNDksMCknLz48L2xpbmVhckdyYWRpZW50PjxjaXJjbGUgY3g9JzE2JyBjeT0nMTYnIHI9JzEyLjcnIHN0eWxlPSdmaWxsOiBub25lOyBzdHJva2U6IHVybCgjRmFzdExvYWRpbmdJbmRpY2F0b3ItbGluZWFyR3JhZGllbnQpOyBzdHJva2Utd2lkdGg6IDI7Jz48L2NpcmNsZT48L3N2Zz4=' alt='' style='' />";
 			setTimeout(()=>{ 
 				that.trelm.classList.add("translation-expand"); 
 			}, 20);
@@ -189,7 +197,10 @@ export class PlaywordsDirective {
     
 		let pointer = document.createElement("span");
 		pointer.classList.add("translate-pointer");
-
+		pointer.onclick = (e)=>{
+			e.stopPropagation();
+			e.preventDefault();
+		}
 		this.trelm.appendChild(pointer);
 		setTimeout(()=>{ pointer.style.top = '60%'; }, 10);
 	}

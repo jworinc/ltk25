@@ -152,6 +152,7 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 				//	After setting card story we have to wait before angular process playwords directive
 				
 				let d = that.psn;
+				d.origin_text = '';
 				d.compileSentence();
 				d.end_callback = ()=>{
 					that.playsentenceEndCallback();
@@ -223,6 +224,7 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 				this.enableMoveNext();
 			}
 			this.prevent_dubling_flag = true;
+			this.psn.compileSentence();
 		}
 		
 	}
@@ -274,7 +276,8 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 	playSentenceFinish() {
 		//this.showNextSentence();
 		let that = this;
-		if(this.elm.nativeElement.querySelector('.gwf-answer-placeholder').innerText !== '...')
+		if(!this.elm.nativeElement.querySelector('.gwf-answer-placeholder') || 
+			this.elm.nativeElement.querySelector('.gwf-answer-placeholder').innerText !== '...')
 				setTimeout(function(){ that.showNextSentence(); }, 700);
 	}
 
@@ -300,7 +303,11 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 			this.showRightAnswer();
 			this.elm.nativeElement.querySelector('.gwf-answer-placeholder').style.width = 'auto';
 			this.elm.nativeElement.querySelector('.gwf-answer-placeholder').innerText = w;
-			setTimeout(function(){ that.psn.compileSentence(); that.playSentence(); }, 1400);
+			setTimeout(function(){ 
+				that.psn.origin_text = that.card.content[0].parts[that.current_set].title.replace(/\(/ig, '').replace(/\)/ig, ''); 
+				that.psn.compileSentence(); 
+				setTimeout(()=>{ that.playSentence(); }, 10);
+			}, 1400);
 		} else {
 			//	Logging wrong answer
 			this.result();
@@ -310,8 +317,9 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 				that.elm.nativeElement.querySelector('.gwf-answer-placeholder').style.width = 'auto';
 				that.elm.nativeElement.querySelector('.gwf-answer-placeholder').innerText = that.expected[that.current_set];
 				setTimeout(function(){
+					that.psn.origin_text = that.card.content[0].parts[that.current_set].title.replace(/\(/ig, '').replace(/\)/ig, '');
 					that.psn.compileSentence();
-					that.playSentence();
+					setTimeout(()=>{ that.playSentence(); }, 10);
 					
 				}, 1400);
 			});

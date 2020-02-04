@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { PlaysentenceDirective } from '../../directives/playsentence.directive';
+import { PlaywordsDirective } from '../../directives/playwords.directive';
 
 @Component({
   selector: 'app-bs1',
@@ -15,7 +16,8 @@ import { PlaysentenceDirective } from '../../directives/playsentence.directive';
 export class Bs1Component extends BaseComponent implements OnInit {
 
 
-    @ViewChildren(PlaysentenceDirective) psns;
+	@ViewChildren(PlaysentenceDirective) psns;
+	@ViewChildren(PlaywordsDirective) pwds;
 
   	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private bs1log: LoggingService, private gmucs: ColorschemeService) {
   	  	super(elm, sanitizer, playmedia, bs1log, gmucs);
@@ -25,13 +27,14 @@ export class Bs1Component extends BaseComponent implements OnInit {
 
 		public current_sentence = "";
 		public current_variant = "";
-    public sentence_index = 0;
-    public main_ind = 0 ;
-    public show_sentences = [];
-    public len = 0;
+		public sentence_index = 0;
+		public previous_index = 0;
+		public main_ind = 0 ;
+		public show_sentences = [];
+		public len = 0;
 
-    public cn:any;
-    public show_variants;
+		public cn:any;
+		public show_variants;
 		public header = "";
 		public subtitle = "";
 		public uinputph = 'sentence';
@@ -46,16 +49,18 @@ export class Bs1Component extends BaseComponent implements OnInit {
 		public i_sentence_var = 2;
 		public s_pull = [];
 		public ss: any;
+		public ww: any;
 		public row_height = 57;
 		public currentinnerWidth = 0;
+		public header_compiled = false;
 
-    ngOnInit() {
+    	ngOnInit() {
 			console.log(this.data);
 			this.card = this.data;
 			this.header = this.data.content[0].header;
 			this.subtitle = this.data.content[0].subtitle;
-      this.cn = this.data.content;
-      if(window.innerWidth <= 1024){
+			this.cn = this.data.content;
+			if(window.innerWidth <= 1024){
 				this.row_height = 19;
 
 			}
@@ -87,6 +92,16 @@ export class Bs1Component extends BaseComponent implements OnInit {
 					this.enableMoveNext();
 				}
 				this.prevent_dubling_flag = true;
+				let that = this;
+				if(!this.header_compiled){
+					setTimeout(()=>{
+						that.ww = that.pwds.toArray();
+						for(let i in that.ww){
+							that.ww[i].initText();
+						}
+						that.header_compiled = true;
+					}, 10);
+				}
 
 			}
 			
@@ -116,7 +131,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 		}
 
 		repeat() {
-			if(this.cn.length - 1 > this.sentence_index){
+			if(this.cn.length - 1 >= this.sentence_index){
 				if(typeof this.ss !== 'undefined'){
 					this.ss.map((s)=>{ 
 						s.stop(); 
@@ -154,6 +169,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 			setTimeout(()=>{
 				that.ss = that.psns.toArray();
 				for(let i in that.ss){
+					that.ss[i].origin_text = '';
 					that.ss[i].compileSentence();
 					that.ss[i].end_callback = ()=>{
 						that.uinputph = 'enablenext';
@@ -170,8 +186,13 @@ export class Bs1Component extends BaseComponent implements OnInit {
 			this.current_sentence = this.cn[i].intro;
 			this.current_variant = this.cn[i].var;
 			setTimeout(()=>{
-				that.ss[0].compileSentence();
-				that.ss[1].compileSentence();
+				if(that.previous_index !== i){
+					that.previous_index = i;
+					that.ss[0].origin_text = '';
+					that.ss[1].origin_text = '';
+					that.ss[0].compileSentence();
+					that.ss[1].compileSentence();
+				}
 				that.showFirstPartOfSentence();
 			}, 20);
 			this.uinputph = 'ressentence';
@@ -219,7 +240,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 				let s = this.s_pull[i];
 				let id = parseInt(i);
 				if(id <= this.sentence_index){
-					s.style = {'top': (this.row_height*(this.sentence_index - id)) + 'px', 'opacity': '1'};
+					s.style = {'top': (this.row_height*(this.sentence_index - id) + 5) + 'px', 'opacity': '1'};
 				}
 			}
 			//this.s_pull[this.sentence_index]

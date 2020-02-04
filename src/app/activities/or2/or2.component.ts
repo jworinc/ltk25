@@ -101,7 +101,14 @@ export class Or2Component extends BaseorComponent implements OnInit {
 			//} else {
 			//	this.enableMoveNext();
 			//}
-			this.prevent_dubling_flag = true;
+      this.prevent_dubling_flag = true;
+
+      let that = this;
+      //	After setting card story we have to wait before angular process playwords directive
+      setTimeout(()=>{
+        let d = that.psn;
+        d.compileSentence();
+      }, 20);
 		}
 		
 	}
@@ -112,6 +119,7 @@ export class Or2Component extends BaseorComponent implements OnInit {
     if(this.current_word < this.card.content[0].parts.length){
       this.answer_word = this.words[this.current_word];
       setTimeout(()=>{
+        that.psn.origin_text = '';
         that.psn.compileSentence();
         that.repeat();
       }, 20);

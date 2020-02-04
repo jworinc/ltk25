@@ -134,6 +134,7 @@ export class DisComponent extends BaseComponent implements OnInit {
 		//	After setting card story we have to wait before angular process playwords directive
 		setTimeout(()=>{
 			let d = this.psn;
+			d.origin_text = '';
 			d.compileSentence();
 			d.end_callback = ()=>{
 				that.playSentenceFinish();
