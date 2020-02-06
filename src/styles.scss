@@ -128,6 +128,59 @@ span:hover[data-playw], span:hover[data-psword] {
     z-index: -1;
     transition: top 0.2s ease;
 }
+.translate-popup-init{
+	display: flex;
+    position: absolute;
+    flex-flow: column;
+    width: 60%;
+    height: 50%;
+    top: -149.5%;
+    left: 20%;
+    /* background-color: darkblue; */
+    color: white;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: darkblue;
+    border-width: 0;
+    font-size: 16px;
+    line-height: 15px;
+    overflow: hidden;
+    z-index: 19999;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+	transition: all 0.1s ease;
+	cursor: pointer;
+}
+.translate-popup-init h3{
+	background-color: darkblue;
+    height: 40px;
+    margin: 0;
+    padding: 3px 13px;
+    width: 100%;
+}
+.translate-popup-init h3::before {
+    content: "X";
+    display: block;
+    position: absolute;
+    right: 10px;
+    top: 2px;
+}
+.translate-popup-init span{
+	display: flex;
+    flex: 1;
+    background-color: #efefef;
+    color: darkblue;
+	padding: 20px;
+	overflow: auto;
+	width: 100%;
+}
+.translate-popup-expanded{
+	width: 60%;
+    height: 50%;
+    top: 25%;
+    left: 20%;
+}
 @media only screen and (max-width:1024px)
 {
 	.translainable-word div{
@@ -144,5 +197,15 @@ span:hover[data-playw], span:hover[data-psword] {
 		width: 12px; 
 		height: 12px; 
 		line-height: 13px; 
+	}
+	.translate-popup-expanded {
+		width: 80%;
+		height: 80%;
+		top: 10%;
+		left: 10%;
+	}
+	.translate-popup-init h3 {
+		height: 22px;
+		font-size: 14px;
 	}
 }

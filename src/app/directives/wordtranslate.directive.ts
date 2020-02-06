@@ -52,11 +52,11 @@ export class WordtranslateDirective {
     this.dynamic_change = this.el.nativeElement.innerText;
 
     this.el.nativeElement.addEventListener('mouseleave', ()=>{
-        that.clearTranslationPopup();
+        //that.clearTranslationPopup();
     });
 
     this.el.nativeElement.addEventListener('touchend', ()=>{
-      that.clearTranslationPopup();
+      //that.clearTranslationPopup();
     });
 
     this.el.nativeElement.addEventListener('mouseover', ()=>{
@@ -86,7 +86,7 @@ export class WordtranslateDirective {
   addTranslationIcon() {
     let that = this;
     let parent = document.createElement("div");
-    parent.innerText = "T";
+    parent.innerText = "?";
     parent.setAttribute('title', this.translation.instant('click_to_see_translation'));
 
     this.el.nativeElement.appendChild(parent);
@@ -126,15 +126,76 @@ export class WordtranslateDirective {
   clearTranslationPopup() {
     let that = this;
     that.trelm.innerHTML = "";
-    that.trelm.innerText = "T";
+    that.trelm.innerText = "?";
     that.trelm.classList.remove("translation-expand"+this.position_class);
     that.in_translation = false;
   }
 
+
+	setTranslationPopup(content, word) {
+		document.querySelectorAll('.translate-popup-expanded').forEach((el)=>{
+			el.remove();
+		});
+		// Find root node for popup
+		let rootclass = 'card-block-item';
+		let rootn = null;
+		let next_node = this.trelm.parentNode;
+		for(let i = 0; i < 10; i++) {
+			if(!next_node.classList.contains(rootclass)) {
+				next_node = next_node.parentNode;
+			} else {
+				rootn = next_node;
+				break;
+			}
+		}
+
+		//	Create popup element
+		let pp = document.createElement("div");
+		pp.classList.add("translate-popup-init");
+		setTimeout(()=>{ pp.classList.add("translate-popup-expanded"); }, 10);
+		//setTimeout(()=>{ pp.innerText = content; }, 100);
+
+		//	Create header
+		let hh = document.createElement("h3");
+		hh.innerText = word;
+		pp.appendChild(hh);
+
+		//	Create content
+		let cn = document.createElement("span");
+		cn.innerText = content;
+		pp.appendChild(cn);
+		
+		pp.onclick = (e)=>{
+			e.stopPropagation();
+			e.preventDefault();
+			pp.remove();
+			document.querySelectorAll('.translate-popup-expanded').forEach((el)=>{
+				el.remove();
+			});
+		}
+		rootn.appendChild(pp);
+
+	}
+
+	showTranslation(translation, word) {
+		if(translation.length < 17){
+			this.trelm.innerHTML = "";
+			this.trelm.innerText = translation;
+			this.addPointerSign();
+		} else {
+			this.setTranslationPopup(translation, word);
+			this.trelm.classList.remove("translation-expand");
+			this.trelm.innerHTML = "?";
+		}
+	}
+
+
   clickToSeeTranslation(e) {
     e.stopPropagation();
     e.preventDefault();
-    
+    document.querySelectorAll('.translate-popup-expanded').forEach((el)=>{
+			el.remove();
+		});
     let that = this;
     this.in_translation = true;
     this.innerText = this.el.nativeElement.innerText.slice(0, -1);
@@ -144,10 +205,8 @@ export class WordtranslateDirective {
         that.trelm.classList.add("translation-expand"+this.position_class);
         setTimeout(()=>{
           if(that.in_translation){
-            that.trelm.innerHTML = "";
-            that.trelm.innerText = this.word_translation.translation;
-            that.addPointerSign();
-          }
+						that.showTranslation(that.word_translation.translation, that.innerText);
+					}
         }, 200);
       }, 10);
       
@@ -160,10 +219,8 @@ export class WordtranslateDirective {
         if(typeof data === 'undefined') return;
         that.word_translation = data;
         console.log(data);
-        if(that.in_translation) {
-          that.trelm.innerHTML = "";
-          that.trelm.innerText = (data as any).translation;
-          that.addPointerSign();
+        if(that.in_translation){
+          that.showTranslation(that.word_translation.translation, that.innerText);
         }
 
 
