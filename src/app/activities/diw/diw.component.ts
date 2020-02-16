@@ -239,7 +239,7 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 			that.elm.nativeElement.querySelector('.diw-hint-word').style.opacity = '0';
 			//	Wait 400ms until transition will complete and remove it from from DOM
 			setTimeout(function(){ that.elm.nativeElement.querySelector('.diw-hint-word').style.display = 'none'; that.hint_busy = false; that.setFocus(); }, 400);
-		}, 3000);
+		}, 4000);
 
 	}
 
@@ -285,6 +285,8 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 		//	Check if hint 1 or hint 3 is already started, then return
 		if(this.hint_3_started) return;
 		this.hint_3_started = true;
+		this.hint_1_started = false;
+		this.hintLevel1();
 		let that = this;
 		//	Show letters
 		this.elm.nativeElement.querySelector('.diw-hint-letters-show').style.display = 'flex';
@@ -364,8 +366,10 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 		let n = value.length;
 
 		//	Check if input data length bigger that 0
-		if(n <= 0) return;
-
+		if(n <= 0){
+			this.lock_user_input = false;
+			return;
+		}
 		//	Check if user complete answer
 		if(this.answer_word.toLowerCase() === value.toLowerCase()){
 			//	Save errors

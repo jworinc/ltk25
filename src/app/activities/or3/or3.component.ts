@@ -162,7 +162,7 @@ export class Or3Component extends BaseorComponent implements OnInit, DoCheck {
 			}
 			this.prevent_dubling_flag = true;
 			this.showHint();
-			
+			this.setGlobalHeader("ORAL READING");
 		}
 		
 	}

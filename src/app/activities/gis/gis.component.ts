@@ -49,7 +49,9 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
     public dashes: any;
     public split_syllables_show: any;
 	public display_result: any;
-  	public showresult:any;
+	public showresult:any;
+	public split_description_played: boolean = false;
+
   	setCard() {
 
 		this.input_data = '';
@@ -143,6 +145,7 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 				this.enableMoveNext();
 			}
 			this.prevent_dubling_flag = true;
+			this.split_description_played = false;
 			this.showClear();
 			this.showEnter();
 		}
@@ -151,7 +154,7 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 
 	//	Set and reset dashes between letters
 	setDash(kl){
-
+		this.pms.stop();
 		if(this.letters[kl] === '-' && this.dashes[kl] === 0){
 			this.dashes[kl] = 1;
 		}
@@ -193,6 +196,8 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 	//	Overload default repeat and play last uncomplete question
 	repeat() {
 		let that = this;
+		this.split_description_played = false;
+		this.pms.stop();
 		if(this.uinputph === 'split') this.splitLoop();
 		//	When we are in syllable help phase (student splited the word incorrect), incorrect instruction must be played
 		else if(this.uinputph === 'sylhelp'){
@@ -386,28 +391,28 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 	//	Overload of default function, wait when user split the word to syllables and play response correct or not
 	enter() {
 		let that = this;
-		if(this.uinputph === 'split' && this.isDashesSetted() && this.split_loop_ready){
-			
+		this.pms.stop();
+		//if(this.uinputph === 'split' && this.isDashesSetted() && this.split_loop_ready){
+		if(this.uinputph === 'split' && this.isDashesSetted()){	
 			//	Check result
 			if(this.getSplitResult()){
-
-				this.finishOrContinueBW();
 
 				//	Show right answer
 				this.split_syllables_show = true;
 				this.display_result.right++;
-				//that.playCorrectSound(function(){
-				//});
+				
+				this.finishOrContinueBW();
+
 			} else {
 				
 				//	Log user error
 				this.card_object = 'Word';
 				this.card_instance = this.expected_string;
 				this.result();
-
+				this.display_result.wrong++;
 				this.respIfIncorrect();
 				//this.enableNextCard();
-				this.display_result.wrong++;
+				
 			}
 			return;
 		}
@@ -422,7 +427,7 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 				//this.blinkWord();
 				this.pms.sound(this.card.content[0].RespAtEnd[0].audio, function(){
 					that.enableNextCard();
-					that.moveNext();
+					setTimeout(()=>{ if(that.isActive()) that.moveNext(); }, 2000);
 				});
 				this.showresult = true;
 			}
@@ -437,7 +442,8 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 	splitLoop() {
 
 		let that = this;
-
+		if(this.split_description_played) { that.split_loop_ready = true; return; }
+		this.split_description_played = true;
 		//	Play the first loop instruction in sequence
 		const pr1 = Observable.create((observer) => {
 			that.lastUncomplete = that.card.content[0].LoopInst[0];

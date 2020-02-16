@@ -9,7 +9,7 @@
 	</div>
 	<div class='bw1-block bw1-letters-wrap bw7-letters-wrap' >
 		<span class='bw7-syllables-selector bw7-syllables-selector-letters' *ngIf="split_letters_show">
-			<span class='bw1-letter bw7-letters bw7-letters-select' *ngFor="let l of letters; let kl=index" [attr.data-letter]='kl' [ngClass]="{'bw7dash': l==='-'}" (click)="setDash(kl)">
+			<span class='bw1-letter bw7-letters bw7-letters-select' *ngFor="let l of letters; let kl=index" [attr.data-letter]='kl' [ngClass]="{'bw7dash': l==='-'}" (click)="setDash(kl); playParticularLetter(l);">
 				{{ l }}
 				<span class='bw7-dashmark bw7-dashmark-select' [ngClass]="{'bw7dashmarkselected': dashes[kl]}" *ngIf="l === '-'"></span>
 			</span>

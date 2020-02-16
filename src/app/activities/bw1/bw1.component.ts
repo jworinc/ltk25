@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { BasebwComponent } from '../basebw/basebw.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { MultiselectComponent } from '../../components/multiselect/multiselect.component';
 
 @Component({
   selector: 'app-bw1',
@@ -22,6 +23,8 @@ export class Bw1Component extends BasebwComponent implements OnInit {
 			  private op: OptionService) {
   	super(element, sz, pms, bw1log, bw1cs);
   }
+
+  @ViewChild(MultiselectComponent) msel: MultiselectComponent;
 
   ngOnInit() {
 
@@ -66,7 +69,5 @@ export class Bw1Component extends BasebwComponent implements OnInit {
 	this.old_input_data = JSON.stringify(this.input_data);
 
   }
-
-
 
 }

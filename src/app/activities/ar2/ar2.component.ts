@@ -335,7 +335,11 @@ export class Ar2Component extends BaseComponent implements OnInit {
 					that.setGlobalDesc(fst.pointer_to_value);
 					if(typeof fst.audio !== 'undefined' && fst.audio !== ''){
 						that.playmedia.sound(fst.audio, function(){});
-						that.playmedia.word(that.answer_word, function(){ that.enableNextSlide(); that.moveNext(); });
+						that.playmedia.word(that.answer_word, function(){ 
+							that.playCorrectSound(function(){ 
+								that.enableNextSlide(); that.moveNext();
+							});
+						});
 					}
 				}
 			}

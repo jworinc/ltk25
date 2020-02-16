@@ -115,6 +115,7 @@ import { CustomfieldService } from './services/customfield.service';
 import { CfcComponent } from './activities/cfc/cfc.component';
 import { SnoozeComponent } from './components/snooze/snooze.component';
 import { WordtranslateDirective } from './directives/wordtranslate.directive';
+import { MultiselectComponent } from './components/multiselect/multiselect.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -208,6 +209,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CfcComponent,
     SnoozeComponent,
     WordtranslateDirective,
+    MultiselectComponent,
   ],
   imports: [
     BrowserModule,

@@ -109,6 +109,7 @@ export class Or2Component extends BaseorComponent implements OnInit {
         let d = that.psn;
         d.compileSentence();
       }, 20);
+      this.setGlobalHeader("ORAL READING");
 		}
 		
 	}

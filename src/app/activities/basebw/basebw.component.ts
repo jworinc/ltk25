@@ -54,20 +54,22 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 		this.elm.nativeElement.querySelector('.bw1-word-wrap').style.opacity = '0';
 		this.uinputph = 'letters';
 		this.main_description_part_played = false;
-
+		this.letters = [];
 		for(let i in this.card.content[ci].parts){
 
 			let cn = this.card.content[ci].parts[i];
 			this.answer_word += cn.replace(/\-/ig, '');
-
+			this.letters.push(cn.replace(/\-/ig, ''));
 		}
 
 		//	Get letters of the word
-		this.letters = this.answer_word.split('');
+		//this.letters = this.answer_word.split('');
 
 		//	Expected number of letters
-		this.expected = this.letters.length;
-
+		this.expected = this.answer_word.split('').length;
+		this.mselshow = true;
+		this.mseltype = 'numbers';
+		if(typeof (this as any).msel !== 'undefined') (this as any).msel.update();
 	}
 
 	//	Define current card number
@@ -134,7 +136,8 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 			}
 			this.prevent_dubling_flag = true;
 			this.input_data = '';
-
+			this.mselshow = true;
+			if(typeof (this as any).msel !== 'undefined') (this as any).msel.update();
 		}
 		
 	}
@@ -400,9 +403,10 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 
 	getVowel() {
 		let out;
-		this.vovels = ['a', 'e', 'i', 'o', 'u'];
+		this.vovels = ['a', 'e', 'i', 'o', 'u', 'y'];
 		for(let i in this.letters){
 			let p = this.letters[i];
+			if(p.length > 1) p = p.split("")[0];
 			if(this.vovels.indexOf(p.toLowerCase()) >= 0){ 
 				out = p; 
 				break; 
@@ -432,12 +436,14 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 
 		let callback = cb;
 		let that = this;
+		let ci = this.current_card_instance;
 		//	Play pronuncuation of the word
-		if(typeof this.card.content[0].pronounce !== 'undefined' && this.card.content[0].pronounce.length > 0){
+		if(typeof this.card.content[ci].pronounce !== 'undefined' && this.card.content[ci].pronounce.length > 0){
 
 			//	Delay before play each sound
 			let del = 400;
 			let ml = 0;
+			let prnc = this.card.content[ci].pronounce;
 			let pm_immidiate_stop = this.playmedia.immidiate_stop_event.subscribe(()=>{
 				pm_immidiate_stop.unsubscribe();
 				that.play_pronouce_busy_flag = false;
@@ -446,10 +452,10 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 			})
 			this.elm.nativeElement.querySelector('.bw1-letter').style.backgroundColor = '#C69C6D';
 			this.elm.nativeElement.querySelector('.bw1-letter[data-index="'+ml+'"]').style.backgroundColor = '#00ADEF';
-			for(let i in this.letters) {
-				let p = '_S' + this.letters[i]; p = p.replace('-', '');
+			for(let i in prnc) {
+				let p = '_S' + prnc[i]; p = p.replace('-', '');
 				//	Check if we play the last sound, switch user input phase to next and play next instructions
-				if(parseInt(i) === this.letters.length - 1){
+				if(parseInt(i) === prnc.length - 1){
 					this.playmedia.sound(p, function(){
 						if(typeof callback !== 'undefined') setTimeout(function(){ callback(); }, del*2);
 						that.play_pronouce_busy_flag = false;
@@ -474,6 +480,7 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 			that.uinputph = 'sounds';
 			that.expected = +that.card.content[that.current_card_instance].sounds;
 			that.playContentDescription();
+			if(typeof (that as any).msel !== 'undefined') (that as any).msel.update();
 		});
 	}
 
@@ -559,6 +566,9 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 				if(this.input_data == this.expected){
 					this.uinputph = 'vowel';
 					this.expected = this.getVowel();
+					this.input_data = '';
+					this.mselshow = false;
+					//if(typeof (this as any).msel !== 'undefined') (this as any).msel.update();
 					this.playCardDescription();
 					return;
 				} else {
@@ -595,7 +605,12 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 	    
 	}
 
-
+	
+	handleUserInput($event) {
+		this.input_data = $event;
+		this.valueChange({});
+	}
+	
 
 
 }

@@ -236,6 +236,7 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 	//	Used to play task word and sound exactly after instructions play finished
 	playContentDescription() {
 		let that = this;
+		this.playSentenceFinish();
 		if(typeof this.card.content[0].LoopInst !== 'undefined' && this.card.content[0].LoopInst.length > 0){
 			this.card.content[0].desc = this.card.content[0].LoopInst[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].desc);

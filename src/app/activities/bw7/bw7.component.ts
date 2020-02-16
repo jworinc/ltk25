@@ -335,6 +335,42 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 
 	}
 
+	playIntroForRule() {
+		let that = this;
+		that.display_answer_word = that.answer_word;
+		that.play_word_busy_flag = false;
+		if(that.card.content[0].RespIfIncorrect2.length > 1){
+			that.lastUncomplete = that.card.content[0].RespIfIncorrect2[0];
+			let i = that.card.content[0].RespIfIncorrect2[0];
+			that.card.content[0].desc = i.pointer_to_value;
+			that.setGlobalDesc(i.pointer_to_value);
+			if(typeof i.audio !== 'undefined' && i.audio !== ''){
+				that.pms.sound(i.audio, function(){
+					
+					that.lastUncomplete = that.card.content[0].RespIfIncorrect2[1];
+					let i = that.card.content[0].RespIfIncorrect2[1];
+					that.card.content[0].desc = i.pointer_to_value;
+					that.setGlobalDesc(i.pointer_to_value);
+					if(typeof i.audio !== 'undefined' && i.audio !== ''){
+						that.pms.sound(i.audio, function(){
+							that.uinputph = 'sylhelp';
+							that.blinkRule();
+							
+						});
+					}
+					
+					
+				});
+			} else  setTimeout(function(){
+				that.uinputph = 'sylhelp';
+				that.blinkRule(); 
+			}, 1);
+		} else setTimeout(function(){
+			that.uinputph = 'sylhelp';
+			that.blinkRule();
+		}, 1);
+	}
+
 	//	Phase incorrect message
 	respIfIncorrect() {
 		
@@ -370,37 +406,7 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 		  	
 			//	Show right answer
 			that.split_syllables_show = true;
-			
-			if(that.card.content[0].RespIfIncorrect2.length > 1){
-				that.lastUncomplete = that.card.content[0].RespIfIncorrect2[0];
-				let i = that.card.content[0].RespIfIncorrect2[0];
-				that.card.content[0].desc = i.pointer_to_value;
-				that.setGlobalDesc(i.pointer_to_value);
-	    		if(typeof i.audio !== 'undefined' && i.audio !== ''){
-	    			that.pms.sound(i.audio, function(){
-	    				
-	    				that.lastUncomplete = that.card.content[0].RespIfIncorrect2[1];
-						let i = that.card.content[0].RespIfIncorrect2[1];
-						that.card.content[0].desc = i.pointer_to_value;
-						that.setGlobalDesc(i.pointer_to_value);
-			    		if(typeof i.audio !== 'undefined' && i.audio !== ''){
-			    			that.pms.sound(i.audio, function(){
-			    				that.uinputph = 'sylhelp';
-			    				that.blinkRule();
-			    				
-			    			});
-	    				}
-	    				
-	    				
-	    			});
-	    		} else  setTimeout(function(){
-	    			that.uinputph = 'sylhelp';
-	    			that.blinkRule(); 
-	    		}, 1);
-	    	} else setTimeout(function(){
-	    		that.uinputph = 'sylhelp';
-	    		that.blinkRule();
-	    	}, 1);
+			that.playIntroForRule();
 
 		});
 
@@ -430,8 +436,9 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 		let pm_word_immidiate_stop = this.pms.immidiate_stop_event.subscribe(()=>{
 			pm_word_immidiate_stop.unsubscribe();
 			that.play_word_busy_flag = false;
-			hletter = 0;
-			that.display_answer_word = that.hilightWordLetter(pr, hletter);
+			//hletter = 0;
+			//that.display_answer_word = that.hilightWordLetter(pr, hletter);
+			that.display_answer_word = that.answer_word;
 			that.clearUserInput();
 		});
 		//	Play word
@@ -449,8 +456,9 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 			let pm_immidiate_stop = this.pms.immidiate_stop_event.subscribe(()=>{
 				pm_immidiate_stop.unsubscribe();
 				that.play_word_busy_flag = false;
-				hletter = 0;
-				that.display_answer_word = that.hilightWordLetter(pr, hletter);
+				//hletter = 0;
+				//that.display_answer_word = that.hilightWordLetter(pr, hletter);
+				that.display_answer_word = that.answer_word;
 				that.clearUserInput();
 			});
 			for(let i in this.card.content[this.current_card_instance].pronounce) {
@@ -530,14 +538,17 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 			if(this.getSplitResult()){
 				//this.uinputph = 'finish';
 
-				this.finishOrContinueBW();
+				//this.finishOrContinueBW();
 
 				//	Show right answer
 				this.split_syllables_show = true;
 			
 				that.playCorrectSound(function(){
-					that.finishOrContinueBW();
+					that.playIntroForRule();
 				});
+				this.showRule();
+
+
 			} else {
 
 				//	Log user error
@@ -643,7 +654,7 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 	
 	playRule(){
 		if(this.uinputph !== 'finish' && this.uinputph !== 'sylhelp') return;
-		if(this.uinputph === 'sylhelp' && !this.hilightsyllables) { this.enter(); return; }
+		//if(this.uinputph === 'sylhelp' && !this.hilightsyllables) { this.enter(); return; }
 		let descs = [];
 		let di = 0;
 		let that = this;
@@ -668,5 +679,12 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 
 	//	Watch if user type any data
 	ngDoCheck() {}
+
+	playParticularLetter(l) {
+		if(l == '' || l == '-') return;
+		this.pms.stop();
+		this.pms.immidiate_stop_event.emit();
+		this.pms.word(l, function(){});
+	}
 
 }

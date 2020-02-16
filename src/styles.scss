@@ -132,10 +132,10 @@ span:hover[data-playw], span:hover[data-psword] {
 	display: flex;
     position: absolute;
     flex-flow: column;
-    width: 60%;
-    height: 50%;
+    width: 80%;
+    height: 70%;
     top: -149.5%;
-    left: 20%;
+    left: 10%;
     /* background-color: darkblue; */
     color: white;
     border-radius: 5px;
@@ -159,6 +159,7 @@ span:hover[data-playw], span:hover[data-psword] {
     padding: 3px 13px;
     width: 100%;
 }
+/*
 .translate-popup-init h3::before {
     content: "X";
     display: block;
@@ -166,8 +167,10 @@ span:hover[data-playw], span:hover[data-psword] {
     right: 10px;
     top: 2px;
 }
+*/
 .translate-popup-init span{
 	display: flex;
+	flex-flow: column;
     flex: 1;
     background-color: #efefef;
     color: darkblue;
@@ -175,11 +178,17 @@ span:hover[data-playw], span:hover[data-psword] {
 	overflow: auto;
 	width: 100%;
 }
+.translate-popup-init span img{ 
+	display: block;
+    margin: 10px auto;
+    /* max-width: 220px; */
+    max-height: 100px;
+}
 .translate-popup-expanded{
-	width: 60%;
-    height: 50%;
-    top: 25%;
-    left: 20%;
+	width: 80%;
+    height: 70%;
+    top: 15%;
+    left: 10%;
 }
 @media only screen and (max-width:1024px)
 {

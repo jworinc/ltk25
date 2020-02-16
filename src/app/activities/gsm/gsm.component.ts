@@ -31,7 +31,7 @@ export class GsmComponent extends BaseComponent implements OnInit {
     console.log(this.data);
     this.current_header = this.card.header;
     this.currentIndex = 0;
-    this.setWords();
+    this.initWords();
     this.card_object = 'Word';
   }
 
@@ -46,6 +46,7 @@ public input_data = '';
 public words = [];
 public numbers=[];
 public Displaywordsarray=[];
+public Displaynumbers=[];
 public answers = [];
 public audios = [];
 public expected = [];
@@ -98,7 +99,7 @@ show() {
       //this.playContentDescription();
       this.playCardDescription();
       this.disableMoveNext();
-      
+      //this.initWords();
     } else {
       this.enableMoveNext();
     }
@@ -176,7 +177,7 @@ playContentDescription() {
 }
 //	Overload default play description function
 
-setWords() {
+initWords() {
   this.Displaywordsarray = [];
   this.numbers = [];
   this.words = [];
@@ -188,6 +189,12 @@ setWords() {
     this.audios.push(this.card.content[i].parts[0].wavename);
     this.Displaywordsarray.push(this.card.content[i].parts[0]);
   }
+  this.Displaynumbers = this.shuffle(this.Displaywordsarray);
+  this.setWords();
+}
+
+setWords() {
+  
   do{
     this.currentIndex = Math.floor(Math.random() * (this.Displaywordsarray.length));
   }while(this.expected.indexOf(this.Displaywordsarray[this.currentIndex].number) != -1)
@@ -221,11 +228,11 @@ getWords() {
 addAnswer(ind) {
 
   if(this.answers.length >= this.expected.length) return;
+  this.playmedia.stop();
+  this.input_data = this.Displaynumbers[ind].number;
+  if(this.Displaynumbers[ind].number !== this.Displaywordsarray[this.currentIndex].number) this.result();
 
-  this.input_data = this.numbers[ind];
-  if(this.Displaywordsarray[ind].number !== this.Displaywordsarray[this.currentIndex].number) this.result();
-
-  this.answers.push(this.Displaywordsarray[ind].number);
+  this.answers.push(this.Displaynumbers[ind].number);
   
   this.getWords();
 
@@ -313,6 +320,20 @@ enter() {
   } 
 }
 
-
+  //	Shuffles array in place.
+	//	@param {Array} a items An array containing the items.
+	shuffle(a) {
+    let j, x, i;
+    let out = [];
+    for(let k in a)
+      out.push(a[k]);
+    for (i = out.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = out[i];
+        out[i] = out[j];
+        out[j] = x;
+    }
+    return out;
+  }
 
 }

@@ -11,7 +11,7 @@
   </div>
   <div class="cr-layout">
     <span *ngFor="let m of mask; let km = index;" class="cr-row" [ngStyle]="cr_w">
-      <span *ngFor="let l of m; let kl = index" class="cr-letter" [ngClass]="{'cr-empty-letter': l.trim() === ''}">
+      <span *ngFor="let l of m; let kl = index" class="cr-letter" [ngClass]="{'cr-empty-letter': l.trim() === '', 'cr-hl-letter': hlmask[km][kl]}">
         <div [hidden]="!showmask[km][kl]" [ngClass]="{'cr-hl-letter': hlmask[km][kl]}">{{ l }}</div>
       </span>
     </span>

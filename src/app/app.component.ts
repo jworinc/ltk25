@@ -41,6 +41,9 @@ export class AppComponent {
   @HostListener('document:click', ['$event'])
   onDocumentClick(ev:any) {
     this.playmedia.immidiateClickSound();
+    document.querySelectorAll('.translate-popup-expanded').forEach((el)=>{
+      el.remove();
+    });
   }
 
 }

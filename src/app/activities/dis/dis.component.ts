@@ -91,6 +91,7 @@ export class DisComponent extends BaseComponent implements OnInit {
 
 	public hint_string = '';
 	public input_data: any;
+	
 
 	/*
 	$element.find('.dis-input-wrap input').bind('keyup keydown keypress', function(e){
@@ -253,6 +254,8 @@ export class DisComponent extends BaseComponent implements OnInit {
 				
 			});
 		} else {
+			this.play_card_description_busy = false;
+			this.playmedia.stop();
 			this.playSentenceFinish();
 			this.playCardDescription();
 			return;
@@ -261,9 +264,27 @@ export class DisComponent extends BaseComponent implements OnInit {
 		this.playContentDescription();
 	}
 
+	showSentence() {
+		if(this.current_hint_level === 0) return;
+		let that = this;
+		this.elm.nativeElement.querySelector('.dis-sentence-wrap').style.display = 'block';
+		setTimeout(function(){ that.elm.nativeElement.querySelector('.dis-sentence-wrap').style.opacity = '1'; }, 10);
+	}
+
+	hideSentence() {
+		if(this.current_hint_level === 0) return;
+		let that = this;
+		setTimeout(function(){ 
+			that.elm.nativeElement.querySelector('.dis-sentence-wrap').style.opacity = '0';
+			//	Wait 400ms until transition will complete and remove it from from DOM
+			setTimeout(function(){ that.elm.nativeElement.querySelector('.dis-sentence-wrap').style.display = 'none'; that.hint_busy = false; that.setFocus(); }, 400);
+		}, 2000);
+	}
+
 	playSentenceFinish() {
 		this.playsentence_started_flag = false;
-		this.setFocus()
+		this.setFocus();
+		this.hideSentence();
 	}
 
 	
@@ -271,6 +292,7 @@ export class DisComponent extends BaseComponent implements OnInit {
 		if(this.playsentence_started_flag) return; 
 		this.playsentence_started_flag = true;
 		let that = this;
+		this.showSentence();
 		//$rootScope.$broadcast('rootScope:playSentenceByIndex', {ind: this.sentence_index, cb: this.playSentenceFinish});
 		this.psn.playSentenceByIndex(this.sentence_index, ()=>{
 			that.playSentenceFinish.call(that);
@@ -288,11 +310,13 @@ export class DisComponent extends BaseComponent implements OnInit {
 		let that = this;
 		let words = this.answer_sent.trim().replace(/[\.\!\?\;\,]/ig, '').split(' ');
 		let uwords = this.input_data.trim().replace(/[\.\!\?\;\,]/ig, '').split(' ');
+
 		if(uwords.length > 0 && words[uwords.length - 1] === uwords[uwords.length - 1] && 
 			!this.playsentence_started_flag && 
 			this.played_words.indexOf(uwords[uwords.length - 1]+(uwords.length - 1)) < 0){
+			//true){
 
-			this.played_words.push(uwords[uwords.length - 1]+(uwords.length - 1));
+			//this.played_words.push(uwords[uwords.length - 1]+(uwords.length - 1));
 			this.playmedia.word(uwords[uwords.length - 1].replace(/[\.\!\?\;\,]/ig, ''), function(){
 
 				//	Reset hint level for a new word
@@ -303,6 +327,15 @@ export class DisComponent extends BaseComponent implements OnInit {
 				that.current_hint_level = 0;
 			}, 10);
 		}
+		
+		//	Clean played words in case when user delete some input text
+		this.played_words = [];
+		for(let i in uwords){
+			if(words[i] === uwords[i]){
+				this.played_words.push(uwords[i]+i);
+			}
+		}
+
 
 	}
 
@@ -421,7 +454,10 @@ export class DisComponent extends BaseComponent implements OnInit {
 		let n = value.length;
 
 		//	Check if input data length bigger that 0
-		if(n <= 0) return;
+		if(n <= 0){
+			this.lock_user_input = false;
+			return;
+		}
 
 		let pr = /[\.\?\!]/;
 

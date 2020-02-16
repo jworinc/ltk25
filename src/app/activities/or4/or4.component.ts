@@ -101,6 +101,7 @@ export class Or4Component extends Or3Component implements OnInit, DoCheck {
 			}
 			this.prevent_dubling_flag = true;
 			//this.showHint();
+			this.setGlobalHeader("ORAL READING");
 		}
 		
 	}

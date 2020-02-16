@@ -59,6 +59,7 @@ export class GcpComponent extends BaseComponent implements OnInit {
     public showmask = [];
     public hlmask = [];
     public cr_w = null;
+    public question_ready: boolean = false;
 
     initCroswordInstances() {
       let c = this.card.content[0].parts[0];
@@ -114,13 +115,17 @@ export class GcpComponent extends BaseComponent implements OnInit {
     repeat(){
       let that = this;
       if(this.uinputph !== 'finish'){
-        if(typeof this.card.content[0].LoopInst !== 'undefined' && this.card.content[0].LoopInst.length > 0 && this.current_set < this.cr_questionstodisplay.length && this.current_set > 0){
+        if(typeof this.card.content[0].LoopInst !== 'undefined' && this.card.content[0].LoopInst.length > 0 && this.current_set < this.cr_questionstodisplay.length && this.current_set >= 0){
           this.card.content[0].desc = this.card.content[0].LoopInst[0].pointer_to_value;
           this.setGlobalDesc(this.card.content[0].desc);
           this.playmedia.sound(this.card.content[0].LoopInst[0].audio, function(){
-            let s = that.cr_questionstodisplay[that.current_set - 1];
-            that.card.content[0].desc = s;
-            that.setGlobalDesc(s);
+            if(that.current_set > 0 && that.question_ready){
+              let s = that.cr_questionstodisplay[that.current_set - 1];
+              that.card.content[0].desc = s;
+              that.setGlobalDesc(s);
+            } else {
+              that.showNextSentence();
+            }
           });
         }
       } else {
@@ -215,7 +220,7 @@ export class GcpComponent extends BaseComponent implements OnInit {
 
     }
 
-    showWord(w) {
+    showWord(w, only_hiligh = false) {
 
       //  First check mask array for current word
       for(let m in this.mask){
@@ -254,11 +259,11 @@ export class GcpComponent extends BaseComponent implements OnInit {
             if(word_detected){
               for(let wi in wrd){
                 let wli = parseInt(wi);
-                this.showmask[parseInt(m)][wli+ind] = true;
+                if(!only_hiligh) this.showmask[parseInt(m)][wli+ind] = true;
                 this.hlmask[parseInt(m)][wli+ind] = true;
               }
               console.log(this.showmask);
-              this.clearHL();
+              if(!only_hiligh) this.clearHL();
               return;
             }
           }
@@ -302,11 +307,11 @@ export class GcpComponent extends BaseComponent implements OnInit {
             if(word_detected){
               for(let wi in wrd){
                 let wli = parseInt(wi);
-                this.showmask[wli+ind][parseInt(m)] = true;
+                if(!only_hiligh) this.showmask[wli+ind][parseInt(m)] = true;
                 this.hlmask[wli+ind][parseInt(m)] = true;
               }
               console.log(this.showmask);
-              this.clearHL();
+              if(!only_hiligh) this.clearHL();
               return;
             }
           }
@@ -344,6 +349,8 @@ export class GcpComponent extends BaseComponent implements OnInit {
         this.answer_received = false;
         this.card.content[0].desc = s;
         this.setGlobalDesc(s);
+        this.showWord(this.expected_string, true);
+        this.question_ready = true;
       } else {
         this.showResults();
       }
@@ -354,6 +361,7 @@ export class GcpComponent extends BaseComponent implements OnInit {
     handleAnswer(w) {
       if(this.answer_received) return;
       let that = this;
+      this.question_ready = false;
       if(w === this.expected_string){
         this.showWord(w);
         //this.playmedia.word(w, ()=>{

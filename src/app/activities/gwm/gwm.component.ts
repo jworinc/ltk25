@@ -122,6 +122,7 @@ export class GwmComponent extends BaseComponent implements OnInit {
 			var w = this.card.content[0].parts[this.current_set][i];
 			this.words.push(w.title);
 			this.audios.push(w.wavename);
+			if(+i >= 3) break;
 		}
 
 		this.current_word = Math.floor(Math.random() * (this.card.content[0].parts[this.current_set].length));

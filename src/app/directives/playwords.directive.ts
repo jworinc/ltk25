@@ -169,7 +169,7 @@ export class PlaywordsDirective {
 
 		//	Create content
 		let cn = document.createElement("span");
-		cn.innerText = content;
+		cn.innerHTML = content;
 		pp.appendChild(cn);
 		
 		pp.onclick = (e)=>{
@@ -185,7 +185,7 @@ export class PlaywordsDirective {
 	}
 
 	showTranslation(translation, word) {
-		if(translation.length < 17){
+		if(translation.length < 2){
 			this.trelm.innerHTML = "";
 			this.trelm.innerText = translation;
 			this.addPointerSign();

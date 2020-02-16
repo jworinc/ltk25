@@ -170,9 +170,11 @@ export class GssComponent extends BaseComponent implements OnInit {
     playContentDescription(){
       this.playmedia.word(this.play_word, function(){
       });
-
-      if(this.isAnswered) //this.nextWord();
-      this.blinkEnter();
+      let that = this;
+      if(this.isAnswered) {
+        setTimeout(()=>{ if(that.isActive()) that.nextWord(); }, 1000);
+      }
+      //this.blinkEnter();
 
       if(this.isAnswered && this.cust_index != this.data.content.length){
         for(let i=0; i<this.all_Skills.length; i++){

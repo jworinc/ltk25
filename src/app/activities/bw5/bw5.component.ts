@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, DoCheck, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { BasebwComponent } from '../basebw/basebw.component';
 import { PlaymediaService } from '../../services/playmedia.service';
@@ -7,6 +7,7 @@ import { flatMap } from "rxjs/operators";
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { MultiselectComponent } from '../../components/multiselect/multiselect.component';
 
 @Component({
   selector: 'app-bw5',
@@ -26,6 +27,11 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
   }
 
   public expected_digraf: any;
+
+  
+	@ViewChild(MultiselectComponent) msel: MultiselectComponent;
+
+
 
   ngOnInit() {
 
@@ -131,6 +137,9 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 
 		//	Expected num of letters
 		this.expected = this.answer_word.replace(/\'/ig, '').length;
+		this.mselshow = true;
+		this.mseltype = 'numbers';
+		if(typeof (this as any).msel !== 'undefined') (this as any).msel.update();
 	}
 
 	//	Callback for show card event
@@ -527,7 +536,8 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 				if(+this.input_data === this.expected){
 					this.uinputph = 'digraf';
 					this.expected = this.expected_digraf;
-					
+					this.input_data = '';
+					this.mselshow = false;
 					this.playCardDescription();
 					return;
 				} else {

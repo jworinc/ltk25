@@ -207,11 +207,21 @@ export class CarComponent extends BaseComponent implements OnInit {
 			//	Check last letter
 			if(parseInt(i) === ltrs.length - 1){
 				this.playmedia.word(l, function(){
+					
     				if(typeof cb !== 'undefined') cb();
-    				if(that.uinputph === 'compare'){
-    					that.uinputph = 'question';
-						setTimeout(function(){ that.playContentDescription(); }, 500);
-    				}
+					if(that.uinputph === 'compare' || that.uinputph === 'question'){
+						that.playmedia.sound('_S'+that.word_letters, function(){
+							that.uinputph = 'question';
+							setTimeout(function(){ that.playContentDescription(); }, 500);
+						}, 400);
+						
+					}
+					if(that.uinputph === 'listen'){
+						that.playmedia.sound('_S'+that.word_letters, function(){
+							
+						}, 400);
+						
+					}
     			}, 1);
 			} else {
 				this.playmedia.word(l, function(){}, 1);
@@ -348,9 +358,18 @@ export class CarComponent extends BaseComponent implements OnInit {
 			this.lastUncomplete = this.card.content[0].RecInst[0];
 			this.card.content[0].desc = this.card.content[0].RecInst[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].RecInst[0].pointer_to_value);
-			this.blinkRec();
+			if(this.card.content[0].RecInst.length == 0) this.blinkRec();
 			this.playmedia.sound(this.card.content[0].RecInst[0].audio, function(){}, 1);
-			this.playAnswerLetters(()=>{});
+			this.playAnswerLetters(()=>{
+				if(typeof that.card.content[0].RecInst !== 'undefined' && that.card.content[0].RecInst.length > 1){
+					that.card.content[0].desc = that.card.content[0].RecInst[1].pointer_to_value;
+					that.setGlobalDesc(that.card.content[0].RecInst[1].pointer_to_value);
+					that.blinkRec();
+					that.playmedia.sound(that.card.content[0].RecInst[1].audio, function(){
+						that.playmedia.sound('_S'+that.word_letters, function(){}, 1);
+					}, 1);
+				}
+			});
 		}
 		//	Phase 1 rec instructions, if mic is disabled
 		else if(typeof this.card.content[0].RecInst !== 'undefined' && this.card.content[0].RecInst.length > 0 && this.uinputph === 'rec' && !this.global_recorder){

@@ -184,17 +184,24 @@ export class Al1Component extends BaseComponent implements OnInit {
 			//	If input letter is wrong, mark it with light coral color
 			if(!d.disabled && d.letter !== '' && d.letter !== d.expected) {
 				//	Check for newly entered letter
-				if(typeof d.mark["background-color"] === 'undefined'){
+				//if(typeof d.mark["background-color"] === 'undefined'){
 					//	Logging user input errors
 					this.last_user_letter = d.letter;
 					this.last_expected_letter = d.expected;
 					this.card_object = 'letter';
 					this.card_instance = d.expected;
 					this.result();
-				}
-				d.mark = {
-					'background-color': 'lightcoral'
-				};
+
+
+					this.clearUserInput();
+					this.setFocus();
+					this.playmedia.stop();
+					this.playmedia.action('DING', function(){}, 30);
+
+				//}
+				//d.mark = {
+				//	'background-color': 'lightcoral'
+				//};
 			} else {
 				d.mark = {};
 			}
@@ -237,6 +244,9 @@ export class Al1Component extends BaseComponent implements OnInit {
 	//	Set focus on first empty input
 	setFocus() {
 		let set_focus = false;
+		this.elm.nativeElement.querySelectorAll('input[data-pos]').forEach((e)=>{
+			if(e.value == "") e.removeAttribute('disabled');
+		});
 		//	Iterate over all input elements
 		for(let i in this.input_data){
 
@@ -250,6 +260,11 @@ export class Al1Component extends BaseComponent implements OnInit {
 				let inps = this.elm.nativeElement.querySelector('input[data-pos="'+index+'"]');
 				//	Small delay which allow Angular to rebuid page markup before focus set
 				setTimeout(function() { inps.focus(); }, 30);
+				continue;
+			}
+			else if(set_focus && d.letter == '') {
+				let inps = this.elm.nativeElement.querySelector('input[data-pos="'+index+'"]');
+				if(inps) inps.setAttribute('disabled', true);
 			}
 
 		};
@@ -381,9 +396,19 @@ export class Al1Component extends BaseComponent implements OnInit {
 			this.input_data[ki].letter = inp.currentTarget.value;
 
 	    //const change = this.differ.diff(this.input_data);
-	    if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
+	    //if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
+		if(this.isActive()){
 	    	
 	    	console.log('collection changed');
+			
+			if(this.input_data[ki].letter !== this.input_data[ki].expected) {
+				/*
+				this.clearUserInput();
+				this.setFocus();
+				this.playmedia.stop();
+				this.playmedia.action('DING', function(){}, 30);
+				*/
+			}
 
 	    	for(let i in this.input_data){
 	    		let d = this.input_data[i];
@@ -391,7 +416,7 @@ export class Al1Component extends BaseComponent implements OnInit {
 	    		this.input_data[index].letter = this.al2filter(d.letter);
 	    	}
 
-	    	this.old_input_data = JSON.stringify(this.input_data);
+	    	//this.old_input_data = JSON.stringify(this.input_data);
 
 	    	let scope = this;
 			//	Validate user input and decide to enable next card or not

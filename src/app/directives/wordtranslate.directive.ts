@@ -121,6 +121,11 @@ export class WordtranslateDirective {
     if(typeof this.icon_hide !== 'undefined'){
       this.checkIfHide(this.icon_hide);
     }
+    //	RegExp for seaching HTML tags in text
+		let html = /<[\w\s\d=\"\;\:\-\.\/\%\_]*>[\w\s\d=\"\;\:\-\.\/\?\!\,\|\u0000-\uffff]*<\/[\w\s\d=\"\;\:\-\.\/]*>/ig;
+    if(typeof this.trelm !== 'undefined' && this.trelm.innerText !== "" && this.current_word.trim() !== this.el.nativeElement.innerHTML.replace(html, '').trim()){
+      this.clearTranslationPopup();
+    }
   }
 
   clearTranslationPopup() {
@@ -162,7 +167,7 @@ export class WordtranslateDirective {
 
 		//	Create content
 		let cn = document.createElement("span");
-		cn.innerText = content;
+		cn.innerHTML = content;
 		pp.appendChild(cn);
 		
 		pp.onclick = (e)=>{
@@ -178,7 +183,7 @@ export class WordtranslateDirective {
 	}
 
 	showTranslation(translation, word) {
-		if(translation.length < 17){
+		if(translation.length < 2){
 			this.trelm.innerHTML = "";
 			this.trelm.innerText = translation;
 			this.addPointerSign();

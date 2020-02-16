@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, ElementRef, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, DoCheck, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { BasebwComponent } from '../basebw/basebw.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { MultiselectComponent } from '../../components/multiselect/multiselect.component';
 
 @Component({
   selector: 'app-bw2',
@@ -24,6 +25,10 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 	}
 	
 	public enable_handle_vowel: boolean = false;
+
+	
+	@ViewChild(MultiselectComponent) msel: MultiselectComponent;
+
 
   ngOnInit() {
 
@@ -279,6 +284,8 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 							if(parseInt(i) === this.card.content[this.current_card_instance].parts.length - 1) break;
 							this.expected += p;
 						}
+						this.input_data = '';
+						this.mselshow = false;
 						//this.playContentDescription();
 						this.playCardDescription();
 						return;

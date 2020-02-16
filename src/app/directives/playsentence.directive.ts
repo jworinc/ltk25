@@ -78,7 +78,7 @@ export class PlaysentenceDirective {
 		//	RegExp to find dots
 		let dots = /\./g;
 		//	RegExp to find slashes
-		let slashes = /[\/\-\_]/g;
+		let slashes = /[\/\-\_\+]/g;
 
 		//	Convert plain words string to array
 		let words_arr = [];
@@ -108,7 +108,7 @@ export class PlaysentenceDirective {
 		for(let i in this.words_audio) {
 			let w = this.words_audio[i];
 			if(/[\d]+/.test(w)) continue;
-			let rg = new RegExp('\\b(?<!\-)'+w+'(?!(\<|\"\>))\\b');
+			let rg = new RegExp('\\b(?<!\-)'+w+'(?!(\<|\"\>|\=))\\b');
 			if(this.op.show_word_translation)
 				proctext = proctext.replace(rg, '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="'+i+'" data-psword="'+w+'">'+w+'<div>?</div></span>');
 			else 
@@ -348,7 +348,7 @@ export class PlaysentenceDirective {
 
 		//	Create content
 		let cn = document.createElement("span");
-		cn.innerText = content;
+		cn.innerHTML = content;
 		pp.appendChild(cn);
 		
 		pp.onclick = (e)=>{
@@ -364,7 +364,7 @@ export class PlaysentenceDirective {
 	}
 
 	showTranslation(translation, word) {
-		if(translation.length < 17){
+		if(translation.length < 2){
 			this.trelm.innerHTML = "";
 			this.trelm.innerText = translation;
 			this.addPointerSign();

@@ -48,6 +48,8 @@ export class BaseComponent implements OnInit, CardComponent {
 	public complete = 0;
 	public max_repetitions = 10;
 	public move_next_timer: any = null;
+	public mseltype = 'numbers';
+	public mselshow = false;
 
     @Input() data: any;
     @Input() default_waves: any;
@@ -800,5 +802,21 @@ export class BaseComponent implements OnInit, CardComponent {
 		console.log('Max presented increased ('+this.card.activity+') !!!');
 	}
 
+	playLetter(l) {
+		let that = this;
+
+		let ci = this.current_card_instance;
+		//	Play pronuncuation of the word
+		if(typeof this.card.content[ci].pronounce !== 'undefined' && this.card.content[ci].pronounce.length > 0){
+			let prnc = this.card.content[ci].pronounce;
+			let p = '_S' + prnc[l]; p = p.replace('-', '');
+			this.pm.stop();
+			this.pm.immidiate_stop_event.emit();
+			this.pm.sound(p, function(){});
+		}
+
+		
+		
+	}
 
 }

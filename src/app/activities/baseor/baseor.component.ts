@@ -92,6 +92,7 @@ export class BaseorComponent extends BaseComponent implements OnInit {
 				this.enableMoveNext();
 			}
 			this.prevent_dubling_flag = true;
+			this.setGlobalHeader("ORAL READING");
 		}
 		
 	}
