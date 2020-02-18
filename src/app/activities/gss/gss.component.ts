@@ -192,7 +192,7 @@ export class GssComponent extends BaseComponent implements OnInit {
 
       console.log("Index :"+this.cust_index);
       console.log("Selected Word :"+selected_word);
-
+      let that = this;
       if(this.cust_index < this.data['content'].length){
     
         if(selected_word == this.data['content'][this.cust_index].skill && !this.isAnswered){
@@ -201,7 +201,7 @@ export class GssComponent extends BaseComponent implements OnInit {
           // if(!this.isAnswered){
           //   this.count++;
           // }
-          this.playmedia.action('CHIMES', function(){}, 30);
+          this.playmedia.action('CHIMES', function(){ that.nextWord(); }, 30);
           console.log("If Index :"+this.cust_index);
           // if(this.cust_index < this.data['content'].length){
           //   this.temp_word =  this.data['content'][this.cust_index].parts.join('').replace(/-/g,'');
@@ -213,7 +213,7 @@ export class GssComponent extends BaseComponent implements OnInit {
           //   this.playCardDescription();
           // }
           this.count++;
-          this.nextWord();
+          
 
         }else{
           console.log(this.respIfIncorrect.content.length);
@@ -238,7 +238,8 @@ export class GssComponent extends BaseComponent implements OnInit {
             this.result();
             
           }else{
-            this.blinkEnter();
+            //this.blinkEnter();
+            this.nextWord();
           }
 
           
