@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef, HostListener } from '@angular/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { PlaymediaService } from './services/playmedia.service';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +13,19 @@ export class AppComponent {
 
   constructor(
     private el:ElementRef,
-    private playmedia: PlaymediaService
-  ) { }
+    private playmedia: PlaymediaService,
+    private router: Router
+  ) { 
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        //(<any>window).ga('set', 'page', event.urlAfterRedirects);
+        //(<any>window).ga('send', 'pageview');
+        (<any>window).gtag('config', (<any>window).global_gtag_code_for_app);
+      }
+    });
+
+  }
 
   public visible_timer: any = null;
 
