@@ -73,12 +73,15 @@ export class PlaymediaService {
 
 		let that = this;
 
+		//	Rate saturation
+		let srate = this.rate >=1 ? this.rate : 1;
+
 		let props = {
 			src: this.ltkmediaurl + path,
 			autoplay: false,
 			loop: false,
 			volume: this.volume,
-			rate: this.rate,
+			rate: srate,
 			html5: false,
 		}
 
