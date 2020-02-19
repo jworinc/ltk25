@@ -27,7 +27,8 @@
               "src/.htaccess",
               "src/beep.mp3",
               "src/recorderWorker.js",
-              "src/assets"
+              "src/assets",
+              "src/sitemap.xml"
             ],
             "styles": [
               "node_modules/ng-snotify/styles/material.css",
