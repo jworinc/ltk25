@@ -94,10 +94,13 @@
     margin-bottom: 19px;
 }
 .word-box-sentence{
-    display: block;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: 195px;
-    margin-bottom: 54px;
+    margin-bottom: 13px;
 }
 .word-box-sentence .word{
     font-size: 36px;
@@ -114,8 +117,9 @@
     position: relative;
     z-index: 1000;
     width: 100%;
-    padding: 0px 24px;
+    padding: 0px 26px;
     font-size: 18px;
+    margin-top: 13px;
 }
 .sample-sentence b{
 	font-weight: 700;
@@ -205,7 +209,31 @@ span.word-native {
     position: relative;
     z-index: 100;
 }
-
+.gwf-variant{
+    display: inline-block;
+    text-align: center;
+    background-color: #C69C6D;
+    color: white;
+    font-size: 34px;
+    line-height: 1em;
+    padding: 0 20px;
+    padding-bottom: 5px;
+    box-shadow: 0 0 3px brown;
+    margin: 0 10px;
+    cursor: pointer;
+}
+.iss-instructions{
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.interactive-ss{
+    font-size: 28px;
+    line-height: 1em;
+}
+.gwf-answer-placeholder{
+    font-weight: 600;
+}
 
 @media only screen and (max-width:1024px)
 {
@@ -280,5 +308,10 @@ span.word-native {
     }
     .click-to-play-pointer {
         top: 65%;
+    }
+    .gwf-variant {
+        font-size: 20px;
+        padding: 0 13px;
+        padding-bottom: 3px;
     }
 }

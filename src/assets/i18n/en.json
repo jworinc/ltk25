@@ -188,5 +188,6 @@
 	"help" : "Help",
 	"click_on_element" : "Click on element you are interested in.",
 	"continue" : "Continue",
-	"snooze" : "Snooze"
+	"snooze" : "Snooze",
+	"select_the_missing_word" : "Select the missing word."
 }

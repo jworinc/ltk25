@@ -97,6 +97,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
       this.resetViewStates();
       this.updateWordblocks();
       this.updateViewStates();
+      //  Init new interactivity sentence
+      this.initISS();
 		}
 		
   }
@@ -230,7 +232,7 @@ export class Rw1Component extends BaseComponent implements OnInit {
   next() {
     if(this.isActive()){
       let cw = this.cw;
-      if(this.wbvs[cw].view === 'sentence' && cw >= this.wbvs.length) this.enableNextSlide();
+      if(this.wbvs[cw].view === 'sentence' && cw > this.wbvs.length) this.enableNextSlide();
       else this.disableNextSlide();
       this.showNextWord();
     }
@@ -253,20 +255,29 @@ export class Rw1Component extends BaseComponent implements OnInit {
       //  Max word blocks
       let m = this.wblength;
       this.cw++;
+
       //  Check overhead
       if(this.cw >= m) {
         this.cw = m-1;
         //  Finish card
         this.uinputph = 'finish';
         this.enableNextCard();
+      } else {
+
       }
+      
       //  Update word blocks
       this.updateWordblocks();
       this.repeat();
     }
     //  Else switch to the next view
     else {
+
       this.showNextView();
+      
+      //  Init new interactivity sentence
+      this.updateISS();
+
     }
 
     
@@ -433,5 +444,161 @@ export class Rw1Component extends BaseComponent implements OnInit {
 
 
   }
+
+
+  //  Max number of showing sentences
+  public issmax = 3;
+  //  Current iss index in current word instance
+  public issindex = 0;
+  //  Interactiv Sample Sentence to show
+  public iss_display = '';
+  //  Variants of words for display
+  public iss_variants = [];
+  //  Current word
+  public iss_word = '';
+  //  Buffer for sentence groups (for each word)
+  public iss_buffer = [];
+
+  public current_sentences = [];
+  public current_sentence = "";
+
+  //  Sample Sentence interaction
+  initISS() {
+
+    //  Current sentence subset
+    let current_sentences = [];
+    this.current_sentence = "";
+    this.iss_buffer = [];
+
+    for(let n in this.card.content){
+      //  Check if we have several sentences
+      if(typeof this.card.content[n].sentences !== 'undefined' &&
+      this.card.content[n].sentences.length > 0){
+        for(let i in this.card.content[n].sentences)
+          current_sentences.push({sentence: this.card.content[n].sentences[i].sentence, word: this.card.content[n].title, pos: n });
+      } else {
+        current_sentences.push({sentence: this.card.content[n].sentence, word: this.card.content[n].title, pos: n });
+      }
+
+      let iss_item = this.processISS(current_sentences);
+
+      //  Save instance to buffer
+      this.iss_buffer.push(iss_item);
+
+    }
+
+  }
+
+  processISS(current_sentences) {
+
+    let out = [];
+
+    for(let i in current_sentences) {
+      let cs = current_sentences[i].sentence;
+      let cw = current_sentences[i].word;
+      let pos = current_sentences[i].pos;
+      
+      //  Check if sentence contains current word
+      if(cs.search(cw) >= 0) {
+
+        //  Replace for display sentence required word with dots
+        let iss_display = cs.replace(cw, '<span class="gwf-answer-placeholder">&nbsp;&nbsp;&nbsp;&nbsp;____&nbsp;&nbsp;&nbsp;&nbsp;</span>');
+        //  Clear variants
+        let iss_variants = [];
+        //  Get variants
+        iss_variants.push(cw);
+        while(iss_variants.length < this.issmax) {
+          //  Get random index
+          let ri = Math.round(Math.random() * (this.card.content.length-1));
+          //  Check if index is not current word index
+          if(ri === pos) continue;
+          //  Push the word to variants
+          if(iss_variants.indexOf(this.card.content[ri].title) < 0 && this.card.content[ri].title !== "") 
+            iss_variants.push(this.card.content[ri].title);
+        }
+
+        //  Save processed data
+        out.push({iss_display: iss_display, iss_variants: iss_variants, pos: pos, answered: false, origin_sentence: cs, word: cw});
+  
+      }
+    }
+
+    return out;
+
+    
+  }
+
+  updateISS() {
+
+    //  Get iss instance for current word (for now work with only first sentence)
+    let issi = this.iss_buffer[this.cw][0];
+
+    //  Reset answer flag if not answered
+    if(!issi.answered) this.user_answer_received_flag = false;
+    
+    //  Display sentence
+    this.iss_display = issi.iss_display;
+    //  Display variants
+    this.iss_variants = issi.iss_variants;
+    //  Expected word
+    this.iss_word = issi.word;
+
+  }
+
+  saveISSAnswerResult() {
+    
+    //  Get iss instance for current word (for now work with only first sentence)
+    let issi = this.iss_buffer[this.cw][0];
+    //  Display sentence
+    issi.iss_display = issi.origin_sentence;
+    //  Display variants
+    issi.iss_variants = [this.iss_word];
+    issi.answered = true;
+
+  }
+
+  public user_answer_received_flag: boolean = false;
+	addAnswer(w) {
+		let that = this;
+		if(this.user_answer_received_flag) return;
+		this.user_answer_received_flag = true;
+
+		//	Check if answer right or not
+		if(w.toLowerCase() === this.iss_word.toLowerCase()){
+			this.playmedia.action('DING', function(){
+        that.iss_variants = [that.iss_word];
+        that.blinkOnlyNext();
+      });
+			this.elm.nativeElement.querySelector('span[data-wrdsspos="'+this.cw+'"] .gwf-answer-placeholder').innerText = w;
+			//setTimeout(function(){ 
+				//that.psn.origin_text = that.card.content[0].parts[that.current_set].title.replace(/\(/ig, '').replace(/\)/ig, ''); 
+				//that.psn.compileSentence(); 
+				//setTimeout(()=>{ that.playSentence(); }, 10);
+			//}, 1400);
+		} else {
+			//	Logging wrong answer
+			//this.result();
+			//	Play wrong sound and show right answer
+			this.playmedia.action('CHONG', function(){
+				//that.blinkAP(true);
+				//that.elm.nativeElement.querySelector('.gwf-answer-placeholder').style.width = 'auto';
+        that.elm.nativeElement.querySelector('span[data-wrdsspos="'+that.cw+'"] .gwf-answer-placeholder').innerText = that.iss_word;
+        that.iss_variants = [that.iss_word];
+        that.blinkOnlyNext();
+				//setTimeout(function(){
+				//	that.psn.origin_text = that.card.content[0].parts[that.current_set].title.replace(/\(/ig, '').replace(/\)/ig, '');
+				//	that.psn.compileSentence();
+				//	setTimeout(()=>{ that.playSentence(); }, 10);
+					
+				//}, 1400);
+			});
+			
+
+		}
+
+		
+	}
+
+
 
 }

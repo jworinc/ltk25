@@ -36,18 +36,29 @@
         </div>
       </div>
       <div class='sentence-box'>
-        <span class='sentence-header'>Sample sentence</span>
+        <!--<span class='sentence-header'>Sample sentence</span>-->
+        <span class='sample-sentence iss-instructions'>{{ 'select_the_missing_word' | translate }}</span>
         <span class='word-box-sentence' (click)="playWord(cn.wavename)">
-            <span class='word'>{{ cn.title }}</span>
+            <!--<span class='word'>{{ cn.title }}</span>-->
             <img [hidden]='!cn.content[0].img || cn.sentence_image' [src]='cn.content[0].img ? playmedia.ltkmediaurl + cn.content[0].img : ""' alt='' />
             <img [hidden]='!cn.sentence_image' [src]='cn.sentence_image ? playmedia.ltkmediaurl + cn.sentence_image : ""' alt='' />
         </span>
         <!--
         <span class='sample-sentence' [hidden]="!cn.content[0].sentence" [innerHTML]="cn.content[0].sentence | bindhtml" app-playsentence [attr.data-ind]="'sent_'+cnkey"></span>
         <span class='sample-sentence ss-default' [hidden]="cn.content[0].sentence" (click)="playDefaultSampleSentence()"><span>This is word</span>&nbsp;<span><b>{{ cn.title }}</b></span>.</span>
-        -->
+        
         <span class='sample-sentence' [hidden]="!cn.sentence" [innerHTML]="cn.sentence | bindhtml" app-playsentence [attr.data-ind]="'sent_'+cnkey"></span>
         <span class='sample-sentence ss-default' [hidden]="cn.sentence" (click)="playDefaultSampleSentence()"><span>This is word</span>&nbsp;<span><b>{{ cn.title }}</b></span>.</span>
+        -->
+        
+        <span class='word-box-variants'>
+            <span class='word-variant gwf-variant' *ngFor="let v of iss_variants" appWordtranslate (click)="addAnswer(v)">
+              {{ v }}
+            </span>
+            
+        </span>
+        <span class='sample-sentence interactive-ss' [hidden]="!cn.sentence" [innerHTML]="iss_display | bindhtml" app-playsentence [attr.data-ind]="'sent_'+cnkey" [attr.data-wrdsspos]="cnkey"></span>
+        
       </div>
     </div>
 
