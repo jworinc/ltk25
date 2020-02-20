@@ -977,10 +977,10 @@ body{
     text-align: center;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
+    font-size: 26px;
     line-height: 30px;
     color: #C2272D;
-    font-weight: 600;
+    font-weight: 200;
 }
 .zoom-frame-header{
     display: flex;
@@ -1127,7 +1127,7 @@ body{
 
 .zoom-frame-header-desktop{
     display: block;
-    background-color: white;
+    /*background-color: white;*/
 }
 .zoom-frame-header-mobile{
     display: none;
@@ -1309,7 +1309,7 @@ body{
 	    background-size: contain;
 	}
     .bottom-description-box {
-        display: none;
+        /*display: none;*/
     }
     .zoom-card-sequence-prev{
         order: 1;
@@ -1356,6 +1356,17 @@ body{
         width: 50%;
         max-width: 45%;
         max-height: 90%;
+    }
+    .bottom-description-box {
+        display: flex;
+        order: 2;
+        height: 120px;
+        background-color: white;
+        box-shadow: 0 0 3px #000;
+        z-index: 1000;
+        text-align: center;
+        align-items: flex-start;
+        justify-content: center;
     }
 
 }  

@@ -96,6 +96,7 @@ export class SypComponent extends BaseComponent implements OnInit {
 				let that = this;
 				this.animation_delay_timer = setTimeout(()=>{ that.setDescription(); }, 100);
 			}
+			this.complete = 100;
 		}
 		
 	}

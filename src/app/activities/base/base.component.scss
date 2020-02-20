@@ -193,7 +193,7 @@
     }
     .card-description-wrap-ar2 {margin-top: 4px;}
     .card-description-wrap-ar2{
-        display: block;
+        /*display: block;*/
     }
 
 }
@@ -236,7 +236,7 @@
 }
 @media screen and (max-width: 1024px) {
     .card-ar1-digraph-input {
-        width: 30px;
+        width: 54px;
         margin-top: -4px;
     }
     .card-ar1-syllable {
@@ -301,7 +301,7 @@
         margin-top: 0;
     }
     .bw1-description{
-        display: block;
+        /*display: block;*/
     }
 
 }
@@ -342,12 +342,12 @@
     }
     .card-style-obj-single {
         width: 400px;
-        height: 230px;
-        margin-top: -100px;
+        height: 270px;
+        margin-top: -135px;
         margin-left: -200px;
     }
     .bw1-description{
-        display: block;
+        /*display: block;*/
         margin-top: 10px;
     }
     .bw1-word, .bw1-letter {
@@ -466,7 +466,13 @@
 .card-description-wrap-al1 {text-align: center;}
 
 .card-content-body-wrap-ar2, .card-syllables-body-wrap-ar2 {margin-top: 0;text-align: center;}
-.card-ar2-syllable.card-ar1-syllable {font-size: 24px;height: 39px;font-weight: 400;margin: 10px 1px;padding: 5px 4px;}
+.card-ar2-syllable.card-ar1-syllable {
+    font-size: 50px;
+    height: 71px;
+    font-weight: 400;
+    margin: 10px 1px;
+    padding: 5px 5px;
+}
 .card-ar1-digraph-input {padding: 0 !important;}
 .card-content-ar1-answer {margin-top: 0;}
 .card-description-wrap-ar2 {margin-top: 4px;}
