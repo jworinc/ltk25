@@ -22,6 +22,7 @@ import { Howl, Howler } from 'howler';
 import * as $ from 'jquery';
 import { GrammarComponent } from '../grammar/grammar.component';
 import { filter } from 'rxjs/operators';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-lesson',
@@ -154,7 +155,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
     private cs: ColorschemeService,
     private cf: CustomfieldService,
     private Auth: AuthService,
-    private Token: TokenService
+    private Token: TokenService,
+    private title: Title
   ) {
         // this language will be used as a fallback when a translation isn't found in the current language
         this.translate.setDefaultLang(Option.getFallbackLocale());
@@ -164,6 +166,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+
+    //  Set lessons title
+    this.title.setTitle('LTK-Lessons');
 
     //  Init studetn information
     this.student_info_event = this.DL.getStudentInfo();
@@ -379,6 +384,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
       this.current_lesson_title = this.getCurrentLessonTitle(this.student.lu);
       this.card_descriptor.lesson = this.student.lu;
       console.log('Run normally, start position setted to '+this.start_position+'!');
+      this.title.setTitle('LTK-Lesson-'+this.card_descriptor.lesson);
     } else {
       this.loadCards(this.n);
       this.current_lesson_title = this.getCurrentLessonTitle(this.n);
@@ -390,6 +396,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
       //  set lu for sidetrip with some delay
       let that = this;
       setTimeout(()=>{ that.DL.lu = +that.n; }, 20);
+      this.title.setTitle('LTK-Lessons-Sidetrip'+this.n);
     }
     
   }

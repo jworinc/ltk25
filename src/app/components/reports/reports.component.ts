@@ -5,6 +5,7 @@ import { DataloaderService } from '../../services/dataloader.service';
 import { AuthService } from '../../services/auth.service';
 import { TokenService } from '../../services/token.service';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-reports',
@@ -14,7 +15,8 @@ import { Router } from '@angular/router';
 export class ReportsComponent implements OnInit {
 
   constructor(private translate: TranslateService,
-    private Auth: AuthService,
+	private Auth: AuthService,
+	private title: Title,
     private Token: TokenService, private router: Router,
     private Option: OptionService, private dataloader: DataloaderService) { 
   		// this language will be used as a fallback when a translation isn't found in the current language
@@ -25,7 +27,8 @@ export class ReportsComponent implements OnInit {
   	}
 
     ngOnInit() {
-
+		//	set Reports title
+		this.title.setTitle('LTK-Lessons-Reports');
     	//  Init studetn information
 	    this.dataloader.getStudentInfo().subscribe(
 	        data => this.handleStudentInfo(data),

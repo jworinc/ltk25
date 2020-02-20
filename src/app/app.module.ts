@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -229,9 +229,10 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [DataloaderService, TokenService, AuthService, BeforeLoginService, AfterLoginService,
   { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
     SnotifyService, OptionService, CardbuilderService, PlaymediaService, RecorderService, MediapreloaderService, 
-    LoggingService, ColorschemeService, CustomfieldService, ErrorLogService,
+    LoggingService, ColorschemeService, CustomfieldService, ErrorLogService, Title,
     { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
-    /*{ provide: ErrorHandler, useClass: GlobalErrorHandler }*/ ],
+    ///*{ provide: ErrorHandler, useClass: GlobalErrorHandler }*/ ],
+    { provide: ErrorHandler, useClass: GlobalErrorHandler }],
   entryComponents: [ Al1Component, CarComponent, Al2Component, Ar1Component, Ar2Component, Ar3Component, Ar4Component, Ar5Component,
   Ar6Component, Or1Component, Or2Component, Or3Component, Or4Component, Bw1Component, Bw2Component, Bw3Component, Bw5Component,
   Bw6Component, Bw7Component, SypComponent, DiwComponent, GscComponent, Rp1Component, Rp2Component, GwmComponent, SiwComponent,

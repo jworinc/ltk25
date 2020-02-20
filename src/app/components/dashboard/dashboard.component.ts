@@ -7,6 +7,7 @@ import { OptionService } from '../../services/option.service';
 import { NotebookComponent } from '../notebook/notebook.component';
 import { AuthService } from '../../services/auth.service';
 import { TokenService } from '../../services/token.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-dashboard',
@@ -79,7 +80,8 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private el: ElementRef,
     private Auth: AuthService,
-    private Token: TokenService
+    private Token: TokenService,
+    private title: Title
   ) {
         // this language will be used as a fallback when a translation isn't found in the current language
         this.translate.setDefaultLang(Option.getFallbackLocale());
@@ -89,6 +91,9 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    //  Set dashboard title
+    this.title.setTitle("LTK-Lessons-Main");
 
     this.DL.getStudentInfo().subscribe(
         data => this.handleStudentInfo(data),
