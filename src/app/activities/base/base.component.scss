@@ -13,7 +13,9 @@
 }
 .card-style-obj-left, .card-style-obj-right, .card-style-obj-single {
     left: 50%;
-    display: block;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
     width: 600px;
     height: 444px;
     margin-top: -222px;
@@ -258,7 +260,7 @@
 
 .bw1-description{
     display: none;
-    font-size: 12px;
+    font-size: 16px;
     color: #C2272D;
     line-height: 1;
 }
@@ -340,7 +342,7 @@
     }
     .card-style-obj-single {
         width: 400px;
-        height: 200px;
+        height: 230px;
         margin-top: -100px;
         margin-left: -200px;
     }

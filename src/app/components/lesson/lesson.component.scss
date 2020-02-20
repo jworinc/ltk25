@@ -741,7 +741,7 @@ body{
     left: 0;
     order: 3;
     background-color: white;
-    box-shadow: 0 0 3px #000;
+    /*box-shadow: 0 0 3px #000;*/
 }
 .zoom-card-sequence-buttons-mobile span{
     display: block;
@@ -994,9 +994,9 @@ body{
     align-items: center;
     font-size: 18px;
     font-weight: 600;
-    box-shadow: 0 0 3px #000;
+    box-shadow: 0 0 7px #444;
     border-bottom-style: solid;
-    border-color: #333;
+    border-color: #777;
     border-width: 1px;
 }
 .zoom-card-sequence-goodbad{
@@ -1125,6 +1125,27 @@ body{
     font-size: 10px;
 }
 
+.zoom-frame-header-desktop{
+    display: block;
+    background-color: white;
+}
+.zoom-frame-header-mobile{
+    display: none;
+    flex-flow: row;
+}
+.inner-frame-header{
+    display: flex;
+    min-width: 50%;
+    height: 100%;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    background-color: #0071BD;
+}
+.inner-frame-header-full{
+    min-width: 100%;
+}
+
 
 @media screen and (max-width: 1024px) {
    
@@ -1136,6 +1157,17 @@ body{
         transition: left 0.4s ease;
         overflow: hidden;
         overflow-y: auto;
+    }
+
+    .zoom-frame-header-desktop{
+        display: none;
+    }
+    .zoom-frame-header-mobile{
+        display: flex;
+        height: auto;
+    }
+    .zoom-frame-header{
+        background-color: white;
     }
     
 }

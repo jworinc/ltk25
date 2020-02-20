@@ -36,7 +36,26 @@
                     </div><!--     Top Toolbar     -->
 
                     <!--  Header  -->
-                    <div class='zoom-frame-header'>{{ global_header }}</div>
+                    <div class='zoom-frame-header zoom-frame-header-desktop'>{{ global_header }}</div>
+                    <div class="zoom-frame-header zoom-frame-header-mobile">
+                        <div class='inner-frame-header' [ngClass]="{'inner-frame-header-full': !global_start}">{{ global_header }}</div>
+                        <span class='zoom-card-sequence-buttons-mobile' [hidden]="!global_start">
+
+                            <!-- <span class='zoom-card-sequence-hint' (click)='hint();'></span> -->
+                            <span class='zoom-card-sequence-goodbad' *ngIf='rui_button_goodbad' [ngClass]="{'blinkhighlight': blinkgoodbad}">
+                                <span class='zoom-card-sequence-good' (click)='good();' title="{{ 'good_btn' | translate }}"></span>
+                                <span class='zoom-card-sequence-bad' (click)='bad();' title="{{ 'bad_btn' | translate }}"></span>
+                            </span>
+                            <span class='zoom-card-sequence-clear' *ngIf='rui_button_clear' (click)='clear();' title="{{ 'clear_input' | translate }}"></span>
+                            <span class='zoom-card-sequence-rule' *ngIf='rui_button_rule' (click)='rule();' title="{{ 'rule_input' | translate }}" [ngClass]="{'blinkhighlight': blinkrule}"></span>
+                            <span class='zoom-card-sequence-hint' *ngIf='rui_button_hint' (click)='hint();' title="{{ 'show_hint' | translate }}"></span>
+                            <span class='zoom-card-sequence-prev' *ngIf='rui_button_prev' (click)='prev();' title="{{ 'move_to_prev' | translate }}"></span>
+                            <span class='zoom-card-sequence-enter' *ngIf='rui_button_enter' (click)='enter();' title="{{ 'enter_answer' | translate }}" [ngClass]="{'blinkhighlight': blinkenter}"></span>
+                            <span class='zoom-card-next' (click)='moveNext()' title="{{ 'move_to_next' | translate }}" [ngClass]="{'blinkhighlight': blinknextnavbtn}"></span>
+    
+                        </span>
+                        <!-- Card Sequence buttons for mobile layout -->
+                    </div>
                     <!--  Header  -->
 
                     <!--     Container for slides    -->
@@ -107,22 +126,7 @@
 
                     </div><!--     Container for slides    -->
 
-                    <span class='zoom-card-sequence-buttons-mobile'>
-
-                        <!-- <span class='zoom-card-sequence-hint' (click)='hint();'></span> -->
-                        <span class='zoom-card-sequence-goodbad' *ngIf='rui_button_goodbad' [ngClass]="{'blinkhighlight': blinkgoodbad}">
-                            <span class='zoom-card-sequence-good' (click)='good();' title="{{ 'good_btn' | translate }}"></span>
-                            <span class='zoom-card-sequence-bad' (click)='bad();' title="{{ 'bad_btn' | translate }}"></span>
-                        </span>
-                        <span class='zoom-card-sequence-clear' *ngIf='rui_button_clear' (click)='clear();' title="{{ 'clear_input' | translate }}"></span>
-                        <span class='zoom-card-sequence-rule' *ngIf='rui_button_rule' (click)='rule();' title="{{ 'rule_input' | translate }}" [ngClass]="{'blinkhighlight': blinkrule}"></span>
-                        <span class='zoom-card-sequence-hint' *ngIf='rui_button_hint' (click)='hint();' title="{{ 'show_hint' | translate }}"></span>
-                        <span class='zoom-card-sequence-prev' *ngIf='rui_button_prev' (click)='prev();' title="{{ 'move_to_prev' | translate }}"></span>
-                        <span class='zoom-card-sequence-enter' *ngIf='rui_button_enter' (click)='enter();' title="{{ 'enter_answer' | translate }}" [ngClass]="{'blinkhighlight': blinkenter}"></span>
-                        <span class='zoom-card-next' (click)='moveNext()' title="{{ 'move_to_next' | translate }}" [ngClass]="{'blinkhighlight': blinknextnavbtn}"></span>
-
-                    </span>
-                    <!-- Card Sequence buttons for mobile layout -->
+                    
 
                 </div>
 
