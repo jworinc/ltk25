@@ -138,6 +138,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public snooze_time = 0;
   public snooze_delay = 180;
 
+  //  Flag for enabling stop of media playback on any user action
+  public action_media_stop = true;
+
   constructor(
     private DL: DataloaderService,
     private notify: SnotifyService,
@@ -1147,7 +1150,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   enter() {
-
+    if(this.action_media_stop) this.playmedia.stop();
     //  Check cards and sent enter event to active card
     //  in case if any other component is hidden
     if(!this.show_grammar && !this.show_notebook && !this.show_testing){
@@ -1180,6 +1183,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   repeat() {
+    if(this.action_media_stop) this.playmedia.stop();
     if(this.lesson_finished) return;
     //  Check cards and sent enter event to active card
     for(let i in this.ccs){
@@ -1192,6 +1196,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   hint() {
+    if(this.action_media_stop) this.playmedia.stop();
     //  Check cards and sent enter event to active card
     for(let i in this.ccs){
       let c = this.ccs[i];
@@ -1202,6 +1207,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   clear() {
+    if(this.action_media_stop) this.playmedia.stop();
     //  Check cards and sent enter event to active card
     for(let i in this.ccs){
       let c = this.ccs[i];
@@ -1212,6 +1218,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   rule() {
+    if(this.action_media_stop) this.playmedia.stop();
     //  Check cards and sent enter event to active card
     for(let i in this.ccs){
       let c = this.ccs[i];
@@ -1373,14 +1380,17 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   good() {
+    if(this.action_media_stop) this.playmedia.stop();
     this.good_btn.emit();
   }
 
   bad() {
+    if(this.action_media_stop) this.playmedia.stop();
     this.bad_btn.emit();
   }
 
   prev() {
+    if(this.action_media_stop) this.playmedia.stop();
     this.prev_btn.emit();
   }
 
@@ -1561,6 +1571,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   //  Handler for mousedown rec button event
   recDown() {
+    if(this.action_media_stop) this.playmedia.stop();
     if(!this.global_start || !this.recorder.audio_context_enable) return
     //  if play in progress or setting page is shown, return
     if(this.show_rec_setting) return;
@@ -1587,6 +1598,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   //  Event handler for start play button
   playStart() {
+    if(this.action_media_stop) this.playmedia.stop();
     if(!this.global_start || !this.recorder.audio_context_enable) return;
     let that = this;
     that.playstart_event.emit();

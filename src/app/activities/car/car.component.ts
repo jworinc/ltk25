@@ -231,6 +231,7 @@ export class CarComponent extends BaseComponent implements OnInit {
 	}
 
 	playWord() {
+		this.playmedia.stop();
 		this.playmedia.word(this.answer_word, function(){}, 1);
 	}
 

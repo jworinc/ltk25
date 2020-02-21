@@ -168,6 +168,7 @@ export class NotebookComponent implements OnInit {
   }
 
   playWord(){
+    this.playmedia.stop();
     this.playmedia.word(this.card[this.counter].wavename,function(){});
   }
 

@@ -46,19 +46,19 @@ body {
 	display: none;
     position: absolute;
     left: 100%;
-    top: -9px;
-	width: 18px;
-	min-width: 18px;
-    margin-left: -18px;
-    height: 18px;
+    top: -14px;
+    width: 24px;
+    min-width: 24px;
+    margin-left: -24px;
+    height: 24px;
     background-color: darkblue;
     color: white;
     border-radius: 5px;
     border-style: solid;
     border-color: transparent;
     border-width: 1px;
-    font-size: 16px;
-	line-height: 15px;
+    font-size: 21px;
+    line-height: 20px;
 	text-align: center;
 	transition: all 0.2s ease;
 	z-index: 10100;
@@ -101,10 +101,10 @@ body {
 	display: block; 
 	position: relative; 
 	margin: auto; 
-	margin-top: 1px; 
-	width: 14px; 
-	height: 14px; 
-	line-height: 15px; 
+	margin-top: 3px; 
+	width: 18px; 
+	height: 18px; 
+	line-height: 21px; 
 	transition: transform 1s linear; 
 	animation-name: trrotation; 
 	animation-duration: 1s; 
@@ -193,19 +193,19 @@ span:hover[data-playw], span:hover[data-psword] {
 @media only screen and (max-width:1024px)
 {
 	.translainable-word div{
-		top: -8px;
-		width: 14px;
-		min-width: 14px;
+		top: -13px;
+		width: 24px;
+		min-width: 24px;
 		margin-left: -14px;
-		height: 14px;
-		font-size: 12px;
-		line-height: 12px;
+		height: 24px;
+		font-size: 21px;
+		line-height: 21px;
 	}
 	.translation-expand span img, .translation-expand-center span img{
-		margin-top: 0; 
-		width: 12px; 
-		height: 12px; 
-		line-height: 13px; 
+		margin-top: 3px; 
+		width: 16px; 
+		height: 16px; 
+		line-height: 22px; 
 	}
 	.translate-popup-expanded {
 		width: 80%;

@@ -135,8 +135,12 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 				this.enableMoveNext();
 			}
 			this.prevent_dubling_flag = true;
+			this.play_pronouce_busy_flag = false;
 			this.input_data = '';
-			this.mselshow = true;
+			if(this.uinputph === 'vowel' || this.uinputph === 'rec' || this.uinputph === 'listen' || this.uinputph === 'compare')
+				this.elm.nativeElement.querySelector('.bw1-word-wrap').style.opacity = '1';
+			else this.elm.nativeElement.querySelector('.bw1-word-wrap').style.opacity = '0';
+			//this.mselshow = true;
 			if(typeof (this as any).msel !== 'undefined') (this as any).msel.update();
 		}
 		
@@ -417,6 +421,7 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 
 	playWord(){
 		let that = this;
+		this.playmedia.stop();
 		this.playmedia.word(this.answer_word, function(){
 			if(that.uinputph === 'compare'){
 				that.playPronounce(function(){

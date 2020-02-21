@@ -119,7 +119,10 @@
                             </span>
 
                             <!-- Card lesson position activity tag -->
-                            <span class='lesson-position-activity-tag' [hidden]="card_descriptor.lesson==0&&card_descriptor.position==0&&card_descriptor.activity==''">
+                            <span class='lesson-position-activity-tag' 
+                                [hidden]="card_descriptor.lesson==0&&card_descriptor.position==0&&card_descriptor.activity==''" 
+                                title="{{ 'feedback_btn' | translate }}"
+                                (click)="onShowFeedback()">
                                 #{{ card_descriptor.lesson }}-{{ card_descriptor.position }}:{{ card_descriptor.activity }}</span>
 
                         </div>

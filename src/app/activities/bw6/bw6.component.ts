@@ -401,6 +401,7 @@ export class Bw6Component extends Bw3Component implements OnInit {
 
 	playWord(){
 		let that = this;
+		this.bw6pm.stop();
 		this.bw6pm.word(this.answer_sound, function(){
 			
 				that.playPronounce(function(){

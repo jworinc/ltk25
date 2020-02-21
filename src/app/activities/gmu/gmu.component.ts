@@ -281,7 +281,7 @@ export class GmuComponent extends BasebwComponent implements OnInit, DoCheck {
     public play_word_busy_flag: boolean = false;
   
     playWord(){
-  
+      this.pms.stop();
       if(this.play_word_busy_flag) return;
       this.play_word_busy_flag = true;
       let that = this;

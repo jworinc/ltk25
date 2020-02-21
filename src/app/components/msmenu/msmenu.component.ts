@@ -32,7 +32,7 @@ export class MsmenuComponent implements OnInit {
 
   constructor(
   	private Auth: AuthService,
-  	private router: Router,
+  	public router: Router,
   	private Token: TokenService,
     translate: TranslateService,
     private Option: OptionService,
