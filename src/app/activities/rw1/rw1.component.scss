@@ -39,7 +39,7 @@
     // height: 150px;
 }
 .phoneme-box, .sentence-box{
-    display: block;
+    /*display: block;*/
 }
 .card-showdown-button{
     display: block;
@@ -182,7 +182,7 @@ span.word-native {
     position: absolute;
     width: 336px;
     height: 30px;
-    top: 122px;
+    top: 184px;
     left: 50%;
     margin-left: -208px;
     background-color: darkblue;
@@ -302,7 +302,7 @@ span.word-native {
     .click-to-play-wrap{
         width: 204px;
         height: 20px;
-        top: 37px;
+        top: 100px;
         margin-left: -125px;
         font-size: 11px;
         line-height: 1.6;

@@ -26,9 +26,11 @@
       </div>
       <div class='phoneme-box' (click)="playPronounce(cnkey)" [attr.wordblock]="cnkey">
         <span class='phoneme-header'>Pronounce</span>
-        <span *ngFor='let ph of cn.breakdown.split("-"); let kph = index' class='phoneme-syllable'>
-          <span *ngFor='let l of ph.split(","); let kl=index' [attr.playsyl]='kph' [attr.playpos]='kl'>{{ l }}</span>
-          
+        <span style="display: flex; flex-flow: row; align-items: center;">
+          <span *ngFor='let ph of cn.breakdown.split("-"); let kph = index' class='phoneme-syllable'>
+            <span *ngFor='let l of ph.split(","); let kl=index' [attr.playsyl]='kph' [attr.playpos]='kl'>{{ l }}</span>
+            
+          </span>
         </span>
         <div class="click-to-play-wrap">
           <span class="click-to-play-text">{{ 'click_to_play' | translate }}</span>

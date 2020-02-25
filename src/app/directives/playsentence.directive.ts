@@ -79,6 +79,8 @@ export class PlaysentenceDirective {
 		let dots = /\./g;
 		//	RegExp to find slashes
 		let slashes = /[\/\-\_\+]/g;
+		//	RegExp for nonbreaking HTML space
+		let nbsps = /(\&nbsp)+/ig;
 
 		//	Convert plain words string to array
 		let words_arr = [];
@@ -89,7 +91,7 @@ export class PlaysentenceDirective {
 
 
 		//innerText = this.origin_text = this.elmt.nativeElement.innerHTML;
-		innerText = innerText.replace(html, '').replace(space_to_one, ' ').replace(punctuation, '').replace(dots, ' ').replace(slashes, ' ');
+		innerText = innerText.replace(html, '').replace(space_to_one, ' ').replace(punctuation, '').replace(dots, ' ').replace(slashes, ' ').replace(nbsps, ' ');
 		words_arr = innerText.split(' ');
     	
 		//	Find unique words in all words array

@@ -309,6 +309,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
     //  Else switch to the prev view
     else {
       this.showPrevView();
+      //  Init new interactivity sentence
+      this.updateISS(true);
     }
     this.uinputph = 'review';
     this.disableNextSlide();
@@ -456,6 +458,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
   public iss_variants = [];
   //  Current word
   public iss_word = '';
+  //  Origin sentence
+  public iss_origin_sentence = '';
   //  Buffer for sentence groups (for each word)
   public iss_buffer = [];
 
@@ -471,12 +475,14 @@ export class Rw1Component extends BaseComponent implements OnInit {
     this.iss_buffer = [];
 
     for(let n in this.card.content){
+      current_sentences = [];
       //  Check if we have several sentences
       if(typeof this.card.content[n].sentences !== 'undefined' &&
       this.card.content[n].sentences.length > 0){
         for(let i in this.card.content[n].sentences)
           current_sentences.push({sentence: this.card.content[n].sentences[i].sentence, word: this.card.content[n].title, pos: n });
-      } else {
+      } 
+      else if(typeof this.card.content[n].sentence !== 'undefined'){
         current_sentences.push({sentence: this.card.content[n].sentence, word: this.card.content[n].title, pos: n });
       }
 
@@ -499,10 +505,11 @@ export class Rw1Component extends BaseComponent implements OnInit {
       let pos = current_sentences[i].pos;
       
       //  Check if sentence contains current word
-      if(cs.search(cw) >= 0) {
+      let r = new RegExp('\\b'+cw+'\\b', 'i');
+      if(cs.search(r) >= 0) {
 
         //  Replace for display sentence required word with dots
-        let iss_display = cs.replace(cw, '<span class="gwf-answer-placeholder">&nbsp;&nbsp;&nbsp;&nbsp;____&nbsp;&nbsp;&nbsp;&nbsp;</span>');
+        let iss_display = cs.replace(r, '<span class="gwf-answer-placeholder">&nbsp;&nbsp;&nbsp;&nbsp;____&nbsp;&nbsp;&nbsp;&nbsp;</span>');
         //  Clear variants
         let iss_variants = [];
         //  Get variants
@@ -520,7 +527,14 @@ export class Rw1Component extends BaseComponent implements OnInit {
         //  Save processed data
         out.push({iss_display: iss_display, iss_variants: iss_variants, pos: pos, answered: false, origin_sentence: cs, word: cw});
   
+      } else {
+
+        out.push({iss_display: cs, iss_variants: [cw], pos: pos, answered: true, origin_sentence: cs, word: cw});
+
       }
+
+
+
     }
 
     return out;
@@ -528,10 +542,13 @@ export class Rw1Component extends BaseComponent implements OnInit {
     
   }
 
-  updateISS() {
+  updateISS(backward = false) {
 
     //  Get iss instance for current word (for now work with only first sentence)
-    let issi = this.iss_buffer[this.cw][0];
+    let issi = null;
+    if(!backward) issi = this.iss_buffer[this.cw][0];
+    else if(backward && this.cw > 0) issi = this.iss_buffer[this.cw-1][0];
+    else issi = this.iss_buffer[this.cw][0];
 
     //  Reset answer flag if not answered
     if(!issi.answered) this.user_answer_received_flag = false;
@@ -542,7 +559,25 @@ export class Rw1Component extends BaseComponent implements OnInit {
     this.iss_variants = issi.iss_variants;
     //  Expected word
     this.iss_word = issi.word;
+    //  Origin sentence
+    this.iss_origin_sentence = issi.origin_sentence;
 
+    this.compileInteractiveSS(issi.iss_display);
+
+  }
+
+  compileInteractiveSS(origin_sentence = '') {
+    //  Update sentences translation and play feature
+    let that = this;
+    setTimeout(()=>{
+      //console.log(that.psn);
+      that.psn.forEach(function(s){ 
+        if((<any>s).elmt.nativeElement.classList.contains('interactive-ss') && that.isActive()) {
+          if(origin_sentence !== '') (<any>s).origin_text = origin_sentence;
+          (<any>s).compileSentence();
+        }
+      });
+    }, 200);
   }
 
   saveISSAnswerResult() {
@@ -596,7 +631,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
 
 		}
 
-		
+    this.compileInteractiveSS(this.iss_origin_sentence);
+    
 	}
 
 
