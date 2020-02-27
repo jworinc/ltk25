@@ -1,8 +1,8 @@
 {
 	"login" : "Вход",
 	"loading" : "Загрузка",
-	"sidetrip_mode" : "Режим просмотра включен! Чтобы отключить просмотр, нажмите ",
-	"here" : "здесь",
+	"sidetrip_mode" : "Режим просмотра.",
+	"here" : "Отключить",
 	"student_menu" : "Меню Студента",
 	"break" : "Раздел",
 	"checkbox_mark" : "Флажки показывают отметку, когда урок завершен.",
@@ -158,7 +158,7 @@
 	"test_details" : "Детали теста",
 	"word_or_sentence" : "Слово или Предложение",
 	"ttest_will_measure" : "Этот тест покажет ваш прогресс.",
-	"ppress_continue" : "Пожалуйста, нажмите Продолжить, чтобы начать тестирование.",
+	"ppress_continue" : "Пожалуйста, нажмите кнопку, чтобы начать тестирование.",
 	"prev_testing_btn" : "Назад",
 	"continue_testing_btn" : "Продолжить",
 	"finish_testing_btn" : "Конец",
@@ -188,5 +188,6 @@
 	"help" : "",
 	"click_on_element" : "",
 	"continue" : "Продолжить",
-	"snooze" : "Сон"
+	"snooze" : "Сон",
+	"select_the_missing_word" : ""
 }
