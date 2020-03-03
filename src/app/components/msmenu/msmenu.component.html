@@ -73,7 +73,7 @@
     </div>
     <!--/Menu Open/Hide button   -->
 
-    <div class='tool-sidebar-background-shadow' [ngClass]="{'sbbshadowopen': show_tool_pages_list}"></div>
+    <div class='tool-sidebar-background-shadow' [ngClass]="{'sbbshadowopen': show_tool_pages_list}" (click)='show_tool_pages_list = false; closeMenu()'></div>
 
 
 </div>
