@@ -393,9 +393,13 @@ export class SypComponent extends BaseComponent implements OnInit {
 					//	this.syp_card_inidesc += '<p>' + c.pointer_to_value.replace('...', '') + '</p>';
 					//}
 					//else if(!mr.test(c.pointer_to_value) && c.audio.split('')[0] === '_' && c.pointer_to_value.length <= 16) {
-					if(!mr.test(c.pointer_to_value) && c.audio.split('')[0] === '_') {
+					if(!mr.test(c.pointer_to_value) && c.audio.split('')[0] === '_' && typeof c.english_subtitle === 'undefined') {
 						//this.temp_inidesc += c.pointer_to_value.replace('...', '') + ' ';
 						this.syp_card_inidesc += '<p>' + c.pointer_to_value.replace('...', '') + '</p>';
+					}
+					else if(!mr.test(c.pointer_to_value) && c.audio.split('')[0] === '_' && typeof c.english_subtitle !== 'undefined' && c.english_subtitle !== '') {
+						//this.temp_inidesc += c.pointer_to_value.replace('...', '') + ' ';
+						this.syp_card_inidesc += '<p>' + c.english_subtitle.replace('...', '') + '</p>';
 					}
 					//	Check if last add it to description list
 					//if(this.current_comand === this.cmds.length-1 && this.temp_inidesc !== '') 
