@@ -165,6 +165,9 @@
           "configurations": {
             "production": {
               "browserTarget": "LTKLessons:build:production"
+            },
+            "dev": {
+              "browserTarget": "LTKLessons:build:dev"
             }
           }
         },

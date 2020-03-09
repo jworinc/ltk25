@@ -103,6 +103,8 @@ export class Bs1Component extends BaseComponent implements OnInit {
 					}, 10);
 				}
 
+				this.setGlobalHeader(this.header);
+
 			}
 			
 		}
@@ -163,6 +165,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 					beg: b,
 					var: c
 				});
+				
 			}
 
 			//	Compile sentence after short delay, that will needed for angular to build a markup
@@ -172,7 +175,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 					that.ss[i].origin_text = '';
 					that.ss[i].compileSentence();
 					that.ss[i].end_callback = ()=>{
-						that.uinputph = 'enablenext';
+						if(that.uinputph !== 'finish') that.uinputph = 'enablenext';
 					}
 				}
 				that.showFirstPartOfSentence();
@@ -240,10 +243,19 @@ export class Bs1Component extends BaseComponent implements OnInit {
 				let s = this.s_pull[i];
 				let id = parseInt(i);
 				if(id <= this.sentence_index){
-					s.style = {'top': (this.row_height*(this.sentence_index - id) + 5) + 'px', 'opacity': '1'};
+					//s.style = {'top': (this.row_height*(this.sentence_index - id) + 5) + 'px', 'opacity': '1'};
+					s.style = {'opacity': '1', 'display': 'flex'};
 				}
 			}
 			//this.s_pull[this.sentence_index]
+			
+			//	Scroll down sentences to the last
+			let that = this;
+			setTimeout(()=>{
+				let se = that.elm.nativeElement.querySelector('.sen-ready-list');
+				se.scrollTop = se.clientHeight * 2;
+			}, 100);
+			
 		}
 
 		enter() {

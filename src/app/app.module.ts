@@ -116,6 +116,7 @@ import { CfcComponent } from './activities/cfc/cfc.component';
 import { SnoozeComponent } from './components/snooze/snooze.component';
 import { WordtranslateDirective } from './directives/wordtranslate.directive';
 import { MultiselectComponent } from './components/multiselect/multiselect.component';
+import { ReversePipe } from './pipes/reverse.pipe';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -210,6 +211,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SnoozeComponent,
     WordtranslateDirective,
     MultiselectComponent,
+    ReversePipe,
   ],
   imports: [
     BrowserModule,

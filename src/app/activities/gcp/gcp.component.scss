@@ -2,12 +2,14 @@
     display: flex;
     flex-flow: column;
     vertical-align: middle;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     align-content: center;
+    flex: 2;
 }
 .cr-words{
     flex-flow: row wrap;
     justify-content: space-evenly;
+    flex: 1;
 }
 .cr-words span{
     width: auto;
@@ -25,7 +27,7 @@
     position: relative;
     width: 200px;
     /* text-align: center; */
-    margin: auto;
+    margin: 1px auto;
 }
 .cr-letter{
     display: block;
@@ -92,11 +94,12 @@
     }
     .cr-words span{
         padding: 4px 1px;
-        font-size: 9px;
+        font-size: 20px;
+        line-height: 14px;
     }
     .cr-letter{
         width: 14px;
-        height: 10px;
+        height: 12px;
         line-height: 8px;
         font-size: 8px;
         font-weight: 200;
