@@ -117,6 +117,7 @@ import { SnoozeComponent } from './components/snooze/snooze.component';
 import { WordtranslateDirective } from './directives/wordtranslate.directive';
 import { MultiselectComponent } from './components/multiselect/multiselect.component';
 import { ReversePipe } from './pipes/reverse.pipe';
+import { FontadjusterDirective } from './directives/fontadjuster.directive';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -212,6 +213,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     WordtranslateDirective,
     MultiselectComponent,
     ReversePipe,
+    FontadjusterDirective,
   ],
   imports: [
     BrowserModule,

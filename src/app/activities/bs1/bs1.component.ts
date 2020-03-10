@@ -6,6 +6,7 @@ import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { PlaysentenceDirective } from '../../directives/playsentence.directive';
 import { PlaywordsDirective } from '../../directives/playwords.directive';
+import { FontadjusterDirective } from '../../directives/fontadjuster.directive';
 
 @Component({
   selector: 'app-bs1',
@@ -18,6 +19,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 
 	@ViewChildren(PlaysentenceDirective) psns;
 	@ViewChildren(PlaywordsDirective) pwds;
+	@ViewChildren(FontadjusterDirective) fads;
 
   	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private bs1log: LoggingService, private gmucs: ColorschemeService) {
   	  	super(elm, sanitizer, playmedia, bs1log, gmucs);
@@ -147,6 +149,13 @@ export class Bs1Component extends BaseComponent implements OnInit {
 			}
 		}
 
+		//	Update font size
+		updateFonts() {
+			this.fads.forEach((fa)=>{
+				if(typeof fa.update !== 'undefined') fa.update();
+			});
+		}
+
 		startSentence(i) {
 			let that = this;
 			this.senstarted = true;
@@ -179,6 +188,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 					}
 				}
 				that.showFirstPartOfSentence();
+				that.updateFonts();
 			}, 10);
 			this.uinputph = 'ressentence';
 		}
@@ -197,6 +207,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 					that.ss[1].compileSentence();
 				}
 				that.showFirstPartOfSentence();
+				that.updateFonts();
 			}, 20);
 			this.uinputph = 'ressentence';
 		}
@@ -254,6 +265,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 			setTimeout(()=>{
 				let se = that.elm.nativeElement.querySelector('.sen-ready-list');
 				se.scrollTop = se.clientHeight * 2;
+				that.updateFonts();
 			}, 100);
 			
 		}
