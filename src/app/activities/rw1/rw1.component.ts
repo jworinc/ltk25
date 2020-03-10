@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { PlaysentenceDirective } from '../../directives/playsentence.directive';
+import { FontadjusterDirective } from '../../directives/fontadjuster.directive';
 
 @Component({
   selector: 'app-rw1',
@@ -15,6 +16,7 @@ import { PlaysentenceDirective } from '../../directives/playsentence.directive';
 export class Rw1Component extends BaseComponent implements OnInit {
 
   @ViewChildren(PlaysentenceDirective) psn !: QueryList<PlaysentenceDirective>;
+  @ViewChildren(FontadjusterDirective) fads;
 
   constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private rw1log: LoggingService, private rw1cs: ColorschemeService) {
   	super(elm, sanitizer, playmedia, rw1log, rw1cs);
@@ -99,6 +101,7 @@ export class Rw1Component extends BaseComponent implements OnInit {
       this.updateViewStates();
       //  Init new interactivity sentence
       this.initISS();
+      this.updateFonts();
 		}
 		
   }
@@ -337,7 +340,7 @@ export class Rw1Component extends BaseComponent implements OnInit {
   //  Play word
   playWord(name) {
     this.playmedia.stop();
-    this.playmedia.word(name, ()=>{});
+    this.playmedia.word(name, ()=>{}, 300);
   }
 
   public pronounce_play_sequence_started: boolean = false;
@@ -370,6 +373,7 @@ export class Rw1Component extends BaseComponent implements OnInit {
               that.elm.nativeElement.querySelectorAll('.phoneme-box[wordblock="'+id+'"] .phoneme-syllable span').forEach((e)=>{
                 e.style.backgroundColor = 'transparent';
               });
+              that.playWord(c.title);
             } else {
               let s = that.mask_syl_pos[that.pronounce_play_counter];
               that.elm.nativeElement.querySelectorAll('.phoneme-box[wordblock="'+id+'"] .phoneme-syllable span').forEach((e)=>{
@@ -633,7 +637,14 @@ export class Rw1Component extends BaseComponent implements OnInit {
 
     this.compileInteractiveSS(this.iss_origin_sentence);
     
-	}
+  }
+  
+  //	Update font size
+  updateFonts() {
+    this.fads.forEach((fa)=>{
+      if(typeof fa.update !== 'undefined') fa.update();
+    });
+  }
 
 
 

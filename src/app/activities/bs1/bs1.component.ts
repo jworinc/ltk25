@@ -39,7 +39,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 		public show_variants;
 		public header = "";
 		public subtitle = "";
-		public uinputph = 'sentence';
+		public uinputph = 'introductory';
 		public senstarted = false;
 		
 		public show_sentence_begin = false;
@@ -55,6 +55,7 @@ export class Bs1Component extends BaseComponent implements OnInit {
 		public row_height = 57;
 		public currentinnerWidth = 0;
 		public header_compiled = false;
+		public intro_inst = [];
 
     	ngOnInit() {
 			console.log(this.data);
@@ -67,6 +68,25 @@ export class Bs1Component extends BaseComponent implements OnInit {
 
 			}
 			this.currentinnerWidth = window.innerWidth;
+
+			//	Get introductory frame instructions
+			if(typeof this.card.content[0].Instructions !== 'undefined' && this.card.content[0].Instructions.length > 0) {
+				for(let i in this.card.content[0].Instructions) {
+					let ins = this.card.content[0].Instructions[i];
+					if(typeof ins.english_subtitle !== 'undefined' && ins.english_subtitle !== "")
+						this.intro_inst.push(ins.english_subtitle);
+					else this.intro_inst.push(ins.pointer_to_value);
+				}
+			}
+			if(typeof this.card.content[0].NextInst !== 'undefined' && this.card.content[0].NextInst.length > 0) {
+				for(let i in this.card.content[0].NextInst) {
+					let ins = this.card.content[0].NextInst[i];
+					if(typeof ins.english_subtitle !== 'undefined' && ins.english_subtitle !== "")
+						this.intro_inst.push(ins.english_subtitle);
+					else this.intro_inst.push(ins.pointer_to_value);
+				}
+			}
+
 		}
 		
 		validate() {
@@ -116,19 +136,52 @@ export class Bs1Component extends BaseComponent implements OnInit {
     
 				let that = this;
 				this.eslCustomInstructions('NextInst', ()=>{
+					/*
 					setTimeout(()=>{ 
+						that.uinputph = 'sentence';
 						if(!that.senstarted) that.startSentence(that.sentence_index);
 						else that.nextSentence(that.sentence_index);
 					}, 500);
+					*/
+					if(that.uinputph === 'introductory'){
+						that.disableNextSlide();
+						that.blinkOnlyNext();
+					} else {
+						setTimeout(()=>{ 
+							that.uinputph = 'sentence';
+							if(!that.senstarted) that.startSentence(that.sentence_index);
+							else that.nextSentence(that.sentence_index);
+						}, 500);
+					}
+					
 				});
 			
+		}
+
+		next() {
+			if(this.uinputph !== 'introductory') {
+				this.repeat();
+				return;
+			}
+			let that = this;
+			that.uinputph = 'sentence';
+			that.enableNextSlide();
+			if(this.cn.length - 1 >= this.sentence_index){
+				if(typeof this.ss !== 'undefined'){
+					this.ss.map((s)=>{ 
+						s.stop(); 
+					});
+				}
+			}
+			if(!that.senstarted) that.startSentence(that.sentence_index);
+			else that.nextSentence(that.sentence_index);
 		}
 
 
 		//	Card hide hook
 		hide() {
 			this.prevent_dubling_flag = false;
-			if(this.uinputph !== 'finish') this.uinputph = 'enablenext';
+			if(this.uinputph !== 'finish') this.uinputph = 'introductory';
 			//	Hide option buttons
 			this.optionHide();
 			this.enterHide();

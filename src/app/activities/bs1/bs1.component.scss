@@ -89,6 +89,20 @@
 .card-block-bs1{
     justify-content: space-between;
 }
+.introductory-frame{
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    padding: 30px;
+    text-align: center;
+    border-style: solid;
+    border-width: 4px;
+    border-color: #91CDC3;
+    color: darkblue;
+}
+.introductory-frame span{
+    margin-bottom: 20px;
+}
 
 @media only screen and (max-width:1024px)
 {
@@ -121,5 +135,11 @@
     .sentence{
         font-size: 16px;
         max-height: 60px;
+    }
+    .introductory-frame{
+        font-size: 14px;
+    }
+    .introductory-frame span{
+        margin-bottom: 5px;
     }
 }

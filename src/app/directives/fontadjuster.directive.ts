@@ -28,8 +28,8 @@ export class FontadjusterDirective {
     if(typeof this.fontcorrection !== 'undefined') f = f - this.fontcorrection;
     this.font_size = f + 'px';
     //  Output debug info
-    console.log("Font adjuster started >>>><<<<");
-    console.log({length: bl, width: bw, height: bh, font: f});
+    //console.log("Font adjuster started >>>><<<<");
+    //console.log({length: bl, width: bw, height: bh, font: f});
 
   }
 

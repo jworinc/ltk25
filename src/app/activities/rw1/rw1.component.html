@@ -8,8 +8,8 @@
     <div *ngFor='let cn of card.content; let cnkey = index' class="word-block" [attr.wordindex]="cnkey">
       <div class='word-box'>
         <div class="row cust-word-img">
-          <div [ngClass]="!cn.content[0].img ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-sx-6'" (click)="playWord(cn.wavename)">           
-              <div class='word mb-2'>{{ cn.title }}</div>
+          <div class="cust-word-container" [ngClass]="!cn.content[0].img ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-sx-6'" (click)="playWord(cn.wavename)">           
+              <div class='word mb-2' appFontadjuster>{{ cn.title }}</div>
               <span class='word-native' [hidden]="!cn.translations || checkForName(cn.title)">{{ cn.translations ? cn.translations[0] : ''}}</span>                      
           </div>
           <div class="col-md-6" [hidden]='!cn.content[0].img'>

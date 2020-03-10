@@ -10,7 +10,11 @@
     <!--<h6 class="text-center" app-playwords [silentPlay]="true">{{subtitle}}</h6>-->
   </div>
 
-  <div class="row cust-row">
+  <div class="row cust-row introductory-frame" [hidden]="uinputph !== 'introductory'">
+    <span *ngFor="let ins of intro_inst">{{ ins }}</span>
+  </div>
+
+  <div class="row cust-row" [hidden]="uinputph === 'introductory'">
     <div class="sen-parts" [hidden]="this.uinputph === 'finish'">
       <div class="col-sm-5 sen-p sen-begin" [ngClass]="{'showitem': show_sentence_begin}" [hidden]="this.uinputph === 'finish'" appFontadjuster>
         <span [innerHTML]="current_sentence | bindhtml" [attr.data-ind]='i_sentence_begin' app-playsentence></span>
