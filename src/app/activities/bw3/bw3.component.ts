@@ -125,6 +125,7 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 			}
 			this.prevent_dubling_flag = true;
 			this.input_data = '';
+			this.uinputph = 'syllable';
 		}
 		
 	}
@@ -278,7 +279,8 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 	public play_word_busy_flag:boolean = false;
 	playWord(){
 		this.pms.stop();
-		if(this.play_word_busy_flag) return;
+		this.play_pronouce_busy_flag = false;
+		//if(this.play_word_busy_flag) return;
 		this.play_word_busy_flag = true;
 		let hletter = 0;
 		let pr = this.card.content[this.current_card_instance].parts;
@@ -345,12 +347,13 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 	//ngDoCheck() {
 	valueChange($event){
 	    //const change = this.differ.diff(this.input_data);
-	    if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
-
-	    	this.old_input_data = JSON.stringify(this.input_data);
+	    //if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
+		if(this.isActive()){
+	    	//this.old_input_data = JSON.stringify(this.input_data);
 
 	    	let that = this;
-
+			this.pms.stop();
+			this.play_pronouce_busy_flag = false;
 			//	When current phase is letters, check if num letters match with user input and switch to next
 			if(this.uinputph === 'letters' && this.input_data !== ''){
 				if(this.input_data == this.expected){

@@ -250,6 +250,7 @@ export class DisComponent extends BaseComponent implements OnInit {
 			this.card.content[0].desc = this.card.content[0].RepInst[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].desc);
 			this.playmedia.sound(this.card.content[0].RepInst[0].audio, function(){
+				that.playSentenceFinish();
 				that.setFocus();
 				
 			});
@@ -293,6 +294,8 @@ export class DisComponent extends BaseComponent implements OnInit {
 		this.playsentence_started_flag = true;
 		let that = this;
 		this.showSentence();
+		this.playmedia.stop();
+		this.psn.play_busy = false;
 		//$rootScope.$broadcast('rootScope:playSentenceByIndex', {ind: this.sentence_index, cb: this.playSentenceFinish});
 		this.psn.playSentenceByIndex(this.sentence_index, ()=>{
 			that.playSentenceFinish.call(that);

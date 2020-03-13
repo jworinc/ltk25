@@ -260,6 +260,7 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 
 	    	let that = this;
 				this.pms.stop();
+				this.play_pronouce_busy_flag = false;
 				//	When current phase is letters, check if num letters match with user input and switch to next
 				if(this.uinputph === 'letters' && this.input_data !== ''){
 					if(this.input_data == this.expected){

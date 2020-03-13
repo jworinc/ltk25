@@ -578,19 +578,20 @@ export class Ar1Component extends BaseComponent implements OnInit {
 						if(typeof fst.audio !== 'undefined' && fst.audio !== ''){
 							this.playmedia.sound(fst.audio, function(){});
 							if(this.card.content[0].RespAtEnd.length === 1)
-								this.playmedia.word(this.answer_word, function(){ that.enter(false); that.uinputph = 'finish'; that.blurInput(); });
+								this.playmedia.word(this.answer_word, function(){ that.enter(false); that.uinputph = 'finish'; that.enableMoveNext(); that.blurInput(); });
 							else{
 								let fst = this.card.content[0].RespAtEnd[1];
 								this.card.content[0].desc = fst.pointer_to_value;
 								this.setGlobalDesc(fst.pointer_to_value);
 								if(typeof fst.audio !== 'undefined' && fst.audio !== ''){
 									this.playmedia.sound(fst.audio, function(){});
-									this.playmedia.word(this.answer_word, function(){ that.enter(false); that.uinputph = 'finish'; that.blurInput(); });
+									this.playmedia.word(this.answer_word, function(){ that.enter(false); that.uinputph = 'finish'; that.enableMoveNext(); that.blurInput(); });
 								}
 							}
 						}
 					} else {
 						this.uinputph = 'finish';
+						this.enableMoveNext();
 						this.enter(false);
 					}
 				}

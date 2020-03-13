@@ -315,6 +315,7 @@ enter() {
     this.enableNextCard();
     let that = this;
     this.move_next_timer = setTimeout(()=>{
+      that.enableMoveNext();
       that.moveNext();
     }, 1000);
   } 

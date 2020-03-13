@@ -158,9 +158,11 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 				this.enableMoveNext();
 			}
 			this.prevent_dubling_flag = true;
+			this.play_pronouce_busy_flag = false;
 			this.input_data = '';
+
 		}
-		
+		if(this.isActive()) this.play_pronouce_busy_flag = false;
 	}
 
 	//	Overload default play description function
@@ -512,10 +514,11 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 	//ngDoCheck() {
 	valueChange($event){
 	    //const change = this.differ.diff(this.input_data);
-	    if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
-
-	    	this.old_input_data = JSON.stringify(this.input_data);
-
+	    //if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
+		if(this.isActive()) {
+	    	//this.old_input_data = JSON.stringify(this.input_data);
+			this.pms.stop();
+			this.play_pronouce_busy_flag = false;
 	    	let that = this;
 
 			//	When current phase is letters, check if num letters match with user input and switch to next

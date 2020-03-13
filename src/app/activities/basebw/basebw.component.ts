@@ -144,6 +144,7 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 			if(typeof (this as any).msel !== 'undefined') (this as any).msel.update();
 		}
 		
+		
 	}
 
 	//	Overload default play description function
@@ -422,6 +423,7 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 	playWord(){
 		let that = this;
 		this.playmedia.stop();
+		this.play_pronouce_busy_flag = false;
 		this.playmedia.word(this.answer_word, function(){
 			if(that.uinputph === 'compare'){
 				that.playPronounce(function(){
@@ -552,6 +554,7 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 				let that = this;
 				
 				this.playmedia.stop();
+				this.play_pronouce_busy_flag = false;
 
 			//	When current phase is letters, check if num letters match with user input and switch to next
 			if(this.uinputph === 'letters' && this.input_data !== ''){

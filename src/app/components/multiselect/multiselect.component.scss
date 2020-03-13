@@ -1,6 +1,21 @@
+:host{
+    margin-bottom: 20px;
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-around;
+    height: 68px;
+}
 .btn{
     margin: 2px;
     font-size: 26px;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: row;
+    max-width: 42px;
+    max-height: 52px;
+    justify-content: center;
 }
 .btn-primary:hover {
     color: #fff;
@@ -9,4 +24,16 @@
     border-style: solid;
     border-width: 2px;
     border-color: red !important;
+}
+@media screen and (max-width: 1024px) {
+    
+    :host{
+        margin-bottom: 10px
+    }
+    .btn{
+        font-size: 20px;
+        max-width: 30px;
+        max-height: 43px;
+    }
+    
 }

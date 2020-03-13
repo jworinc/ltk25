@@ -69,7 +69,7 @@ export class CccComponent extends BaseComponent implements OnInit {
 				
 				//	Play card description
 				//this.playCardDescription();
-				this.disableMoveNext();
+				this.enableMoveNext();
 				
 			} else {
 				this.enableMoveNext();

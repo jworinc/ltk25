@@ -278,6 +278,7 @@ export class GssComponent extends BaseComponent implements OnInit {
         this.enableNextCard();
         let that = this;
         this.move_next_timer = setTimeout(()=>{
+          that.enableMoveNext();
           that.moveNext();
         }, 2000);
         

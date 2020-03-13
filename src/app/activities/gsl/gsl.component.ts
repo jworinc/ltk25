@@ -98,6 +98,7 @@ export class GslComponent extends BaseComponent implements OnInit {
         this.enableNextCard();
         let that = this;
         this.move_next_timer = setTimeout(()=>{
+          that.enableMoveNext();
           that.moveNext();
         }, 1000);
         return;
@@ -215,6 +216,7 @@ export class GslComponent extends BaseComponent implements OnInit {
         this.enableNextCard();
         let that = this;
         this.move_next_timer = setTimeout(()=>{
+          that.enableMoveNext();
           that.moveNext();
         }, 1000);
       } else this.checkAnswer();

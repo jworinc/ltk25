@@ -34,6 +34,7 @@ export class GcsComponent extends BaseComponent implements OnInit {
     public input_data = '';
     public uinputph = 'question';
     public after_complete_phase = false;
+    public finish_phase_timeout: any = null;
 
   	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gcslog: LoggingService, private gcscs: ColorschemeService) {
   	  	super(elm, sanitizer, playmedia, gcslog, gcscs);
@@ -240,8 +241,12 @@ export class GcsComponent extends BaseComponent implements OnInit {
       }
       if(this.after_complete_phase) {
         this.after_complete_phase = false;
-        this.enableNextCard();
-        this.moveNext();
+        let that = this;
+        this.finish_phase_timeout = setTimeout(()=>{
+          that.enableMoveNext();
+          that.moveNext();
+        }, 1700);
+        
       }
 
     }
@@ -290,6 +295,7 @@ export class GcsComponent extends BaseComponent implements OnInit {
         }
         this.prevent_dubling_flag = true;
         this.after_complete_phase = false;
+        clearTimeout(this.finish_phase_timeout);
       }
       
     }
@@ -300,6 +306,10 @@ export class GcsComponent extends BaseComponent implements OnInit {
       if(this.uinputph === 'finish')
         return true;
       else return false;
+    }
+
+    hide() {
+      clearTimeout(this.finish_phase_timeout);
     }
 
     

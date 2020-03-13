@@ -322,7 +322,9 @@ export class BaseComponent implements OnInit, CardComponent {
 
 
   moveNext() {
-		this.enableNextSlide();
+	this.enableNextSlide();
+	//if(this.uinputph === 'finish') this.complete = 100;
+  	//console.log('Card ' + this.card.activity + ' is complete!');
   	this.mnext.emit();
   }
 

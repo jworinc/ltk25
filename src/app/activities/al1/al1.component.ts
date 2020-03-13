@@ -148,7 +148,7 @@ export class Al1Component extends BaseComponent implements OnInit {
 	next() {
 		this.enter();
 		if(this.validate()){
-			this.enableNextSlide();
+			this.enableMoveNext();
 			this.moveNext();
 		}
 	}
@@ -424,7 +424,7 @@ export class Al1Component extends BaseComponent implements OnInit {
 				//this.inp_data_watcher_doubling = true;
 				scope.enableNextSlide();
 				
-				setTimeout(function(){ scope.playCorrectSound(()=>{ scope.moveNext(); }) }, 1000);
+				setTimeout(function(){ scope.playCorrectSound(()=>{ scope.enableMoveNext(); scope.moveNext(); }) }, 1000);
 
 			}
 			else {

@@ -304,7 +304,8 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 
 	playWord(){
 		this.pms.stop();
-		if(this.play_word_busy_flag) return;
+		this.play_pronouce_busy_flag = false;
+		//if(this.play_word_busy_flag) return;
 		this.play_word_busy_flag = true;
 		let that = this;
 		let hletter = 0;

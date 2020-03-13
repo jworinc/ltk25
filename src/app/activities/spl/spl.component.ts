@@ -124,7 +124,10 @@ export class SplComponent extends BaseComponent implements OnInit {
 					});
 					if(cl !== '')
 						that.elm.nativeElement.querySelector(".letters-content-wrap-spl span[data-currentletter='"+cl+"'] .separate-letter").style.backgroundColor = 'lightblue';
-					else that.moveNext();
+					else {
+						that.enableMoveNext();
+						that.moveNext();
+					}
 				}, del*1000);
 			}
 

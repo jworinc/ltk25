@@ -143,6 +143,7 @@ export class CarComponent extends BaseComponent implements OnInit {
 			this.uinputph = 'finish';
 			let that = this;
 			this.playCorrectSound(()=>{
+				that.enableMoveNext();
 				that.moveNext();
 			});
 			//this.enter(false);

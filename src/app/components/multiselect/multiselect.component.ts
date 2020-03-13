@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+//import { PlaymediaService } from '../../services/playmedia.service';
 
 @Component({
   selector: 'app-multiselect',
@@ -14,7 +15,10 @@ export class MultiselectComponent implements OnInit {
   @Output() public result = new EventEmitter();
 
   public varitems: any = [];
+  public answer_received: boolean = false;
+  public old_input: any;
 
+  //constructor(private pms: PlaymediaService) { }
   constructor() { }
 
   ngOnInit() {
@@ -36,13 +40,22 @@ export class MultiselectComponent implements OnInit {
   }
 
   handleUserAnswer(v) {
+    /*
+    if(this.old_input !== v) this.answer_received = false;
+    if(!this.answer_received){
+      this.answer_received = true;
+      this.old_input = v;
+      this.result.emit(v);
+    }
+    */
     this.result.emit(v);
+      
   }
 
   update() {
     let that = this;
     setTimeout(()=>{ that.updateproc(); }, 10);
-
+    this.answer_received = false;
   }
 
   updateproc() {
@@ -51,7 +64,8 @@ export class MultiselectComponent implements OnInit {
       //  Define depending on type variants for unswer
       if(typeof this.type !== 'undefined' && this.type === 'numbers'){
         //for(let i=0; i<this.num-1; i++) items.push(Math.round(Math.random()*8)+1);
-        while(items.length < this.num - 1) {
+        let n = this.num < 5 ? this.num : 5;
+        while(items.length < n - 1) {
           let i = Math.round(Math.random()*8)+1;
           if(items.indexOf(i) < 0) items.push(i);
         }

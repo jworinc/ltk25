@@ -347,7 +347,7 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 	next() {
 		this.enter();
 		if(this.current_presented >= this.max_presented) {
-			this.enableNextSlide();
+			this.enableMoveNext();
 			this.moveNext();
 		}
 	}
@@ -469,7 +469,7 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 						
 				} else {
 					//this.enter();
-					this.playCorrectSound(()=>{ that.moveNext(); });
+					this.playCorrectSound(()=>{ that.enableMoveNext(); that.moveNext(); });
 				}
 			
 			}

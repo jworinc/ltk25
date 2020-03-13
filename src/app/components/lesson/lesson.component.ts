@@ -892,7 +892,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
     //  method on current card before switch, where performs validation of user input
     //  and shows/plays some messages to user
     let sc = this.getChildCardScope(this.current_id);
-    if(typeof sc !== 'undefined' && sc !== null && typeof sc.complete !== 'undefined' && sc.complete < 100 && !this.sidetripmode){
+    if(typeof sc !== 'undefined' && sc !== null && typeof sc.complete !== 'undefined' && sc.complete < 100 && this.cpos === sc.card.pos && !this.sidetripmode){
+    //if(typeof sc !== 'undefined' && sc !== null && typeof sc.complete !== 'undefined' && sc.complete < 100 && this.cpos === sc.card.pos){
       this.showWarnComplete();
       return;
     } 

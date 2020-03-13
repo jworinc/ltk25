@@ -184,8 +184,10 @@ export class Bw6Component extends Bw3Component implements OnInit {
 				this.enableMoveNext();
 			}
 			this.prevent_dubling_flag = true;
+			this.play_pronouce_busy_flag = false;
 			this.input_data = '';
 		}
+		if(this.isActive()) this.play_pronouce_busy_flag = false;
 		
 	}
 
@@ -402,6 +404,7 @@ export class Bw6Component extends Bw3Component implements OnInit {
 	playWord(){
 		let that = this;
 		this.bw6pm.stop();
+		this.play_pronouce_busy_flag = false;
 		this.bw6pm.word(this.answer_sound, function(){
 			
 				that.playPronounce(function(){
@@ -472,12 +475,13 @@ export class Bw6Component extends Bw3Component implements OnInit {
 	//ngDoCheck() {
 	valueChange($event){
 	    //const change = this.differ.diff(this.input_data);
-	    if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
-
-	    	this.old_input_data = JSON.stringify(this.input_data);
+	    //if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
+		if(this.isActive()) {
+	    	//this.old_input_data = JSON.stringify(this.input_data);
 
 	    	let that = this;
-
+			this.bw6pm.stop();
+			this.play_pronouce_busy_flag = false;
 			//	When current phase is letters, check if num letters match with user input and switch to next
 			if(this.uinputph === 'letters' && this.input_data !== ''){
 				if(this.input_data == this.expected){

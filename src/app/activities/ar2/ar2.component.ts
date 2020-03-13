@@ -337,7 +337,7 @@ export class Ar2Component extends BaseComponent implements OnInit {
 						that.playmedia.sound(fst.audio, function(){});
 						that.playmedia.word(that.answer_word, function(){ 
 							that.playCorrectSound(function(){ 
-								that.enableNextSlide(); that.moveNext();
+								that.enableMoveNext(); that.moveNext();
 							});
 						});
 					}
