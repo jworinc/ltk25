@@ -189,5 +189,6 @@
 	"click_on_element" : "",
 	"continue" : "Продолжить",
 	"snooze" : "Сон",
-	"select_the_missing_word" : ""
+	"select_the_missing_word" : "Выберите пропущенное слово",
+	"report_no_info_msg" : "У вас еще нет никакой активности."
 }

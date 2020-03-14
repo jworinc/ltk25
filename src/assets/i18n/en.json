@@ -189,5 +189,6 @@
 	"click_on_element" : "Click on element you are interested in.",
 	"continue" : "Continue",
 	"snooze" : "Snooze",
-	"select_the_missing_word" : "Select the missing word."
+	"select_the_missing_word" : "Select the missing word.",
+	"report_no_info_msg" : "You have no any activity yet."
 }

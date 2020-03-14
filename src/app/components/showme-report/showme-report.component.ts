@@ -218,6 +218,7 @@ export class ShowmeReportComponent implements OnInit {
     public barChartData: any;
     public showMeBar: any;
     public _chart: any;
+    public noinfo_available: boolean = false;
     
 
     //  Get command description
@@ -357,7 +358,9 @@ export class ShowmeReportComponent implements OnInit {
         }
         this.updateLesson();
       } else {
-        alert('Unable to find last lesson.');
+        //alert('Unable to find last lesson.');
+        console.log('Unable to find last lesson.');
+        this.noinfo_available = true;
         return;
       }
       
@@ -378,6 +381,7 @@ export class ShowmeReportComponent implements OnInit {
     updateReport() {
       let that = this;
       this.current_lesson = 0;
+      this.noinfo_available = false;
       this.dataloader.getStudentLessons().subscribe(
         data => { that.getLessonsCallback(data); },
         error => { console.log(error); }
