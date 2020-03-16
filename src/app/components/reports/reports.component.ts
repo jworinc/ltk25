@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { TokenService } from '../../services/token.service';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-reports',
@@ -17,6 +18,7 @@ export class ReportsComponent implements OnInit {
   constructor(private translate: TranslateService,
 	private Auth: AuthService,
 	private title: Title,
+	public location: Location,
     private Token: TokenService, private router: Router,
     private Option: OptionService, private dataloader: DataloaderService) { 
   		// this language will be used as a fallback when a translation isn't found in the current language
@@ -178,6 +180,10 @@ export class ReportsComponent implements OnInit {
 
 	onCloseFeedback() {
 	    this.show_feedback_modal = false;
+	}
+
+	onCloseBack() {
+		this.location.back();
 	}
 
 }

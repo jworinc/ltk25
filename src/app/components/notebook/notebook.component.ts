@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DataloaderService } from '../../services/dataloader.service';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
-import { trigger, transition, animate, style, state } from '@angular/animations'
+import { trigger, transition, animate, style, state } from '@angular/animations';
+//import { EventEmitter } from 'protractor';
 
 @Component({
   selector: 'app-notebook',
@@ -84,6 +85,8 @@ export class NotebookComponent implements OnInit {
      this._scale = scale;
      this.updateLayout();
   }
+
+  @Output() closenotebook = new EventEmitter<boolean>();
 
   constructor(private elm:ElementRef, 
               private sanitizer: DomSanitizer, 
@@ -206,5 +209,7 @@ export class NotebookComponent implements OnInit {
 
   }
 
-
+  onCloseBack() {
+    this.closenotebook.emit();
+  }
 }

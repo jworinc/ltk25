@@ -1464,6 +1464,20 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
   }
 
+  onCloseNotebook(){
+    console.log("Close Notebook.");
+    this.show_grammar = false;
+    this.show_testing = false;
+    let that = this;
+    this.show_notebook = false;
+    setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
+    if(this.mode === 'single') this.onCloseMenu();
+    if(!this.global_start){
+      if(this.show_notebook) this.show_start_screen = false;
+      if(!this.show_notebook) this.show_start_screen = true;
+    }
+  }
+
   //  Show Testing
   onShowTesting() {
     this.show_notebook = false;

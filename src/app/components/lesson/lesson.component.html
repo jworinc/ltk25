@@ -69,7 +69,7 @@
                             </div><!-- Zoom card body -->
 
                             <!-- Notebook   -->
-                            <app-notebook [show]="show_notebook" [scale]="scale" [hidden]="!show_notebook"></app-notebook>
+                            <app-notebook [show]="show_notebook" [scale]="scale" [hidden]="!show_notebook" (closenotebook)="onCloseNotebook()"></app-notebook>
 
                             <!-- Grammar   -->
                             <app-grammar [show]="show_grammar" [scale]="scale" [hidden]="!show_grammar"></app-grammar>

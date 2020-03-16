@@ -413,6 +413,16 @@ export class DashboardComponent implements OnInit {
     setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
   }
 
+  onCloseNotebook() {
+    console.log("Close Notebook.");
+    this.show_grammar = false;
+    this.show_testing = false;
+    let that = this;
+    this.show_notebook = false;
+    //this.nb.lesson_num = this.student.lu;
+    setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
+  }
+
   //  Show Testing
   onShowTesting() {
     this.show_notebook = false;
