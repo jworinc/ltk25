@@ -38,7 +38,8 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
     this._show = show;
     
     if(!show){
-      this.saveTestResultsToLog();
+      this.clearResults();
+      //this.saveTestResultsToLog();
       this.tstdata = null;
       this.layout = {
         'transform': 'scale('+this._scale+', '+this._scale+')',
@@ -183,6 +184,7 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
           c.instance.getTestResult();
           c.instance.pm.stop();
         }
+        
       }
       this.ctestpos++;
 
@@ -190,6 +192,14 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
       this.complete = Math.round((this.ctestpos / (this.max - 1)) * 100);
 
       this.updateTests();
+
+      for(let i in this.cts){
+        let c = this.cts[i];
+        if(c.instance.isActive() && c.instance.data.type === "results")
+          this.saveTestResultsToLog();
+        
+      }
+
     } else {
       this.uinputph = 'finish';
       this.complete = 100;
@@ -238,7 +248,7 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
         sc = c.instance; 
       }
     }
-    if(typeof sc !== 'undefined' && sc !== null && typeof sc.card.position !== 'undefined'  && !this.test_log_sent) {
+    if(typeof sc !== 'undefined' && sc !== null && typeof sc.card !== 'undefined' && typeof sc.card.position !== 'undefined'  && !this.test_log_sent) {
       //if(!this.sidetripmode){
         this.test_log_sent = true;
         this.logging.testEnd('TST', sc.card.position, this.test_results, this.ctestpos, this.dl.lu, this.complete)
@@ -250,7 +260,7 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
             }
           );
       //} 
-      this.clearResults();
+      //this.clearResults();
     }
   }
 

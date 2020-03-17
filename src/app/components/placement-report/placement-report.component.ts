@@ -75,6 +75,9 @@ export class PlacementReportComponent implements OnInit {
         }
       }
 
+    }
+    if(typeof data === 'object' && typeof data.testing !== 'undefined'){
+      
       this.tests = data.testing;
       
     }
