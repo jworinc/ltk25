@@ -28,7 +28,8 @@
               "src/beep.mp3",
               "src/recorderWorker.js",
               "src/assets",
-              "src/sitemap.xml"
+              "src/sitemap.xml",
+              "src/YHNRY.mp3"
             ],
             "styles": [
               "node_modules/ng-snotify/styles/material.css",

@@ -106,6 +106,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public page_is_loading_screen: boolean = true;
   public main_app_screen: boolean = false;
   public beep_start_sound: any;
+  public yhnry_sound: any;
   public global_recorder: boolean = false;
   public end_lesson_flag: boolean = false;
   public recstart_event: EventEmitter<any> = new EventEmitter();
@@ -228,6 +229,24 @@ export class LessonComponent implements OnInit, AfterViewInit {
         }
         
     });
+
+    
+    that.beep_start_sound = new Howl({
+      src: 'beep.mp3',
+      autoplay: false,
+      loop: false,
+      volume: 0.7,
+      rate: 1.8
+    });
+
+    that.yhnry_sound = new Howl({
+      src: 'YHNRY.mp3',
+      autoplay: false,
+      loop: false,
+      volume: 0.7,
+      rate: 1
+    });
+
 
     
      
@@ -625,14 +644,6 @@ export class LessonComponent implements OnInit, AfterViewInit {
         //that.setGlobalRecorder(that.global_recorder);
         that.playmedia.setVolume(that.global_volume);
         
-        that.beep_start_sound = new Howl({
-              src: 'beep.mp3',
-              autoplay: false,
-              loop: false,
-              volume: 0.7,
-              rate: 1.8
-            });
-
         that.updateLesson();
         that.lesson_finished = false;
       }
@@ -640,14 +651,14 @@ export class LessonComponent implements OnInit, AfterViewInit {
       let wait_audio_ctx_counter = 0;
       let waitForAudioContext = function() {
         if(!that.recorder.audio_context_enable) {
-          if(wait_audio_ctx_counter > 50){
-            alert('Please enable microphone or check if your browser support it and reload the lesson!');
+          if(wait_audio_ctx_counter > 10){
+            alert(that.translate.instant('mic_disabled_msg'));
             that.global_recorder = false;
             that.setGlobalRecorder(that.global_recorder);
             enableLesson();
             return;
           } else {
-            setTimeout(waitForAudioContext, 100);
+            setTimeout(waitForAudioContext, 150);
             wait_audio_ctx_counter++;
             return;
           }
@@ -1534,7 +1545,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
         that.recstart_event.emit();
       }, 600);
       
-      if(typeof this.beep_start_sound.play !== 'undefined') {
+      if(typeof this.beep_start_sound !== 'undefined' && typeof this.beep_start_sound.play !== 'undefined') {
         this.beep_start_sound.volume(this.global_volume);
         this.beep_start_sound.play();
       }
@@ -1555,17 +1566,96 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   //  Max record time include waiting delay
   public max_rec_duration = 11000;
+  //  Min record time include waiting delay
+  public min_rec_duration = 3000;
   //  Rec interval instance
   public rec_start_interval = null;
   //  Delay before start
   public delay_before_rec_start = 140;
   //  Time of current record
   public rec_time = 0;
-  
+  //  Flag that represent record button state
+  public rec_button_release = false;
+  //  Waiting for audio context timer
+  public waiting_audioctx_timer = null;
+
+  startRecordingOfInitSample() {
+    let that = this;
+    //this.recToggle();
+    this.rec_start_interval = setInterval(function() {
+      that.rec_time += 20;
+      if(!that.rec_toggle){
+        that.recToggle();
+      }
+      //  Check if recording was started and it duration is more than allowed
+      //  stop recording
+      if(that.rec_time >= that.max_rec_duration){
+        clearTimeout(that.rec_start_interval);
+        that.rec_time = 0;
+        if(that.rec_toggle) that.recToggle();
+      }
+
+      //  Check if rec button was released and minimal duration reached
+      if(that.rec_time >= that.min_rec_duration && that.rec_button_release){
+        clearTimeout(that.rec_start_interval);
+        that.rec_time = 0;
+        if(that.rec_toggle) that.recToggle();
+      }
+
+    }, 20);
+  }
+
+  recUp() {
+    this.rec_button_release = true;
+  } 
+
+  recDown() {
+    let that = this;
+    this.rec_button_release = false;
+    //  Intermediate function to check audio context and start recording
+    let wait_audio_ctx_counter = 0;
+    clearTimeout(that.waiting_audioctx_timer);
+    let waitForAudioContext = function() {
+      if(!that.recorder.audio_context_enable) {
+        if(wait_audio_ctx_counter > 10){
+          alert(that.translate.instant('mic_disabled_msg'));
+          that.global_recorder = false;
+          that.setGlobalRecorder(that.global_recorder);
+          return;
+        } else {
+          that.waiting_audioctx_timer = setTimeout(waitForAudioContext, 150);
+          wait_audio_ctx_counter++;
+          return;
+        }
+        
+      } else {
+        that.global_recorder = true;
+        setTimeout(()=>{ that.setGlobalRecorder(that.global_recorder); }, 100);
+        that.startRecordingOfInitSample();
+      }
+    }
+    
+    if(!this.recorder.audio_context_enable) {
+      
+      //  Enable audio context
+      this.recorder.init();
+      waitForAudioContext();
+      return;
+
+    }
+    clearTimeout(this.rec_start_interval);
+
+    this.startRecordingOfInitSample();
+
+  }
+
+
+  /*
   //  Handler for mouseup rec button event
   recUp() {
     
-    if(!this.global_start || !this.recorder.audio_context_enable) return;
+    //if(!this.global_start || !this.recorder.audio_context_enable) return;
+    if(!this.recorder.audio_context_enable) return;
     clearTimeout(this.rec_start_interval);
     //  If recording was started, stop it
     if(this.rec_toggle){
@@ -1587,7 +1677,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
   //  Handler for mousedown rec button event
   recDown() {
     if(this.action_media_stop) this.playmedia.stop();
-    if(!this.global_start || !this.recorder.audio_context_enable) return
+    if(!this.recorder.recorder_init_ready) this.recorder.init();
+    //if(!this.global_start || !this.recorder.audio_context_enable) return
+    if(!this.recorder.audio_context_enable) return
     //  if play in progress or setting page is shown, return
     if(this.show_rec_setting) return;
     if(this.rec_play) this.playStop();
@@ -1610,13 +1702,41 @@ export class LessonComponent implements OnInit, AfterViewInit {
       }
     }, 20);
   }
+  */
+
+  setNoRecordItem() {
+    //alert("You have no recordings yet!");
+    this.global_desc = this.translate.instant('no_recording_msg');
+    if(typeof this.yhnry_sound !== 'undefined' && typeof this.yhnry_sound.play !== 'undefined') {
+      this.yhnry_sound.stop();
+      this.yhnry_sound.volume(this.global_volume);
+      this.yhnry_sound.play();
+    }
+  }
 
   //  Event handler for start play button
   playStart() {
     if(this.action_media_stop) this.playmedia.stop();
-    if(!this.global_start || !this.recorder.audio_context_enable) return;
+    //if(!this.global_start || !this.recorder.audio_context_enable) return;
+    if(!this.recorder.audio_context_enable){
+      this.setNoRecordItem(); return;
+    }
     let that = this;
     that.playstart_event.emit();
+
+    //  Check if there is no any record yet
+    if(!this.recorder.lastrec) {
+      this.setNoRecordItem();
+    }
+
+    // Stop recording
+    clearTimeout(that.rec_start_interval);
+    that.rec_time = 0;
+    if(that.rec_toggle) {
+      that.recToggle();
+      return;
+    }
+
     //  Start play audio and set callback when playing will finished
     this.recorder.playStart(function() {
       that.rec_play = false;
