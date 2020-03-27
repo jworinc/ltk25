@@ -56,6 +56,7 @@ export class AppComponent {
     document.querySelectorAll('.translate-popup-expanded').forEach((el)=>{
       el.remove();
     });
+    
   }
 
 }

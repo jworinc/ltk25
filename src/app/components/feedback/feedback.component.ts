@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, ElementRef, EventEmitter } from '@angular/core';
 import { DataloaderService } from '../../services/dataloader.service';
 import { addToViewTree } from '@angular/core/src/render3/instructions';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-feedback',
@@ -10,7 +11,7 @@ import { addToViewTree } from '@angular/core/src/render3/instructions';
 export class FeedbackComponent implements OnInit {
 
   constructor(private el: ElementRef, 
-  			  private dl: DataloaderService,) { }
+  			  private dl: DataloaderService, private pe: PickElementService) { }
 
 
   public _show: boolean = false;
@@ -25,6 +26,7 @@ export class FeedbackComponent implements OnInit {
      this.initFeedback();
   }
   @Input() card_descriptor: string = '';
+  @Input() prev_feedbacks: string = '';
 
   ngOnInit() {
 
@@ -90,7 +92,14 @@ export class FeedbackComponent implements OnInit {
 
 	setCategory(cat){
 		this.feedback.category = cat;
-	}
+  }
+  
+  startElementPicking() {
+
+    //  Hide feedback screen
+    this.pe.setMouseLock();
+
+  }
 
 
 }

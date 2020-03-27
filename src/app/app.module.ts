@@ -118,6 +118,7 @@ import { WordtranslateDirective } from './directives/wordtranslate.directive';
 import { MultiselectComponent } from './components/multiselect/multiselect.component';
 import { ReversePipe } from './pipes/reverse.pipe';
 import { FontadjusterDirective } from './directives/fontadjuster.directive';
+import { PickElementService } from './services/pick-element.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -230,7 +231,7 @@ export function HttpLoaderFactory(http: HttpClient) {
             }
         }),
   ],
-  providers: [DataloaderService, TokenService, AuthService, BeforeLoginService, AfterLoginService,
+  providers: [DataloaderService, TokenService, AuthService, BeforeLoginService, AfterLoginService, PickElementService,
   { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
     SnotifyService, OptionService, CardbuilderService, PlaymediaService, RecorderService, MediapreloaderService, 
     LoggingService, ColorschemeService, CustomfieldService, ErrorLogService, Title,

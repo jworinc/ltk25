@@ -1149,6 +1149,13 @@ body{
 .inner-frame-header-full{
     min-width: 100%;
 }
+.lesson-description-feedback-exists{
+    display: block;
+    position: absolute;
+    top: 0;
+    left: -13px;
+    color: blue;
+}
 
 
 @media screen and (max-width: 1024px) {

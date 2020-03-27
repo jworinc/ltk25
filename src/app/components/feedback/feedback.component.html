@@ -2,11 +2,14 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            	<h4 class="modal-title">{{ 'feedback' | translate }}</h4>
+                <!--
+                <h4 class="modal-title">{{ 'feedback' | translate }}</h4>
+                -->
                 <button type="button" class="close" (click)="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 
             </div>
             <div class="modal-body">
+                <!--
                 <div class="app-feedback-intro" [hidden]="success_result">
                     <p>{{ 'feedback_intro' | translate }}</p>
                 </div>
@@ -14,14 +17,36 @@
                     <button class="btn btn-success app-feedback-like-btn" [ngClass]="{'disabled': feedback.like === 1 || feedback.dislike === 1}" (click)='setLike()'><i class="far fa-thumbs-up"></i>{{ 'like_btn' | translate }}</button>
                     <button class="btn btn-danger app-feedback-dislike-btn" [ngClass]="{'disabled': feedback.like === 1 || feedback.dislike === 1}" (click)='setDislike()'><i class="far fa-thumbs-down"></i>{{ 'dislike_btn' | translate }}</button>
                 </div>
+                -->
                 <div class="app-feedback-category" [hidden]="success_result">
                     <button class="btn btn-sm" [ngClass]="{'btn-primary': feedback.category === 'idea', 'btn-secondary': feedback.category !== 'idea'}" (click)="setCategory('idea')"><i class="fas fa-bolt"></i>{{ 'idea_btn' | translate }}</button>
                     <button class="btn btn-secondary btn-sm" [ngClass]="{'btn-primary': feedback.category === 'problem', 'btn-secondary': feedback.category !== 'problem'}" (click)="setCategory('problem')"><i class="fas fa-exclamation-triangle"></i>{{ 'problem_btn' | translate }}</button>
                     <button class="btn btn-secondary btn-sm" [ngClass]="{'btn-primary': feedback.category === 'question', 'btn-secondary': feedback.category !== 'question'}" (click)="setCategory('question')"><i class="fas fa-question"></i>{{ 'question_btn' | translate }}</button>
                     <button class="btn btn-secondary btn-sm" [ngClass]="{'btn-primary': feedback.category === 'praise', 'btn-secondary': feedback.category !== 'praise'}" (click)="setCategory('praise')"><i class="fas fa-heart"></i>{{ 'praise_btn' | translate }}</button>
+                    <button class="btn btn-secondary btn-sm" [ngClass]="{'btn-primary': feedback.category === 'correction', 'btn-secondary': feedback.category !== 'correction'}" (click)="setCategory('correction')"><i class="fas fa-pen-square"></i>{{ 'correct_btn' | translate }}</button>
+                    <button class="btn btn-secondary btn-sm" [ngClass]="{'btn-primary': feedback.category === 'bookmark', 'btn-secondary': feedback.category !== 'bookmark'}" (click)="setCategory('bookmark')"><i class="fas fa-bookmark"></i>{{ 'bookmark_btn' | translate }}</button>
                 </div>
                 <div class="app-feedback-message" [hidden]="success_result">
                     <textarea class="form-control" rows="4" placeholder="{{ 'your_feedback' | translate }}" [(ngModel)]="feedback.message"></textarea>
+                    <div class="app-prev-feedback-wrap" [hidden]="prev_feedbacks.length < 1">
+                        <span class="app-prev-feedback-desc">{{ 'your_recent_feedbacks' | translate }}({{ prev_feedbacks.length }})</span>
+                        <div class="app-prev-feedback-items-wrap">
+                            <ul>
+                                <li *ngFor="let f of prev_feedbacks">
+                                    
+                                    <span class="prev-feedback-item-cat" [hidden]="f.category !== 'idea'"><i class="fas fa-bolt"></i>{{ 'idea_btn' | translate }}</span>
+                                    <span class="prev-feedback-item-cat" [hidden]="f.category !== 'problem'"><i class="fas fa-exclamation-triangle"></i>{{ 'problem_btn' | translate }}</span>
+                                    <span class="prev-feedback-item-cat" [hidden]="f.category !== 'question'"><i class="fas fa-question"></i>{{ 'question_btn' | translate }}</span>
+                                    <span class="prev-feedback-item-cat" [hidden]="f.category !== 'praise'"><i class="fas fa-heart"></i>{{ 'praise_btn' | translate }}</span>
+                                    <span class="prev-feedback-item-cat" [hidden]="f.category !== 'correction'"><i class="fas fa-pen-square"></i>{{ 'correct_btn' | translate }}</span>
+                                    <span class="prev-feedback-item-cat" [hidden]="f.category !== 'bookmark'"><i class="fas fa-bookmark"></i>{{ 'bookmark_btn' | translate }}</span>
+                                    <p>{{ f.message }}</p>
+
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="feedback-pick-element-btn" (click)="startElementPicking()"><i class="fas fa-paperclip"></i></div>
                 </div>
                 <div class="thank-for-feedback" [hidden]="!success_result">
                     <p>{{ 'feedback_thanks' | translate }}</p>

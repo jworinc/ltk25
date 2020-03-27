@@ -142,6 +142,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
   //  Flag for enabling stop of media playback on any user action
   public action_media_stop = true;
 
+  //  Sent Feedback List according to current card descriptor
+  public current_feedback_list: any = [];
+
   constructor(
     private DL: DataloaderService,
     private notify: SnotifyService,
@@ -378,7 +381,19 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   getCardDescriptor() {
-    return '#'+this.card_descriptor.lesson+'-'+this.card_descriptor.position+':'+this.card_descriptor.activity;
+    let that = this;
+    let d = '#'+this.card_descriptor.lesson+'-'+this.card_descriptor.position+':'+this.card_descriptor.activity;
+    //  Check if feedback already exist for current card
+    this.DL.getLastFeedbacks(encodeURIComponent(d)).then((data)=>{
+      if(typeof (data as any).length !== 'undefined' && (data as any).length > 0){
+        console.log("Found feedback according to current card");
+        console.log(data);
+        that.current_feedback_list = data;
+      } else {
+        that.current_feedback_list = [];
+      }
+    });
+    return d;
   }
 
   //  Handle loaded student info
@@ -920,6 +935,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
     //  }, 30);
     //  return;
     //}
+
+    //  Clear feedback list
+    that.current_feedback_list = [];
     
     this.switchToNextCard();
 
@@ -999,7 +1017,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.cpos--;
     this.setCurrentCardPosition(this.cpos);
     this.refreshNav(); 
-
+    //  Clear feedback list
+    that.current_feedback_list = [];
     this.setCurrentCardDescriptor();
     
   }
@@ -1415,6 +1434,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   onShowFeedback() {
+    this.playmedia.stop();
     this.show_feedback_modal = true;
   }
 
