@@ -4,6 +4,7 @@ import { TestDirective } from '../../directives/test.directive';
 import { DataloaderService } from '../../services/dataloader.service';
 import { TestbuilderService } from '../../services/testbuilder.service';
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from '../../services/pick-element.service';
 //import { LessonComponent } from '../lesson/lesson.component';
 
 @Component({
@@ -72,6 +73,7 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
       private tb: TestbuilderService,
       private componentFactoryResolver: ComponentFactoryResolver,
       private logging: LoggingService,
+      private pe: PickElementService
   ) { }
 
   ngOnInit() {
@@ -176,6 +178,8 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
 
   //  Move next event
   mvNext(){
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     //  Check limit
     if(this.ctestpos < this.max){
       for(let i in this.cts){
@@ -210,6 +214,8 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
 
   //  Move prev event
   mvPrev(){
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     //  Check limit
     if(this.ctestpos > this.min){
       this.ctestpos--;
@@ -235,6 +241,8 @@ export class ShowtestingComponent implements OnInit, AfterViewInit {
   }
 
   close(){
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
 		this._show = false;
 		//this.saveTestResultsToLog();
 		this.closetesting.emit();

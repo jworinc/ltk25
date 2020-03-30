@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { PlaysentenceDirective } from '../../directives/playsentence.directive';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gnb',
@@ -15,8 +16,13 @@ import { LoggingService } from '../../services/logging.service';
 export class GnbComponent extends BaseComponent implements OnInit {
 
     @ViewChild(PlaysentenceDirective) psn;
-  	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gnblog: LoggingService, private gnbcs: ColorschemeService) {
-  	  	super(elm, sanitizer, playmedia, gnblog, gnbcs);
+    constructor(private elm:ElementRef, 
+                private sanitizer: DomSanitizer, 
+                private playmedia: PlaymediaService, 
+                private gnblog: LoggingService, 
+                private gnbcs: ColorschemeService,
+                private gnbpe: PickElementService) {
+  	  	super(elm, sanitizer, playmedia, gnblog, gnbcs, gnbpe);
     }
 
     ngOnInit() {
@@ -129,6 +135,9 @@ export class GnbComponent extends BaseComponent implements OnInit {
     }
     
     addAnswer(ind) {
+
+      //	If mouse event locked by feedback
+		  if(this.gnbpe.mouseLock()) return;
   
       this.input_data = this.blends[ind];
   

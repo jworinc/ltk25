@@ -4,6 +4,7 @@ import { Or3Component } from '../or3/or3.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-or4',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Or4Component extends Or3Component implements OnInit, DoCheck {
 
-    constructor(private or4el:ElementRef, private or4sn: DomSanitizer, private or4pm: PlaymediaService, private or4log: LoggingService, private or4cs: ColorschemeService) {
-  		super(or4el, or4sn, or4pm, or4log, or4cs);
+	constructor(private or4el:ElementRef, 
+				private or4sn: DomSanitizer, 
+				private or4pm: PlaymediaService, 
+				private or4log: LoggingService, 
+				private or4cs: ColorschemeService,
+				private or4pe: PickElementService) {
+  		super(or4el, or4sn, or4pm, or4log, or4cs, or4pe);
     }
 
     public answer_type: any;

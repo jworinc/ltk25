@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-diw',
@@ -19,8 +20,9 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 							private playmedia: PlaymediaService, 
 							private diwlog: LoggingService, 
 							private diwcs: ColorschemeService,
-							private op: OptionService) {
-  	super(elm, sanitizer, playmedia, diwlog, diwcs);
+							private op: OptionService,
+							private diwpe: PickElementService) {
+  	super(elm, sanitizer, playmedia, diwlog, diwcs, diwpe);
   }
 
   ngOnInit() {

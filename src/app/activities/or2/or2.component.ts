@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { PlaysentenceDirective } from '../../directives/playsentence.directive';
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-or2',
@@ -14,8 +15,13 @@ import { LoggingService } from '../../services/logging.service';
 })
 export class Or2Component extends BaseorComponent implements OnInit {
   @ViewChild(PlaysentenceDirective) psn;
-  constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService, private or2log: LoggingService, private or1cs: ColorschemeService) {
-  	super(element, sz, pms, or2log, or1cs);
+  constructor(private element:ElementRef, 
+              private sz: DomSanitizer, 
+              private pms: PlaymediaService, 
+              private or2log: LoggingService, 
+              private or1cs: ColorschemeService,
+              private or2pe: PickElementService) {
+  	super(element, sz, pms, or2log, or1cs, or2pe);
   }
 
 

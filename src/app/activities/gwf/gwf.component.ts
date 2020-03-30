@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { PlaysentenceDirective } from '../../directives/playsentence.directive';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gwf',
@@ -16,8 +17,13 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 
 	@ViewChild(PlaysentenceDirective) psn;
 
-    constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gwflog: LoggingService, private gwfcs: ColorschemeService) {
-  		super(elm, sanitizer, playmedia, gwflog, gwfcs);
+	constructor(private elm:ElementRef, 
+				private sanitizer: DomSanitizer, 
+				private playmedia: PlaymediaService, 
+				private gwflog: LoggingService, 
+				private gwfcs: ColorschemeService,
+				private gwfpe: PickElementService) {
+  		super(elm, sanitizer, playmedia, gwflog, gwfcs, gwfpe);
     }
 
     ngOnInit() {
@@ -291,6 +297,8 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 
 	public user_answer_received_flag: boolean = false;
 	addAnswer(w) {
+		//	If mouse event locked by feedback
+		if(this.gwfpe.mouseLock()) return;
 		let that = this;
 		if(this.user_answer_received_flag) return;
 		this.user_answer_received_flag = true;

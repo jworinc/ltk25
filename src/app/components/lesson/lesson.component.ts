@@ -23,6 +23,7 @@ import * as $ from 'jquery';
 import { GrammarComponent } from '../grammar/grammar.component';
 import { filter } from 'rxjs/operators';
 import { Title } from '@angular/platform-browser';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-lesson',
@@ -163,7 +164,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
     private cf: CustomfieldService,
     private Auth: AuthService,
     private Token: TokenService,
-    private title: Title
+    private title: Title,
+    private pe: PickElementService
   ) {
         // this language will be used as a fallback when a translation isn't found in the current language
         this.translate.setDefaultLang(Option.getFallbackLocale());
@@ -648,6 +650,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   startLesson() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.show_start_screen = false;
     let that = this;
     if(!this.recorder.recorder_init_ready) this.recorder.init();
@@ -854,6 +858,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public navigation_switch_flag: boolean = false;
 
   moveNext() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     let that = this;
     
     //  Try to resume audio context
@@ -979,6 +985,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   movePrev() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     let that = this;
     
     //  Check delay
@@ -1181,6 +1189,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   enter() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
     //  Check cards and sent enter event to active card
     //  in case if any other component is hidden
@@ -1214,6 +1224,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   repeat() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
     if(this.lesson_finished) return;
     //  Check cards and sent enter event to active card
@@ -1227,6 +1239,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   hint() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
     //  Check cards and sent enter event to active card
     for(let i in this.ccs){
@@ -1238,6 +1252,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   clear() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
     //  Check cards and sent enter event to active card
     for(let i in this.ccs){
@@ -1249,6 +1265,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   rule() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
     //  Check cards and sent enter event to active card
     for(let i in this.ccs){
@@ -1411,16 +1429,22 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   good() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
     this.good_btn.emit();
   }
 
   bad() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
     this.bad_btn.emit();
   }
 
   prev() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
     this.prev_btn.emit();
   }
@@ -1434,6 +1458,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   onShowFeedback() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.playmedia.stop();
     this.show_feedback_modal = true;
   }
@@ -1630,6 +1656,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   } 
 
   recDown() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     let that = this;
     this.rec_button_release = false;
     //  Intermediate function to check audio context and start recording
@@ -1736,6 +1764,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   //  Event handler for start play button
   playStart() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
     //if(!this.global_start || !this.recorder.audio_context_enable) return;
     if(!this.recorder.audio_context_enable){
@@ -1777,8 +1807,16 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   disableSidetrip() {
+    //	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
     this.end_lesson_flag = true;
     this.router.navigateByUrl('/home');
+  }
+
+  showToolPageListMenu() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    this.show_tool_pages_list = true;
   }
 
   startSnoozeTimer() {

@@ -1,7 +1,9 @@
 /*		LTK Feedback Directive styles      */
 
 #app-feedback-modal{
-
+  transition: all 0.3s ease;
+  top: 0;
+  opacity: 1;
 }
 .app-feedback-intro{
 
@@ -74,10 +76,11 @@ span.app-prev-feedback-desc:before{
   margin-right: 7px;
 }
 .feedback-pick-element-btn{
-  display: block;
+  display: flex;
+  flex-flow: column;
   position: absolute;
   width: 12px;
-  height: 14px;
+  height: 32px;
   top: 12px;
   left: 100%;
   margin-left: -28px;
@@ -87,6 +90,10 @@ span.app-prev-feedback-desc:before{
   border: none;
   background: transparent;
   padding: 0;
+}
+.hide-feedback-screen{
+  top: -100% !important;
+  opacity: 0 !important;
 }
 
 @media screen and (max-width: 347px) {

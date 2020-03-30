@@ -4,6 +4,7 @@ import { Rp1Component } from '../rp1/rp1.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-rp2',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Rp2Component extends Rp1Component implements OnInit {
 
-  constructor(private rp2el:ElementRef, private rp2sn: DomSanitizer, private rp2pm: PlaymediaService, private rp2log: LoggingService, private rp2cs: ColorschemeService) {
-  	super(rp2el, rp2sn, rp2pm, rp2log, rp2cs);
+  constructor(private rp2el:ElementRef, 
+			  private rp2sn: DomSanitizer, 
+			  private rp2pm: PlaymediaService, 
+			  private rp2log: LoggingService, 
+			  private rp2cs: ColorschemeService,
+			  private rp2pe: PickElementService) {
+  	super(rp2el, rp2sn, rp2pm, rp2log, rp2cs, rp2pe);
   }
 
   ngOnInit() {

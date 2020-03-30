@@ -4,6 +4,7 @@ import { Or1Component } from '../or1/or1.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-siw',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class SiwComponent extends Or1Component implements OnInit {
 
-  constructor(private siwel:ElementRef, private siwsn: DomSanitizer, private siwpm: PlaymediaService, private siwlog: LoggingService, private siwcs: ColorschemeService) {
-  	super(siwel, siwsn, siwpm, siwlog, siwcs);
+  constructor(private siwel:ElementRef, 
+			  private siwsn: DomSanitizer, 
+			  private siwpm: PlaymediaService, 
+			  private siwlog: LoggingService, 
+			  private siwcs: ColorschemeService,
+			  private siwpe: PickElementService) {
+  	super(siwel, siwsn, siwpm, siwlog, siwcs, siwpe);
   }
 
   ngOnInit() {

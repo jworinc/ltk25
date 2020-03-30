@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { flatMap } from "rxjs/operators";
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-baseor',
@@ -14,8 +15,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class BaseorComponent extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private borlog: LoggingService, private borcs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, borlog, borcs);
+  constructor(private elm:ElementRef, 
+			  private sanitizer: DomSanitizer, 
+			  private playmedia: PlaymediaService, 
+			  private borlog: LoggingService, 
+			  private borcs: ColorschemeService,
+			  private borpe: PickElementService) {
+  	super(elm, sanitizer, playmedia, borlog, borcs, borpe);
 
   }
 
@@ -145,6 +151,9 @@ export class BaseorComponent extends BaseComponent implements OnInit {
 	}
 	
 	playWord(){
+		//	If mouse event locked by feedback
+		if(this.borpe.mouseLock()) return;
+
 		let that = this;
 		this.playmedia.stop();
 		this.playmedia.word(this.audios[this.current_word], function(){

@@ -4,6 +4,7 @@ import { CardComponent } from '../../components/card/card.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 import { max } from 'rxjs/operators';
 
 @Component({
@@ -107,7 +108,12 @@ export class BaseComponent implements OnInit, CardComponent {
 	@Output() set_global_header = new EventEmitter<any>();
 	@Output() set_default_header = new EventEmitter<any>();
 
-  constructor(private el:ElementRef, private sn: DomSanitizer, private pm: PlaymediaService, private logging: LoggingService, private cs: ColorschemeService) { 
+  constructor(private el:ElementRef, 
+			  private sn: DomSanitizer, 
+			  private pm: PlaymediaService, 
+			  private logging: LoggingService, 
+			  private cs: ColorschemeService,
+			  private pe: PickElementService) { 
 	  this.sp.mediastorage = pm.getMediaStorage();
    }
 
@@ -322,6 +328,9 @@ export class BaseComponent implements OnInit, CardComponent {
 
 
   moveNext() {
+	//	If mouse event locked by feedback
+	if(this.pe.mouseLock()) return;
+
 	this.enableNextSlide();
 	//if(this.uinputph === 'finish') this.complete = 100;
   	//console.log('Card ' + this.card.activity + ' is complete!');
@@ -329,6 +338,9 @@ export class BaseComponent implements OnInit, CardComponent {
   }
 
   movePrev() {
+	//	If mouse event locked by feedback
+	if(this.pe.mouseLock()) return;
+
   	this.mprev.emit();
   }
 
@@ -524,6 +536,8 @@ export class BaseComponent implements OnInit, CardComponent {
 	}
 	
 	playCardDescription(){
+		//	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
 		if(this.play_card_description_busy) return;
 		this.play_card_description_busy = true;
 		this.current_description = 0;
@@ -806,7 +820,9 @@ export class BaseComponent implements OnInit, CardComponent {
 
 	playLetter(l) {
 		let that = this;
-
+		//	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
+		
 		let ci = this.current_card_instance;
 		//	Play pronuncuation of the word
 		if(typeof this.card.content[ci].pronounce !== 'undefined' && this.card.content[ci].pronounce.length > 0){

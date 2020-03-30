@@ -4,6 +4,7 @@ import { DataloaderService } from '../../services/dataloader.service';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { trigger, transition, animate, style, state } from '@angular/animations';
+import { PickElementService } from '../../services/pick-element.service';
 //import { EventEmitter } from 'protractor';
 
 @Component({
@@ -92,7 +93,8 @@ export class NotebookComponent implements OnInit {
               private sanitizer: DomSanitizer, 
               private playmedia: PlaymediaService, 
               private rw1cs: ColorschemeService,
-              private dl: DataloaderService) {
+              private dl: DataloaderService,
+              private pe: PickElementService) {
   	//super(elm, sanitizer, playmedia, rw1cs);
   }
 
@@ -115,6 +117,8 @@ export class NotebookComponent implements OnInit {
   }
 
   getDetails(i){
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.isNotebook = false;
     // // this.show_word = this.data[i].title;;
     // // this.desc = this.data[i].definition;
@@ -131,6 +135,8 @@ export class NotebookComponent implements OnInit {
   }
   counter = 0;
   showNextWord(){
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.move = true;
     console.log(this.ind);
     if(this.ind != this.card.length-1){
@@ -147,6 +153,8 @@ export class NotebookComponent implements OnInit {
   }
 
   showPrevWord(){
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.move = false;
 
     // if(this.ind != 0){
@@ -166,6 +174,8 @@ export class NotebookComponent implements OnInit {
   }
 
   showDescription(){
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     //this.isDescription = !this.isDescription;
     this.playWord();
   }
@@ -210,6 +220,8 @@ export class NotebookComponent implements OnInit {
   }
 
   onCloseBack() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.closenotebook.emit();
   }
 }

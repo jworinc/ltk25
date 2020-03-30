@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, HostListener } from '@angular/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { PlaymediaService } from './services/playmedia.service';
 import { Router, NavigationEnd } from '@angular/router';
+import { PickElementService } from './services/pick-element.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ export class AppComponent {
   constructor(
     private el:ElementRef,
     private playmedia: PlaymediaService,
-    private router: Router
+    private router: Router,
+    private pe: PickElementService
   ) { 
 
     this.router.events.subscribe(event => {
@@ -56,7 +58,12 @@ export class AppComponent {
     document.querySelectorAll('.translate-popup-expanded').forEach((el)=>{
       el.remove();
     });
-    
+    this.pe.setNewElement(ev.target);
+  }
+
+  @HostListener('document:mousemove', ['$event'])
+  onDocumentMousemove(ev:any) {
+    //this.pe.pointNewElement(ev.target);
   }
 
 }

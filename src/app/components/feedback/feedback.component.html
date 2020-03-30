@@ -1,4 +1,7 @@
-<div id='app-feedback-modal' class="modal fade show" tabindex="-1" role="dialog" style='z-index: 10100; display: block; padding-left: 0px; background-color: rgba(0, 0, 0, 0.7); overflow-y: auto;'>
+<div id='app-feedback-modal' class="modal fade show" 
+    tabindex="-1" role="dialog" 
+    style='z-index: 10100; display: block; padding-left: 0px; background-color: rgba(0, 0, 0, 0.7); overflow-y: auto;'
+    [ngClass]="{'hide-feedback-screen': temphide_feedback}">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -46,7 +49,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="feedback-pick-element-btn" (click)="startElementPicking()"><i class="fas fa-paperclip"></i></div>
+                    <div class="feedback-pick-element-btn" (click)="startElementPicking()"><i class="fas fa-vector-square"></i><span [hidden]="feedback.element==''"><i class="fas fa-paperclip"></i></span></div>
                 </div>
                 <div class="thank-for-feedback" [hidden]="!success_result">
                     <p>{{ 'feedback_thanks' | translate }}</p>
@@ -54,7 +57,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" (click)="close()">{{ 'close' | translate }}</button>
-                <button type="button" class="btn btn-primary" [ngClass]="{'disabled': feedback.like === 0 && feedback.dislike === 0 && feedback.message === ''}" (click)='submitFeedback()' [hidden]="success_result">{{ 'submit_feedback' | translate }}</button>
+                <button type="button" class="btn btn-primary" [ngClass]="{'disabled': feedback.category === '' && feedback.message === ''}" (click)='submitFeedback()' [hidden]="success_result">{{ 'submit_feedback' | translate }}</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

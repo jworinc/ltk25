@@ -6,6 +6,7 @@ import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { PlaysentenceDirective } from '../../directives/playsentence.directive';
 import { FontadjusterDirective } from '../../directives/fontadjuster.directive';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-rw1',
@@ -18,8 +19,13 @@ export class Rw1Component extends BaseComponent implements OnInit {
   @ViewChildren(PlaysentenceDirective) psn !: QueryList<PlaysentenceDirective>;
   @ViewChildren(FontadjusterDirective) fads;
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private rw1log: LoggingService, private rw1cs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, rw1log, rw1cs);
+  constructor(private elm:ElementRef, 
+              private sanitizer: DomSanitizer, 
+              private playmedia: PlaymediaService, 
+              private rw1log: LoggingService, 
+              private rw1cs: ColorschemeService,
+              private rw1pe: PickElementService) {
+  	super(elm, sanitizer, playmedia, rw1log, rw1cs, rw1pe);
   }
 
   ngOnInit() {
@@ -187,6 +193,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
 
   showTranslationStatus(e)
   {
+    //	If mouse event locked by feedback
+		if(this.rw1pe.mouseLock()) return;
     if(this.showTranslation)
       this.showTranslation = false;
     else
@@ -339,6 +347,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
 
   //  Play word
   playWord(name) {
+    //	If mouse event locked by feedback
+		if(this.rw1pe.mouseLock()) return;
     this.playmedia.stop();
     this.playmedia.word(name, ()=>{}, 300);
   }
@@ -348,6 +358,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
   public mask_syl_pos = [];
 
   playPronounce(id) {
+    //	If mouse event locked by feedback
+		if(this.rw1pe.mouseLock()) return;
     this.playmedia.stop();
     this.elm.nativeElement.querySelectorAll('.phoneme-syllable span').forEach((e)=>{
       e.style.backgroundColor = 'transparent';
@@ -598,6 +610,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
 
   public user_answer_received_flag: boolean = false;
 	addAnswer(w) {
+    //	If mouse event locked by feedback
+		if(this.rw1pe.mouseLock()) return;
 		let that = this;
 		if(this.user_answer_received_flag) return;
 		this.user_answer_received_flag = true;

@@ -64,16 +64,16 @@
 
     <!--  Menu Open/Hide button  -->
     <div class='tool-sidebar-open-close' [ngClass]="{'toolsidebarocb': show_tool_pages_list}" *ngIf='show_menu_open_button || show_tool_pages_list'>
-        <span class='tool-sidebar-open-icon' [ngClass]="{'toolsidebaroi': !show_tool_pages_list}" (click)='show_tool_pages_list = true'>
+        <span class='tool-sidebar-open-icon' [ngClass]="{'toolsidebaroi': !show_tool_pages_list}" (click)='showMenu()'>
             <i class="fas fa-ellipsis-v"></i>
         </span>
-        <span class='tool-sidebar-close-icon' [ngClass]="{'toolsidebarci': show_tool_pages_list}" (click)='show_tool_pages_list = false; closeMenu()'>
+        <span class='tool-sidebar-close-icon' [ngClass]="{'toolsidebarci': show_tool_pages_list}" (click)='closeMenu()'>
             <i class="fas fa-times"></i>
         </span>
     </div>
     <!--/Menu Open/Hide button   -->
 
-    <div class='tool-sidebar-background-shadow' [ngClass]="{'sbbshadowopen': show_tool_pages_list}" (click)='show_tool_pages_list = false; closeMenu()'></div>
+    <div class='tool-sidebar-background-shadow' [ngClass]="{'sbbshadowopen': show_tool_pages_list}" (click)='closeMenu()'></div>
 
 
 </div>

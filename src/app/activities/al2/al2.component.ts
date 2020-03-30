@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-al2',
@@ -19,8 +20,9 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 								private playmedia: PlaymediaService, 
 								private al2log: LoggingService, 
 								private al2cs: ColorschemeService,
-								private op: OptionService) {
-  		super(elm, sanitizer, playmedia, al2log, al2cs);
+								private op: OptionService,
+								private al2pe: PickElementService) {
+  		super(elm, sanitizer, playmedia, al2log, al2cs, al2pe);
   	}
 
   	ngOnInit() {
@@ -438,6 +440,8 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 	}
 
 	playMediaWord(w) {
+		//	If mouse event locked by feedback
+		if(this.al2pe.mouseLock()) return;
 		this.playmedia.word(w, function(){});
 	}
 

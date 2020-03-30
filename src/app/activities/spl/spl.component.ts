@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-spl',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class SplComponent extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private spllog: LoggingService, private splcs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, spllog, splcs);
+  constructor(private elm:ElementRef, 
+			  private sanitizer: DomSanitizer, 
+			  private playmedia: PlaymediaService, 
+			  private spllog: LoggingService, 
+			  private splcs: ColorschemeService,
+			  private splpe: PickElementService) {
+  	super(elm, sanitizer, playmedia, spllog, splcs, splpe);
   }
 
   ngOnInit() {

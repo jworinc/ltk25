@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-syp',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class SypComponent extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private syplog: LoggingService, private sypcs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, syplog, sypcs);
+  constructor(private elm:ElementRef, 
+			  private sanitizer: DomSanitizer, 
+			  private playmedia: PlaymediaService, 
+			  private syplog: LoggingService, 
+			  private sypcs: ColorschemeService,
+			  private syppe: PickElementService) {
+  	super(elm, sanitizer, playmedia, syplog, sypcs, syppe);
   }
 
   ngOnInit() {

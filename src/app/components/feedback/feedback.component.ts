@@ -11,13 +11,14 @@ import { PickElementService } from '../../services/pick-element.service';
 export class FeedbackComponent implements OnInit {
 
   constructor(private el: ElementRef, 
-  			  private dl: DataloaderService, private pe: PickElementService) { }
+  			  private dl: DataloaderService, public pe: PickElementService) { }
 
 
   public _show: boolean = false;
   public feedback_shown: boolean = false;
   public save_feedback_started: boolean = false;
   public success_result = false;
+  public temphide_feedback = false;
   
   @Output() closefeedback = new EventEmitter<boolean>();
   @Input('show')
@@ -29,15 +30,20 @@ export class FeedbackComponent implements OnInit {
   @Input() prev_feedbacks: string = '';
 
   ngOnInit() {
-
+    let that = this;
+    this.pe.element_set.subscribe((eltext)=>{
+      that.temphide_feedback = false;
+      that.feedback.element = eltext;
+    });
   }
 
   	public feedback = {
         like: 0,
         dislike: 0,
-        category: 'no',
+        category: 'correction',
         message: '',
-        card_descriptor: ''
+        card_descriptor: '',
+        element: ''
     }
 
     //  Init clean feedback object
@@ -45,9 +51,10 @@ export class FeedbackComponent implements OnInit {
         this.feedback = {
             like: 0,
             dislike: 0,
-            category: 'no',
+            category: 'correction',
             message: '',
-            card_descriptor: ''
+            card_descriptor: '',
+            element: ''
         }
         this.success_result = false;
     }
@@ -61,7 +68,7 @@ export class FeedbackComponent implements OnInit {
 
 	submitFeedback() {
     console.log('Save feedback.');
-    if(this.feedback.like === 0 && this.feedback.dislike === 0 && this.feedback.message === ''){
+    if(this.feedback.category === '' && this.feedback.message === ''){
       console.log('Empty feedback!');
       alert('Please fill in form before saving!');
       return;
@@ -97,7 +104,13 @@ export class FeedbackComponent implements OnInit {
   startElementPicking() {
 
     //  Hide feedback screen
-    this.pe.setMouseLock();
+    let that = this;
+    that.temphide_feedback = true;
+    setTimeout(()=>{
+      that.pe.setMouseLock();
+    }, 500);
+    
+
 
   }
 

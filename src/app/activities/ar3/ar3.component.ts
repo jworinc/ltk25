@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-ar3',
@@ -19,8 +20,9 @@ export class Ar3Component extends Ar1Component implements OnInit {
 			  private ar3pm: PlaymediaService, 
 			  private ar3log: LoggingService, 
 			  private ar3cs: ColorschemeService,
-			  private opar3: OptionService) {
-  	super(ar3el, ar3sn, ar3pm, ar3log, ar3cs, opar3);
+			  private opar3: OptionService,
+			  private ar3pe: PickElementService) {
+  	super(ar3el, ar3sn, ar3pm, ar3log, ar3cs, opar3, ar3pe);
   }
 
   ngOnInit() {

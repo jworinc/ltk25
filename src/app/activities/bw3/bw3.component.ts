@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-bw3',
@@ -20,8 +21,9 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 							private pms: PlaymediaService, 
 							private bw3log: LoggingService, 
 							private bw3cs: ColorschemeService,
-							private op: OptionService) {
-  	super(element, sz, pms, bw3log, bw3cs);
+							private op: OptionService,
+							private bw3pe: PickElementService) {
+  	super(element, sz, pms, bw3log, bw3cs, bw3pe);
   }
 
   public display_answer_word: any;
@@ -278,6 +280,10 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 
 	public play_word_busy_flag:boolean = false;
 	playWord(){
+
+		//	If mouse event locked by feedback
+		if(this.bw3pe.mouseLock()) return;
+
 		this.pms.stop();
 		this.play_pronouce_busy_flag = false;
 		//if(this.play_word_busy_flag) return;

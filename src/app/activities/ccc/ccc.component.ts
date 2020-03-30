@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-ccc',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class CccComponent extends BaseComponent implements OnInit {
 
-	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private ccclog: LoggingService, private ccccs: ColorschemeService) {
-		super(elm, sanitizer, playmedia, ccclog, ccccs);
+	constructor(private elm:ElementRef, 
+				private sanitizer: DomSanitizer, 
+				private playmedia: PlaymediaService, 
+				private ccclog: LoggingService, 
+				private ccccs: ColorschemeService,
+				private cccpe: PickElementService) {
+		super(elm, sanitizer, playmedia, ccclog, ccccs, cccpe);
 	}
 
 	ngOnInit() {

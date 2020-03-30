@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { PlaywordsDirective } from '../../directives/playwords.directive';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-or3',
@@ -14,8 +15,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Or3Component extends BaseorComponent implements OnInit, DoCheck {
 
-  constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService, private or3log: LoggingService, private or3cs: ColorschemeService) {
-  	super(element, sz, pms, or3log, or3cs);
+  constructor(private element:ElementRef, 
+			  private sz: DomSanitizer, 
+			  private pms: PlaymediaService, 
+			  private or3log: LoggingService, 
+			  private or3cs: ColorschemeService,
+			  private or3pe: PickElementService) {
+  	super(element, sz, pms, or3log, or3cs, or3pe);
   }
 
   public instruction2_flag: boolean = false;

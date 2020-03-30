@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gss',
@@ -33,8 +34,13 @@ export class GssComponent extends BaseComponent implements OnInit {
     public uinputph = 'start';
     public move_next_timer: any = null;
 
-  	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gsslog: LoggingService, private gsscs: ColorschemeService) {
-  	  	super(elm, sanitizer, playmedia, gsslog, gsscs);
+    constructor(private elm:ElementRef, 
+                private sanitizer: DomSanitizer, 
+                private playmedia: PlaymediaService, 
+                private gsslog: LoggingService, 
+                private gsscs: ColorschemeService,
+                private gsspe: PickElementService) {
+  	  	super(elm, sanitizer, playmedia, gsslog, gsscs, gsspe);
     }
 
   	ngOnInit() {
@@ -189,6 +195,8 @@ export class GssComponent extends BaseComponent implements OnInit {
 
 
     selectedSound(selected_word, select_header){
+      //	If mouse event locked by feedback
+		  if(this.gsspe.mouseLock()) return;
 
       console.log("Index :"+this.cust_index);
       console.log("Selected Word :"+selected_word);

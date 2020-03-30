@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { Observable } from 'rxjs';
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gsl',
@@ -34,8 +35,13 @@ export class GslComponent extends BaseComponent implements OnInit {
     public uinputph = 'start';
     public move_next_timer: any = null;
 
-  	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gsllog: LoggingService, private gslcs: ColorschemeService) {
-  	  	super(elm, sanitizer, playmedia, gsllog, gslcs);
+    constructor(private elm:ElementRef, 
+                private sanitizer: DomSanitizer, 
+                private playmedia: PlaymediaService, 
+                private gsllog: LoggingService, 
+                private gslcs: ColorschemeService,
+                private gslpe: PickElementService) {
+  	  	super(elm, sanitizer, playmedia, gsllog, gslcs, gslpe);
     }
 
 

@@ -6,6 +6,7 @@ import { PlaysentenceDirective } from '../../directives/playsentence.directive';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-dis',
@@ -22,8 +23,9 @@ export class DisComponent extends BaseComponent implements OnInit {
 								private playmedia: PlaymediaService, 
 								private dislog: LoggingService, 
 								private discs: ColorschemeService,
-								private op: OptionService) {
-  	  super(elm, sanitizer, playmedia, dislog, discs);
+								private op: OptionService,
+								private dispe: PickElementService) {
+  	  super(elm, sanitizer, playmedia, dislog, discs, dispe);
     }
 
     ngOnInit() {

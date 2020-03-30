@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { flatMap } from "rxjs/operators";
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-basebw',
@@ -14,8 +15,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private bbwlog: LoggingService, private bbwcs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, bbwlog, bbwcs);
+  constructor(private elm:ElementRef, 
+			  private sanitizer: DomSanitizer, 
+			  private playmedia: PlaymediaService, 
+			  private bbwlog: LoggingService, 
+			  private bbwcs: ColorschemeService,
+			  private bbwpe: PickElementService) {
+  	super(elm, sanitizer, playmedia, bbwlog, bbwcs, bbwpe);
 
   }
 
@@ -422,6 +428,9 @@ export class BasebwComponent extends BaseComponent implements OnInit, DoCheck {
 
 	playWord(){
 		let that = this;
+		//	If mouse event locked by feedback
+		if(this.bbwpe.mouseLock()) return;
+
 		this.playmedia.stop();
 		this.play_pronouce_busy_flag = false;
 		this.playmedia.word(this.answer_word, function(){

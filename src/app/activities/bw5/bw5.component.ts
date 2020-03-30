@@ -8,6 +8,7 @@ import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
 import { MultiselectComponent } from '../../components/multiselect/multiselect.component';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-bw5',
@@ -22,8 +23,9 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 							private pms: PlaymediaService, 
 							private bw5log: LoggingService, 
 							private bw5cs: ColorschemeService,
-							private op: OptionService) {
-  	super(element, sz, pms, bw5log, bw5cs);
+							private op: OptionService,
+							private bw5pe: PickElementService) {
+  	super(element, sz, pms, bw5log, bw5cs, bw5pe);
   }
 
   public expected_digraf: any;

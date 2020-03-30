@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from 'src/app/services/pick-element.service';
 
 @Component({
   selector: 'app-gcs',
@@ -36,8 +37,13 @@ export class GcsComponent extends BaseComponent implements OnInit {
     public after_complete_phase = false;
     public finish_phase_timeout: any = null;
 
-  	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gcslog: LoggingService, private gcscs: ColorschemeService) {
-  	  	super(elm, sanitizer, playmedia, gcslog, gcscs);
+    constructor(private elm:ElementRef, 
+                private sanitizer: DomSanitizer, 
+                private playmedia: PlaymediaService, 
+                private gcslog: LoggingService, 
+                private gcscs: ColorschemeService,
+                private gcspe: PickElementService) {
+  	  	super(elm, sanitizer, playmedia, gcslog, gcscs, gcspe);
     }
 
   	ngOnInit() {
@@ -94,7 +100,9 @@ export class GcsComponent extends BaseComponent implements OnInit {
     
 
     checkAnswer(answer,i){
-
+      //	If mouse event locked by feedback
+      if(this.gcspe.mouseLock()) return;
+    
       this.ind = i;
       this.next_word++;
       let that = this;

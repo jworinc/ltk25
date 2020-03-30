@@ -6,6 +6,7 @@ import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
 import { MultiselectComponent } from '../../components/multiselect/multiselect.component';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-bw1',
@@ -20,8 +21,9 @@ export class Bw1Component extends BasebwComponent implements OnInit {
 			  private pms: PlaymediaService, 
 			  private bw1log: LoggingService, 
 			  private bw1cs: ColorschemeService,
-			  private op: OptionService) {
-  	super(element, sz, pms, bw1log, bw1cs);
+			  private op: OptionService,
+			  private bw1pe: PickElementService) {
+  	super(element, sz, pms, bw1log, bw1cs, bw1pe);
   }
 
   @ViewChild(MultiselectComponent) msel: MultiselectComponent;

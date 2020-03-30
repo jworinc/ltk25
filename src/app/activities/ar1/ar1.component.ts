@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-ar1',
@@ -19,8 +20,9 @@ export class Ar1Component extends BaseComponent implements OnInit {
 								private playmedia: PlaymediaService, 
 								private ar1log: LoggingService, 
 								private ar1cs: ColorschemeService,
-								private op: OptionService) {
-  		super(elm, sanitizer, playmedia, ar1log, ar1cs);
+								private op: OptionService,
+								private ar1pe: PickElementService) {
+  		super(elm, sanitizer, playmedia, ar1log, ar1cs, ar1pe);
   	}
 
   	ngOnInit() {
@@ -309,6 +311,8 @@ export class Ar1Component extends BaseComponent implements OnInit {
 
 	//	Play answer word on user click
 	answerPlay() {
+		//	If mouse event locked by feedback
+		if(this.ar1pe.mouseLock()) return;
 		//	If playing is enabled
 		if(this.enable_answer_play) this.playmedia.word(this.answer_word, ()=>{});
 

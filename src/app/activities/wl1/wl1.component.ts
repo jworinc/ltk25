@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-wl1',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Wl1Component extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private wl1log: LoggingService, private wl1cs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, wl1log, wl1cs);
+  constructor(private elm:ElementRef, 
+              private sanitizer: DomSanitizer, 
+              private playmedia: PlaymediaService, 
+              private wl1log: LoggingService, 
+              private wl1cs: ColorschemeService,
+              private wl1pe: PickElementService) {
+  	super(elm, sanitizer, playmedia, wl1log, wl1cs, wl1pe);
   }
 
   ngOnInit() {
@@ -307,6 +313,8 @@ export class Wl1Component extends BaseComponent implements OnInit {
 
   //  Check user answer
   selectWord(w){
+    //	If mouse event locked by feedback
+		if(this.wl1pe.mouseLock()) return;
     if(this.uinputph === 'finish') return; 
     //  If word is right
     if(w.key === this.words[this.pw].key){

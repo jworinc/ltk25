@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-ar5',
@@ -19,8 +20,9 @@ export class Ar5Component extends BasearComponent implements OnInit, DoCheck {
 				private pms: PlaymediaService, 
 				private ar5log: LoggingService, 
 				private ar5cs: ColorschemeService,
-				private opar5: OptionService) {
-  	  super(element, sz, pms, ar5log, ar5cs);
+				private opar5: OptionService,
+				private ar5pe: PickElementService) {
+  	  super(element, sz, pms, ar5log, ar5cs, ar5pe);
     }
 
     public letter_1: string;

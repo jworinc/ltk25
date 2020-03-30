@@ -4,6 +4,7 @@ import { BaseorComponent } from '../baseor/baseor.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-or1',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Or1Component extends BaseorComponent implements OnInit {
 
-  constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService, private or1log: LoggingService, private or1cs: ColorschemeService) {
-  	super(element, sz, pms, or1log, or1cs);
+  constructor(private element:ElementRef, 
+			  private sz: DomSanitizer, 
+			  private pms: PlaymediaService, 
+			  private or1log: LoggingService, 
+			  private or1cs: ColorschemeService,
+			  private or1pe: PickElementService) {
+  	super(element, sz, pms, or1log, or1cs, or1pe);
   }
 
   ngOnInit() {

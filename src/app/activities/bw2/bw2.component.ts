@@ -6,6 +6,7 @@ import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
 import { MultiselectComponent } from '../../components/multiselect/multiselect.component';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-bw2',
@@ -20,8 +21,9 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 							private pms: PlaymediaService, 
 							private bw2log: LoggingService, 
 							private bw2cs: ColorschemeService,
-							private op: OptionService) {
-  	super(element, sz, pms, bw2log, bw2cs);
+							private op: OptionService,
+							private bw2pe: PickElementService) {
+  	super(element, sz, pms, bw2log, bw2cs, bw2pe);
 	}
 	
 	public enable_handle_vowel: boolean = false;

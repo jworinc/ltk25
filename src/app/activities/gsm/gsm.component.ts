@@ -6,6 +6,7 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 import { Observable } from 'rxjs';
 import { flatMap } from "rxjs/operators";
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gsm',
@@ -15,8 +16,13 @@ import { LoggingService } from '../../services/logging.service';
 })
 export class GsmComponent extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gsmlog: LoggingService, private gwmcs: ColorschemeService) {
-    super(elm, sanitizer, playmedia, gsmlog, gwmcs);
+  constructor(private elm:ElementRef, 
+              private sanitizer: DomSanitizer, 
+              private playmedia: PlaymediaService, 
+              private gsmlog: LoggingService, 
+              private gwmcs: ColorschemeService,
+              private gwmpe: PickElementService) {
+    super(elm, sanitizer, playmedia, gsmlog, gwmcs, gwmpe);
   }
 
   ngOnInit() {
@@ -226,6 +232,8 @@ getWords() {
 }
 
 addAnswer(ind) {
+  //	If mouse event locked by feedback
+  if(this.gwmpe.mouseLock()) return;
 
   if(this.answers.length >= this.expected.length) return;
   this.playmedia.stop();

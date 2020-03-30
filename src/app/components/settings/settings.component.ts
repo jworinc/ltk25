@@ -4,6 +4,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { DataloaderService } from '../../services/dataloader.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 import * as $ from 'jquery';
 
 @Component({
@@ -18,7 +19,8 @@ export class SettingsComponent implements OnInit {
   				private el: ElementRef, 
   				private dl: DataloaderService,
   				private cs: ColorschemeService,
-  				private op: OptionService
+				  private op: OptionService,
+				  private pe: PickElementService
   			) { }
 
   public options: any;
@@ -67,12 +69,30 @@ export class SettingsComponent implements OnInit {
   }
 
 
-	micDown(){ this.recgain-=this.recgain<=0?0:1; };
-	micUp(){ this.recgain+=this.recgain>=100?0:1; };
-	volDown(){ this.globalvolume-=this.globalvolume<=0?0:0.05; };
-	volUp(){ this.globalvolume+=this.globalvolume>=1?0:0.05; };
+	micDown(){ 
+		//	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
+		this.recgain-=this.recgain<=0?0:1; 
+	};
+	micUp(){ 
+		//	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
+		this.recgain+=this.recgain>=100?0:1; 
+	};
+	volDown(){ 
+		//	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
+		this.globalvolume-=this.globalvolume<=0?0:0.05; 
+	};
+	volUp(){ 
+		//	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
+		this.globalvolume+=this.globalvolume>=1?0:0.05; 
+	};
 
 	close(){
+		//	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
 		this._show = false;
 		this.settings_shown = false;
 		//  Stop volume test
@@ -81,7 +101,8 @@ export class SettingsComponent implements OnInit {
 	}
 
 	save() {
-
+		//	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
         //  Update volume and microphone settings
         this.options.volume = '' + this.globalvolume;
         this.options.mic = '' + this.recgain;

@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 //import { CompileShallowModuleMetadata } from '@angular/compiler';
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gcp',
@@ -14,8 +15,13 @@ import { LoggingService } from '../../services/logging.service';
 })
 export class GcpComponent extends BaseComponent implements OnInit {
 
-  	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gcplog: LoggingService, private gcpcs: ColorschemeService) {
-  	  	super(elm, sanitizer, playmedia, gcplog, gcpcs);
+    constructor(private elm:ElementRef, 
+                private sanitizer: DomSanitizer, 
+                private playmedia: PlaymediaService, 
+                private gcplog: LoggingService, 
+                private gcpcs: ColorschemeService,
+                private gcppe: PickElementService) {
+  	  	super(elm, sanitizer, playmedia, gcplog, gcpcs, gcppe);
     }
 
   	ngOnInit() {
@@ -359,6 +365,9 @@ export class GcpComponent extends BaseComponent implements OnInit {
 
     //  Handle user answer
     handleAnswer(w) {
+      //	If mouse event locked by feedback
+      if(this.gcppe.mouseLock()) return;
+    
       if(this.answer_received) return;
       let that = this;
       this.question_ready = false;

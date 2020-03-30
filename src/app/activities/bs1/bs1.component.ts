@@ -7,6 +7,7 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 import { PlaysentenceDirective } from '../../directives/playsentence.directive';
 import { PlaywordsDirective } from '../../directives/playwords.directive';
 import { FontadjusterDirective } from '../../directives/fontadjuster.directive';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-bs1',
@@ -21,8 +22,13 @@ export class Bs1Component extends BaseComponent implements OnInit {
 	@ViewChildren(PlaywordsDirective) pwds;
 	@ViewChildren(FontadjusterDirective) fads;
 
-  	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private bs1log: LoggingService, private gmucs: ColorschemeService) {
-  	  	super(elm, sanitizer, playmedia, bs1log, gmucs);
+	  constructor(private elm:ElementRef, 
+				  private sanitizer: DomSanitizer, 
+				  private playmedia: PlaymediaService, 
+				  private bs1log: LoggingService, 
+				  private gmucs: ColorschemeService,
+				  private bs1pe: PickElementService) {
+  	  	super(elm, sanitizer, playmedia, bs1log, gmucs, bs1pe);
     }
 
   

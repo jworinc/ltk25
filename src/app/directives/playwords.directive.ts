@@ -2,13 +2,18 @@ import { Directive, ElementRef, Input } from '@angular/core';
 import { PlaymediaService } from '../services/playmedia.service';
 import { OptionService } from '../services/option.service';
 import { DataloaderService } from '../services/dataloader.service';
+import { PickElementService } from '../services/pick-element.service';
 
 @Directive({
   selector: '[app-playwords]'
 })
 export class PlaywordsDirective {
 
-  constructor(private elmt: ElementRef, private pms: PlaymediaService, private op: OptionService, private dl: DataloaderService) { 
+  constructor(private elmt: ElementRef, 
+			  private pms: PlaymediaService, 
+			  private op: OptionService, 
+			  private dl: DataloaderService,
+			  private pe: PickElementService) { 
   	this.initText();
   }	
 
@@ -106,7 +111,8 @@ export class PlaywordsDirective {
 				if(typeof this.silentPlay === 'undefined' || (typeof this.silentPlay !== 'undefined' && !this.silentPlay)){
 					//	Bind onclick event
 					pw.onclick = function(){
-						
+						//	If mouse event locked by feedback
+    					if(that.pe.mouseLock()) return;
 						//	Get name of the file which must be played
 						let an = pw.attributes['data-playw'].value;
 						
@@ -127,9 +133,13 @@ export class PlaywordsDirective {
 				if(this.op.show_word_translation){
 					let tr = pw.querySelector('div');
 					tr.addEventListener('click', (e)=>{
+						//	If mouse event locked by feedback
+    					if(that.pe.mouseLock()) return;
 						that.clickToSeeTranslation.call(that, e);
 					});
 					tr.addEventListener('touchstart', (e)=>{
+						//	If mouse event locked by feedback
+    					if(that.pe.mouseLock()) return;
 						that.clickToSeeTranslation.call(that, e);
 					});
 				}
@@ -171,8 +181,10 @@ export class PlaywordsDirective {
 		let cn = document.createElement("span");
 		cn.innerHTML = content;
 		pp.appendChild(cn);
-		
+		let that = this;
 		pp.onclick = (e)=>{
+			//	If mouse event locked by feedback
+			if(that.pe.mouseLock()) return;
 			e.stopPropagation();
 			e.preventDefault();
 			pp.remove();
@@ -250,10 +262,12 @@ export class PlaywordsDirective {
 	}
 
 	addPointerSign() {
-    
+		let that = this;
 		let pointer = document.createElement("span");
 		pointer.classList.add("translate-pointer");
 		pointer.onclick = (e)=>{
+			//	If mouse event locked by feedback
+			if(that.pe.mouseLock()) return;
 			e.stopPropagation();
 			e.preventDefault();
 		}

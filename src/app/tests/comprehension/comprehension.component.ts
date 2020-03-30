@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BasetestComponent } from '../basetest/basetest.component';
 import { PlaymediaService } from '../../services/playmedia.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-comprehension',
@@ -18,7 +19,10 @@ export class ComprehensionComponent extends BasetestComponent implements OnInit 
   public result:any=[];
   public test_complete = false;
 
-  constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService) { 
+  constructor(private element:ElementRef, 
+              private sz: DomSanitizer, 
+              private pms: PlaymediaService,
+              private pe: PickElementService) { 
     super(element, sz, pms);
   }
 
@@ -45,6 +49,8 @@ export class ComprehensionComponent extends BasetestComponent implements OnInit 
   // }
 
   getAnswer(answer){
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     let data;
 
     if(this.result.length == 0){

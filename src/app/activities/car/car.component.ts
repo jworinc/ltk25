@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { flatMap } from "rxjs/operators";
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-car',
@@ -15,8 +16,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class CarComponent extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private carlog: LoggingService, private carcs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, carlog, carcs);
+  constructor(private elm:ElementRef, 
+			  private sanitizer: DomSanitizer, 
+			  private playmedia: PlaymediaService, 
+			  private carlog: LoggingService, 
+			  private carcs: ColorschemeService,
+			  private carpe: PickElementService) {
+  	super(elm, sanitizer, playmedia, carlog, carcs, carpe);
   }
 
   ngOnInit() {
@@ -201,6 +207,9 @@ export class CarComponent extends BaseComponent implements OnInit {
 	}
 
 	playAnswerLetters(cb) {
+		//	If mouse event locked by feedback
+		if(this.carpe.mouseLock()) return;
+
 		let ltrs = this.word_letters.split('');
 		let that = this;
 		for(let i in ltrs){
@@ -232,6 +241,9 @@ export class CarComponent extends BaseComponent implements OnInit {
 	}
 
 	playWord() {
+		//	If mouse event locked by feedback
+		if(this.carpe.mouseLock()) return;
+
 		this.playmedia.stop();
 		this.playmedia.word(this.answer_word, function(){}, 1);
 	}

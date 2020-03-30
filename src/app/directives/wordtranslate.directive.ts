@@ -2,13 +2,18 @@ import { Directive, ElementRef, Input } from '@angular/core';
 import { DataloaderService } from '../services/dataloader.service';
 import { TranslateService } from '@ngx-translate/core';
 import { PlaymediaService } from '../services/playmedia.service';
+import { PickElementService } from '../services/pick-element.service';
 
 @Directive({
   selector: '[appWordtranslate]'
 })
 export class WordtranslateDirective {
 
-  constructor(private dl: DataloaderService, private el: ElementRef, private translation: TranslateService, private pms: PlaymediaService) {
+  constructor(private dl: DataloaderService, 
+              private el: ElementRef, 
+              private translation: TranslateService, 
+              private pms: PlaymediaService,
+              private pe: PickElementService) {
     let that = this;
     setTimeout(()=>{
       that.initTranslation();
@@ -92,9 +97,14 @@ export class WordtranslateDirective {
     this.el.nativeElement.appendChild(parent);
 
     parent.addEventListener('click', (e)=>{
+
+      //	If mouse event locked by feedback
+      if(that.pe.mouseLock()) return;
       that.clickToSeeTranslation.call(that, e);
     });
     parent.addEventListener('touchstart', (e)=>{
+      //	If mouse event locked by feedback
+      if(that.pe.mouseLock()) return;
       that.clickToSeeTranslation.call(that, e);
     });
 
@@ -169,8 +179,10 @@ export class WordtranslateDirective {
 		let cn = document.createElement("span");
 		cn.innerHTML = content;
 		pp.appendChild(cn);
-		
+		let that = this;
 		pp.onclick = (e)=>{
+      //	If mouse event locked by feedback
+      if(that.pe.mouseLock()) return;
 			e.stopPropagation();
 			e.preventDefault();
 			pp.remove();

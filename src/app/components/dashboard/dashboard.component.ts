@@ -8,6 +8,7 @@ import { NotebookComponent } from '../notebook/notebook.component';
 import { AuthService } from '../../services/auth.service';
 import { TokenService } from '../../services/token.service';
 import { Title } from '@angular/platform-browser';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -81,7 +82,8 @@ export class DashboardComponent implements OnInit {
     private el: ElementRef,
     private Auth: AuthService,
     private Token: TokenService,
-    private title: Title
+    private title: Title,
+    private pe: PickElementService
   ) {
         // this language will be used as a fallback when a translation isn't found in the current language
         this.translate.setDefaultLang(Option.getFallbackLocale());
@@ -133,6 +135,8 @@ export class DashboardComponent implements OnInit {
   }
 
   setLesson(l) {
+    //	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
     this.current_lesson = l;
     for(let i in this.lessons){
       if(parseInt(this.lessons[i].number) === parseInt(l)) this.cl = this.lessons[i];
@@ -286,7 +290,8 @@ export class DashboardComponent implements OnInit {
 
   //  Handle click event on lesson
   showLesson(n) {
-
+    //	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
     //  Check if sidetrip mode is enabled, redirect user to sidetrip lessons
     if(this.sidetripmode){
       this.router.navigateByUrl('/sidetrip/'+n);
@@ -360,6 +365,8 @@ export class DashboardComponent implements OnInit {
   }
 
   disableSidetrip() {
+    //	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
     this.sidetripmode = false;
   }
 

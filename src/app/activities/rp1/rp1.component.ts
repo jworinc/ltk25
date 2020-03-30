@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-rp1',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Rp1Component extends BaseComponent implements OnInit {
 
-    constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private rp1log: LoggingService, private rp1cs: ColorschemeService) {
-  	  super(elm, sanitizer, playmedia, rp1log, rp1cs);
+	constructor(private elm:ElementRef, 
+				private sanitizer: DomSanitizer, 
+				private playmedia: PlaymediaService, 
+				private rp1log: LoggingService, 
+				private rp1cs: ColorschemeService,
+				private rp1pe: PickElementService) {
+  	  super(elm, sanitizer, playmedia, rp1log, rp1cs, rp1pe);
     }
 
     ngOnInit() {
@@ -200,6 +206,8 @@ export class Rp1Component extends BaseComponent implements OnInit {
 	}
 	
 	playLetter(){
+		//	If mouse event locked by feedback
+		if(this.rp1pe.mouseLock()) return;
 		let that = this;
 		this.playmedia.stop();
 		this.playLetterOrSound(this.audios[this.current_letter], function(){

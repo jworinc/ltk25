@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gsc',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class GscComponent extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gsclog: LoggingService, private gsccs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, gsclog, gsccs);
+  constructor(private elm:ElementRef, 
+			  private sanitizer: DomSanitizer, 
+			  private playmedia: PlaymediaService, 
+			  private gsclog: LoggingService, 
+			  private gsccs: ColorschemeService,
+			  private gscpe: PickElementService) {
+  	super(elm, sanitizer, playmedia, gsclog, gsccs, gscpe);
   }
 
   ngOnInit() {
@@ -192,6 +198,8 @@ export class GscComponent extends BaseComponent implements OnInit {
 	}
 
 	addAnswer(ind) {
+		//	If mouse event locked by feedback
+		if(this.gscpe.mouseLock()) return;
 
 		if(this.answers.length >= this.expected.length) return;
 

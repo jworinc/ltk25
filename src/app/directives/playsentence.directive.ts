@@ -3,19 +3,25 @@ import { PlaymediaService } from '../services/playmedia.service';
 import { OptionService } from '../services/option.service';
 import { DataloaderService } from '../services/dataloader.service';
 import { forEach } from '@angular/router/src/utils/collection';
+import { PickElementService } from '../services/pick-element.service';
 
 @Directive({
 	selector: '[app-playsentence]'
 })
 export class PlaysentenceDirective {
 
-	constructor(private elmt: ElementRef, private pms: PlaymediaService, private op: OptionService, private dl: DataloaderService) {
+	constructor(private elmt: ElementRef, 
+				private pms: PlaymediaService, 
+				private op: OptionService, 
+				private dl: DataloaderService,
+				private pe: PickElementService) {
 		this.compileSentence();
 	}
 
 	@HostListener('click', ['$event.target'])
 	onClick(e) {
-
+		//	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
 		//console.log('Play sentence started for ' + e.attributes['data-ind'].value);
 		if (!this.compiled && !this.play_busy) {
 			this.compileSentence();
@@ -351,6 +357,8 @@ export class PlaysentenceDirective {
 				if (typeof this.silentPlay === 'undefined' || (typeof this.silentPlay !== 'undefined' && !this.silentPlay)) {
 					//	Bind onclick event
 					pw.onclick = function () {
+						//	If mouse event locked by feedback
+    					if(this.pe.mouseLock()) return;
 						/*
 						//	Get name of the file which must be played
 						let an = pw.attributes['data-psword'].value;
@@ -372,9 +380,13 @@ export class PlaysentenceDirective {
 				if (this.op.show_word_translation) {
 					let tr = pw.querySelector('div');
 					tr.addEventListener('click', (e) => {
+						//	If mouse event locked by feedback
+   						 if(that.pe.mouseLock()) return;
 						that.clickToSeeTranslation.call(that, e);
 					});
 					tr.addEventListener('touchstart', (e) => {
+						//	If mouse event locked by feedback
+    					if(that.pe.mouseLock()) return;
 						that.clickToSeeTranslation.call(that, e);
 					});
 				}
@@ -385,6 +397,7 @@ export class PlaysentenceDirective {
 	}
 
 	setTranslationPopup(content, word) {
+		let that = this;
 		document.querySelectorAll('.translate-popup-expanded').forEach((el) => {
 			el.remove();
 		});
@@ -418,6 +431,8 @@ export class PlaysentenceDirective {
 		pp.appendChild(cn);
 
 		pp.onclick = (e) => {
+			//	If mouse event locked by feedback
+			if(that.pe.mouseLock()) return;
 			e.stopPropagation();
 			e.preventDefault();
 			pp.remove();
@@ -495,10 +510,12 @@ export class PlaysentenceDirective {
 	}
 
 	addPointerSign() {
-
+		let that = this;
 		let pointer = document.createElement("span");
 		pointer.classList.add("translate-pointer");
 		pointer.onclick = (e) => {
+			//	If mouse event locked by feedback
+			if(that.pe.mouseLock()) return;
 			e.stopPropagation();
 			e.preventDefault();
 		}

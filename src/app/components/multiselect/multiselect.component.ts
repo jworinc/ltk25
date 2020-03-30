@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { PickElementService } from '../../services/pick-element.service';
 //import { PlaymediaService } from '../../services/playmedia.service';
 
 @Component({
@@ -19,7 +20,7 @@ export class MultiselectComponent implements OnInit {
   public old_input: any;
 
   //constructor(private pms: PlaymediaService) { }
-  constructor() { }
+  constructor(private pe: PickElementService) { }
 
   ngOnInit() {
     //this.update();
@@ -48,6 +49,8 @@ export class MultiselectComponent implements OnInit {
       this.result.emit(v);
     }
     */
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.result.emit(v);
       
   }

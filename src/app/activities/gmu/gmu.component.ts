@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { flatMap } from "rxjs/operators";
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gmu',
@@ -17,8 +18,13 @@ export class GmuComponent extends BasebwComponent implements OnInit, DoCheck {
   
   @ViewChild('focus') private elementRef: ElementRef;
   
-  constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService, private gmulog: LoggingService, private bw7cs: ColorschemeService) {
-  	super(element, sz, pms, gmulog, bw7cs);
+  constructor(private element:ElementRef, 
+              private sz: DomSanitizer, 
+              private pms: PlaymediaService, 
+              private gmulog: LoggingService, 
+              private bw7cs: ColorschemeService,
+              private gmupe: PickElementService) {
+  	super(element, sz, pms, gmulog, bw7cs, gmupe);
   }
 
     ngOnInit() {
@@ -281,6 +287,8 @@ export class GmuComponent extends BasebwComponent implements OnInit, DoCheck {
     public play_word_busy_flag: boolean = false;
   
     playWord(){
+      //	If mouse event locked by feedback
+		  if(this.gmupe.mouseLock()) return;
       this.pms.stop();
       this.play_pronouce_busy_flag = false;
       //if(this.play_word_busy_flag) return;

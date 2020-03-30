@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-bw6',
@@ -19,8 +20,9 @@ export class Bw6Component extends Bw3Component implements OnInit {
 							private bw6pm: PlaymediaService, 
 							private bw6log: LoggingService, 
 							private bw6cs: ColorschemeService,
-							private opbw6: OptionService) {
-  	super(bw6el, bw6sn, bw6pm, bw6log, bw6cs, opbw6);
+							private opbw6: OptionService,
+							private bw6pe: PickElementService) {
+  	super(bw6el, bw6sn, bw6pm, bw6log, bw6cs, opbw6, bw6pe);
   }
 
   ngOnInit() {
@@ -402,6 +404,10 @@ export class Bw6Component extends Bw3Component implements OnInit {
 
 
 	playWord(){
+
+		//	If mouse event locked by feedback
+		if(this.bw6pe.mouseLock()) return;
+
 		let that = this;
 		this.bw6pm.stop();
 		this.play_pronouce_busy_flag = false;

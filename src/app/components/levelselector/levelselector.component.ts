@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-levelselector',
@@ -7,7 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class LevelselectorComponent implements OnInit {
 
-  constructor() { }
+  constructor(private pe: PickElementService) { }
 
   @Output() public levelset = new EventEmitter<number>();
   @Input() level: number;
@@ -33,6 +34,8 @@ export class LevelselectorComponent implements OnInit {
 
     //  Level up handler
     levelUp(){
+        //	If mouse event locked by feedback
+        if(this.pe.mouseLock()) return;
         this.prepVals();
         this.level+=this.level>=this.max?0:this.step;
         this.levelset.emit(this.level);
@@ -40,6 +43,8 @@ export class LevelselectorComponent implements OnInit {
 
     //  Level down handler
     levelDown(){
+        //	If mouse event locked by feedback
+        if(this.pe.mouseLock()) return;
         this.prepVals();
         this.level-=this.level<=this.min?0:this.step;
         this.levelset.emit(this.level);

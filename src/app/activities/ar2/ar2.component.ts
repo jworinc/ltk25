@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-ar2',
@@ -19,8 +20,9 @@ export class Ar2Component extends BaseComponent implements OnInit {
 								private playmedia: PlaymediaService, 
 								private ar2log: LoggingService, 
 								private ar2cs: ColorschemeService,
-								private op: OptionService) {
-  		super(elm, sanitizer, playmedia, ar2log, ar2cs);
+								private op: OptionService,
+								private ar2pe: PickElementService) {
+  		super(elm, sanitizer, playmedia, ar2log, ar2cs, ar2pe);
     } 
 
     ngOnInit() {
@@ -187,6 +189,8 @@ export class Ar2Component extends BaseComponent implements OnInit {
 
 	//	Handle clicks on buttons, btn - is a button number
 	handleAnswer(btn) {
+		//	If mouse event locked by feedback
+		if(this.ar2pe.mouseLock()) return;
 		if(this.validate()) return;
 		//	Change style of pushed button
 		this.elm.nativeElement.querySelectorAll('button').forEach((e)=>{

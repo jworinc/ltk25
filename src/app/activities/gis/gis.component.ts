@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { flatMap } from "rxjs/operators";
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gis',
@@ -15,8 +16,13 @@ import { LoggingService } from '../../services/logging.service';
 })
 export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 
-  constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService, private gislog: LoggingService, private bw7cs: ColorschemeService) {
-  	super(element, sz, pms, gislog, bw7cs);
+  constructor(private element:ElementRef, 
+			  private sz: DomSanitizer, 
+			  private pms: PlaymediaService, 
+			  private gislog: LoggingService, 
+			  private bw7cs: ColorschemeService,
+			  private bw7pe: PickElementService) {
+  	super(element, sz, pms, gislog, bw7cs, bw7pe);
   }
 
   ngOnInit() {
@@ -154,6 +160,8 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 
 	//	Set and reset dashes between letters
 	setDash(kl){
+		//	If mouse event locked by feedback
+		if(this.bw7pe.mouseLock()) return;
 		this.pms.stop();
 		if(this.letters[kl] === '-' && this.dashes[kl] === 0){
 			this.dashes[kl] = 1;
@@ -303,6 +311,9 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 	public play_word_busy_flag: boolean = false;
 
 	playWord(){
+		//	If mouse event locked by feedback
+		if(this.bw7pe.mouseLock()) return;
+
 		this.pms.stop();
 		this.play_pronouce_busy_flag = false;
 		//if(this.play_word_busy_flag) return;
@@ -498,6 +509,8 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 	}
 	
 	playRule(){
+		//	If mouse event locked by feedback
+		if(this.bw7pe.mouseLock()) return;
 		if(this.uinputph !== 'finish' && this.uinputph !== 'sylhelp') return;
 		let descs = [];
 		let di = 0;

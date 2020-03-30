@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-al1',
@@ -13,8 +14,14 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Al1Component extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, differs: IterableDiffers, private al1log: LoggingService, private al1cs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, al1log, al1cs);
+  constructor(private elm:ElementRef, 
+			  private sanitizer: DomSanitizer, 
+			  private playmedia: PlaymediaService, 
+			  differs: IterableDiffers, 
+			  private al1log: LoggingService, 
+			  private al1cs: ColorschemeService,
+			  private al1pe: PickElementService) {
+  	super(elm, sanitizer, playmedia, al1log, al1cs, al1pe);
   	//this.differ = differs.find([]).create(null);
   }
 
@@ -285,6 +292,8 @@ export class Al1Component extends BaseComponent implements OnInit {
 
 	//	Play letter sound
 	playLetter(i) {
+		//	If mouse event locked by feedback
+		if(this.al1pe.mouseLock()) return;
 		let d = this.input_data[i];
 		if(d.letter === d.expected) {
 			this.playmedia.word(d.letter, function(){}, 0);
