@@ -146,6 +146,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   //  Sent Feedback List according to current card descriptor
   public current_feedback_list: any = [];
 
+  public show_course_expire_msg = false;
+
   constructor(
     private DL: DataloaderService,
     private notify: SnotifyService,
@@ -416,6 +418,21 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.Option.setOptions(data.options);
     //  Check if start position is setted
     if(typeof data.start !== 'undefined' && !this.sidetripmode) this.start_position = data.start;
+
+    //  Check if course expired
+    if(typeof data.course_expired !== 'undefined' && data.course_expired) {
+      
+      this.show_course_expire_msg = true;
+
+      this.page_is_loading_screen = false;
+      this.main_app_screen = true;
+      setTimeout(()=>{
+        //that.el.nativeElement.querySelector('#main-app-screen').style.opacity = '1';
+        $('#main-app-screen').css('opacity', '1');
+      }, 10);
+      return;
+      
+    }
     
     //  Start loading cards according to last uncomplete lesson
     if(!this.sidetripmode){

@@ -195,5 +195,8 @@
 	"no_recording_msg" : "You have no recordings yet!",
 	"your_recent_feedbacks" : "You previous feedbacks",
 	"correct_btn" : "Correction",
-	"bookmark_btn" : "Bookmark"
+	"bookmark_btn" : "Bookmark",
+	"send_request_to_orgadmin" : "Send notification to Organization Administrator",
+	"request_sent_to_orgadmin" : "Request was sent to Organization Administrator",
+	"course_expired_msg" : "Current course expired, your access was temporarily restricted. To continue learning process send request to organization administrator."
 }

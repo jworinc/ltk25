@@ -199,5 +199,10 @@ export class DataloaderService {
       }).toPromise();
   }
 
+  sendCourseExpiredNotificationEmail() {
+    return this.http.get(`${this.base_url}/notification/course/expired`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+  }
 
 }

@@ -12,7 +12,7 @@
 			<h1>{{ student.name }}</h1>
             <h4>{{ student.sid_message }}</h4>
 		</div>
-		<div class="row ltk-breaks-list" [hidden]="show_notebook || show_grammar || show_testing">
+		<div class="row ltk-breaks-list" [hidden]="show_notebook || show_grammar || show_testing || show_course_expire_msg">
 	        <div class="col-md-12">
 	            <div class="tab" role="tabpanel">
 	                <!-- Nav tabs -->
@@ -559,6 +559,8 @@
             <!-- Testing -->
             <app-showtesting [show]="show_testing" [scale]="scale" [hidden]="!show_testing" (closetesting)="onCloseTesting()"></app-showtesting>
         </div>
+
+        <app-course-expire-msg [hidden]="!show_course_expire_msg"></app-course-expire-msg>
         
         <!--  Lesson pointer arrow  -->
         <div class="lesson-ponter-arrow" [ngStyle]="arrow_pointer"><i class="fas fa-arrow-down"></i></div>

@@ -1,0 +1,17 @@
+:host, .course-expired-msg-wrap{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    width: 100%;
+    margin-top: 50px;
+}
+.course-expired-msg-wrap button{
+    min-width: 240px;
+}
+.course-expired-msg-wrap p{
+    min-width: 240px;
+    max-width: 440px;
+    text-align: center;
+}

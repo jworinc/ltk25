@@ -71,6 +71,8 @@ export class DashboardComponent implements OnInit {
 
   public lang_change_event: any;
 
+  public show_course_expire_msg = false;
+
   @ViewChild(NotebookComponent) nb: NotebookComponent;
 
   constructor(
@@ -165,14 +167,25 @@ export class DashboardComponent implements OnInit {
       });
       
     }
+
+    //  Check if course expired
+    if(typeof data.course_expired !== 'undefined' && data.course_expired) {
+      //  Show main screen
+      this.el.nativeElement.querySelector('.book-container').style.opacity = '1';
+
+      this.show_course_expire_msg = true;
+      
+    } else {
+      this.DL.getLessons().subscribe(
+        data => this.handleLessons(data),
+          error => {
+            console.log(error);
+            this.notify.error('Lessons list load status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
+          }
+      );
+    }
     
-  	this.DL.getLessons().subscribe(
-  		data => this.handleLessons(data),
-      	error => {
-      		console.log(error);
-      		this.notify.error('Lessons list load status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
-      	}
-  	);
+  	
 
   }
 
