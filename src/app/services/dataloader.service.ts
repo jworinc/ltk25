@@ -144,6 +144,7 @@ export class DataloaderService {
 
 
   logMissingAudio(m) {
+    if(!this.Token.loggedIn()) return empty().toPromise();
     return this.http.post(`${this.base_url}/media/log/missing/audio`, {'url': m}, {
       headers: this.Token.getAuthHeader()
     }).pipe(share());
