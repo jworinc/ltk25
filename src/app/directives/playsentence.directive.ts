@@ -358,7 +358,7 @@ export class PlaysentenceDirective {
 					//	Bind onclick event
 					pw.onclick = function () {
 						//	If mouse event locked by feedback
-    					if(this.pe.mouseLock()) return;
+    					if(that.pe.mouseLock()) return;
 						/*
 						//	Get name of the file which must be played
 						let an = pw.attributes['data-psword'].value;
