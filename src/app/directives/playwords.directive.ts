@@ -37,23 +37,26 @@ export class PlaywordsDirective {
 	public trelm: any = null;
 	public in_translation: boolean = false;
 	public current_word: string = '';
+	public origin_text = '';
 
 	@Input() silentPlay: boolean;
 	
 	initText() {
 		//	Get content of element which words must be playable
 		this.innerText = this.elmt.nativeElement.innerHTML;
+		this.origin_text = this.innerText;
 		//	Check if nothing in element then go back
 		if(this.innerText === "") return;
+		let _wordarr = this.innerText.split(' ');
 		//	Filter markup to leave only words with spaces as delimiter
 		this.innerText = this.innerText.replace(this.html, '').replace(this.space_to_one, ' ').replace(this.punctuation, '').replace(this.dots, ' ').replace(this.slashes, ' ');
 	  	//	Convert plain words string to array
 		this.words_arr = this.innerText.split(' ');
-
+		
 		//	Find unique words in all words array
 		for(let i in this.words_arr)	{
 			let w = this.words_arr[i];
-			if(this.unique_words.indexOf(w) >= 0 || w === ' ' || w === '') continue;
+			//if(this.unique_words.indexOf(w) >= 0 || w === ' ' || w === '') continue;
 			this.unique_words.push(w);
 		}
 
@@ -61,20 +64,79 @@ export class PlaywordsDirective {
 
 		//	Replace HTML with wrapped words in HTML span element
 		let w_html = this.elmt.nativeElement.innerHTML;
+		let proctext = this.origin_text;
+		let customeHtml = '';
+		let _html = '';
+		let _words = [];
 		for(let i in this.unique_words){
 			let w = this.unique_words[i];
 			let pw = w.replace("'", '');
 			if(/[\d]+/.test(w)) continue;
-			let reg = new RegExp('\\b(?<!\-)'+w+'(?!\=)\\b', 'g');
-			if(this.op.show_word_translation) 
-				w_html = w_html.replace(reg, '<span data-playw="'+pw+'" data-click-ev-bound="false" appWordtranslate class="translainable-word">'+
-												w+
-											 '<div>?</div></span>');
-			else 
-				w_html = w_html.replace(reg, '<span data-playw="'+pw+'" data-click-ev-bound="false" appWordtranslate>'+w+'</span>');
+			// let rg = new RegExp('\\b(?<!\-)'+w+'(?!(\<|\"\>|\=))\\b');
+			const wordExistenceCount = this.origin_text.split(w).length - 1;
+			let count = 0;
+
+			if (this.op.show_word_translation) {
+				// customeHtml = customeHtml + '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-psword="' + w + '">' + w + ' <div>?</div></span>';
+				_wordarr.forEach((word, index) => {
+					let replacewords = word.replace('-', ' -');
+					const split_word = replacewords.split(' ');
+					let lastword  = split_word[length + 1];
+					if(lastword){
+						lastword = lastword.replace('-', '')
+					}
+					if (lastword && word.includes('-') && lastword==w) {
+						_wordarr[index] = '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + split_word[0] + '">' + split_word[0] + '<div>?</div></span>' + split_word[1];
+					}
+					if (wordExistenceCount == 1 && (word.replace('.', '') == w
+						|| word.replace(',', '') == w || word.replace(':', ' ') == w
+						|| word.replace('(', '') == w || word.replace('!', '') == w
+						|| word.replace(')', '') == w || word.replace(';', '') == w)) {
+
+						if (word.split(w).length > 1) {
+							_wordarr[index] = '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + '<div>?</div></span>' + word.split(w)[1];
+							if (word.includes('(')) {
+								_wordarr[index] = '' + '(' + '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + '<div>?</div></span>';
+							}
+						} else {
+							_wordarr[index] = '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + ' <div>?</div></span>';
+						}
+						count = 1;
+						return;
+					}
+					if (wordExistenceCount > 1 && word.replace('.', '') == w && count === 0) {
+						const subwordExistenceCount = word.split('<span').length - 1;
+						if (subwordExistenceCount == 0) {
+							_wordarr[index] = '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + ' <div>?</div></span>';
+							count = 1;
+							return;
+						}
+
+					}
+				});
+
+			} else {
+				// customeHtml = customeHtml + '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-psword="' + w + '">' + w + '</span>';
+				// const wordExistenceCount = this.origin_text.split(w).length - 1;
+				_wordarr.forEach((word, index) => {
+					if (wordExistenceCount == 1 && word.replace('.', '') == w) {
+						_wordarr[index] = '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + '</span>';
+						return;
+					}
+					if (wordExistenceCount > 1 && word.replace('.', '') == w) {
+						const subwordExistenceCount = word.split('<span').length - 1;
+						if (subwordExistenceCount == 0) {
+							_wordarr[index] = '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + '</span>';
+							return;
+						}
+
+					}
+				});
+			}
 		}
 		//	Put back updated HTML
-		this.elmt.nativeElement.innerHTML = w_html;
+		//this.elmt.nativeElement.innerHTML = w_html;
+		this.elmt.nativeElement.innerHTML = _wordarr.join(' ');
 
 		let that = this;
 		setTimeout(()=>{
