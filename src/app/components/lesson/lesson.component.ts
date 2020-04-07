@@ -388,7 +388,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     let that = this;
     let d = '#'+this.card_descriptor.lesson+'-'+this.card_descriptor.position+':'+this.card_descriptor.activity;
     //  Check if feedback already exist for current card
-    this.DL.getLastFeedbacks(encodeURIComponent(d)).then((data)=>{
+    this.DL.getLastFeedbacks(encodeURIComponent('N'+this.card_descriptor.lesson+'-'+this.card_descriptor.position+'-'+this.card_descriptor.activity)).then((data)=>{
       if(typeof (data as any).length !== 'undefined' && (data as any).length > 0){
         console.log("Found feedback according to current card");
         console.log(data);

@@ -213,7 +213,7 @@
     <!--    Feedback window   -->
     <app-feedback  [show]='show_feedback_modal' 
                    [hidden]="!show_feedback_modal"
-                   [card_descriptor]="'#'+card_descriptor.lesson+'-'+card_descriptor.position+':'+card_descriptor.activity"
+                   [card_descriptor]="'N'+card_descriptor.lesson+'-'+card_descriptor.position+'-'+card_descriptor.activity"
                    [prev_feedbacks]="current_feedback_list"
                    (closefeedback)="onCloseFeedback()"></app-feedback>
 

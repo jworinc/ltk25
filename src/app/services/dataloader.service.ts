@@ -195,9 +195,12 @@ export class DataloaderService {
   }
 
   getLastFeedbacks(descriptor) {
-    return this.http.get(`${this.base_url}/feedback/${descriptor}`, {
-        headers: this.Token.getAuthHeader()
-      }).toPromise();
+    if(descriptor) {
+      let d = descriptor.replace('#', 'N');
+      return this.http.get(`${this.base_url}/feedback/${d}`, {
+          headers: this.Token.getAuthHeader()
+        }).toPromise();
+    } else return empty().toPromise();
   }
 
   sendCourseExpiredNotificationEmail() {
