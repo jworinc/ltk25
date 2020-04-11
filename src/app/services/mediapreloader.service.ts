@@ -90,6 +90,12 @@ export class MediapreloaderService {
 
 							//	Check audio property
 							if(k === 'wave' || k === 'WaveName' || k === 'wavename'){
+
+								//	RP1 RP2 Exception, load sounds instead of letters
+								if((card_type === 'rp1' || card_type === 'rp2') && part[k].split('')[0] !== '_'){
+									cmedia.push('_S'+part[k]);
+									continue;
+								}
 								cmedia.push(part[k]);
 								continue;
 							}
