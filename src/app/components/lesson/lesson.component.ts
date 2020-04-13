@@ -1682,7 +1682,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     clearTimeout(that.waiting_audioctx_timer);
     let waitForAudioContext = function() {
       if(!that.recorder.audio_context_enable) {
-        if(wait_audio_ctx_counter > 10){
+        if(wait_audio_ctx_counter > 30){
           alert(that.translate.instant('mic_disabled_msg'));
           that.global_recorder = false;
           that.setGlobalRecorder(that.global_recorder);
