@@ -119,7 +119,9 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 			this.setGlobalDesc(this.card.content[0].desc);
 			this.enterHide();
 			this.blinkRec();
-			this.pms.sound(this.card.content[0].RecInst[0].audio, function(){});
+			this.pms.sound(this.card.content[0].RecInst[0].audio, function(){
+				that.pms.word(that.answer_word, function(){});
+			});
 		}
 		//	Phase 4 rec instructions, if mic is disabled
 		else if(typeof this.card.content[0].RecInst !== 'undefined' && this.card.content[0].RecInst.length > 0 && this.uinputph === 'rec' && !this.global_recorder){
