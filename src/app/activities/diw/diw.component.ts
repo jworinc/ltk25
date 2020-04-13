@@ -132,6 +132,7 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 
 	//	Enter click handler
 	enter() {
+		this.playmedia.stop();
 		this.lock_user_input = false;
 		if(this.uinputph === 'finish'){
 			if(this.getUserInputString() !== '') this.playCorrectSound();
