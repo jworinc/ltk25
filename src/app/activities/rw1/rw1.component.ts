@@ -622,7 +622,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
         that.iss_variants = [that.iss_word];
         that.blinkOnlyNext();
       });
-			this.elm.nativeElement.querySelector('span[data-wrdsspos="'+this.cw+'"] .gwf-answer-placeholder').innerText = w;
+      if(this.elm.nativeElement.querySelector('span[data-wrdsspos="'+this.cw+'"] .gwf-answer-placeholder'))
+			  this.elm.nativeElement.querySelector('span[data-wrdsspos="'+this.cw+'"] .gwf-answer-placeholder').innerText = w;
 			//setTimeout(function(){ 
 				//that.psn.origin_text = that.card.content[0].parts[that.current_set].title.replace(/\(/ig, '').replace(/\)/ig, ''); 
 				//that.psn.compileSentence(); 
@@ -634,8 +635,9 @@ export class Rw1Component extends BaseComponent implements OnInit {
 			//	Play wrong sound and show right answer
 			this.playmedia.action('CHONG', function(){
 				//that.blinkAP(true);
-				//that.elm.nativeElement.querySelector('.gwf-answer-placeholder').style.width = 'auto';
-        that.elm.nativeElement.querySelector('span[data-wrdsspos="'+that.cw+'"] .gwf-answer-placeholder').innerText = that.iss_word;
+        //that.elm.nativeElement.querySelector('.gwf-answer-placeholder').style.width = 'auto';
+        if(that.elm.nativeElement.querySelector('span[data-wrdsspos="'+that.cw+'"] .gwf-answer-placeholder'))
+          that.elm.nativeElement.querySelector('span[data-wrdsspos="'+that.cw+'"] .gwf-answer-placeholder').innerText = that.iss_word;
         that.iss_variants = [that.iss_word];
         that.blinkOnlyNext();
 				//setTimeout(function(){

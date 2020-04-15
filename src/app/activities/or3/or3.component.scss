@@ -14,10 +14,12 @@
     margin-top: 2%;
     max-height: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
     background-color: lightblue;
     z-index: 9999;
     box-shadow: 0 0 3px #777;
     padding-top: 17px;
+    text-align: justify;
 }
 .or3-story-wrap span{
 	cursor: pointer;	

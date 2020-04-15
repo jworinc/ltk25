@@ -41,6 +41,7 @@ body {
 
 .translainable-word, .translainable-word-center{
 	position: relative;
+    margin: 0 0px 1px 0;
 }
 .translainable-word div, .translainable-word-center div{
 	display: none;
@@ -112,6 +113,7 @@ body {
 }
 span:hover[data-playw], span:hover[data-psword] {
 	background-color: rgb(0, 173, 239) !important;
+	margin: 0 0px 1px 0;
 }
 .translate-pointer{
     display: block;

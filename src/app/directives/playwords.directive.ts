@@ -45,6 +45,23 @@ export class PlaywordsDirective {
 	public origin_text = '';
 
 	@Input() silentPlay: boolean;
+
+	cleanWordPunctuation(word) {
+		let wrd = word.replace('.', '')
+					.replace('?', '')
+					.replace(',', '')
+					.replace(':', '')
+					.replace('"', '')
+					.replace('(', '')
+					.replace('!', '')
+					.replace(')', '')
+					.replace('“', '')
+					.replace('”', '')
+					.replace('`', '')
+					.replace('’', '')
+					.replace(';', '');
+		return wrd;
+	}
 	
 	initText() {
 		//	Get content of element which words must be playable
@@ -52,7 +69,7 @@ export class PlaywordsDirective {
 		this.origin_text = this.innerText;
 		//	Check if nothing in element then go back
 		if(this.innerText === "") return;
-		let _wordarr = this.innerText.split(' ');
+		let _wordarr = this.innerText.replace(this.html, '').replace(this.space_to_one, ' ').split(' ');
 		//	Filter markup to leave only words with spaces as delimiter
 		this.innerText = this.innerText.replace(this.html, '').replace(this.space_to_one, ' ').replace(this.punctuation, '').replace(this.dots, ' ').replace(this.slashes, ' ');
 	  	//	Convert plain words string to array
@@ -62,6 +79,7 @@ export class PlaywordsDirective {
 		for(let i in this.words_arr)	{
 			let w = this.words_arr[i];
 			//if(this.unique_words.indexOf(w) >= 0 || w === ' ' || w === '') continue;
+			if(w === ' ' || w === '') continue;
 			this.unique_words.push(w);
 		}
 
@@ -74,7 +92,7 @@ export class PlaywordsDirective {
 		let _html = '';
 		let _words = [];
 		for(let i in this.unique_words){
-			let w = this.unique_words[i];
+			let w = this.unique_words[i].trim();
 			let pw = w.replace("'", '');
 			if(/[\d]+/.test(w)) continue;
 			// let rg = new RegExp('\\b(?<!\-)'+w+'(?!(\<|\"\>|\=))\\b');
@@ -90,16 +108,13 @@ export class PlaywordsDirective {
 					if(lastword){
 						lastword = lastword.replace('-', '')
 					}
-					if (lastword && word.includes('-') && lastword==w) {
+					if (lastword && word.includes('-') && lastword==w && split_word.indexOf('<span') < 0) {
 						_wordarr[index] = '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + split_word[0] + '">' + split_word[0] + '<div>?</div></span>' + split_word[1];
 					}
-					if (wordExistenceCount == 1 && (word.replace('.', '') == w
-						|| word.replace(',', '') == w || word.replace(':', ' ') == w
-						|| word.replace('(', '') == w || word.replace('!', '') == w
-						|| word.replace(')', '') == w || word.replace(';', '') == w)) {
+					if (wordExistenceCount == 1 && this.cleanWordPunctuation(word) == w) {
 
 						if (word.split(w).length > 1) {
-							_wordarr[index] = '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + '<div>?</div></span>' + word.split(w)[1];
+							_wordarr[index] = word.split(w)[0] + '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + '<div>?</div></span>' + word.split(w)[1];
 							if (word.includes('(')) {
 								_wordarr[index] = '' + '(' + '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + '<div>?</div></span>';
 							}
@@ -109,10 +124,13 @@ export class PlaywordsDirective {
 						count = 1;
 						return;
 					}
-					if (wordExistenceCount > 1 && word.replace('.', '') == w && count === 0) {
+					if (wordExistenceCount > 1 && this.cleanWordPunctuation(word) == w && count === 0) {
 						const subwordExistenceCount = word.split('<span').length - 1;
 						if (subwordExistenceCount == 0) {
-							_wordarr[index] = '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + ' <div>?</div></span>';
+							if(word.split(w).length > 1)
+								_wordarr[index] = word.split(w)[0] + '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + '<div>?</div></span>' + word.split(w)[1];
+							else
+								_wordarr[index] = '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + ' <div>?</div></span>';
 							count = 1;
 							return;
 						}
@@ -124,14 +142,36 @@ export class PlaywordsDirective {
 				// customeHtml = customeHtml + '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-psword="' + w + '">' + w + '</span>';
 				// const wordExistenceCount = this.origin_text.split(w).length - 1;
 				_wordarr.forEach((word, index) => {
-					if (wordExistenceCount == 1 && word.replace('.', '') == w) {
-						_wordarr[index] = '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + '</span>';
+					let replacewords = word.replace('-', ' -');
+					const split_word = replacewords.split(' ');
+					let lastword  = split_word[length + 1];
+					if(lastword){
+						lastword = lastword.replace('-', '')
+					}
+					if (lastword && word.includes('-') && lastword==w) {
+						_wordarr[index] = '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + split_word[0] + '">' + split_word[0] + '</span>' + split_word[1];
+					}
+					if (wordExistenceCount == 1 && this.cleanWordPunctuation(word) == w) {
+
+						if (word.split(w).length > 1) {
+							_wordarr[index] = word.split(w)[0] + '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + '</span>' + word.split(w)[1];
+							if (word.includes('(')) {
+								_wordarr[index] = '' + '(' + '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + '</span>';
+							}
+						} else {
+							_wordarr[index] = '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + ' </span>';
+						}
+						count = 1;
 						return;
 					}
-					if (wordExistenceCount > 1 && word.replace('.', '') == w) {
+					if (wordExistenceCount > 1 && this.cleanWordPunctuation(word) == w && count === 0) {
 						const subwordExistenceCount = word.split('<span').length - 1;
 						if (subwordExistenceCount == 0) {
-							_wordarr[index] = '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + '</span>';
+							if(word.split(w).length > 1)
+								_wordarr[index] = word.split(w)[0] + '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + '</span>' + word.split(w)[1];
+							else
+								_wordarr[index] = '<span data-click-ev-bound="false" class="translainable-word" data-wordpos="' + i + '" data-playw="' + w + '">' + w + ' </span>';
+							count = 1;
 							return;
 						}
 
@@ -194,6 +234,7 @@ export class PlaywordsDirective {
 				//	Set click event for translation
 				if(this.op.show_word_translation){
 					let tr = pw.querySelector('div');
+					if(!tr) continue;
 					tr.addEventListener('click', (e)=>{
 						//	If mouse event locked by feedback
     					if(that.pe.mouseLock()) return;
@@ -219,6 +260,7 @@ export class PlaywordsDirective {
 		let rootclass = 'card-block-item';
 		let rootn = null;
 		let next_node = this.trelm.parentNode;
+		if(!next_node) return;
 		for(let i = 0; i < 10; i++) {
 			if(!next_node.classList.contains(rootclass)) {
 				next_node = next_node.parentNode;

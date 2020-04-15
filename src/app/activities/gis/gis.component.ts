@@ -432,7 +432,7 @@ export class GisComponent extends BasebwComponent implements OnInit, DoCheck {
 			this.enableNextCard();
 			let a = this.display_result.wrong + this.display_result.right;
 			let b = this.card.content.length;
-			if(a == b){				
+			if(a >= b){				
 				this.lastUncomplete = this.card.content[0].RespAtEnd[0];
 				this.card.content[0].desc = this.card.content[0].RespAtEnd[0].pointer_to_value;
 				this.setGlobalDesc(this.card.content[0].desc);

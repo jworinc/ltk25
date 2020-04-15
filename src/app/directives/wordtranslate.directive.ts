@@ -154,7 +154,8 @@ export class WordtranslateDirective {
 		// Find root node for popup
 		let rootclass = 'card-block-item';
 		let rootn = null;
-		let next_node = this.trelm.parentNode;
+    let next_node = this.trelm.parentNode;
+    if(!next_node) return;
 		for(let i = 0; i < 10; i++) {
 			if(!next_node.classList.contains(rootclass)) {
 				next_node = next_node.parentNode;
