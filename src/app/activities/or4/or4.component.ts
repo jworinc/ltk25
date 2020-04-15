@@ -223,7 +223,7 @@ export class Or4Component extends Or3Component implements OnInit, DoCheck {
 	//	Show question
 	public current_question = 0;
 	showQuestion() {
-
+		let that = this;
 		if(typeof this.card.content[0].questions !== 'undefined' && 
 			typeof this.card.content[0].questions.length !== 'undefined' && 
 			this.card.content[0].questions.length > this.current_question){
@@ -258,7 +258,13 @@ export class Or4Component extends Or3Component implements OnInit, DoCheck {
 				}
 				vr += '</span>';
 				this.or4el.nativeElement.querySelector('.or3-story-question-wrap').innerHTML = qt+vr;
-
+				this.or4el.nativeElement.querySelectorAll("input[name='user_input']").forEach((e)=>{
+					if(e) {
+						e.onchange = ()=>{
+							that.enter();
+						}
+					}
+				});
 			} else {
 				this.answer_type = 'word';
 				//	Get answer word
