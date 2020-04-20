@@ -177,7 +177,7 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 		}
 		//	Phase 4 rec instructions, if mic is disabled
 		else if(typeof this.card.content[0].RecInst !== 'undefined' && this.card.content[0].RecInst.length > 0 && this.uinputph === 'rec' && !this.global_recorder){
-			this.finishOrContinueBW(function(){ this.playCardDescription(); });
+			this.finishOrContinueBW(function(){ that.playCardDescription(); });
 		}
 		//	Phase 5 listen instructions
 		else if(typeof this.card.content[0].PlayInst !== 'undefined' && this.card.content[0].PlayInst.length > 0 && this.uinputph === 'listen'){
