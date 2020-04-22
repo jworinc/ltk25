@@ -47,6 +47,11 @@ export class AuditoryComponent extends BasetestComponent implements OnInit {
     this.test_complete = false;
     this.getWords();
   }
+  
+  repeat() {
+    this.pms.stop();
+    this.pms.word(this.card[this.ind].answer.wavename,function(){});
+  }
 
   getWords(){
     this.pms.word(this.card[this.ind].answer.wavename,function(){});
