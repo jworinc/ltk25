@@ -559,6 +559,9 @@ export class Ar1Component extends BaseComponent implements OnInit {
 
 				if(this.current_presented < this.max_presented){
 					this.playmedia.action('CHIMES', function(){
+						
+					}, 1000);
+					setTimeout(()=>{
 						that.current_card_instance++;
 						that.elm.nativeElement.querySelector('.content_right_answer_word').style.opacity = '0';
 						that.hide_translation_icon = true;
@@ -568,7 +571,7 @@ export class Ar1Component extends BaseComponent implements OnInit {
 							that.current_presented++; 
 							that.playContentDescription();
 						}, 300);
-					}, 2000);
+					}, 1000);
 						
 				} else {
 					

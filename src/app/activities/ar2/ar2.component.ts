@@ -211,7 +211,7 @@ export class Ar2Component extends BaseComponent implements OnInit {
 			this.card_instance = this.expected_string = 'How Many Syllables? ' + this.answer_word + ' ('+this.expected+')';
 			this.result();
 			this.disableMoveNext();
-			this.enter();
+			//this.enter();
 		}
 		this.checkIfComplete();
 
@@ -268,6 +268,7 @@ export class Ar2Component extends BaseComponent implements OnInit {
 		this.elm.nativeElement.querySelectorAll('button').forEach((e)=>{
 			e.classList.remove('btn-success');
 			e.classList.remove('btn-warning');
+			e.blur();
 		});
 		this.input_data = 0;
 		
@@ -285,20 +286,22 @@ export class Ar2Component extends BaseComponent implements OnInit {
 		setTimeout(function(){ that.elm.nativeElement.querySelector('.card-syllables-body-wrap-ar2').style.opacity = '0';; }, 3000);
 	}
 
+	public config_next_task_in_progress = false;
 	checkIfComplete() {
 
 		//	Filter all user data 
 		this.input_data = +this.input_data;
-		
+		this.playmedia.stop();
 		//	Get user answer
 		let result = this.input_data;
 		let that = this;
 		//	If user input is not wrong
 		if(result === this.expected){
-
+			this.clearUserInput();
 			this.elm.nativeElement.querySelector('.card-syllables-body-wrap-ar2').style.opacity = '1';
-
+			
 			if(this.current_presented < this.max_presented){
+				this.config_next_task_in_progress = true;
 				this.playmedia.action('CHIMES', function(){
 
 					//	Play 'The word is...'
@@ -316,6 +319,7 @@ export class Ar2Component extends BaseComponent implements OnInit {
 								that.current_card_instance++;
 								that.input_data = 0;
 								that.setCard();
+								that.config_next_task_in_progress = false;
 								setTimeout(function(){ 
 									that.current_presented++; 
 									that.playContentDescription();
@@ -347,6 +351,8 @@ export class Ar2Component extends BaseComponent implements OnInit {
 					}
 				}
 			}
+		} else {
+			this.enter();
 		}
 		//	If current card is active
 		/*
@@ -362,6 +368,7 @@ export class Ar2Component extends BaseComponent implements OnInit {
 	}
 
 	enter(silent = false) {
+		//return;
 		let that = this;
 		this.playmedia.stop();
 		if(!this.validate()){
@@ -386,6 +393,22 @@ export class Ar2Component extends BaseComponent implements OnInit {
 					});
 				} else {
 					that.enableNextCard();
+				}
+			} else {
+				//	When next task configuration process was interrupted by enter, restart it
+				if(this.config_next_task_in_progress) {
+					//	Continue with next word
+					that.elm.nativeElement.querySelector('.card-syllables-body-wrap-ar2').style.opacity = '0';
+					that.current_card_instance++;
+					that.input_data = 0;
+					that.setCard();
+					that.config_next_task_in_progress = false;
+					setTimeout(function(){ 
+						that.current_presented++; 
+						that.playContentDescription();
+					}, 300);
+				} else {
+					that.playContentDescription();
 				}
 			}
 		}
