@@ -31,7 +31,7 @@
 			<tr [hidden]="placement.results.length === 0">
 				<td>{{ 'your_level' | translate }}: {{ placement.level }}</td>
 				<td></td>
-				<td>{{ 'start_ltk_from' | translate }}:&nbsp;Break&nbsp;{{ placement.break }}</td>
+				<td>{{ 'start_ltk_from' | translate }}:&nbsp;Break&nbsp;{{ placement.break }}&nbsp;{{ 'lesson' | translate }}&nbsp;{{ placement.lesson }}</td>
 				<td>{{ placement.end }}</td>
 			</tr>
 			<tr [hidden]="placement.errors.length !== 0 || placement.results.length !== 0">
