@@ -108,7 +108,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public main_app_screen: boolean = false;
   public beep_start_sound: any;
   public yhnry_sound: any;
-  public global_recorder: boolean = false;
+  public global_recorder: boolean = true;
   public end_lesson_flag: boolean = false;
   public recstart_event: EventEmitter<any> = new EventEmitter();
   public recstop_event: EventEmitter<any> = new EventEmitter();
@@ -174,6 +174,31 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
         // the lang to use, if the lang isn't available, it will use the current loader to get them
         this.translate.use(Option.getLocale());
+
+        //  Attach beep sound to recorder start rec event
+        let that = this;
+        this.recorder.start_recording_ev.subscribe(()=>{
+          if(typeof that.beep_start_sound !== 'undefined' && typeof that.beep_start_sound.play !== 'undefined') {
+            alert((window as any).Howler.ctx.state);
+            that.beep_start_sound.volume(that.global_volume);
+            that.beep_start_sound.play();
+          }
+          if(!that.global_recorder) {
+            that.global_recorder = true;
+            that.setGlobalRecorder(that.global_recorder);
+          }
+        });
+
+        this.recorder.mic_disabled_ev.subscribe(()=>{
+          if(that.global_recorder) {
+            that.global_recorder = false;
+            that.setGlobalRecorder(that.global_recorder);
+          }
+          alert(that.translate.instant('mic_disabled_msg'));
+          clearInterval(that.rec_start_interval);
+          that.rec_time = 0;
+          if(that.rec_toggle) that.recToggle();
+        });
   }
 
   ngOnInit() {
@@ -264,6 +289,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.route_change_event.unsubscribe();
     this.lang_change_event.unsubscribe();
     this.color_change_event.unsubscribe();
+    this.recorder.start_recording_ev.unsubscribe();
+    this.recorder.mic_disabled_ev.unsubscribe();
     //this.student_info_event.unsubscribe();
   }
 
@@ -280,7 +307,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.setCurrentCardPosition(this.cpos);
     let that = this;
     setTimeout(()=>{ that.refreshNav(); that.setCurrentCardDescriptor(); }, 100);
-    //this.setGlobalRecorder(true);
+    that.global_recorder = true;
+    that.setGlobalRecorder(that.global_recorder);
     this.setSidetripMode(this.sidetripmode);
     this.setGlobalStart(this.global_start);
   }
@@ -686,10 +714,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
       let wait_audio_ctx_counter = 0;
       let waitForAudioContext = function() {
-        if(!that.recorder.audio_context_enable) {
+        if(!that.recorder.recorder_init_ready) {
           if(wait_audio_ctx_counter > 10){
             alert(that.translate.instant('mic_disabled_msg'));
-            that.global_recorder = false;
+            that.global_recorder = true;
             that.setGlobalRecorder(that.global_recorder);
             enableLesson();
             return;
@@ -705,7 +733,14 @@ export class LessonComponent implements OnInit, AfterViewInit {
           enableLesson();
         }
       }
-      waitForAudioContext();
+      //waitForAudioContext();
+      setTimeout(()=>{
+        that.global_recorder = true;
+        that.setGlobalRecorder(that.global_recorder);
+        enableLesson();
+      }, 20);
+      
+
       //  Send activity log begin Lesson message
       if(!this.sidetripmode){
         this.logging.lessonBegin(this.student.lu)
@@ -1603,15 +1638,15 @@ export class LessonComponent implements OnInit, AfterViewInit {
       this.rec_exists = false;
       
       //  Start recording
-      setTimeout(function(){ 
+      //setTimeout(function(){ 
         that.recorder.start(); 
         that.recstart_event.emit();
-      }, 600);
+      //}, 10);
       
-      if(typeof this.beep_start_sound !== 'undefined' && typeof this.beep_start_sound.play !== 'undefined') {
-        this.beep_start_sound.volume(this.global_volume);
-        this.beep_start_sound.play();
-      }
+      //if(typeof this.beep_start_sound !== 'undefined' && typeof this.beep_start_sound.play !== 'undefined') {
+      //  this.beep_start_sound.volume(this.global_volume);
+      //  this.beep_start_sound.play();
+      //}
 
     } else {
       //  Change rec flag
@@ -1620,10 +1655,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
       this.rec_exists = true;
       
       //  Stop recording
-      setTimeout(function(){ 
+      //setTimeout(function(){ 
         that.recorder.stop(); 
         that.recstop_event.emit();
-      }, 500);
+      //}, 500);
     }
   }
 
@@ -1634,7 +1669,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   //  Rec interval instance
   public rec_start_interval = null;
   //  Delay before start
-  public delay_before_rec_start = 140;
+  public delay_before_rec_start = 160;
   //  Time of current record
   public rec_time = 0;
   //  Flag that represent record button state
@@ -1644,28 +1679,39 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   startRecordingOfInitSample() {
     let that = this;
+    if(that.rec_toggle) return;
     //this.recToggle();
+    clearInterval(that.rec_start_interval);
     this.rec_start_interval = setInterval(function() {
-      that.rec_time += 20;
+      if(that.recorder.audio_context_enable && that.recorder.recording_started) that.rec_time += 80;
+      if(!that.global_recorder && !that.recorder.audio_context_enable && that.rec_toggle) {
+        /*
+        clearInterval(that.rec_start_interval);
+        that.rec_time = 0;
+        if(that.rec_toggle) that.recToggle();
+        return;
+        */
+        //that.rec_time += 40;
+      }
       if(!that.rec_toggle){
         that.recToggle();
       }
       //  Check if recording was started and it duration is more than allowed
       //  stop recording
       if(that.rec_time >= that.max_rec_duration){
-        clearTimeout(that.rec_start_interval);
+        clearInterval(that.rec_start_interval);
         that.rec_time = 0;
         if(that.rec_toggle) that.recToggle();
       }
 
       //  Check if rec button was released and minimal duration reached
       if(that.rec_time >= that.min_rec_duration && that.rec_button_release){
-        clearTimeout(that.rec_start_interval);
+        clearInterval(that.rec_start_interval);
         that.rec_time = 0;
         if(that.rec_toggle) that.recToggle();
       }
 
-    }, 20);
+    }, 80);
   }
 
   recUp() {
@@ -1680,15 +1726,17 @@ export class LessonComponent implements OnInit, AfterViewInit {
     //  Intermediate function to check audio context and start recording
     let wait_audio_ctx_counter = 0;
     clearTimeout(that.waiting_audioctx_timer);
+    that.waiting_audioctx_timer = null;
     let waitForAudioContext = function() {
       if(!that.recorder.audio_context_enable) {
-        if(wait_audio_ctx_counter > 30){
+        if(wait_audio_ctx_counter > 20){
           alert(that.translate.instant('mic_disabled_msg'));
           that.global_recorder = false;
           that.setGlobalRecorder(that.global_recorder);
+          clearTimeout(that.waiting_audioctx_timer);
           return;
         } else {
-          that.waiting_audioctx_timer = setTimeout(waitForAudioContext, 150);
+          that.waiting_audioctx_timer = setTimeout(waitForAudioContext, 100);
           wait_audio_ctx_counter++;
           return;
         }
@@ -1696,20 +1744,30 @@ export class LessonComponent implements OnInit, AfterViewInit {
       } else {
         that.global_recorder = true;
         setTimeout(()=>{ that.setGlobalRecorder(that.global_recorder); }, 100);
-        that.startRecordingOfInitSample();
+        clearTimeout(that.waiting_audioctx_timer);
       }
     }
     
-    if(!this.recorder.audio_context_enable) {
+    this.playmedia.stop();
+
+    if(!this.recorder.audio_context_enable && !this.waiting_audioctx_timer) {
       
       //  Enable audio context
-      this.recorder.init();
-      waitForAudioContext();
+      if(!this.recorder.recorder_init_ready) this.recorder.init();
+      //waitForAudioContext();
+      this.startRecordingOfInitSample();
       return;
 
     }
-    clearTimeout(this.rec_start_interval);
-
+    
+    if(this.recorder.audio_context_enable && !that.global_recorder) {
+      that.global_recorder = true;
+      that.setGlobalRecorder(that.global_recorder);
+      clearTimeout(that.waiting_audioctx_timer);
+    }
+    
+    //clearInterval(this.rec_start_interval);
+    
     this.startRecordingOfInitSample();
 
   }
@@ -1770,12 +1828,16 @@ export class LessonComponent implements OnInit, AfterViewInit {
   */
 
   setNoRecordItem() {
-    //alert("You have no recordings yet!");
+    let that = this;
     this.global_desc = this.translate.instant('no_recording_msg');
     if(typeof this.yhnry_sound !== 'undefined' && typeof this.yhnry_sound.play !== 'undefined') {
       this.yhnry_sound.stop();
       this.yhnry_sound.volume(this.global_volume);
       this.yhnry_sound.play();
+      this.yhnry_sound.on('end', function(){
+        that.playstop_event.emit();
+      });
+      
     }
   }
 
@@ -1797,7 +1859,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
 
     // Stop recording
-    clearTimeout(that.rec_start_interval);
+    clearInterval(that.rec_start_interval);
     that.rec_time = 0;
     if(that.rec_toggle) {
       that.recToggle();

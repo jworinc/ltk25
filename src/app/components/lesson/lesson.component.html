@@ -7,7 +7,10 @@
             <div class='main-app-wrapp'>
 
                 <div class='top-and-slide-container-wrap'>
-
+                    <!-- Sidetrip mode enabled message -->
+                    <div class='row sidetrip-mode' *ngIf='!global_recorder' style='background-color: blue;'>
+                        <span class='sidetrip-message'>{{ 'mic_disabled' | translate }}</span>
+                    </div>
                     <!-- Sidetrip mode enabled message -->
                     <div class='row sidetrip-mode' *ngIf='sidetripmode'>
                         <span class='sidetrip-message'>{{ 'sidetrip_mode' | translate }}<span class='sidetrip-disable-btn' (click)="disableSidetrip()">&nbsp;&nbsp;&nbsp;{{ 'here' | translate }}</span>.</span>

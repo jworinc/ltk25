@@ -209,4 +209,8 @@ export class DataloaderService {
       }).toPromise();
   }
 
+  sendLinkExpiredNotificationEmail(link) {
+    return this.http.get(`${this.base_url}/service/expired/${link}`).toPromise();
+  }
+
 }
