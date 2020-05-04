@@ -3,6 +3,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { PlaymediaService } from './services/playmedia.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { PickElementService } from './services/pick-element.service';
+import { LoggingService } from './services/logging.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,8 @@ export class AppComponent {
     private el:ElementRef,
     private playmedia: PlaymediaService,
     private router: Router,
-    private pe: PickElementService
+    private pe: PickElementService,
+    private lg: LoggingService
   ) { 
 
     this.router.events.subscribe(event => {
@@ -41,6 +43,7 @@ export class AppComponent {
       console.log('VisibilityChange event');
       this.playmedia.stop();
       this.playmedia.immidiate_stop_event.emit();
+      this.lg.on_leave_lesson.emit();
     }
     
   }
@@ -50,6 +53,7 @@ export class AppComponent {
     console.log('Blur Change event');
     this.playmedia.stop();
     this.playmedia.immidiate_stop_event.emit();
+    this.lg.on_leave_lesson.emit();
   }
 
   @HostListener('document:click', ['$event'])

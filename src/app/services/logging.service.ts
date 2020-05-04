@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TokenService } from './token.service';
 import { share } from 'rxjs/operators';
@@ -19,6 +19,8 @@ export class LoggingService {
 	public single_types = ['AL1', 'GSC', 'GWM', 'OR1', 'OR3', 'OR4', 'SYP', 'SET', 'SIW', 'CAR'];
 	private base_url = 'https://api.ltk.cards/api';
 	private current_lesson = 0;
+
+	public on_leave_lesson = new EventEmitter<any>();
 
 	setCurrentLesson(l) {
 		this.current_lesson = l;

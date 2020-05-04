@@ -11,6 +11,7 @@ export class PlaymediaService {
    constructor(private opt: OptionService, private dl: DataloaderService) { 
 		this.ltkmediaurl = opt.getMediaStorage();
 		this.immidiate_stop_event = new EventEmitter<boolean>();
+		Howler.autoSuspend = false;
    }
 
   public play_sequence = [];
