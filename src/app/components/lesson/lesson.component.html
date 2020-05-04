@@ -29,7 +29,7 @@
                         <span class='top-toolbar-rec' [ngClass]="{'blinkhighlight': blinkrec}">
                             <span class='top-toolbar-rec-icon card-content-rec-button' title="{{ 'rec_btn' | translate }}"
                                 (mousedown)="recDown()" (touchstart)="recDown()" (mouseup)="recUp()" (touchend)="recUp()">
-                                <span class='top-toolbar-rec-redcircle' *ngIf='rec_toggle'></span>
+                                <span class='top-toolbar-rec-redcircle' *ngIf='rec_toggle && recorder.recording_started'></span>
                             </span>
                         </span>
                         <span class='top-toolbar-listen' (click)='playStart();' title="{{ 'listen_btn' | translate }}"

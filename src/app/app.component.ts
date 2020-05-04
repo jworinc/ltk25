@@ -61,9 +61,9 @@ export class AppComponent {
     this.pe.setNewElement(ev.target);
   }
 
-  @HostListener('document:mousemove', ['$event'])
-  onDocumentMousemove(ev:any) {
+  //@HostListener('document:mousemove', ['$event'])
+  //onDocumentMousemove(ev:any) {
     //this.pe.pointNewElement(ev.target);
-  }
+  //}
 
 }

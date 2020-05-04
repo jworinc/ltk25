@@ -158,7 +158,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     private componentFactoryResolver: ComponentFactoryResolver,
     private el:ElementRef,
     private route: ActivatedRoute,
-    private recorder: RecorderService,
+    public  recorder: RecorderService,
     private playmedia: PlaymediaService,
     private preloader: MediapreloaderService,
     private logging: LoggingService,
@@ -178,11 +178,16 @@ export class LessonComponent implements OnInit, AfterViewInit {
         //  Attach beep sound to recorder start rec event
         let that = this;
         this.recorder.start_recording_ev.subscribe(()=>{
+          /*
           if(typeof that.beep_start_sound !== 'undefined' && typeof that.beep_start_sound.play !== 'undefined') {
-            alert((window as any).Howler.ctx.state);
+            //alert((window as any).Howler.ctx.state);
+            
             that.beep_start_sound.volume(that.global_volume);
             that.beep_start_sound.play();
+            
+            
           }
+          */
           if(!that.global_recorder) {
             that.global_recorder = true;
             that.setGlobalRecorder(that.global_recorder);
@@ -1636,18 +1641,20 @@ export class LessonComponent implements OnInit, AfterViewInit {
       this.rec_toggle = true;
       this.rec_stoped = false;
       this.rec_exists = false;
+
+      if(typeof that.beep_start_sound !== 'undefined' && typeof that.beep_start_sound.play !== 'undefined') {
+        
+        that.beep_start_sound.volume(that.global_volume);
+        that.beep_start_sound.play();
+        
+      }
       
       //  Start recording
-      //setTimeout(function(){ 
+      setTimeout(function(){ 
         that.recorder.start(); 
         that.recstart_event.emit();
-      //}, 10);
+      }, 400);
       
-      //if(typeof this.beep_start_sound !== 'undefined' && typeof this.beep_start_sound.play !== 'undefined') {
-      //  this.beep_start_sound.volume(this.global_volume);
-      //  this.beep_start_sound.play();
-      //}
-
     } else {
       //  Change rec flag
       this.rec_toggle = false;

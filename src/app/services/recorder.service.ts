@@ -207,6 +207,7 @@ export class RecorderService {
 			// webkit shim, receive audio context cross browser
 			//window.AudioContext = window.AudioContext; || window.webkitAudioContext;
 			navigator = (window as any).navigator;
+			
 			navigator.getUserMedia = (navigator.getUserMedia ||
 											navigator.webkitGetUserMedia ||
 											navigator.mozGetUserMedia ||
@@ -219,7 +220,7 @@ export class RecorderService {
 			//	Get new instance of audio context
 			//audio_context = this.actx = new AudioContext();
 			console.log('Audio context set up.');
-			console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+			//console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
 			
 			//alert('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
 			
