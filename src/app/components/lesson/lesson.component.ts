@@ -207,7 +207,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
         //  When user leave screen or change tab, got to snooze
         this.logging.on_leave_lesson.subscribe(()=>{
-          this.goToSnooze();
+          //this.goToSnooze();
+          that.snooze_time = 170;
         });
   }
 
