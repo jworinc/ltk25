@@ -125,10 +125,15 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public start_button_animation: any = null;
   public lesson_finished: boolean = false;
 
+  //  Services events subscriptions
   public route_change_event: any;
   public color_change_event: any;
   public student_info_event: any;
   public lang_change_event: any;
+  public start_recording_event: any;
+  public mic_disabled_event: any;
+  public on_leave_lesson_event: any;
+  public student_info_event_subscription: any;
 
   public card_descriptor = {
     lesson: 0,
@@ -138,7 +143,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   public snooze_timer: any = null;
   public snooze_time = 0;
-  public snooze_delay = 180;
+  public snooze_delay = 240;
 
   //  Flag for enabling stop of media playback on any user action
   public action_media_stop = true;
@@ -177,7 +182,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
         //  Attach beep sound to recorder start rec event
         let that = this;
-        this.recorder.start_recording_ev.subscribe(()=>{
+        this.start_recording_event = this.recorder.start_recording_ev.subscribe(()=>{
           /*
           if(typeof that.beep_start_sound !== 'undefined' && typeof that.beep_start_sound.play !== 'undefined') {
             //alert((window as any).Howler.ctx.state);
@@ -194,7 +199,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
           }
         });
 
-        this.recorder.mic_disabled_ev.subscribe(()=>{
+        this.mic_disabled_event = this.recorder.mic_disabled_ev.subscribe(()=>{
           if(that.global_recorder) {
             that.global_recorder = false;
             that.setGlobalRecorder(that.global_recorder);
@@ -206,7 +211,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
         });
 
         //  When user leave screen or change tab, got to snooze
-        this.logging.on_leave_lesson.subscribe(()=>{
+        this.on_leave_lesson_event = this.logging.on_leave_lesson.subscribe(()=>{
           //this.goToSnooze();
           that.snooze_time = 170;
         });
@@ -219,7 +224,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
     //  Init studetn information
     this.student_info_event = this.DL.getStudentInfo();
-    this.student_info_event.subscribe(
+    this.student_info_event_subscription = this.student_info_event.subscribe(
         data => this.handleStudentInfo(data),
         error => {
           console.log(error);
@@ -300,9 +305,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.route_change_event.unsubscribe();
     this.lang_change_event.unsubscribe();
     this.color_change_event.unsubscribe();
-    this.recorder.start_recording_ev.unsubscribe();
-    this.recorder.mic_disabled_ev.unsubscribe();
-    //this.student_info_event.unsubscribe();
+    this.start_recording_event.unsubscribe();
+    this.mic_disabled_event.unsubscribe();
+    this.student_info_event_subscription.unsubscribe();
+    this.on_leave_lesson_event.unsubscribe();
   }
 
 
@@ -378,7 +384,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   //  Mouse move events
-  @HostListener('window:mousemove', ['$event'])
+  //@HostListener('window:mousemove', ['$event'])
   @HostListener('window:mousedown', ['$event'])
   @HostListener('window:mouseup', ['$event'])
   @HostListener('window:touchstart', ['$event'])

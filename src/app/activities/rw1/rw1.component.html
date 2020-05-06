@@ -59,7 +59,7 @@
             </span>
             
         </span>
-        <span class='sample-sentence interactive-ss' [hidden]="!cn.sentence" [innerHTML]="iss_display | bindhtml" app-playsentence [attr.data-ind]="'sent_'+cnkey" [attr.data-wrdsspos]="cnkey"></span>
+        <span class='sample-sentence interactive-ss' [hidden]="!cn.sentence && !iss_display" [innerHTML]="iss_display | bindhtml" app-playsentence [attr.data-ind]="'sent_'+cnkey" [attr.data-wrdsspos]="cnkey"></span>
         
       </div>
     </div>

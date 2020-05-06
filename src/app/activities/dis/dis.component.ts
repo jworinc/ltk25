@@ -466,7 +466,7 @@ export class DisComponent extends BaseComponent implements OnInit {
 			return;
 		}
 
-		let pr = /[\.\?\!]/;
+		let pr = /[\.\?\!\,\:\;\"\~\`\'\@\#\$\%\^\&\*\(\)\-\_\+\=\{\}\[\]\<\>\/]/ig;
 
 		//	Check if user complete answer
 		if(this.answer_sent.toLowerCase().replace(pr, '') === value.toLowerCase().replace(pr, '')){
@@ -496,9 +496,17 @@ export class DisComponent extends BaseComponent implements OnInit {
 		let s = this.answer_sent.substring(0, n);
 
 		//	Compare user input with right answer
-		if(s.toLowerCase() === value.toLowerCase()){
+		if(s.replace(pr, '').toLowerCase().trim() === value.replace(pr, '').toLowerCase().trim()){
+			
+			//	Check if next char is punctuation, input it automaticaly
+			//let nch = this.answer_sent.substring(n, 1);
+			//if(pr.test(nch)) {
+			//	s = this.answer_sent.substring(0, n + 1);
+			//}
+
 			inp.currentTarget.value = s;
 			setTimeout(()=>{ that.input_data = s; that.lock_user_input = false; }, 1);
+
 		} else {
 			//	Save for logging user mistake
 			if(this.user_answers === ''){
@@ -518,6 +526,7 @@ export class DisComponent extends BaseComponent implements OnInit {
 			setTimeout(()=>{ that.input_data = newval; that.lock_user_input = false; }, 3);
 			this.playmedia.stop();
 			this.playmedia.action('DING', function(){}, 30);
+			this.playsentence_started_flag = false;
 		}
 
 

@@ -565,20 +565,37 @@ export class Rw1Component extends BaseComponent implements OnInit {
     if(!backward) issi = this.iss_buffer[this.cw][0];
     else if(backward && this.cw > 0) issi = this.iss_buffer[this.cw-1][0];
     else issi = this.iss_buffer[this.cw][0];
+    if(typeof issi !== 'undefined' && issi && typeof issi.answered !== 'undefined'){
+      //  Reset answer flag if not answered
+      if(!issi.answered) this.user_answer_received_flag = false;
+      
+      //  Display sentence
+      this.iss_display = issi.iss_display;
+      //  Display variants
+      this.iss_variants = issi.iss_variants;
+      //  Expected word
+      this.iss_word = issi.word;
+      //  Origin sentence
+      this.iss_origin_sentence = issi.origin_sentence;
+      
+      this.compileInteractiveSS(issi.iss_display);
 
-    //  Reset answer flag if not answered
-    if(!issi.answered) this.user_answer_received_flag = false;
-    
-    //  Display sentence
-    this.iss_display = issi.iss_display;
-    //  Display variants
-    this.iss_variants = issi.iss_variants;
-    //  Expected word
-    this.iss_word = issi.word;
-    //  Origin sentence
-    this.iss_origin_sentence = issi.origin_sentence;
 
-    this.compileInteractiveSS(issi.iss_display);
+    } else {
+      //  Reset answer flag if not answered
+      this.user_answer_received_flag = true;
+      
+      //  Display sentence
+      this.iss_display = "No sentence";
+      //  Display variants
+      this.iss_variants = [];
+      //  Expected word
+      this.iss_word = this.card.content[this.cw].title;
+      //  Origin sentence
+      this.iss_origin_sentence = "No sentence";
+      this.compileInteractiveSS(this.iss_display);
+    }
+
 
   }
 
