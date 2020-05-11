@@ -120,6 +120,7 @@ import { ReversePipe } from './pipes/reverse.pipe';
 import { FontadjusterDirective } from './directives/fontadjuster.directive';
 import { PickElementService } from './services/pick-element.service';
 import { CourseExpireMsgComponent } from './components/course-expire-msg/course-expire-msg.component';
+import { LtkmenuComponent } from './components/ltkmenu/ltkmenu.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -217,6 +218,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReversePipe,
     FontadjusterDirective,
     CourseExpireMsgComponent,
+    LtkmenuComponent,
   ],
   imports: [
     BrowserModule,

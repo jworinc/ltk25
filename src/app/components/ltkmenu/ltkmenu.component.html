@@ -1,0 +1,26 @@
+<div id='app-settings-modal' class="modal fade show" tabindex="-1" role="dialog" style='z-index: 10100; display: block; padding-left: 0px; background-color: rgba(0, 0, 0, 0.7); overflow-y: auto;'>
+  <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title">{{ 'ltk_menu' | translate }}</h4>
+              <button type="button" class="close" (click)="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body" style="display: flex; flex-flow: row wrap;">
+              
+              <button class="btn btn-primary col-xl-4 col-lg-6 app-setting-item">{{ 'set_next_lesson' | translate }}</button>
+              <button class="btn btn-primary col-xl-4 col-lg-6 app-setting-item">{{ 'visit_our_website' | translate }}</button>
+              <button class="btn btn-primary col-xl-4 col-lg-6 app-setting-item">{{ 'visit_our_courses' | translate }}</button>
+              <button class="btn btn-primary col-xl-4 col-lg-6 app-setting-item">{{ 'support' | translate }}</button>
+              <button class="btn btn-primary col-xl-4 col-lg-6 app-setting-item">{{ 'find_tutor' | translate }}</button>
+              <button class="btn btn-primary col-xl-4 col-lg-6 app-setting-item">{{ 'change_username' | translate }}</button>
+              <button class="btn btn-primary col-xl-4 col-lg-6 app-setting-item">{{ 'join_chatroom' | translate }}</button>
+
+              <div class='clearfix'></div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-default" (click)='close()'>{{ 'close' | translate }}</button>
+              <button type="button" class="btn btn-primary" (click)='save()'>{{ 'save_changes' | translate }}</button>
+          </div>
+      </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

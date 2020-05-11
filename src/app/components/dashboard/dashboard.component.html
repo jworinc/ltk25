@@ -574,7 +574,8 @@
                 (showfeedback)="onShowFeedback()"
                 (shownotebook)="onShowNotebook()"
                 (showgrammar)="onShowGrammar()"
-                (showtesting)="onShowTesting()" 
+                (showtesting)="onShowTesting()"
+                (showltkmenu)="onShowLtkMenu()"
                 [lu]="current_lesson_title"
                 [last_uncomplete] = "student.lu"
                 [show_tool_pages_list]="false"
@@ -590,7 +591,9 @@
 
     <!--    Feedback window   -->
     <app-feedback  [show]='show_feedback_modal' [hidden]="!show_feedback_modal" (closefeedback)="onCloseFeedback()"></app-feedback>
-        
+       
+    <!--    LTK Menu   -->
+    <app-ltkmenu [show]='show_ltk_menu' [hidden]='!show_ltk_menu' (closeltkmenu)='onCloseLtkMenu()'></app-ltkmenu>
         
 </div>
 

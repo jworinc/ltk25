@@ -52,6 +52,7 @@ export class DashboardComponent implements OnInit {
   public current_lesson_title: string = '000';
   public show_setting_modal: boolean = false;
   public show_feedback_modal: boolean = false;
+  public show_ltk_menu: boolean = false;
 
   public current_lesson = 0;
   public cl: any = {};
@@ -375,6 +376,14 @@ export class DashboardComponent implements OnInit {
 
   onCloseFeedback() {
     this.show_feedback_modal = false;
+  }
+
+  onShowLtkMenu() {
+    this.show_ltk_menu = true;
+  }
+
+  onCloseLtkMenu() {
+    this.show_ltk_menu = false;
   }
 
   disableSidetrip() {
