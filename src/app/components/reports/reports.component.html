@@ -39,7 +39,8 @@
 
     <!--  Menu background   -->
     <app-msmenu (showsettings)="onShowSettings()"
-                (showfeedback)="onShowFeedback()" 
+                (showfeedback)="onShowFeedback()"
+                (showltkmenu)="onShowLtkMenu()" 
                 [lu]="current_lesson_title"
                 [show_tool_pages_list]="false"
                 [show_menu_open_button]="true">
@@ -57,6 +58,9 @@
         
     <!-- Close button for reports -->
     <button class="button-close-report" (click)="onCloseBack()"><i class="far fa-window-close"></i></button>
-    
+        
+    <!--    LTK Menu   -->
+    <app-ltkmenu [show]='show_ltk_menu' [hidden]='!show_ltk_menu' (closeltkmenu)='onCloseLtkMenu()' [student]="student"></app-ltkmenu>
+     
 
 </div>

@@ -64,6 +64,7 @@ export class ReportsComponent implements OnInit {
 	//	Setting modal 
 	public show_setting_modal: boolean = false;
 	public show_feedback_modal: boolean = false;
+	public show_ltk_menu: boolean = false;
 
 	public volume = 0;
 	public mic = 0;
@@ -71,6 +72,11 @@ export class ReportsComponent implements OnInit {
 	//	Last uncomplete lesson
 	public lu = 0;
 	public current_lesson_title = '000';
+	public student = {
+		name: 'Admin',
+	  	lu: 0,
+		sid_message: 'Message'
+	}
 
 	//	Reports show flags
 	public showme_report: boolean = true;
@@ -155,7 +161,9 @@ export class ReportsComponent implements OnInit {
 	//  Handle loaded student info
 	handleStudentInfo(data){
 	    console.log('Student Info:');
-	    console.log(data);
+		console.log(data);
+		this.student.name = data.user_name;
+    	this.student.lu = data.last_uncomplete;
 
 	    this.Option.setLanguage(data.options.language);
 	    
@@ -185,5 +193,14 @@ export class ReportsComponent implements OnInit {
 	onCloseBack() {
 		this.location.back();
 	}
+	
+	onShowLtkMenu() {
+		this.show_ltk_menu = true;
+	}
+
+	onCloseLtkMenu() {
+		this.show_ltk_menu = false;
+	}
+	
 
 }

@@ -197,6 +197,7 @@
                     (shownotebook)="onShowNotebook()"
                     (showgrammar)="onShowGrammar()"
                     (showtesting)="onShowTesting()"
+                    (showltkmenu)="onShowLtkMenu()"
                     [lu]="current_lesson_title"
                     [last_uncomplete] = "student.lu"
                     [show_tool_pages_list]="show_tool_pages_list"
@@ -228,5 +229,9 @@
     <!--    Snooze window    -->
     <app-snooze [hidden]="!show_snooze"
                 (continue)="continueLesson()"></app-snooze>
+       
+    <!--    LTK Menu   -->
+    <app-ltkmenu [show]='show_ltk_menu' [hidden]='!show_ltk_menu' (closeltkmenu)='onCloseLtkMenu()' [student]="student"></app-ltkmenu>
+     
         
 </div>

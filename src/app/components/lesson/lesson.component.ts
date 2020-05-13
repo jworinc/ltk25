@@ -60,6 +60,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public show_feedback_modal: boolean = false;
   public show_warncomplete_modal: boolean = false;
   public show_snooze: boolean = false;
+  public show_ltk_menu: boolean = false;
   public mode = 'dual';
   public cpos: number = 2;
   public scale: number = 0.9;
@@ -1642,6 +1643,16 @@ export class LessonComponent implements OnInit, AfterViewInit {
       if(!this.show_testing) this.show_start_screen = true;
     }
   }
+
+  
+  onShowLtkMenu() {
+    this.show_ltk_menu = true;
+  }
+
+  onCloseLtkMenu() {
+    this.show_ltk_menu = false;
+  }
+
 
 
 
