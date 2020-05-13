@@ -199,5 +199,18 @@
 	"send_request_to_orgadmin" : "Send notification to Organization Administrator",
 	"request_sent_to_orgadmin" : "Request was sent to Organization Administrator",
 	"course_expired_msg" : "Current course expired, your access was temporarily restricted. To continue learning process send request to organization administrator.",
-	"mic_disabled" : "Microphone disabled!"
+	"mic_disabled" : "Microphone disabled!",
+	"ltk_menu" : "LTK Menu",
+	"set_next_lesson" : "Set next lesson",
+	"visit_our_website" : "Visit our website",
+	"visit_our_courses" : "Visit our courses",
+	"support" : "Support",
+	"find_tutor" : "Find tutor",
+	"tutor_email" : "Tutor email",
+	"send_request" : "Send request",
+	"change_username" : "Change your name",
+	"join_chatroom" : "Join chatroom",
+	"save_new_student_name_error" : "Save new student name error!",
+	"your_request_was_sent" : "Your request was successfully sent to the tutor!",
+	"find_tutor_request_error" : "Error during send your request, please contact administrator!"
 }

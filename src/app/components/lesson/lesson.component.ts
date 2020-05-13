@@ -51,6 +51,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   public current_lesson_title: string = '000';
   public sidetripmode = false;
+  public nextlessonmode = false;
   public innerWidth: any;
   public innerHeight: any;
   public show_tool_pages_list: boolean = true;
@@ -218,7 +219,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
+    let that = this;
     //  Set lessons title
     this.title.setTitle('LTK-Lessons');
 
@@ -246,11 +247,20 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
 
     this.sub = this.route.params.subscribe(params => {
-      if(params.hasOwnProperty('n')){
-        this.n = +params['n']; // (+) converts string 'id' to a number
-        this.sidetripmode = true;
-        this.setSidetripMode(true);
+      
+      if(params.hasOwnProperty('n') && that.router.isActive("sidetrip", false)){
+        that.n = +params['n']; // (+) converts string 'id' to a number
+        that.sidetripmode = true;
+        that.setSidetripMode(true);
         console.log('Application runned in sidetrip mode!');
+        return;
+      }
+      else if(params.hasOwnProperty('n') && that.router.isActive("next", false)){
+        that.n = +params['n']; // (+) converts string 'id' to a number
+        that.nextlessonmode = true;
+        //that.setSidetripMode(true);
+        console.log('Application runned in next lesson mode!');
+        return;
       }
 
     });
@@ -264,8 +274,6 @@ export class LessonComponent implements OnInit, AfterViewInit {
       console.log('Change language event.');
       this.translate.use(this.Option.getLocale());
     });
-
-    let that = this;
 
     this.route_change_event = this.router.events.pipe(filter(event => event instanceof NavigationStart)).subscribe((e) => {
         if(that.router.getCurrentNavigation().previousNavigation.extractedUrl.toString() === "/lesson"){
@@ -480,13 +488,17 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
     
     //  Start loading cards according to last uncomplete lesson
-    if(!this.sidetripmode){
+    if(!this.sidetripmode && !this.nextlessonmode){
       this.loadCards(this.student.lu);
       this.current_lesson_title = this.getCurrentLessonTitle(this.student.lu);
       this.card_descriptor.lesson = this.student.lu;
       console.log('Run normally, start position setted to '+this.start_position+'!');
       this.title.setTitle('LTK-Lesson-'+this.card_descriptor.lesson);
     } else {
+      if(this.nextlessonmode) {
+        this.student.lu = this.n;
+        this.logging.setCurrentLesson(this.student.lu);
+      }
       this.loadCards(this.n);
       this.current_lesson_title = this.getCurrentLessonTitle(this.n);
       this.card_descriptor.lesson = this.n;

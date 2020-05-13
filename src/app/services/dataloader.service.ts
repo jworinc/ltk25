@@ -213,4 +213,16 @@ export class DataloaderService {
     return this.http.get(`${this.base_url}/service/expired/${link}`).toPromise();
   }
 
+  setStudentName(name) {
+    return this.http.post(`${this.base_url}/student/set/name`, {'name': name}, {
+      headers: this.Token.getAuthHeader()
+    }).toPromise();
+  }
+
+  sendStudentFindTutorRequest(email) {
+    return this.http.post(`${this.base_url}/student/send/findtutor`, {'email': email}, {
+      headers: this.Token.getAuthHeader()
+    }).toPromise();
+  }
+
 }

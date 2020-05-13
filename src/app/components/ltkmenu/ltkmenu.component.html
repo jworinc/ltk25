@@ -1,25 +1,56 @@
 <div id='app-settings-modal' class="modal fade show" tabindex="-1" role="dialog" style='z-index: 10100; display: block; padding-left: 0px; background-color: rgba(0, 0, 0, 0.7); overflow-y: auto;'>
-  <div class="modal-dialog modal-xl" role="document">
+  <div class="modal-dialog modal-md" role="document">
       <div class="modal-content">
           <div class="modal-header">
               <h4 class="modal-title">{{ 'ltk_menu' | translate }}</h4>
               <button type="button" class="close" (click)="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           </div>
-          <div class="modal-body" style="display: flex; flex-flow: row wrap;">
-              
-              <button class="btn btn-primary col-xl-4 col-lg-6 app-setting-item">{{ 'set_next_lesson' | translate }}</button>
-              <button class="btn btn-primary col-xl-4 col-lg-6 app-setting-item">{{ 'visit_our_website' | translate }}</button>
-              <button class="btn btn-primary col-xl-4 col-lg-6 app-setting-item">{{ 'visit_our_courses' | translate }}</button>
-              <button class="btn btn-primary col-xl-4 col-lg-6 app-setting-item">{{ 'support' | translate }}</button>
-              <button class="btn btn-primary col-xl-4 col-lg-6 app-setting-item">{{ 'find_tutor' | translate }}</button>
-              <button class="btn btn-primary col-xl-4 col-lg-6 app-setting-item">{{ 'change_username' | translate }}</button>
-              <button class="btn btn-primary col-xl-4 col-lg-6 app-setting-item">{{ 'join_chatroom' | translate }}</button>
-
-              <div class='clearfix'></div>
+          <div class="modal-body ltkmenu-wrap" style="display: flex; flex-flow: row wrap;">
+            <div class=" col-xl-12 col-lg-12">
+              <button class="btn btn-primary app-setting-item" [hidden]="set_next_lesson_sbitem" (click)="closeAllOptions(); setNextLesson();">{{ 'set_next_lesson' | translate }}</button>
+              <div class="ltk-submenu-item" [hidden]="!set_next_lesson_sbitem">
+                <h5>{{ 'set_next_lesson' | translate }}</h5>
+                <select id='language-select' [(ngModel)]="selected_next_lesson">
+                   
+                        <option *ngFor="let l of lessons" [attr.value]="l.number">{{ 'lesson' | translate }} {{ l.alias }}</option>
+                    
+                </select>
+                <button class="btn btn-success" (click)="setStudentNextLesson()">{{ 'go_to_lesson' | translate }}</button>
+              </div>
+            </div>
+            <div class=" col-xl-12 col-lg-12">
+              <a href="https://jwor.com" target="_blank"><button class="btn btn-primary app-setting-item">{{ 'visit_our_website' | translate }}</button></a>
+            </div>
+            <div class=" col-xl-12 col-lg-12">
+              <a href="https://jwor.com" target="_blank"><button class="btn btn-primary app-setting-item">{{ 'visit_our_courses' | translate }}</button></a>
+            </div>
+            <div class=" col-xl-12 col-lg-12">
+              <a href="https://jwor.com" target="_blank"><button class="btn btn-primary app-setting-item">{{ 'support' | translate }}</button></a>
+            </div>
+            <div class=" col-xl-12 col-lg-12">
+              <button class="btn btn-primary app-setting-item" [hidden]="findtutor_sbitem" (click)="closeAllOptions(); findTutor();">{{ 'find_tutor' | translate }}</button>
+              <div class="ltk-submenu-item" [hidden]="!findtutor_sbitem">
+                <h5>{{ 'find_tutor' | translate }}</h5>
+                <input type="text" [(ngModel)]="tutor_email" placeholder="{{ 'tutor_email' | translate }}" />
+                <button class="btn btn-success" (click)="sendRequestFindTutor()">{{ 'send_request' | translate }}</button>
+              </div>
+            </div>
+            <div class=" col-xl-12 col-lg-12">
+              <button class="btn btn-primary app-setting-item" [hidden]="change_username_sbitem" (click)="closeAllOptions(); changeUsername();">{{ 'change_username' | translate }}</button>
+              <div class="ltk-submenu-item" [hidden]="!change_username_sbitem">
+                  <h5>{{ 'change_username' | translate }}</h5>
+                  <input type="text" [(ngModel)]="student.name" placeholder="{{ 'your_name' | translate }}" />
+                  <button class="btn btn-success" (click)="saveStudentName()">{{ 'save' | translate }}</button>
+              </div>
+            </div>
+            <div class=" col-xl-12 col-lg-12">
+              <button class="btn btn-primary app-setting-item">{{ 'join_chatroom' | translate }}</button>
+            </div>
+            <div class='clearfix'></div>
           </div>
           <div class="modal-footer">
-              <button type="button" class="btn btn-default" (click)='close()'>{{ 'close' | translate }}</button>
-              <button type="button" class="btn btn-primary" (click)='save()'>{{ 'save_changes' | translate }}</button>
+              <button type="button" class="btn btn-primary" (click)='close()'>{{ 'close' | translate }}</button>
+              <!--<button type="button" class="btn btn-primary" (click)='save()'>{{ 'save_changes' | translate }}</button>-->
           </div>
       </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

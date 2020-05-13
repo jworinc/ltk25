@@ -593,7 +593,7 @@
     <app-feedback  [show]='show_feedback_modal' [hidden]="!show_feedback_modal" (closefeedback)="onCloseFeedback()"></app-feedback>
        
     <!--    LTK Menu   -->
-    <app-ltkmenu [show]='show_ltk_menu' [hidden]='!show_ltk_menu' (closeltkmenu)='onCloseLtkMenu()'></app-ltkmenu>
+    <app-ltkmenu [show]='show_ltk_menu' [hidden]='!show_ltk_menu' (closeltkmenu)='onCloseLtkMenu()' [student]="student"></app-ltkmenu>
         
 </div>
 

@@ -1,0 +1,21 @@
+.ltkmenu-wrap{
+
+}
+.ltkmenu-wrap div{
+    margin: 5px 0;
+}
+.ltkmenu-wrap>div>button, .ltkmenu-wrap>div>a>button{
+    width: 100%;
+}
+.ltkmenu-wrap>div>a{
+    display: block;
+    width: 100%;
+}
+.ltk-submenu-item input, .ltk-submenu-item select{
+    width: 100%;
+    margin-bottom: 10px;
+}
+.ltk-submenu-item button{
+    width: 39%;
+    float: right;
+}

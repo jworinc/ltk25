@@ -36,6 +36,11 @@ const routes: Routes = [
     canActivate: [AfterLoginService],
   },
   {
+    path: 'next/:n',
+    component: LessonComponent,
+    canActivate: [AfterLoginService],
+  },
+  {
     path: 'reports',
     component: ReportsComponent,
     canActivate: [AfterLoginService],
