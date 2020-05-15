@@ -121,6 +121,7 @@ import { FontadjusterDirective } from './directives/fontadjuster.directive';
 import { PickElementService } from './services/pick-element.service';
 import { CourseExpireMsgComponent } from './components/course-expire-msg/course-expire-msg.component';
 import { LtkmenuComponent } from './components/ltkmenu/ltkmenu.component';
+import { TalkingNotepadComponent } from './components/talking-notepad/talking-notepad.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -219,6 +220,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FontadjusterDirective,
     CourseExpireMsgComponent,
     LtkmenuComponent,
+    TalkingNotepadComponent
   ],
   imports: [
     BrowserModule,
@@ -240,7 +242,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SnotifyService, OptionService, CardbuilderService, PlaymediaService, RecorderService, MediapreloaderService, 
     LoggingService, ColorschemeService, CustomfieldService, ErrorLogService, Title,
     { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
-    /*{ provide: ErrorHandler, useClass: GlobalErrorHandler }*/ ],
+    { provide: ErrorHandler, useClass: GlobalErrorHandler } ],
     //{ provide: ErrorHandler, useClass: GlobalErrorHandler }],
   entryComponents: [ Al1Component, CarComponent, Al2Component, Ar1Component, Ar2Component, Ar3Component, Ar4Component, Ar5Component,
   Ar6Component, Or1Component, Or2Component, Or3Component, Or4Component, Bw1Component, Bw2Component, Bw3Component, Bw5Component,

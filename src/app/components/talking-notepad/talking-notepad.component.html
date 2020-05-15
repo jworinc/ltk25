@@ -1,0 +1,7 @@
+
+
+<div class="talking-notepad-root">
+  <button (click)="playWord()">Play</button>
+
+  <textarea rows="8" cols="5" [(ngModel)]="message" (keydown.space)="playWord()" (keydown.enter)="playWord()"></textarea>
+</div>
