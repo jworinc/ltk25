@@ -1,130 +1,166 @@
-<div class="card-block-item card-style-obj-single mobile-view" [ngClass]=" isNotebook ? 'card-block-rw1':''" [ngStyle]="nblayout">
-    <div class="notebook-title">
-      <h5>Notebook</h5>
-    </div>
-    <div id='app-is-loading-screen' *ngIf="data == undefined ?true:false" style='display: flex; text-align: center; justify-content: center; margin-top: 50px;'><img src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PGxpbmVhckdyYWRpZW50IGlkPSdGYXN0TG9hZGluZ0luZGljYXRvci1saW5lYXJHcmFkaWVudCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnIHgxPScxLjc4MDQnIHkxPScxNi4wMzc5JyB4Mj0nMzAuMTQzOScgeTI9JzE2LjAzNzknPjxzdG9wIG9mZnNldD0nMC40MTY5JyBzdG9wLWNvbG9yPScjQ0RDRkQyJy8+PHN0b3Agb2Zmc2V0PScwLjkzNzYnIHN0b3AtY29sb3I9J3JnYmEoMjQ4LDI0OCwyNDksMCknLz48L2xpbmVhckdyYWRpZW50PjxjaXJjbGUgY3g9JzE2JyBjeT0nMTYnIHI9JzEyLjcnIHN0eWxlPSdmaWxsOiBub25lOyBzdHJva2U6IHVybCgjRmFzdExvYWRpbmdJbmRpY2F0b3ItbGluZWFyR3JhZGllbnQpOyBzdHJva2Utd2lkdGg6IDI7Jz48L2NpcmNsZT48L3N2Zz4=' alt='' style="width: 36px; height: 36px;" /></div>
-
-    <div class=""  *ngIf="data != undefined && isNotebook  ?true:false">
-      <div class="form-group cust-sea">
-        <select class="form-control" [(ngModel)]="search_val" (change)="changingValue()">
-          <option value="0">Show all</option>
-          <option value="1">Show before lesson</option>
-          <option value="2">Show current lesson</option>
-          <option value="3">Words with mistakes</option>
-        </select>
-      </div>
-    </div>
-    <div class="row cust-row" *ngIf="data != undefined && isNotebook  ?true:false">
-      <div class="col-3" *ngFor="let dt of card;let i = index" >
-        <p class="text-center" (click)="getDetails(i)">{{dt.title}}</p>
-      </div>
-    </div>
-    <div  *ngIf="!isNotebook">
-      <div class='word-box' *ngFor="let dt of card;let i = index" id="{{i}}" (click)="showDescription()">
-        <div class="row cust-word-img" *ngIf="i == counter && move ?true:false" @slideleft>
-          <div [ngClass]="!dt.content[0].img ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-sx-6'">           
-              <div class='word mb-2'>{{ dt.title }}</div>
-              <span class='word-native' [hidden]="!dt.translations || dt.translations.length===0">{{dt.translations[0]}}</span>
-          </div>
-          <div class="col-md-6" [hidden]='!dt.content[0].img'>
-            <div class="img-parent">
-                <img [hidden]='!dt.content[0].img' [src]='dt.content[0].img ? playmedia.ltkmediaurl + dt.content[0].img : ""' alt='' />
-            </div>
-          </div>
-        </div>
-        <div class="row cust-word-img" *ngIf="i == counter && !move ?true:false" @slideright>
-          <div [ngClass]="!dt.content[0].img ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-sx-6'">           
-              <div class='word mb-2'>{{ dt.title }}</div>
-              <span class='word-native' [hidden]="!dt.translations || dt.translations.length===0">{{dt.translations[0]}}</span>
-          </div>
-          <div class="col-md-6" [hidden]='!dt.content[0].img'>
-            <div class="img-parent">
-                <img [hidden]='!dt.content[0].img' [src]='dt.content[0].img ? playmedia.ltkmediaurl + dt.content[0].img : ""' alt='' />
-            </div>
-          </div>
-        </div>
-        <div class="sentence-defination" *ngIf="i == counter && move ?true:false" @slideleft>
-            <span *ngIf='!showTranslation' class='sample-sentence tranlsation-box'>{{dt.definition}}</span>
-        </div>
-        <div class="sentence-defination"  *ngIf="i == counter && !move ?true:false" @slideright>
-          <span *ngIf='!showTranslation' class='sample-sentence tranlsation-box'>{{dt.definition}}</span>
-      </div>
-      </div>
-    </div>
-
-    <div *ngIf="!isNotebook && counter != card.length-1 ? true : false" class='card-showdown-button word-next-button' (click)='showNextWord()'><i class="far fa-arrow-alt-circle-right"></i></div>
-    <div *ngIf="!isNotebook && counter != 0 ? true : false " class='card-showdown-button word-prev-button' (click)='showPrevWord()'><i class="far fa-arrow-alt-circle-left"></i></div>
-
-</div>
-
-
-<!-- <div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
-<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
-[ngClass]="{'blinkhighlight': blinknext}"></div> -->
-
-
-<div class="card-block-item card-style-obj-single desktop-view" [ngClass]=" isNotebook ? 'card-block-rw1':''" [ngStyle]="nblayout">
-    <div class="notebook-title">
-      <h5>Notebook</h5>
-    </div>
-    <div id='app-is-loading-screen' *ngIf="data == undefined ?true:false" style='display: flex; text-align: center; justify-content: center; margin-top: 50px;'><img src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PGxpbmVhckdyYWRpZW50IGlkPSdGYXN0TG9hZGluZ0luZGljYXRvci1saW5lYXJHcmFkaWVudCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnIHgxPScxLjc4MDQnIHkxPScxNi4wMzc5JyB4Mj0nMzAuMTQzOScgeTI9JzE2LjAzNzknPjxzdG9wIG9mZnNldD0nMC40MTY5JyBzdG9wLWNvbG9yPScjQ0RDRkQyJy8+PHN0b3Agb2Zmc2V0PScwLjkzNzYnIHN0b3AtY29sb3I9J3JnYmEoMjQ4LDI0OCwyNDksMCknLz48L2xpbmVhckdyYWRpZW50PjxjaXJjbGUgY3g9JzE2JyBjeT0nMTYnIHI9JzEyLjcnIHN0eWxlPSdmaWxsOiBub25lOyBzdHJva2U6IHVybCgjRmFzdExvYWRpbmdJbmRpY2F0b3ItbGluZWFyR3JhZGllbnQpOyBzdHJva2Utd2lkdGg6IDI7Jz48L2NpcmNsZT48L3N2Zz4=' alt='' style="width: 36px; height: 36px;" /></div>
-    <div class="row nb-content">
-      <div class="col-6 nb-list">
-        <div class="nb-list-filter"  *ngIf="data != undefined ?true:false">
-          <div class="form-group cust-sea">
-            <select class="form-control" [(ngModel)]="search_val" (change)="changingValue()">
-              <option value="0">Show all</option>
-              <option value="1">Show before lesson</option>
-              <option value="2">Show current lesson</option>
-              <option value="3">Words with mistakes</option>
-            </select>
-          </div>
-        </div>
-        <div class="row cust-row" *ngIf="data != undefined ?true:false">
-          <div class="col-4" *ngFor="let dt of card;let i = index" >
-            <p class="text-center" (click)="getDetails(i)">{{dt.title}}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-6 word-sent">
-      <div>
-        <div class='word-box' *ngFor="let dt of card;let i = index" id="{{i}}" (click)="showDescription()">
-          <div class="row cust-word-img" *ngIf="i == counter && move ?true:false" @slideleft>
-            <div [ngClass]="!dt.content[0].img ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-sx-6'">           
-                <div class='word mb-2'>{{ dt.title }}</div>
-                <span class='word-native' [hidden]="!dt.translations || dt.translations.length===0">{{dt.translations[0]}}</span>
-            </div>
-            <div class="col-md-6" [hidden]='!dt.content[0].img'>
-              <div class="img-parent">
-                  <img [hidden]='!dt.content[0].img' [src]='dt.content[0].img ? playmedia.ltkmediaurl + dt.content[0].img : ""' alt='' />
-              </div>
-            </div>
-          </div>
-          <div class="row cust-word-img" *ngIf="i == counter && !move ?true:false" @slideright>
-            <div [ngClass]="!dt.content[0].img ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-sx-6'">           
-                <div class='word mb-2'>{{ dt.title }}</div>
-                <span class='word-native' [hidden]="!dt.translations || dt.translations.length===0">{{dt.translations[0]}}</span>
-            </div>
-            <div class="col-md-6" [hidden]='!dt.content[0].img'>
-              <div class="img-parent">
-                  <img [hidden]='!dt.content[0].img' [src]='dt.content[0].img ? playmedia.ltkmediaurl + dt.content[0].img : ""' alt='' />
-              </div>
-            </div>
-          </div>
-          <div class="sentence-defination" *ngIf="i == counter && move ?true:false" @slideleft>
-              <span *ngIf='!showTranslation' class='sample-sentence tranlsation-box'>{{dt.definition}}</span>
-          </div>
-          <div class="sentence-defination"  *ngIf="i == counter && !move ?true:false" @slideright>
-            <span *ngIf='!showTranslation' class='sample-sentence tranlsation-box'>{{dt.definition}}</span>
-        </div>
-        </div>
-      </div>
-
-      <div *ngIf="counter != card?.length-1 ? true : false" class='card-showdown-button word-next-button' (click)='showNextWord()'><i class="far fa-arrow-alt-circle-right"></i></div>
-      <div *ngIf="counter != 0 ? true : false " class='card-showdown-button word-prev-button' (click)='showPrevWord()'><i class="far fa-arrow-alt-circle-left"></i></div>
-      </div>
-    </div>
-  
+<div class="card-block-item card-style-obj-single tab-content" id="myTabContent">
+	<ul class="nav nav-tabs notebook-tabpanel" id="myTab" role="tablist">
+		<li class="nav-item" (click)="onShowNotebook()">
+			<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><span class="nav-text">Notebook</span></a>
+		</li>
+		<li class="nav-item" (click)="onShowNotepad()">
+			<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"><span class="nav-text">Talking Notepad</span></a>
+		</li>
+	</ul>
+	<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+		<div class="card-block-item card-style-obj-single mobile-view" [ngClass]=" isNotebook ? 'card-block-rw1':''" [ngStyle]="nblayout">
+				<div class="notebook-title">
+					<h5 id="notebook-title">Notebook</h5>
+				</div>
+				<div id='app-is-loading-screen' *ngIf="data == undefined ?true:false" style='display: flex; text-align: center; justify-content: center; margin-top: 50px;background: white; position: relative; max-height: 80%;'><img src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PGxpbmVhckdyYWRpZW50IGlkPSdGYXN0TG9hZGluZ0luZGljYXRvci1saW5lYXJHcmFkaWVudCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnIHgxPScxLjc4MDQnIHkxPScxNi4wMzc5JyB4Mj0nMzAuMTQzOScgeTI9JzE2LjAzNzknPjxzdG9wIG9mZnNldD0nMC40MTY5JyBzdG9wLWNvbG9yPScjQ0RDRkQyJy8+PHN0b3Agb2Zmc2V0PScwLjkzNzYnIHN0b3AtY29sb3I9J3JnYmEoMjQ4LDI0OCwyNDksMCknLz48L2xpbmVhckdyYWRpZW50PjxjaXJjbGUgY3g9JzE2JyBjeT0nMTYnIHI9JzEyLjcnIHN0eWxlPSdmaWxsOiBub25lOyBzdHJva2U6IHVybCgjRmFzdExvYWRpbmdJbmRpY2F0b3ItbGluZWFyR3JhZGllbnQpOyBzdHJva2Utd2lkdGg6IDI7Jz48L2NpcmNsZT48L3N2Zz4=' alt='' style="width: 36px; height: 36px;" /></div>
+		
+				<div class="nb-list-filter"  *ngIf="data != undefined && isNotebook  ?true:false">
+					<div class="input-group mb-2">
+						<input class="form-control" type="text" name="" (input)="serchText($event.target.value)" placeholder="Search here.." [(ngModel)]="searched_text">
+						<div class="input-group-btn">
+							<button class="btn btn-default border" type="submit">
+								<i class="fas fa-search"></i>
+							</button>
+						</div>
+					</div>
+					<div class="form-group cust-sea">
+						<select class="form-control" [(ngModel)]="search_val" (change)="changingValue()">
+							<option value="0">Show all</option>
+							<option value="1">Show before lesson</option>
+							<option value="2">Show current lesson</option>
+							<option value="3">Words with mistakes</option>
+						</select>
+					</div>
+				</div>
+				<div class="row cust-row notebook-words" id="notebook-words" *ngIf="data != undefined && isNotebook  ?true:false">
+					<div class="col-3" *ngFor="let dt of card;let i = index" id="scroll-to-{{i}}">
+						<p class="text-center" (click)="getDetails(i)" [ngClass]="{'highlight': counter === i}">{{dt.title}}</p>
+					</div>
+				</div>
+				<div  *ngIf="!isNotebook" class="word-defination">
+					<div class='word-box  word-full-description' *ngFor="let dt of card;let i = index" id="{{i}}" (click)="showDescription()" [ngClass]="{'active': counter === i}">
+						<div class="row cust-word-img" *ngIf="i == counter && move ?true:false" @slideleft>
+							<div [ngClass]="!dt.content[0].img ? 'col-md-12 col-sm-12 col-xs-12 mobile-word-text' : 'col-md-6 col-sm-6 col-sx-6 mobile-word-text'">           
+									<div class='word mb-2'>{{ dt.title }}</div>
+									<span class='word-native' [hidden]="!dt.translations || dt.translations.length===0">{{dt.translations[0]}}</span>
+							</div>
+							<div class="col-md-6 mobile-word-image" [hidden]='!dt.content[0].img'>
+								<div class="img-parent">
+										<img [hidden]='!dt.content[0].img' [src]='dt.content[0].img ? playmedia.ltkmediaurl + dt.content[0].img : ""' alt='' />
+								</div>
+							</div>
+						</div>
+						<div class="row cust-word-img" *ngIf="i == counter && !move ?true:false" @slideright>
+							<div [ngClass]="!dt.content[0].img ? 'col-md-12 col-sm-12 col-xs-12 mobile-word-text' : 'col-md-6 col-sm-6 col-sx-6 mobile-word-text'">           
+									<div class='word mb-2'>{{ dt.title }}</div>
+									<span class='word-native' [hidden]="!dt.translations || dt.translations.length===0">{{dt.translations[0]}}</span>
+							</div>
+							<div class="col-md-6 mobile-word-image" [hidden]='!dt.content[0].img'>
+								<div class="img-parent">
+										<img [hidden]='!dt.content[0].img' [src]='dt.content[0].img ? playmedia.ltkmediaurl + dt.content[0].img : ""' alt='' />
+								</div>
+							</div>
+						</div>
+						<div class="sentence-defination" *ngIf="i == counter && move ?true:false" @slideleft>
+								<span *ngIf='!showTranslation' class='sample-sentence tranlsation-box'>{{dt.definition}}</span>
+						</div>
+						<div class="sentence-defination"  *ngIf="i == counter && !move ?true:false" @slideright>
+							<span *ngIf='!showTranslation' class='sample-sentence tranlsation-box'>{{dt.definition}}</span>
+					</div>
+					</div>
+				</div>
+		
+				<div *ngIf="!isNotebook && counter != card.length-1 ? true : false" class='card-showdown-button word-next-button' (click)='showNextWord()'><i class="far fa-arrow-alt-circle-right"></i></div>
+				<div *ngIf="!isNotebook && counter != 0 ? true : false " class='card-showdown-button word-prev-button' (click)='showPrevWord()'><i class="far fa-arrow-alt-circle-left"></i></div>
+		</div>
+		
+		
+		<!-- <div class='card-item-navigation-prev' [ngStyle]='nav_style_prev' (click)='movePrev()' *ngIf='_mode === "dual"'></div>
+		<div class='card-item-navigation-next' [ngStyle]='nav_style_next' (click)='moveNext()' *ngIf='_mode === "dual"'
+		[ngClass]="{'blinkhighlight': blinknext}"></div> -->
+		
+		
+		<div class="card-block-item card-style-obj-single desktop-view" [ngClass]=" isNotebook ? 'card-block-rw1':''" [ngStyle]="nblayout">
+				<div class="notebook-title">
+					<h5 id="notebook-title1">Notebook</h5>
+				</div>
+				<div id='app-is-loading-screen' *ngIf="data == undefined ?true:false" style='display: flex; text-align: center; justify-content: center; margin-top: 0px;background: white;position: relative; max-height: 80%;'><img src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PGxpbmVhckdyYWRpZW50IGlkPSdGYXN0TG9hZGluZ0luZGljYXRvci1saW5lYXJHcmFkaWVudCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnIHgxPScxLjc4MDQnIHkxPScxNi4wMzc5JyB4Mj0nMzAuMTQzOScgeTI9JzE2LjAzNzknPjxzdG9wIG9mZnNldD0nMC40MTY5JyBzdG9wLWNvbG9yPScjQ0RDRkQyJy8+PHN0b3Agb2Zmc2V0PScwLjkzNzYnIHN0b3AtY29sb3I9J3JnYmEoMjQ4LDI0OCwyNDksMCknLz48L2xpbmVhckdyYWRpZW50PjxjaXJjbGUgY3g9JzE2JyBjeT0nMTYnIHI9JzEyLjcnIHN0eWxlPSdmaWxsOiBub25lOyBzdHJva2U6IHVybCgjRmFzdExvYWRpbmdJbmRpY2F0b3ItbGluZWFyR3JhZGllbnQpOyBzdHJva2Utd2lkdGg6IDI7Jz48L2NpcmNsZT48L3N2Zz4=' alt='' style="width: 36px; height: 36px;" /></div>
+				<div class="row nb-content" *ngIf="data != undefined ?true:false">
+					<div class="col-6 nb-list">
+						<div class="words-list-column">
+							<div class="nb-list-filter"  *ngIf="data != undefined ?true:false">
+								<div class="form-group cust-sea">
+									<select class="form-control" [(ngModel)]="search_val" (change)="changingValue()">
+										<option value="0">Show all</option>
+										<option value="1">Show before lesson</option>
+										<option value="2">Show current lesson</option>
+										<option value="3">Words with mistakes</option>
+									</select>
+								</div>
+								<div class="input-group mb-2">
+									<input class="form-control" type="text" name="" (input)="serchText($event.target.value)" placeholder="Search here.." [(ngModel)]="searched_text">
+									<div class="input-group-btn">
+										<button class="btn btn-default border" type="submit">
+											<i class="fas fa-search"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+							<div class="word-list">
+								<div class="row cust-row notebook-words" id="notebook-words1" *ngIf="data != undefined ?true:false">
+									<div class="col-4" *ngFor="let dt of card;let i = index" id="scroll1-to-{{i}}">
+										<p class="text-center" (click)="getDetails(i)" [ngClass]="{'highlight': counter === i}">{{dt.title}}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 word-sent">
+						<div>
+							<div class='word-box word-full-description' *ngFor="let dt of card;let i = index" id="{{i}}" (click)="showDescription()" [ngClass]="{'active': counter === i}">
+								<div class="row cust-word-img" *ngIf="i == counter && move ?true:false" @slideleft>
+									<div [ngClass]="!dt.content[0].img ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-sx-6'">           
+											<div class='word mb-2'>{{ dt.title }}</div>
+											<span class='word-native' [hidden]="!dt.translations || dt.translations.length===0">{{dt.translations[0]}}</span>
+									</div>
+									<div class="col-md-6" [hidden]='!dt.content[0].img'>
+										<div class="img-parent">
+												<img [hidden]='!dt.content[0].img' [src]='dt.content[0].img ? playmedia.ltkmediaurl + dt.content[0].img : ""' alt='' />
+										</div>
+									</div>
+								</div>
+								<div class="row cust-word-img" *ngIf="i == counter && !move ?true:false" @slideright>
+									<div [ngClass]="!dt.content[0].img ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-sx-6'">           
+											<div class='word mb-2'>{{ dt.title }}</div>
+											<span class='word-native' [hidden]="!dt.translations || dt.translations.length===0">{{dt.translations[0]}}</span>
+									</div>
+									<div class="col-md-6" [hidden]='!dt.content[0].img'>
+										<div class="img-parent">
+												<img [hidden]='!dt.content[0].img' [src]='dt.content[0].img ? playmedia.ltkmediaurl + dt.content[0].img : ""' alt='' />
+										</div>
+									</div>
+								</div>
+								<div class="sentence-defination" *ngIf="i == counter && move ?true:false" @slideleft>
+										<span *ngIf='!showTranslation' class='sample-sentence tranlsation-box'>{{dt.definition}}</span>
+								</div>
+								<div class="sentence-defination"  *ngIf="i == counter && !move ?true:false" @slideright>
+									<span *ngIf='!showTranslation' class='sample-sentence tranlsation-box'>{{dt.definition}}</span>
+							</div>
+							</div>
+						</div>
+		
+						<div *ngIf="counter != card?.length-1 ? true : false" class='card-showdown-button word-next-button' (click)='showNextWord()'><i class="far fa-arrow-alt-circle-right"></i></div>
+						<div *ngIf="counter != 0 ? true : false " class='card-showdown-button word-prev-button' (click)='showPrevWord()'><i class="far fa-arrow-alt-circle-left"></i></div>
+					</div>
+				</div>
+			
+		</div>
+	</div>
+	<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+		<!-- Talking Notepad -->
+		<app-talking-notepad [hidden]="!talking_notepad_show"></app-talking-notepad>
+		<!-- /Talking Notepad -->
+	</div>
 </div>
 
 <!-- Close button for reports -->

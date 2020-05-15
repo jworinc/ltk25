@@ -27,6 +27,7 @@ export class PlaymediaService {
 	public sounds_buffer = [];
 	public ltkmediaurl = '';
 	public immidiate_stop_event: any;
+	public noWordFound: EventEmitter<boolean> = new EventEmitter();
 
 	setDisable() {
 		clearTimeout(this.play_reset_disable_timer);
@@ -106,12 +107,14 @@ export class PlaymediaService {
 		}
 		sound.on('end', function(){
 			that.clearDisable();
+			that.noWordFound.emit(false);
 			if(typeof cb !== 'undefined' && !that.disable_callback_flag) cb();
 			
 		});
 		sound.on('loaderror', function(){
 			console.log('Error to load audio: ' + this._src);
 			that.logMissingAudio(this._src);
+			that.noWordFound.emit(true);
 			setTimeout(function(){
 				that.clearDisable();
 			}, 300);
