@@ -4,6 +4,7 @@ import { CardComponent } from '../../components/card/card.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 import { max } from 'rxjs/operators';
 
 @Component({
@@ -47,6 +48,9 @@ export class BaseComponent implements OnInit, CardComponent {
 	public current_hint_level = 0;
 	public complete = 0;
 	public max_repetitions = 10;
+	public move_next_timer: any = null;
+	public mseltype = 'numbers';
+	public mselshow = false;
 
     @Input() data: any;
     @Input() default_waves: any;
@@ -84,15 +88,19 @@ export class BaseComponent implements OnInit, CardComponent {
 	@Output() mnext = new EventEmitter<boolean>();
 	@Output() mprev = new EventEmitter<boolean>();
 	@Output() blinkenter = new EventEmitter<boolean>();
+	@Output() blinkrule = new EventEmitter<boolean>();
 	@Output() blinknextnavbtn = new EventEmitter<boolean>();
 	@Output() blink_good_bad = new EventEmitter<boolean>();
 	@Output() blinkrec = new EventEmitter<boolean>();
 	@Output() blinkplay = new EventEmitter<boolean>();
 	@Output() option_hide = new EventEmitter<boolean>();
+	@Output() enter_hide = new EventEmitter<boolean>();
 	@Output() show_good_bad = new EventEmitter<boolean>();
 	@Output() show_hint = new EventEmitter<boolean>();
 	@Output() show_prev = new EventEmitter<boolean>();
 	@Output() show_clear = new EventEmitter<boolean>();
+	@Output() show_rule = new EventEmitter<boolean>();
+	@Output() show_enter = new EventEmitter<boolean>();
 	@Output() set_card_id = new EventEmitter<number>();
 	@Output() disable_next_slide = new EventEmitter<boolean>();
 	@Output() enable_next_slide = new EventEmitter<boolean>();
@@ -100,7 +108,12 @@ export class BaseComponent implements OnInit, CardComponent {
 	@Output() set_global_header = new EventEmitter<any>();
 	@Output() set_default_header = new EventEmitter<any>();
 
-  constructor(private el:ElementRef, private sn: DomSanitizer, private pm: PlaymediaService, private logging: LoggingService, private cs: ColorschemeService) { 
+  constructor(private el:ElementRef, 
+			  private sn: DomSanitizer, 
+			  private pm: PlaymediaService, 
+			  private logging: LoggingService, 
+			  private cs: ColorschemeService,
+			  private pe: PickElementService) { 
 	  this.sp.mediastorage = pm.getMediaStorage();
    }
 
@@ -315,11 +328,19 @@ export class BaseComponent implements OnInit, CardComponent {
 
 
   moveNext() {
-		this.enableNextSlide();
+	//	If mouse event locked by feedback
+	if(this.pe.mouseLock()) return;
+
+	this.enableNextSlide();
+	//if(this.uinputph === 'finish') this.complete = 100;
+  	//console.log('Card ' + this.card.activity + ' is complete!');
   	this.mnext.emit();
   }
 
   movePrev() {
+	//	If mouse event locked by feedback
+	if(this.pe.mouseLock()) return;
+
   	this.mprev.emit();
   }
 
@@ -397,7 +418,7 @@ export class BaseComponent implements OnInit, CardComponent {
 			
 			if(this.validate()){
 				this.enableMoveNext();
-				this.blinkNextNavButtons();
+				//this.blinkNextNavButtons();
 			}
 			else this.disableMoveNext();
 			
@@ -409,20 +430,32 @@ export class BaseComponent implements OnInit, CardComponent {
   	this.option_hide.emit();
   }
 
+  enterHide() {
+	this.enter_hide.emit();
+  }
+
   showGoodBad() {
   	this.show_good_bad.emit();
   }
 
   showHint() {
   	this.show_hint.emit();
-	}
+  }
 	
-	showPrev() {
+  showPrev() {
   	this.show_prev.emit();
   }
 
   showClear() {
   	this.show_clear.emit();
+  }
+
+  showRule() {
+	this.show_rule.emit();
+  }
+
+  showEnter() {
+	this.show_enter.emit();
   }
 
   setGlobalDesc(d: any) {
@@ -437,6 +470,10 @@ export class BaseComponent implements OnInit, CardComponent {
   	this.blinkenter.emit();
   }
 
+  blinkRule() {
+	this.blinkrule.emit();
+  }
+
   playCorrectSound(cb: any = ()=>{}) {
   	if(typeof this.default_waves === 'undefined' || typeof this.default_waves.RespIfCorrect === 'undefined') return;
   	//	Get default random set of correct sound
@@ -444,9 +481,10 @@ export class BaseComponent implements OnInit, CardComponent {
 	//	Set description
 	this.card.content[0].desc = i.pointer_to_value;
 	this.setGlobalDesc(i.pointer_to_value);
+	this.pm.stop();
 	//	Play sound
 	if(typeof i.audio !== 'undefined' && i.audio !== '')
-		this.pm.sound(i.audio, cb, 1);
+		this.pm.sound(i.audio, cb, 400);
   }
 
   show() {
@@ -498,6 +536,8 @@ export class BaseComponent implements OnInit, CardComponent {
 	}
 	
 	playCardDescription(){
+		//	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
 		if(this.play_card_description_busy) return;
 		this.play_card_description_busy = true;
 		this.current_description = 0;
@@ -569,14 +609,14 @@ export class BaseComponent implements OnInit, CardComponent {
 		if(!this.validate()){
 			if(!silent && this.getUserInputString() !== ''){
 				this.pm.sound('_STNQR', function(){ 
-					 that.result(); that.enableNextCard(); that.clearUserInput(); that.play_card_description_busy = false; //scope.playCardDescription();
+					 that.result(); that.clearUserInput(); that.play_card_description_busy = false; //scope.playCardDescription();
 				}, 0);
 			} 
 			else if(!silent && this.getUserInputString() === ''){
 				this.repeat();
 			}
 			else {
-				that.result(); that.enableNextCard(); that.clearUserInput(); that.play_card_description_busy = false; //scope.playCardDescription();
+				that.result(); that.clearUserInput(); that.play_card_description_busy = false; //scope.playCardDescription();
 			}
 		} else {
 
@@ -584,10 +624,10 @@ export class BaseComponent implements OnInit, CardComponent {
 			if(that.current_presented >= that.max_presented){
 				if(!silent && this.getUserInputString() !== ''){
 					this.playCorrectSound(function(){ 
-						that.enableNextCard();
+						that.enableNextCard(); that.moveNext();
 					});
 				} else {
-					that.enableNextCard();
+					that.enableNextCard(); that.moveNext();
 				}
 			}
 		}
@@ -615,6 +655,8 @@ export class BaseComponent implements OnInit, CardComponent {
 		this.play_card_description_busy = false;
 		//	Hide option buttons
 		this.optionHide();
+		this.enterHide();
+		clearTimeout(this.move_next_timer);
 	}
 
 	repeat() {
@@ -664,6 +706,10 @@ export class BaseComponent implements OnInit, CardComponent {
 
 	clear() {
 
+	}
+
+	rule() {
+		
 	}
 	
 	eslCustomInstructions(name, cb=()=>{}){
@@ -772,5 +818,23 @@ export class BaseComponent implements OnInit, CardComponent {
 		console.log('Max presented increased ('+this.card.activity+') !!!');
 	}
 
+	playLetter(l) {
+		let that = this;
+		//	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
+		
+		let ci = this.current_card_instance;
+		//	Play pronuncuation of the word
+		if(typeof this.card.content[ci].pronounce !== 'undefined' && this.card.content[ci].pronounce.length > 0){
+			let prnc = this.card.content[ci].pronounce;
+			let p = '_S' + prnc[l]; p = p.replace('-', '');
+			this.pm.stop();
+			this.pm.immidiate_stop_event.emit();
+			this.pm.sound(p, function(){});
+		}
+
+		
+		
+	}
 
 }

@@ -5,6 +5,7 @@ import { TokenService } from '../../services/token.service';
 import { AuthService } from '../../services/auth.service';
 import { SnotifyService } from 'ng-snotify';
 import { TranslateService } from '@ngx-translate/core';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,7 @@ export class LoginComponent implements OnInit {
     private Auth: AuthService,
     private notify: SnotifyService,
     private translate: TranslateService,
+    private title: Title
   ) { 
         // this language will be used as a fallback when a translation isn't found in the current language
         this.translate.setDefaultLang('en');
@@ -45,6 +47,8 @@ export class LoginComponent implements OnInit {
   public disable_request_button: boolean = false;
 
   ngOnInit() {
+    //  Set login title
+    this.title.setTitle('LTK-Lessons-Login');
     //  Get app locales
     this.dl.getLocales().subscribe((e)=>{
       console.log('Get app locales');

@@ -45,6 +45,7 @@
     border-radius: 8px;
     background-color: #0071BD;
     color: #fff;
+    cursor: pointer;
 }
 
 .wrong{
@@ -81,6 +82,16 @@
     top: 50%;
     transform: translateY(-50%);
 }
+.header-description{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.repeat-button{
+    font-size: 30px;
+    color: #0071BD;
+    cursor: pointer;
+}
 
 @media only screen and (max-width:1024px){
     .col-10{
@@ -98,16 +109,16 @@
     .p_design{
         padding: 2px 4px;
         padding-bottom: 3px;
-        font-size: 12px;
+        font-size: 14px;
     }
     .cust-row h4 {
-        margin: 4px 0;
-        font-size: 14px;
+        margin: 20px 0;
+        font-size: 18px;
     }
     .word-row {
         position: absolute;
         bottom: 0px;
-        padding: 2px 0;
+        padding: 22px 0;
         background-color: #F4F4F4;
     }
     .answer-div .col-4{

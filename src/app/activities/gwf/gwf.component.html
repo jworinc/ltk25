@@ -13,7 +13,7 @@
 			</span>
 		</div>
 		<div class='gwf-variants-wrap'>
-			<span class='gwf-variant' *ngFor='let v of variants; let kv=index' [attr.data-index]='kv' (click)='addAnswer(v)'>
+			<span class='gwf-variant' *ngFor='let v of variants; let kv=index' [attr.data-index]='kv' (click)='addAnswer(v)' appWordtranslate>
 				{{ v }}
 			</span>
 		</div>

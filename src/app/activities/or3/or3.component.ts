@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { PlaywordsDirective } from '../../directives/playwords.directive';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-or3',
@@ -14,8 +15,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Or3Component extends BaseorComponent implements OnInit, DoCheck {
 
-  constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService, private or3log: LoggingService, private or3cs: ColorschemeService) {
-  	super(element, sz, pms, or3log, or3cs);
+  constructor(private element:ElementRef, 
+			  private sz: DomSanitizer, 
+			  private pms: PlaymediaService, 
+			  private or3log: LoggingService, 
+			  private or3cs: ColorschemeService,
+			  private or3pe: PickElementService) {
+  	super(element, sz, pms, or3log, or3cs, or3pe);
   }
 
   public instruction2_flag: boolean = false;
@@ -120,9 +126,12 @@ export class Or3Component extends BaseorComponent implements OnInit, DoCheck {
 				}
 				//	Check if it was last question, finish card
 				if(this.card.content[0].questions.length === this.current_question){
-					this.playCorrectSound();
+					this.playCorrectSound(()=>{
+						that.enableNextCard();
+						that.moveNext();
+					});
 					this.uinputph = 'finish';
-					this.enableNextCard();
+					
 				} else {
 					this.playCorrectSound(()=>{
 						that.instruction2_flag = false;
@@ -159,6 +168,7 @@ export class Or3Component extends BaseorComponent implements OnInit, DoCheck {
 			}
 			this.prevent_dubling_flag = true;
 			this.showHint();
+			this.setGlobalHeader("ORAL READING");
 		}
 		
 	}
@@ -210,11 +220,13 @@ export class Or3Component extends BaseorComponent implements OnInit, DoCheck {
 	
 	//	Next button click handler
 	next() {
+		if(this.instruction2_flag) this.repeat();
 		if(this.instruction2_flag || typeof this.card.content[0].Instructions2 === 'undefined') return;
 		this.instruction2_flag = true;
 		this.nextInstructions();
 		this.showQuestion();
-		this.enableMoveNext();
+		//this.enableMoveNext();
+		this.showEnter();
 	}
 
 	//	Show question
@@ -241,7 +253,7 @@ export class Or3Component extends BaseorComponent implements OnInit, DoCheck {
 			this.expected_string = q.title;
 
 			//	Replace answer word with a input
-			q.title = q.title.replace(ar, '<input type="text" class="or3-question-word-input" id="user-answer-or3" />');
+			q.title = q.title.replace(ar, '<input type="text" autocomplete="off" class="or3-question-word-input" id="user-answer-or3" />');
 			 
 
 			this.element.nativeElement.querySelector('.or3-story-question-wrap').innerHTML = '';

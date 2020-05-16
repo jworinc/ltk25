@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BasetestComponent } from '../basetest/basetest.component';
 import { PlaymediaService } from '../../services/playmedia.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 
 @Component({
@@ -22,7 +23,10 @@ export class AuditoryComponent extends BasetestComponent implements OnInit {
 
   public result:any= [];
 
-  constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService) { 
+  constructor(private element:ElementRef, 
+              private sz: DomSanitizer, 
+              private pms: PlaymediaService,
+              private pe: PickElementService) { 
     super(element, sz, pms);
   }
 
@@ -42,6 +46,11 @@ export class AuditoryComponent extends BasetestComponent implements OnInit {
     this.result = [];
     this.test_complete = false;
     this.getWords();
+  }
+  
+  repeat() {
+    this.pms.stop();
+    this.pms.word(this.card[this.ind].answer.wavename,function(){});
   }
 
   getWords(){
@@ -69,6 +78,8 @@ export class AuditoryComponent extends BasetestComponent implements OnInit {
   }
 
   getAnswer(answer){
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     let data;
     if(this.result.length != this.card.length){
       if(answer ===  this.card[this.ind].answer.title){

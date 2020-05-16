@@ -1,13 +1,18 @@
 /***********************************************	gmu block styling **************************************************/
-
+.card-block-gmu{
+    justify-content: space-between;
+}
 .gmu-word-wrap{
 	margin-top: 43px;
 	opacity: 1;
 }
 .gmu-letters-wrap{
 	flex-flow: column nowrap;
-	padding: 0px 33px;
-	min-height: 167px;
+    padding: 0px 33px;
+    min-height: 167px;
+    flex: 2;
+    justify-content: center;
+    padding-bottom: 50px;
 }
 .gmu-syllables-selector{
 

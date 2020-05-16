@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gsc',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class GscComponent extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gsclog: LoggingService, private gsccs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, gsclog, gsccs);
+  constructor(private elm:ElementRef, 
+			  private sanitizer: DomSanitizer, 
+			  private playmedia: PlaymediaService, 
+			  private gsclog: LoggingService, 
+			  private gsccs: ColorschemeService,
+			  private gscpe: PickElementService) {
+  	super(elm, sanitizer, playmedia, gsclog, gsccs, gscpe);
   }
 
   ngOnInit() {
@@ -131,24 +137,33 @@ export class GscComponent extends BaseComponent implements OnInit {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()) {
+			//if(!this.validate()) {
 				
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
-				
-			} else {
-				this.enableMoveNext();
-			}
+				this.disableNextSlide();
+			//} else {
+			//	this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 		}
 		
+	}
+
+	next() {
+		if(this.uinputph === 'finish'){
+			this.enableNextCard(); this.moveNext();
+		} else {
+			this.repeat();
+		}
 	}
 
 	hide() {
 		this.prevent_dubling_flag = false;
 		//	Hide option buttons
 		this.optionHide();
+		this.enterHide();
 	}
 
 	setFocus(){
@@ -183,6 +198,8 @@ export class GscComponent extends BaseComponent implements OnInit {
 	}
 
 	addAnswer(ind) {
+		//	If mouse event locked by feedback
+		if(this.gscpe.mouseLock()) return;
 
 		if(this.answers.length >= this.expected.length) return;
 
@@ -214,7 +231,7 @@ export class GscComponent extends BaseComponent implements OnInit {
 		//	Play chimes
 		this.playmedia.action('CHIMES', function(){
 			that.uinputph = 'finish';
-			that.enableNextCard();
+			that.enableNextCard(); that.moveNext();
 		}, 300);
 
 	}
@@ -222,7 +239,7 @@ export class GscComponent extends BaseComponent implements OnInit {
 	//	Enter click handler
 	enter() {
 		if(this.uinputph === 'finish'){
-			this.enableNextCard();
+			this.enableNextCard(); this.moveNext();
 		} 
 	}
 

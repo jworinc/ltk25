@@ -13,9 +13,12 @@
     margin-top: 2%;
     max-height: 100%;
     overflow-y: auto;
+    /*overflow: scroll;*/
     background-color: lightblue;
     z-index: 9999;
     box-shadow: 0 0 3px #777;
+    text-align: justify;
+    -webkit-overflow-scrolling: touch;
 }
 .or3-story-wrap span{
 	cursor: pointer;	

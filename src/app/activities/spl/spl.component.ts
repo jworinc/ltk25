@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-spl',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class SplComponent extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private spllog: LoggingService, private splcs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, spllog, splcs);
+  constructor(private elm:ElementRef, 
+			  private sanitizer: DomSanitizer, 
+			  private playmedia: PlaymediaService, 
+			  private spllog: LoggingService, 
+			  private splcs: ColorschemeService,
+			  private splpe: PickElementService) {
+  	super(elm, sanitizer, playmedia, spllog, splcs, splpe);
   }
 
   ngOnInit() {
@@ -36,7 +42,7 @@ export class SplComponent extends BaseComponent implements OnInit {
 
 		public input_data = '';
 
-		public display_letters = '';
+		public display_letters = [];
 
 		//	Define current card number
 		public current_number = 0;
@@ -50,10 +56,10 @@ export class SplComponent extends BaseComponent implements OnInit {
 
 			if(typeof this.card.content[0].letter !== 'undefined'){
 				if(this.card.content[0].letter === 'Vowels - All'){
-					this.display_letters = 'A, E, I, O, U';
+					this.display_letters = ['A', 'E', 'I', 'O', 'U'];
 				}
 				else if(this.card.content[0].letter === 'Consonants - All'){
-					this.display_letters = 'B, C, D, F, G, H, J, K, L, M, N, P, Q, R, S, T, V, W, X, Y (sometimes), and Z';
+					this.display_letters = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z'];
 				}
 			}
 
@@ -74,15 +80,18 @@ export class SplComponent extends BaseComponent implements OnInit {
 			//	If card is active and it is not dubling
 			if(this.isActive() && !this.prevent_dubling_flag){
 				//	If user not enter valid data yet
-				if(!this.validate()) {
-					
+				//if(!this.validate()) {
+					this.uinputph = 'rec';
+					this.elm.nativeElement.querySelectorAll('.letters-content-wrap-spl .separate-letter').forEach((e)=>{
+						e.style.backgroundColor = 'transparent';
+					});
 					//	Play card description
 					this.playCardDescription();
 					this.disableMoveNext();
 					
-				} else {
-					this.enableMoveNext();
-				}
+				//} else {
+				//	this.enableMoveNext();
+				//}
 				this.prevent_dubling_flag = true;
 			}
 			
@@ -91,7 +100,8 @@ export class SplComponent extends BaseComponent implements OnInit {
 		hide() {
 			this.prevent_dubling_flag = false;
 			//	Hide option buttons
-    		this.optionHide();
+			this.optionHide();
+			this.enterHide();
     		//	Clear content finish delay timer
     		clearTimeout(this.content_timeout);
 		}
@@ -106,11 +116,41 @@ export class SplComponent extends BaseComponent implements OnInit {
 			} else {
 				let del = 1;
 			}
+
+			let playletters = [];
+
+			for(let i in this.display_letters) {
+				let letter = this.display_letters[i];
+				playletters.push(letter);
+				this.playmedia.word(letter, ()=>{
+					let cl = '';
+					if(playletters.length > 0) cl = playletters.shift();
+					that.elm.nativeElement.querySelectorAll('.letters-content-wrap-spl .separate-letter').forEach((e)=>{
+						e.style.backgroundColor = 'transparent';
+					});
+					if(cl !== '')
+						that.elm.nativeElement.querySelector(".letters-content-wrap-spl span[data-currentletter='"+cl+"'] .separate-letter").style.backgroundColor = 'lightblue';
+					else {
+						that.enableMoveNext();
+						that.moveNext();
+					}
+				}, del*1000);
+			}
+
+			let cl = '';
+			if(playletters.length > 0) {
+				cl = playletters.shift();
+				that.elm.nativeElement.querySelector(".letters-content-wrap-spl span[data-currentletter='"+cl+"'] .separate-letter").style.backgroundColor = 'lightblue';
+			}
+			
+
 			//	Finish card after delay
+			/*
 			this.content_timeout = setTimeout(function(){
 				that.uinputph = 'finish';
 				that.enter();
 			}, del*1000);
+			*/
 		}
 
 		//	Enter click handler

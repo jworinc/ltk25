@@ -4,8 +4,8 @@
     display: block;
     position: relative;
     width: 678px;
-    margin: auto;
-    padding-top: 90px;
+    /*margin: auto;*/
+    padding-top: 0;
     z-index: 100;
 }
 .card-description-wrap-al2{
@@ -54,7 +54,7 @@ input[class*='card-al2-letter']{
     padding-bottom: 8px;
 }
 .card-description-wrap-al2 span{
-    display: block;
+    /*display: block;*/
     position: relative;
     width: 100%;
     color: #C2272D;
@@ -92,7 +92,7 @@ input[class*='card-al2-letter']{
         margin-top: 7px;
     }
     .card-description-wrap-al2{
-        display: block;
+        /*display: block;*/
     }
 }
 /*

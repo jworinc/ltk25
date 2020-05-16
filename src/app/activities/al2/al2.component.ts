@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-al2',
@@ -19,8 +20,9 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 								private playmedia: PlaymediaService, 
 								private al2log: LoggingService, 
 								private al2cs: ColorschemeService,
-								private op: OptionService) {
-  		super(elm, sanitizer, playmedia, al2log, al2cs);
+								private op: OptionService,
+								private al2pe: PickElementService) {
+  		super(elm, sanitizer, playmedia, al2log, al2cs, al2pe);
   	}
 
   	ngOnInit() {
@@ -322,15 +324,18 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()){
+			//if(!this.validate()){
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
-			} else {
-				this.enableMoveNext();
-			}
+				this.disableNextSlide();
+			//} else {
+			//	this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 			this.showHint();
+			this.setCard();
+			this.current_presented = 1;
 			let that = this;
 			clearInterval(this.set_cursor_interval);
 			this.set_cursor_interval = setInterval(()=>{
@@ -339,6 +344,14 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 			}, 2000);
 		}
 		
+	}
+
+	next() {
+		this.enter();
+		if(this.current_presented >= this.max_presented) {
+			this.enableMoveNext();
+			this.moveNext();
+		}
 	}
 
 	//	Callback for hide card event
@@ -351,6 +364,7 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 		this.play_card_description_busy = false;
 		//	Hide option buttons
 		this.optionHide();
+		this.enterHide();
 		clearInterval(this.set_cursor_interval);
 	}
 
@@ -426,6 +440,8 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 	}
 
 	playMediaWord(w) {
+		//	If mouse event locked by feedback
+		if(this.al2pe.mouseLock()) return;
 		this.playmedia.word(w, function(){});
 	}
 
@@ -456,8 +472,8 @@ export class Al2Component extends BaseComponent implements OnInit, DoCheck {
 					}, 300);
 						
 				} else {
-					this.enter();
-					
+					//this.enter();
+					this.playCorrectSound(()=>{ that.enableMoveNext(); that.moveNext(); });
 				}
 			
 			}

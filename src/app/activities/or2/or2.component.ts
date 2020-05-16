@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { PlaysentenceDirective } from '../../directives/playsentence.directive';
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-or2',
@@ -14,8 +15,13 @@ import { LoggingService } from '../../services/logging.service';
 })
 export class Or2Component extends BaseorComponent implements OnInit {
   @ViewChild(PlaysentenceDirective) psn;
-  constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService, private or2log: LoggingService, private or1cs: ColorschemeService) {
-  	super(element, sz, pms, or2log, or1cs);
+  constructor(private element:ElementRef, 
+              private sz: DomSanitizer, 
+              private pms: PlaymediaService, 
+              private or2log: LoggingService, 
+              private or1cs: ColorschemeService,
+              private or2pe: PickElementService) {
+  	super(element, sz, pms, or2log, or1cs, or2pe);
   }
 
 
@@ -43,7 +49,7 @@ export class Or2Component extends BaseorComponent implements OnInit {
 
     }
     
-    this.answer_word = this.words[this.current_word];
+    
     
     this.sentence_index = Math.floor(Math.random() * 100000);
 
@@ -89,18 +95,27 @@ export class Or2Component extends BaseorComponent implements OnInit {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()) {
-				
+			//if(!this.validate()) {
+        this.current_word = 0;
+        this.answer_word = this.words[this.current_word];
 				//	Play card description
 				//this.playContentDescription();
 				this.playCardDescription();
         this.disableMoveNext();
         
 				
-			} else {
-				this.enableMoveNext();
-			}
-			this.prevent_dubling_flag = true;
+			//} else {
+			//	this.enableMoveNext();
+			//}
+      this.prevent_dubling_flag = true;
+
+      let that = this;
+      //	After setting card story we have to wait before angular process playwords directive
+      setTimeout(()=>{
+        let d = that.psn;
+        d.compileSentence();
+      }, 20);
+      this.setGlobalHeader("ORAL READING");
 		}
 		
 	}
@@ -111,6 +126,7 @@ export class Or2Component extends BaseorComponent implements OnInit {
     if(this.current_word < this.card.content[0].parts.length){
       this.answer_word = this.words[this.current_word];
       setTimeout(()=>{
+        that.psn.origin_text = '';
         that.psn.compileSentence();
         that.repeat();
       }, 20);

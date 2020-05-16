@@ -48,7 +48,8 @@ export class PlacementReportComponent implements OnInit {
 
   placementUpdateCallback(data) {
     console.log(data);
-    if(typeof data === 'object'){
+    if(typeof data === 'object' && typeof data.placement !== 'undefined' && 
+    typeof data.placement.results !== 'undefined' && typeof data.placement.errors !== 'undefined'){
       this.placement = data.placement;
       if(typeof data.placement.wrong_answers !== 'undefined' && 
           typeof data.placement.right_answer !== 'undefined' && 
@@ -74,10 +75,14 @@ export class PlacementReportComponent implements OnInit {
         }
       }
 
-      this.tests = data.testing;
-      this.report_tst_ready = true;
-      this.report_pcm_ready = true;
     }
+    if(typeof data === 'object' && typeof data.testing !== 'undefined'){
+      
+      this.tests = data.testing;
+      
+    }
+    this.report_tst_ready = true;
+    this.report_pcm_ready = true;
   }
 
   refreshReport() {

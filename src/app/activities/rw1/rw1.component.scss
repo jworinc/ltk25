@@ -39,7 +39,7 @@
     // height: 150px;
 }
 .phoneme-box, .sentence-box{
-    display: block;
+    /*display: block;*/
 }
 .card-showdown-button{
     display: block;
@@ -94,10 +94,13 @@
     margin-bottom: 19px;
 }
 .word-box-sentence{
-    display: block;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: 195px;
-    margin-bottom: 54px;
+    margin-bottom: 13px;
 }
 .word-box-sentence .word{
     font-size: 36px;
@@ -114,8 +117,9 @@
     position: relative;
     z-index: 1000;
     width: 100%;
-    padding: 0px 24px;
-    font-size: 18px;
+    padding: 0px 26px;
+    font-size: 24px;
+    margin-top: 13px;
 }
 .sample-sentence b{
 	font-weight: 700;
@@ -132,13 +136,15 @@ span.word-native {
     color: #a52a2ab0;
 }
 .sentence-defination {
-    background-color: #b7d7fe;
+    /*background-color: #b7d7fe;*/
        color: #5c80f1;
        position: relative;
        height: 100px;
        width: 100%;
        max-width: 500px;
        overflow-y: auto;
+       display: flex;
+       flex: 1;
    }
        
 .btn-translate {
@@ -159,25 +165,27 @@ span.word-native {
 
 .word-box img {
     max-width: 200px;
-    max-height: 280px;
+    max-height: 250px;
 }
 
 .row.cust-word-img {
     width: 100%;
     max-width: 500px;
     align-items: center;
+    flex: 2;
 }
 .rw1-description{
     position: absolute;
     bottom: 0;
-    font-size: 12px;
+    font-size: 16px;
+    line-height: 1;
 }
 .click-to-play-wrap{
     display: block;
     position: absolute;
     width: 336px;
     height: 30px;
-    top: 122px;
+    top: 184px;
     left: 50%;
     margin-left: -208px;
     background-color: darkblue;
@@ -205,7 +213,48 @@ span.word-native {
     position: relative;
     z-index: 100;
 }
-
+.gwf-variant{
+    display: inline-block;
+    text-align: center;
+    background-color: #C69C6D;
+    color: white;
+    font-size: 34px;
+    line-height: 1em;
+    padding: 0 20px;
+    padding-bottom: 5px;
+    box-shadow: 0 0 3px brown;
+    margin: 0 10px;
+    cursor: pointer;
+}
+.iss-instructions{
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.interactive-ss{
+    font-size: 28px;
+    line-height: 1em;
+    background-color: #B7D7FE;
+    padding: 5px;
+}
+.gwf-answer-placeholder{
+    font-weight: 600;
+}
+.cust-word-container{
+    display: flex;
+    flex-flow: column;
+    position: relative;
+    height: 50%;
+    justify-content: center;
+    align-items: center;
+}
+.cust-word-container div{
+    width: 100%;
+    height: 70%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
 
 @media only screen and (max-width:1024px)
 {
@@ -255,14 +304,14 @@ span.word-native {
         height: 50px;
     }    
     .sample-sentence{
-        font-size: 10px;
+        font-size: 20px;
     }
     .sentence-defination{
-        height: 50px;
+        height: 66px;
         font-size: 12px;
     }
     .tranlsation-box{
-        padding: 5px 30px;
+        padding: 13px 30px;
     }
     .btn-translate{
         z-index: 9999;
@@ -273,12 +322,17 @@ span.word-native {
     .click-to-play-wrap{
         width: 204px;
         height: 20px;
-        top: 37px;
+        top: 100px;
         margin-left: -125px;
         font-size: 11px;
         line-height: 1.6;
     }
     .click-to-play-pointer {
         top: 65%;
+    }
+    .gwf-variant {
+        font-size: 20px;
+        padding: 0 13px;
+        padding-bottom: 3px;
     }
 }

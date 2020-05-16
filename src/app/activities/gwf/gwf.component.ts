@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { PlaysentenceDirective } from '../../directives/playsentence.directive';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gwf',
@@ -16,8 +17,13 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 
 	@ViewChild(PlaysentenceDirective) psn;
 
-    constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gwflog: LoggingService, private gwfcs: ColorschemeService) {
-  		super(elm, sanitizer, playmedia, gwflog, gwfcs);
+	constructor(private elm:ElementRef, 
+				private sanitizer: DomSanitizer, 
+				private playmedia: PlaymediaService, 
+				private gwflog: LoggingService, 
+				private gwfcs: ColorschemeService,
+				private gwfpe: PickElementService) {
+  		super(elm, sanitizer, playmedia, gwflog, gwfcs, gwfpe);
     }
 
     ngOnInit() {
@@ -152,6 +158,7 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 				//	After setting card story we have to wait before angular process playwords directive
 				
 				let d = that.psn;
+				d.origin_text = '';
 				d.compileSentence();
 				d.end_callback = ()=>{
 					that.playsentenceEndCallback();
@@ -163,7 +170,7 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 		} else {
 			this.uinputph = 'finish';
 			this.showResults();
-			this.enter();
+			//this.enter();
 		}
 	}
 
@@ -190,6 +197,7 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 		if(this.uinputph === 'finish'){
 			//this.playCorrectSound();
 			this.enableNextCard();
+			this.moveNext();
 		} else {
 			//playmedia.sound('_STNQR', function(){});
 		}
@@ -199,6 +207,7 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 		if(this.uinputph === 'finish'){
 			this.playCorrectSound();
 			this.enableNextCard();
+			this.moveNext();
 			return;
 		}
 		
@@ -221,6 +230,7 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 				this.enableMoveNext();
 			}
 			this.prevent_dubling_flag = true;
+			this.psn.compileSentence();
 		}
 		
 	}
@@ -232,6 +242,7 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 	//	Used to play task word and sound exactly after instructions play finished
 	playContentDescription() {
 		let that = this;
+		this.playSentenceFinish();
 		if(typeof this.card.content[0].LoopInst !== 'undefined' && this.card.content[0].LoopInst.length > 0){
 			this.card.content[0].desc = this.card.content[0].LoopInst[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].desc);
@@ -272,7 +283,8 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 	playSentenceFinish() {
 		//this.showNextSentence();
 		let that = this;
-		if(this.elm.nativeElement.querySelector('.gwf-answer-placeholder').innerText !== '...')
+		if(!this.elm.nativeElement.querySelector('.gwf-answer-placeholder') || 
+			this.elm.nativeElement.querySelector('.gwf-answer-placeholder').innerText !== '...')
 				setTimeout(function(){ that.showNextSentence(); }, 700);
 	}
 
@@ -285,6 +297,8 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 
 	public user_answer_received_flag: boolean = false;
 	addAnswer(w) {
+		//	If mouse event locked by feedback
+		if(this.gwfpe.mouseLock()) return;
 		let that = this;
 		if(this.user_answer_received_flag) return;
 		this.user_answer_received_flag = true;
@@ -298,7 +312,11 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 			this.showRightAnswer();
 			this.elm.nativeElement.querySelector('.gwf-answer-placeholder').style.width = 'auto';
 			this.elm.nativeElement.querySelector('.gwf-answer-placeholder').innerText = w;
-			setTimeout(function(){ that.psn.compileSentence(); that.playSentence(); }, 1400);
+			setTimeout(function(){ 
+				that.psn.origin_text = that.card.content[0].parts[that.current_set].title.replace(/\(/ig, '').replace(/\)/ig, ''); 
+				that.psn.compileSentence(); 
+				setTimeout(()=>{ that.playSentence(); }, 10);
+			}, 1400);
 		} else {
 			//	Logging wrong answer
 			this.result();
@@ -308,8 +326,9 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 				that.elm.nativeElement.querySelector('.gwf-answer-placeholder').style.width = 'auto';
 				that.elm.nativeElement.querySelector('.gwf-answer-placeholder').innerText = that.expected[that.current_set];
 				setTimeout(function(){
+					that.psn.origin_text = that.card.content[0].parts[that.current_set].title.replace(/\(/ig, '').replace(/\)/ig, '');
 					that.psn.compileSentence();
-					that.playSentence();
+					setTimeout(()=>{ that.playSentence(); }, 10);
 					
 				}, 1400);
 			});
@@ -338,9 +357,13 @@ export class GwfComponent extends BaseComponent implements OnInit, DoCheck {
 		this.elm.nativeElement.querySelector('.gsc-results').style.display = 'block';
 
 		//	Play chimes
-		this.playmedia.action('CHIMES', function(){
+		//this.playmedia.action('CHIMES', function(){
 			
-		}, 300);
+		//}, 300);
+		let that = this;
+		this.playCorrectSound(()=>{
+			that.enter();
+		})
 
 	}
 

@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-ar6',
@@ -19,8 +20,9 @@ export class Ar6Component extends Ar5Component implements OnInit, DoCheck {
 							private ar6pm: PlaymediaService, 
 							private ar6log: LoggingService, 
 							private ar6cs: ColorschemeService,
-							private opar6: OptionService) {
-  	super(ar6el, ar6sn, ar6pm, ar6log, ar6cs, opar6);
+							private opar6: OptionService,
+							private ar6pe: PickElementService) {
+  	super(ar6el, ar6sn, ar6pm, ar6log, ar6cs, opar6, ar6pe);
   }
 
   public index_for_required_letter: number = -1;

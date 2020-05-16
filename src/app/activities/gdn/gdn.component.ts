@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gdn',
@@ -19,8 +20,13 @@ export class GdnComponent extends BaseComponent implements OnInit {
   showResult: boolean;
   hideContent: boolean;
 
-  constructor(private elm: ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gdnlog: LoggingService, private gdncs: ColorschemeService) {
-    super(elm, sanitizer, playmedia, gdnlog, gdncs);
+  constructor(private elm: ElementRef, 
+              private sanitizer: DomSanitizer, 
+              private playmedia: PlaymediaService, 
+              private gdnlog: LoggingService, 
+              private gdncs: ColorschemeService,
+              private gdnpe: PickElementService) {
+    super(elm, sanitizer, playmedia, gdnlog, gdncs, gdnpe);
   }
 
   ngOnInit() {
@@ -54,6 +60,7 @@ export class GdnComponent extends BaseComponent implements OnInit {
   public current_set = 0;
   public expected_string: any;
   public current_word: any;
+  public move_next_timeout: any = null;
 
   //	Validation of user input
   validate() {
@@ -108,6 +115,8 @@ export class GdnComponent extends BaseComponent implements OnInit {
     this.prevent_dubling_flag = false;
     //	Hide option buttons
     this.optionHide();
+    this.enterHide();
+    clearTimeout(this.move_next_timeout);
   }
 
   setFocus() {
@@ -116,12 +125,19 @@ export class GdnComponent extends BaseComponent implements OnInit {
 
   //	Enter click handler
   enter() {
+    let that = this;
     if (this.uinputph === 'finish') {
       this.enableNextCard();
+      this.move_next_timeout = setTimeout(()=>{
+        that.moveNext();
+      }, 1000);
     }
   }
 
   submitAnswer = async (getAnswer, currentValue) => {
+    //	If mouse event locked by feedback
+    if(this.gdnpe.mouseLock()) return;
+    
     let spellingData, breakdown;
     this.input_data = getAnswer ? 'Yes' : 'No';
     if (this.getAllSpelling.indexOf(currentValue) != -1) {

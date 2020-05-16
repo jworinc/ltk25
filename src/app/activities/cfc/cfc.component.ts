@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-cfc',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class CfcComponent extends BaseComponent implements OnInit {
 
-	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private cfclog: LoggingService, private cfccs: ColorschemeService) {
-		super(elm, sanitizer, playmedia, cfclog, cfccs);
+	constructor(private elm:ElementRef, 
+				private sanitizer: DomSanitizer, 
+				private playmedia: PlaymediaService, 
+				private cfclog: LoggingService, 
+				private cfccs: ColorschemeService,
+				private cfcpe: PickElementService) {
+		super(elm, sanitizer, playmedia, cfclog, cfccs, cfcpe);
 	}
 
 	ngOnInit() {
@@ -80,6 +86,7 @@ export class CfcComponent extends BaseComponent implements OnInit {
 		this.prevent_dubling_flag = false;
 		//	Hide option buttons
 		this.optionHide();
+		this.enterHide();
 		//	Clear content finish delay timer
 		clearTimeout(this.content_timeout);
 	}

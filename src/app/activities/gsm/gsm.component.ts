@@ -6,6 +6,7 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 import { Observable } from 'rxjs';
 import { flatMap } from "rxjs/operators";
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gsm',
@@ -15,8 +16,13 @@ import { LoggingService } from '../../services/logging.service';
 })
 export class GsmComponent extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gsmlog: LoggingService, private gwmcs: ColorschemeService) {
-    super(elm, sanitizer, playmedia, gsmlog, gwmcs);
+  constructor(private elm:ElementRef, 
+              private sanitizer: DomSanitizer, 
+              private playmedia: PlaymediaService, 
+              private gsmlog: LoggingService, 
+              private gwmcs: ColorschemeService,
+              private gwmpe: PickElementService) {
+    super(elm, sanitizer, playmedia, gsmlog, gwmcs, gwmpe);
   }
 
   ngOnInit() {
@@ -31,7 +37,7 @@ export class GsmComponent extends BaseComponent implements OnInit {
     console.log(this.data);
     this.current_header = this.card.header;
     this.currentIndex = 0;
-    this.setWords();
+    this.initWords();
     this.card_object = 'Word';
   }
 
@@ -46,6 +52,7 @@ public input_data = '';
 public words = [];
 public numbers=[];
 public Displaywordsarray=[];
+public Displaynumbers=[];
 public answers = [];
 public audios = [];
 public expected = [];
@@ -60,6 +67,7 @@ public current_number: any;
 public current_set = 0;
 public expected_string: any;
 public current_word: any;
+public move_next_timer: any = null;
 
 //	Validation of user input
 validate() {
@@ -97,11 +105,12 @@ show() {
       //this.playContentDescription();
       this.playCardDescription();
       this.disableMoveNext();
-      
+      //this.initWords();
     } else {
       this.enableMoveNext();
     }
     this.prevent_dubling_flag = true;
+    clearTimeout(this.move_next_timer);
   }
   
 }
@@ -174,7 +183,7 @@ playContentDescription() {
 }
 //	Overload default play description function
 
-setWords() {
+initWords() {
   this.Displaywordsarray = [];
   this.numbers = [];
   this.words = [];
@@ -186,6 +195,12 @@ setWords() {
     this.audios.push(this.card.content[i].parts[0].wavename);
     this.Displaywordsarray.push(this.card.content[i].parts[0]);
   }
+  this.Displaynumbers = this.shuffle(this.Displaywordsarray);
+  this.setWords();
+}
+
+setWords() {
+  
   do{
     this.currentIndex = Math.floor(Math.random() * (this.Displaywordsarray.length));
   }while(this.expected.indexOf(this.Displaywordsarray[this.currentIndex].number) != -1)
@@ -217,13 +232,15 @@ getWords() {
 }
 
 addAnswer(ind) {
+  //	If mouse event locked by feedback
+  if(this.gwmpe.mouseLock()) return;
 
   if(this.answers.length >= this.expected.length) return;
+  this.playmedia.stop();
+  this.input_data = this.Displaynumbers[ind].number;
+  if(this.Displaynumbers[ind].number !== this.Displaywordsarray[this.currentIndex].number) this.result();
 
-  this.input_data = this.numbers[ind];
-  if(this.Displaywordsarray[ind].number !== this.Displaywordsarray[this.currentIndex].number) this.result();
-
-  this.answers.push(this.Displaywordsarray[ind].number);
+  this.answers.push(this.Displaynumbers[ind].number);
   
   this.getWords();
 
@@ -243,14 +260,16 @@ showResults(){
   //	Play chimes
   this.playmedia.action('CHIMES', function(){
     that.uinputph = 'finish';
-    that.enter();
+    
   }, 300);
  
   this.lastUncomplete = this.card.content[0].RespAtEnd[0];
   this.card.content[0].desc = this.card.content[0].RespAtEnd[0].pointer_to_value;
   this.setGlobalDesc(this.card.content[0].desc);
-  this.blinkWord();
-  this.playmedia.sound(this.card.content[0].RespAtEnd[0].audio, function(){});
+  //this.blinkWord();
+  this.playmedia.sound(this.card.content[0].RespAtEnd[0].audio, function(){
+    that.enter();
+  });
 
   this.elm.nativeElement.querySelector('.cust-div').style.display = 'none';
   this.elm.nativeElement.querySelector('.gsc-results').style.display = 'block';
@@ -302,9 +321,28 @@ showResults(){
 enter() {
   if(this.uinputph === 'finish'){
     this.enableNextCard();
+    let that = this;
+    this.move_next_timer = setTimeout(()=>{
+      that.enableMoveNext();
+      that.moveNext();
+    }, 1000);
   } 
 }
 
-
+  //	Shuffles array in place.
+	//	@param {Array} a items An array containing the items.
+	shuffle(a) {
+    let j, x, i;
+    let out = [];
+    for(let k in a)
+      out.push(a[k]);
+    for (i = out.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = out[i];
+        out[i] = out[j];
+        out[j] = x;
+    }
+    return out;
+  }
 
 }

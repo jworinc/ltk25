@@ -7,12 +7,12 @@
     <div class='card-content-body-wrap-gsc'>
 		<div class='gsc-user-input gwm-user-input'>
 			<span class='gwm-answer-wrap' *ngFor='let a of answer_for_display; let ka=index' [attr.data-index]='ka'>
-				<span class='gwm-user-answer' [ngClass]="{'gschilight': a.word !== a.expected}">{{ a.word }}</span>
-				<span class='gwm-rigth-answer' *ngIf='a.word !== a.expected'>{{ a.expected }}</span>
+				<span class='gwm-user-answer' [ngClass]="{'gschilight': a.word !== a.expected}" appWordtranslate>{{ a.word }}</span>
+				<span class='gwm-rigth-answer' *ngIf='a.word !== a.expected' appWordtranslate>{{ a.expected }}</span>
 			</span>
 		</div>
 		<div class='diw-hint-letters gsc-letters gwm-words'>
-			<span *ngFor='let l of words; let kl = index' [attr.data-index]='kl' (click)='addAnswer(kl)'>
+			<span *ngFor='let l of words; let kl = index' [attr.data-index]='kl' (click)='addAnswer(kl)' appWordtranslate>
 			{{ l }}</span>
 		</div>
 		<div class='gsc-results'>

@@ -8,6 +8,7 @@ import { TestComponent } from '../../components/test/test.component';
 import { TestDirective } from '../../directives/test.directive';
 import { DataloaderService } from '../../services/dataloader.service';
 import { TestbuilderService } from '../../services/testbuilder.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-tst',
@@ -24,8 +25,9 @@ export class TstComponent extends BaseComponent implements OnInit {
               private tstcs: ColorschemeService,
               private dl: DataloaderService,
               private tb: TestbuilderService,
-              private componentFactoryResolver: ComponentFactoryResolver,) {
-  	super(elm, sanitizer, playmedia, tstlog, tstcs);
+              private componentFactoryResolver: ComponentFactoryResolver,
+              private tstpe: PickElementService) {
+  	super(elm, sanitizer, playmedia, tstlog, tstcs, tstpe);
   }
 
   public uinputph = 'teststart';
@@ -97,6 +99,7 @@ export class TstComponent extends BaseComponent implements OnInit {
     this.prevent_dubling_flag = false;
     //	Hide option buttons
     this.optionHide();
+    this.enterHide();
   }
 
   //	Used to play task word and sound exactly after instructions play finished
@@ -204,6 +207,8 @@ export class TstComponent extends BaseComponent implements OnInit {
 
   //  Move next event
   mvNext(){
+    //	If mouse event locked by feedback
+		if(this.tstpe.mouseLock()) return;
     //  Check limit
     if(this.ctestpos < this.max){
       for(let i in this.cts){
@@ -228,6 +233,8 @@ export class TstComponent extends BaseComponent implements OnInit {
 
   //  Move prev event
   mvPrev(){
+    //	If mouse event locked by feedback
+		if(this.tstpe.mouseLock()) return;
     //  Check limit
     if(this.ctestpos > this.min){
       this.ctestpos--;

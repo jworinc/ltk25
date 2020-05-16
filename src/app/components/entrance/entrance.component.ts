@@ -95,11 +95,18 @@ export class EntranceComponent implements OnInit {
     let that = this;
     this.disable_request_button = true;
 
+    this.dl.sendLinkExpiredNotificationEmail(that.link).then(()=>{
+      that.request_update_screen = false;
+      that.update_message_screen = true;
+    });
+
     //  Imitation of sent request
+    /*
     setTimeout(()=>{
       that.request_update_screen = false;
       that.update_message_screen = true;
     }, 400);
+    */
 
   }
 

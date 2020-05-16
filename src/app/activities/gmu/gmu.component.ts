@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { flatMap } from "rxjs/operators";
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gmu',
@@ -17,8 +18,13 @@ export class GmuComponent extends BasebwComponent implements OnInit, DoCheck {
   
   @ViewChild('focus') private elementRef: ElementRef;
   
-  constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService, private gmulog: LoggingService, private bw7cs: ColorschemeService) {
-  	super(element, sz, pms, gmulog, bw7cs);
+  constructor(private element:ElementRef, 
+              private sz: DomSanitizer, 
+              private pms: PlaymediaService, 
+              private gmulog: LoggingService, 
+              private bw7cs: ColorschemeService,
+              private gmupe: PickElementService) {
+  	super(element, sz, pms, gmulog, bw7cs, gmupe);
   }
 
     ngOnInit() {
@@ -135,6 +141,7 @@ export class GmuComponent extends BasebwComponent implements OnInit, DoCheck {
           this.enableMoveNext();
         }
         this.prevent_dubling_flag = true;
+        this.showEnter();
       }
        
     }
@@ -280,8 +287,11 @@ export class GmuComponent extends BasebwComponent implements OnInit, DoCheck {
     public play_word_busy_flag: boolean = false;
   
     playWord(){
-  
-      if(this.play_word_busy_flag) return;
+      //	If mouse event locked by feedback
+		  if(this.gmupe.mouseLock()) return;
+      this.pms.stop();
+      this.play_pronouce_busy_flag = false;
+      //if(this.play_word_busy_flag) return;
       this.play_word_busy_flag = true;
       let that = this;
       let hletter = 0;
@@ -383,13 +393,14 @@ export class GmuComponent extends BasebwComponent implements OnInit, DoCheck {
       let that = this;
      
       this.pms.stop(); 
-      if(typeof this.entered_val === 'undefined' || this.entered_val === "") return;
+      
       if(this.uinputph === 'split' && this.entered_val !==""){
+        //if(typeof this.entered_val === 'undefined' || this.entered_val === "") return;
+        
         this.showword= true;
         //	Check result
         if(this.entered_val === this.answer_word){
   
-          
           this.getSplitResult();
           this.entered_val = '';
           //	Show right answer
@@ -398,6 +409,7 @@ export class GmuComponent extends BasebwComponent implements OnInit, DoCheck {
           that.playCorrectSound(function(){
           });
           this.finishOrContinueBW();
+
         } else {
           
           //	Log user error
@@ -421,8 +433,11 @@ export class GmuComponent extends BasebwComponent implements OnInit, DoCheck {
           this.lastUncomplete = this.card.content[0].RespAtEnd[0];
           this.card.content[0].desc = this.card.content[0].RespAtEnd[0].pointer_to_value;
           this.setGlobalDesc(this.card.content[0].desc);
-          this.blinkWord();
-          this.pms.sound(this.card.content[0].RespAtEnd[0].audio, function(){});
+          //this.blinkWord();
+          this.pms.sound(this.card.content[0].RespAtEnd[0].audio, function(){
+            that.enableNextCard();
+					  that.moveNext();
+          });
           this.showresult = true;
         }
       }

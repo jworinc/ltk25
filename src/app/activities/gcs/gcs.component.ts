@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from 'src/app/services/pick-element.service';
 
 @Component({
   selector: 'app-gcs',
@@ -33,9 +34,16 @@ export class GcsComponent extends BaseComponent implements OnInit {
     public expected_string = '';
     public input_data = '';
     public uinputph = 'question';
+    public after_complete_phase = false;
+    public finish_phase_timeout: any = null;
 
-  	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gcslog: LoggingService, private gcscs: ColorschemeService) {
-  	  	super(elm, sanitizer, playmedia, gcslog, gcscs);
+    constructor(private elm:ElementRef, 
+                private sanitizer: DomSanitizer, 
+                private playmedia: PlaymediaService, 
+                private gcslog: LoggingService, 
+                private gcscs: ColorschemeService,
+                private gcspe: PickElementService) {
+  	  	super(elm, sanitizer, playmedia, gcslog, gcscs, gcspe);
     }
 
   	ngOnInit() {
@@ -92,7 +100,9 @@ export class GcsComponent extends BaseComponent implements OnInit {
     
 
     checkAnswer(answer,i){
-
+      //	If mouse event locked by feedback
+      if(this.gcspe.mouseLock()) return;
+    
       this.ind = i;
       this.next_word++;
       let that = this;
@@ -237,7 +247,15 @@ export class GcsComponent extends BaseComponent implements OnInit {
         }
 
       }
-
+      if(this.after_complete_phase) {
+        this.after_complete_phase = false;
+        let that = this;
+        this.finish_phase_timeout = setTimeout(()=>{
+          that.enableMoveNext();
+          that.moveNext();
+        }, 1700);
+        
+      }
 
     }
 
@@ -248,7 +266,7 @@ export class GcsComponent extends BaseComponent implements OnInit {
             temp = { "audio":this.data['content'][0]['RespAtEnd'][i].audio ,"pointer_to_value":this.data['content'][0]['RespAtEnd'][i].pointer_to_value}
             this.card.content[0].instructions.push(temp);
           }
-
+          this.after_complete_phase = true;
           this.playCardDescription();
     }
 
@@ -284,6 +302,8 @@ export class GcsComponent extends BaseComponent implements OnInit {
           this.enableMoveNext();
         }
         this.prevent_dubling_flag = true;
+        this.after_complete_phase = false;
+        clearTimeout(this.finish_phase_timeout);
       }
       
     }
@@ -294,6 +314,10 @@ export class GcsComponent extends BaseComponent implements OnInit {
       if(this.uinputph === 'finish')
         return true;
       else return false;
+    }
+
+    hide() {
+      clearTimeout(this.finish_phase_timeout);
     }
 
     

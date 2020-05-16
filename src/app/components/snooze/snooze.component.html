@@ -1,0 +1,19 @@
+<div id='app-snooze-modal' class="modal fade show" tabindex="-1" role="dialog" style='z-index: 10100; display: block; padding-left: 0px; background-color: rgba(0, 0, 0, 0.7); overflow-y: auto;'>
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            	<h4 class="modal-title">{{ 'snooze' | translate }}</h4>
+                
+            </div>
+            <div class="modal-body">
+                <div class="app-feedback-intro">
+                    <span class="icon-snooze"></span>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)='continueLesson()'>{{ 'continue' | translate }}</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

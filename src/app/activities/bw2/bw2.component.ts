@@ -1,10 +1,12 @@
-import { Component, OnInit, Input, ElementRef, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, DoCheck, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { BasebwComponent } from '../basebw/basebw.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { MultiselectComponent } from '../../components/multiselect/multiselect.component';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-bw2',
@@ -19,11 +21,16 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 							private pms: PlaymediaService, 
 							private bw2log: LoggingService, 
 							private bw2cs: ColorschemeService,
-							private op: OptionService) {
-  	super(element, sz, pms, bw2log, bw2cs);
+							private op: OptionService,
+							private bw2pe: PickElementService) {
+  	super(element, sz, pms, bw2log, bw2cs, bw2pe);
 	}
 	
 	public enable_handle_vowel: boolean = false;
+
+	
+	@ViewChild(MultiselectComponent) msel: MultiselectComponent;
+
 
   ngOnInit() {
 
@@ -98,6 +105,7 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 			this.lastUncomplete = this.card.content[0].Question3[0];
 			this.card.content[0].desc = this.card.content[0].Question3[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].desc);
+			this.showEnter();
 			this.pms.sound(this.card.content[0].Question3[0].audio, function(){
 				that.setFocus();
 				that.input_data = '';
@@ -109,8 +117,11 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 			this.lastUncomplete = this.card.content[0].RecInst[0];
 			this.card.content[0].desc = this.card.content[0].RecInst[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].desc);
+			this.enterHide();
 			this.blinkRec();
-			this.pms.sound(this.card.content[0].RecInst[0].audio, function(){});
+			this.pms.sound(this.card.content[0].RecInst[0].audio, function(){
+				that.pms.word(that.answer_word, function(){});
+			});
 		}
 		//	Phase 4 rec instructions, if mic is disabled
 		else if(typeof this.card.content[0].RecInst !== 'undefined' && this.card.content[0].RecInst.length > 0 && this.uinputph === 'rec' && !this.global_recorder){
@@ -231,9 +242,11 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 			if(this.getUserInputString() !== ''){
 				this.playCorrectSound(function(){ 
 					that.enableNextCard();
+					that.moveNext();
 				});
 			} else {
 				that.enableNextCard();
+				that.moveNext();
 			}
 		}
 
@@ -251,6 +264,7 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 
 	    	let that = this;
 				this.pms.stop();
+				this.play_pronouce_busy_flag = false;
 				//	When current phase is letters, check if num letters match with user input and switch to next
 				if(this.uinputph === 'letters' && this.input_data !== ''){
 					if(this.input_data == this.expected){
@@ -275,6 +289,8 @@ export class Bw2Component extends BasebwComponent implements OnInit, DoCheck {
 							if(parseInt(i) === this.card.content[this.current_card_instance].parts.length - 1) break;
 							this.expected += p;
 						}
+						this.input_data = '';
+						this.mselshow = false;
 						//this.playContentDescription();
 						this.playCardDescription();
 						return;

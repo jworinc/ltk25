@@ -5,15 +5,16 @@
 
 <div class="card-block-item card-style-obj-single card-block-bw5">
     <div class='bw1-block bw1-letters-wrap'>
-		<span class='bw1-letter' *ngFor="let l of card.content[current_card_instance].parts; let kl = index" [attr.data-letter]='kl' [attr.data-index]='kl'>
+		<span class='bw1-letter' *ngFor="let l of card.content[current_card_instance].parts; let kl = index" [attr.data-letter]='kl' [attr.data-index]='kl' (click)="playLetter(kl)">
 			{{ l }}
 		</span>
 	</div>
 	<div class='bw1-block bw1-word-wrap'>
-		<span class='bw1-word' (click)='playWord()'>{{ answer_word }}</span>
+		<span class='bw1-word' (click)='playWord()' appWordtranslate>{{ answer_word }}</span>
 	</div>
 	<div class='bw1-block bw1-user-input'>
-		<input type='text' [(ngModel)]='input_data' (input)="valueChange($event)" />
+		<input [hidden]="mselshow" autocomplete="off" type='text' [(ngModel)]='input_data' (input)="valueChange($event)" />
+		<app-multiselect [hidden]="!mselshow" [num]="6" [type]="mseltype" [right]="expected" (result)="handleUserInput($event)"></app-multiselect>
 	</div>
 	<div class='bw1-block bw1-description'>
 		{{ card.content[0].desc }}

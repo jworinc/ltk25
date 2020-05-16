@@ -637,7 +637,8 @@ body{
 .top-toolbar-rec, 
 .zoom-card-next, 
 .zoom-card-sequence-good, 
-.zoom-card-sequence-bad{
+.zoom-card-sequence-bad,
+.zoom-card-sequence-rule{
     display: flex;
     position: relative;
     flex-grow: 1;
@@ -647,11 +648,15 @@ body{
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
+    border-style: solid;
+    border-width: 5px;
+    border-color: transparent;
+    box-sizing: content-box;
 }
 .top-toolbar-repeat, .top-toolbar-listen, .top-toolbar-rec{
     height: 70%;
 }
-.zoom-card-sequence-prev, .zoom-card-sequence-hint, .zoom-card-sequence-clear, .zoom-card-sequence-enter, .zoom-card-next, .zoom-card-sequence-goodbad{
+.zoom-card-sequence-rule, .zoom-card-sequence-prev, .zoom-card-sequence-hint, .zoom-card-sequence-clear, .zoom-card-sequence-enter, .zoom-card-next, .zoom-card-sequence-goodbad{
     background-size: contain;
     max-height: 160px;
     max-width: 90px;
@@ -673,6 +678,10 @@ body{
 }
 .zoom-card-sequence-clear{
     background-image: url(../../../assets/img/clear_button.png);
+    /*background-size: 50% 60%;*/
+}
+.zoom-card-sequence-rule{
+    background-image: url(../../../assets/img/rule_button.png);
     /*background-size: 50% 60%;*/
 }
 .zoom-card-sequence-enter{
@@ -715,8 +724,8 @@ body{
     max-height: 60px;
     max-width: 90px;
     min-height: 24px;
-    border-style: none;
-    border-color: #AAFFAA;
+    /*border-style: none;*/
+    border-color: transparent;
     border-width: 2px;
 }
 .zoom_card_next_hl{
@@ -732,21 +741,23 @@ body{
     left: 0;
     order: 3;
     background-color: white;
-    box-shadow: 0 0 3px #000;
+    /*box-shadow: 0 0 3px #000;*/
 }
 .zoom-card-sequence-buttons-mobile span{
     display: block;
     position: relative;
     float: left;
-    width: 33.33%;
+    max-width: 27.33%;
     height: 100%;
-    max-width: 1024px;
+    /* max-width: 1024px; */
     min-width: 0;
-    max-height: 100%;
+    max-height: 70%;
     min-height: 0;
     margin: 0;
     background-size: contain;
     background-repeat: no-repeat;
+    box-sizing: content-box;
+    border-width: 5px;
 }
 .main-app-start-lesson-screen, .main-app-finish-lesson-screen, .lesson-not-complete-screen{
     display: flex;
@@ -966,10 +977,10 @@ body{
     text-align: center;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
+    font-size: 26px;
     line-height: 30px;
     color: #C2272D;
-    font-weight: 600;
+    font-weight: 200;
 }
 .zoom-frame-header{
     display: flex;
@@ -982,9 +993,10 @@ body{
     text-align: center;
     align-items: center;
     font-size: 18px;
-    box-shadow: 0 0 3px #000;
+    font-weight: 600;
+    box-shadow: 0 0 7px #444;
     border-bottom-style: solid;
-    border-color: #333;
+    border-color: #777;
     border-width: 1px;
 }
 .zoom-card-sequence-goodbad{
@@ -1075,8 +1087,19 @@ body{
     position: relative;
 }
 .blinkhighlight{
+    /*
     opacity: 0.6 !important;
     background-color: rgba(100, 255, 100, 0.9) !important;
+    */
+    /*
+    opacity: 1 !important;
+    background-color: rgb(15, 255, 15) !important;
+    */
+    border-style: solid !important;
+    border-width: 5px !important;
+    border-color: rgb(252, 86, 86) !important;
+    border-radius: 4px !important;
+    box-sizing: content-box !important;
 }
 
 .tool-sidebar-open-icon-top{
@@ -1092,6 +1115,48 @@ body{
     height: 70%;
 }
 
+.lesson-position-activity-tag{
+    display: block;
+    position: absolute;
+    z-index: 2200;
+    bottom: 5px;
+    right: 5px;
+    color: grey;
+    font-size: 10px;
+    cursor: pointer;
+}
+.lesson-position-activity-tag:hover{
+    background-color: lightblue;
+}
+
+.zoom-frame-header-desktop{
+    display: block;
+    /*background-color: white;*/
+}
+.zoom-frame-header-mobile{
+    display: none;
+    flex-flow: row;
+}
+.inner-frame-header{
+    display: flex;
+    min-width: 50%;
+    height: 100%;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    background-color: #0071BD;
+}
+.inner-frame-header-full{
+    min-width: 100%;
+}
+.lesson-description-feedback-exists{
+    display: block;
+    position: absolute;
+    top: 0;
+    left: -13px;
+    color: blue;
+}
+
 
 @media screen and (max-width: 1024px) {
    
@@ -1103,6 +1168,17 @@ body{
         transition: left 0.4s ease;
         overflow: hidden;
         overflow-y: auto;
+    }
+
+    .zoom-frame-header-desktop{
+        display: none;
+    }
+    .zoom-frame-header-mobile{
+        display: flex;
+        height: auto;
+    }
+    .zoom-frame-header{
+        background-color: white;
     }
     
 }
@@ -1237,12 +1313,14 @@ body{
     }
     .zoom-card-sequence-buttons-mobile{
         display: flex;
+        align-items: center;
+        justify-content: space-evenly;
     }
     .zoom-card-sequence-clear{
 	    background-size: contain;
 	}
     .bottom-description-box {
-        display: none;
+        /*display: none;*/
     }
     .zoom-card-sequence-prev{
         order: 1;
@@ -1278,6 +1356,28 @@ body{
         width: 0px;
         flex-grow: 0;
         cursor: pointer;
+    }
+    .zoom-card-sequence-goodbad {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-evenly;
+        flex-flow: row;
+    }
+    .zoom-card-sequence-goodbad span{
+        width: 50%;
+        max-width: 45%;
+        max-height: 90%;
+    }
+    .bottom-description-box {
+        display: flex;
+        order: 2;
+        height: 120px;
+        background-color: white;
+        box-shadow: 0 0 3px #000;
+        z-index: 1000;
+        text-align: center;
+        align-items: flex-start;
+        justify-content: center;
     }
 
 }  

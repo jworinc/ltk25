@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gss',
@@ -31,9 +32,15 @@ export class GssComponent extends BaseComponent implements OnInit {
     public input_data: any;
     public expected_string: any;
     public uinputph = 'start';
+    public move_next_timer: any = null;
 
-  	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gsslog: LoggingService, private gsscs: ColorschemeService) {
-  	  	super(elm, sanitizer, playmedia, gsslog, gsscs);
+    constructor(private elm:ElementRef, 
+                private sanitizer: DomSanitizer, 
+                private playmedia: PlaymediaService, 
+                private gsslog: LoggingService, 
+                private gsscs: ColorschemeService,
+                private gsspe: PickElementService) {
+  	  	super(elm, sanitizer, playmedia, gsslog, gsscs, gsspe);
     }
 
   	ngOnInit() {
@@ -160,6 +167,8 @@ export class GssComponent extends BaseComponent implements OnInit {
           this.enableMoveNext();
         }
         this.prevent_dubling_flag = true;
+        this.showEnter();
+        clearTimeout(this.move_next_timer);
       }
       
     }
@@ -167,9 +176,11 @@ export class GssComponent extends BaseComponent implements OnInit {
     playContentDescription(){
       this.playmedia.word(this.play_word, function(){
       });
-
-      if(this.isAnswered)
-      this.blinkEnter();
+      let that = this;
+      if(this.isAnswered) {
+        setTimeout(()=>{ if(that.isActive()) that.nextWord(); }, 1000);
+      }
+      //this.blinkEnter();
 
       if(this.isAnswered && this.cust_index != this.data.content.length){
         for(let i=0; i<this.all_Skills.length; i++){
@@ -184,10 +195,12 @@ export class GssComponent extends BaseComponent implements OnInit {
 
 
     selectedSound(selected_word, select_header){
+      //	If mouse event locked by feedback
+		  if(this.gsspe.mouseLock()) return;
 
       console.log("Index :"+this.cust_index);
       console.log("Selected Word :"+selected_word);
-
+      let that = this;
       if(this.cust_index < this.data['content'].length){
     
         if(selected_word == this.data['content'][this.cust_index].skill && !this.isAnswered){
@@ -196,7 +209,7 @@ export class GssComponent extends BaseComponent implements OnInit {
           // if(!this.isAnswered){
           //   this.count++;
           // }
-          this.playmedia.action('CHIMES', function(){}, 30);
+          this.playmedia.action('CHIMES', function(){ that.nextWord(); }, 30);
           console.log("If Index :"+this.cust_index);
           // if(this.cust_index < this.data['content'].length){
           //   this.temp_word =  this.data['content'][this.cust_index].parts.join('').replace(/-/g,'');
@@ -208,7 +221,7 @@ export class GssComponent extends BaseComponent implements OnInit {
           //   this.playCardDescription();
           // }
           this.count++;
-          this.nextWord();
+          
 
         }else{
           console.log(this.respIfIncorrect.content.length);
@@ -233,7 +246,8 @@ export class GssComponent extends BaseComponent implements OnInit {
             this.result();
             
           }else{
-            this.blinkEnter();
+            //this.blinkEnter();
+            this.nextWord();
           }
 
           
@@ -268,6 +282,14 @@ export class GssComponent extends BaseComponent implements OnInit {
         this.card.content[0].instructions = [];
         this.card.content[0].instructions[0] = this.instruct.content[this.instruct.content.length-1];
         this.playCardDescription();
+      } else {
+        this.enableNextCard();
+        let that = this;
+        this.move_next_timer = setTimeout(()=>{
+          that.enableMoveNext();
+          that.moveNext();
+        }, 2000);
+        
       }
     }
 

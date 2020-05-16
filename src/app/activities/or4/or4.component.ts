@@ -4,6 +4,7 @@ import { Or3Component } from '../or3/or3.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-or4',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Or4Component extends Or3Component implements OnInit, DoCheck {
 
-    constructor(private or4el:ElementRef, private or4sn: DomSanitizer, private or4pm: PlaymediaService, private or4log: LoggingService, private or4cs: ColorschemeService) {
-  		super(or4el, or4sn, or4pm, or4log, or4cs);
+	constructor(private or4el:ElementRef, 
+				private or4sn: DomSanitizer, 
+				private or4pm: PlaymediaService, 
+				private or4log: LoggingService, 
+				private or4cs: ColorschemeService,
+				private or4pe: PickElementService) {
+  		super(or4el, or4sn, or4pm, or4log, or4cs, or4pe);
     }
 
     public answer_type: any;
@@ -58,9 +64,11 @@ export class Or4Component extends Or3Component implements OnInit, DoCheck {
 			if(this.input_data !== '' && this.input_data.toLowerCase() === this.answer_word.toLowerCase()){
 				//	Check if it was last question, finish card
 				if(this.card.content[0].questions.length === this.current_question){
-					this.playCorrectSound();
+					this.playCorrectSound(()=>{
+						that.enableNextCard();
+						that.moveNext();
+					});
 					this.uinputph = 'finish';
-					this.enableNextCard();
 				} else {
 					this.or4pm.action('DING', function(){});
 					setTimeout(function(){
@@ -99,6 +107,7 @@ export class Or4Component extends Or3Component implements OnInit, DoCheck {
 			}
 			this.prevent_dubling_flag = true;
 			//this.showHint();
+			this.setGlobalHeader("ORAL READING");
 		}
 		
 	}
@@ -140,6 +149,7 @@ export class Or4Component extends Or3Component implements OnInit, DoCheck {
 			} else {
 				that.uinputph = 'finish';
 				that.enableNextCard();
+				that.moveNext();
 			}
 		}
 		for(let i in ric){
@@ -182,11 +192,13 @@ export class Or4Component extends Or3Component implements OnInit, DoCheck {
 	}
 
 	next() {
+		if(this.instruction2_flag) this.repeat();
 		if(this.instruction2_flag) return;
 		this.instruction2_flag = true;
 		this.showQuestion();
 		this.nextInstructions();
-		this.enableMoveNext();
+		//this.enableMoveNext();
+		this.showEnter();
 	}
 
 	nextInstructions(){
@@ -211,7 +223,7 @@ export class Or4Component extends Or3Component implements OnInit, DoCheck {
 	//	Show question
 	public current_question = 0;
 	showQuestion() {
-
+		let that = this;
 		if(typeof this.card.content[0].questions !== 'undefined' && 
 			typeof this.card.content[0].questions.length !== 'undefined' && 
 			this.card.content[0].questions.length > this.current_question){
@@ -246,7 +258,13 @@ export class Or4Component extends Or3Component implements OnInit, DoCheck {
 				}
 				vr += '</span>';
 				this.or4el.nativeElement.querySelector('.or3-story-question-wrap').innerHTML = qt+vr;
-
+				this.or4el.nativeElement.querySelectorAll("input[name='user_input']").forEach((e)=>{
+					if(e) {
+						e.onchange = ()=>{
+							that.enter();
+						}
+					}
+				});
 			} else {
 				this.answer_type = 'word';
 				//	Get answer word
@@ -264,7 +282,7 @@ export class Or4Component extends Or3Component implements OnInit, DoCheck {
 				this.expected_string = q.title;
 
 				//	Replace answer word with a input
-				q.title = q.title.replace(ar, '<input type="text" class="or3-question-word-input" id="user-answer-or3" />');
+				q.title = q.title.replace(ar, '<input type="text" autocomplete="off" class="or3-question-word-input" id="user-answer-or3" />');
 				
 				this.or4el.nativeElement.querySelector('.or3-story-question-wrap').innerHTML = '<span>' + q.title + '</span>';
 			

@@ -12,6 +12,8 @@ import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { CustomfieldService } from '../../services/customfield.service';
 import { HelpService } from '../../services/help.service';
+import { AuthService } from '../../services/auth.service';
+import { TokenService } from '../../services/token.service';
 import { CardDirective } from '../../directives/card.directive';
 import { CardItem } from '../../card-item';
 import { CardComponent } from '../card/card.component';
@@ -22,6 +24,8 @@ import * as $ from 'jquery';
 import { GrammarComponent } from '../grammar/grammar.component';
 import { filter } from 'rxjs/operators';
 import { HelpTooltipComponent } from '../help-tooltip/help-tooltip.component';
+import { Title } from '@angular/platform-browser';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-lesson',
@@ -56,6 +60,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public show_setting_modal: boolean = false;
   public show_feedback_modal: boolean = false;
   public show_warncomplete_modal: boolean = false;
+  public show_snooze: boolean = false;
   public mode = 'dual';
   public cpos: number = 2;
   public scale: number = 0.9;
@@ -94,15 +99,19 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public blinkgoodbad: boolean = false;
   public blinkrec: boolean = false;
   public blinkplay: boolean = false;
+  public blinkrule: boolean = false;
 
   public rui_button_hint: boolean = false;
   public rui_button_clear: boolean = false;
+  public rui_button_rule: boolean = false;
   public rui_button_goodbad: boolean = false;
   public rui_button_prev: boolean = false;
+  public rui_button_enter: boolean = false;
   public page_is_loading_screen: boolean = true;
   public main_app_screen: boolean = false;
   public beep_start_sound: any;
-  public global_recorder: boolean = false;
+  public yhnry_sound: any;
+  public global_recorder: boolean = true;
   public end_lesson_flag: boolean = false;
   public recstart_event: EventEmitter<any> = new EventEmitter();
   public recstop_event: EventEmitter<any> = new EventEmitter();
@@ -119,10 +128,33 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public start_button_animation: any = null;
   public lesson_finished: boolean = false;
 
+  //  Services events subscriptions
   public route_change_event: any;
   public color_change_event: any;
   public student_info_event: any;
   public lang_change_event: any;
+  public start_recording_event: any;
+  public mic_disabled_event: any;
+  public on_leave_lesson_event: any;
+  public student_info_event_subscription: any;
+
+  public card_descriptor = {
+    lesson: 0,
+    position: 0,
+    activity: ''
+  }
+
+  public snooze_timer: any = null;
+  public snooze_time = 0;
+  public snooze_delay = 240;
+
+  //  Flag for enabling stop of media playback on any user action
+  public action_media_stop = true;
+
+  //  Sent Feedback List according to current card descriptor
+  public current_feedback_list: any = [];
+
+  public show_course_expire_msg = false;
 
   constructor(
     private DL: DataloaderService,
@@ -134,30 +166,76 @@ export class LessonComponent implements OnInit, AfterViewInit {
     private componentFactoryResolver: ComponentFactoryResolver,
     private el:ElementRef,
     private route: ActivatedRoute,
-    private recorder: RecorderService,
+    public  recorder: RecorderService,
     private playmedia: PlaymediaService,
     private preloader: MediapreloaderService,
     private logging: LoggingService,
     private cs: ColorschemeService,
     private cf: CustomfieldService,
-    public hs: HelpService
+    public hs: HelpService,
+    private Auth: AuthService,
+    private Token: TokenService,
+    private title: Title,
+    private pe: PickElementService
   ) {
         // this language will be used as a fallback when a translation isn't found in the current language
         this.translate.setDefaultLang(Option.getFallbackLocale());
 
         // the lang to use, if the lang isn't available, it will use the current loader to get them
         this.translate.use(Option.getLocale());
+
+        //  Attach beep sound to recorder start rec event
+        let that = this;
+        this.start_recording_event = this.recorder.start_recording_ev.subscribe(()=>{
+          /*
+          if(typeof that.beep_start_sound !== 'undefined' && typeof that.beep_start_sound.play !== 'undefined') {
+            //alert((window as any).Howler.ctx.state);
+            
+            that.beep_start_sound.volume(that.global_volume);
+            that.beep_start_sound.play();
+            
+            
+          }
+          */
+          if(!that.global_recorder) {
+            that.global_recorder = true;
+            that.setGlobalRecorder(that.global_recorder);
+          }
+        });
+
+        this.mic_disabled_event = this.recorder.mic_disabled_ev.subscribe(()=>{
+          if(that.global_recorder) {
+            that.global_recorder = false;
+            that.setGlobalRecorder(that.global_recorder);
+          }
+          alert(that.translate.instant('mic_disabled_msg'));
+          clearInterval(that.rec_start_interval);
+          that.rec_time = 0;
+          if(that.rec_toggle) that.recToggle();
+        });
+
+        //  When user leave screen or change tab, got to snooze
+        this.on_leave_lesson_event = this.logging.on_leave_lesson.subscribe(()=>{
+          //this.goToSnooze();
+          that.snooze_time = 170;
+        });
   }
 
   ngOnInit() {
 
+    //  Set lessons title
+    this.title.setTitle('LTK-Lessons');
+
     //  Init studetn information
     this.student_info_event = this.DL.getStudentInfo();
-    this.student_info_event.subscribe(
+    this.student_info_event_subscription = this.student_info_event.subscribe(
         data => this.handleStudentInfo(data),
         error => {
           console.log(error);
           this.notify.error('Student info load status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
+          this.Auth.changeAuthStatus(false);
+          this.router.navigateByUrl('/login');
+          this.Token.remove();
         }
     );
 
@@ -202,7 +280,27 @@ export class LessonComponent implements OnInit, AfterViewInit {
           }
         }
         
-      });
+    });
+
+    
+    that.beep_start_sound = new Howl({
+      src: 'beep.mp3',
+      autoplay: false,
+      loop: false,
+      volume: 0.7,
+      rate: 1.8
+    });
+
+    that.yhnry_sound = new Howl({
+      src: 'YHNRY.mp3',
+      autoplay: false,
+      loop: false,
+      volume: 0.7,
+      rate: 1
+    });
+
+
+    
      
   }
 
@@ -211,7 +309,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.route_change_event.unsubscribe();
     this.lang_change_event.unsubscribe();
     this.color_change_event.unsubscribe();
-    //this.student_info_event.unsubscribe();
+    this.start_recording_event.unsubscribe();
+    this.mic_disabled_event.unsubscribe();
+    this.student_info_event_subscription.unsubscribe();
+    this.on_leave_lesson_event.unsubscribe();
   }
 
 
@@ -228,8 +329,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.setCurrentScale(this.scale);
     this.setCurrentCardPosition(this.cpos);
     let that = this;
-    setTimeout(()=>{ that.refreshNav(); }, 100);
-    //this.setGlobalRecorder(true);
+    setTimeout(()=>{ that.refreshNav(); that.setCurrentCardDescriptor(); }, 100);
+    that.global_recorder = true;
+    that.setGlobalRecorder(that.global_recorder);
     this.setSidetripMode(this.sidetripmode);
     this.setGlobalStart(this.global_start);
   }
@@ -270,7 +372,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   @HostListener('window:beforeunload', ['$event'])
   onBeforeUnload(event) {
       
-      if(!this.end_lesson_flag){
+      if(!this.end_lesson_flag && !this.show_snooze){
         this.urgentLeaveLesson();
         let dialogText = 'Do you want to leave this lesson?';
         event.returnValue = dialogText;
@@ -281,9 +383,21 @@ export class LessonComponent implements OnInit, AfterViewInit {
   //  Handle keydown events
   @HostListener('window:keydown', ['$event'])
   onKeydow(event) {
+      this.resetSnoozeTime();
       if(event.keyCode == 37) this.movePrev();
       if(event.keyCode == 39) this.moveNext();
       if(event.keyCode == 13) this.enter();
+  }
+
+  //  Mouse move events
+  //@HostListener('window:mousemove', ['$event'])
+  @HostListener('window:mousedown', ['$event'])
+  @HostListener('window:mouseup', ['$event'])
+  @HostListener('window:touchstart', ['$event'])
+  @HostListener('window:touchend', ['$event'])
+  @HostListener('window:click', ['$event'])
+  onMovement(event) {
+      this.resetSnoozeTime();
   }
 
   urgentLeaveLesson() {
@@ -321,6 +435,22 @@ export class LessonComponent implements OnInit, AfterViewInit {
      
   }
 
+  getCardDescriptor() {
+    let that = this;
+    let d = '#'+this.card_descriptor.lesson+'-'+this.card_descriptor.position+':'+this.card_descriptor.activity;
+    //  Check if feedback already exist for current card
+    this.DL.getLastFeedbacks(encodeURIComponent('N'+this.card_descriptor.lesson+'-'+this.card_descriptor.position+'-'+this.card_descriptor.activity)).then((data)=>{
+      if(typeof (data as any).length !== 'undefined' && (data as any).length > 0){
+        console.log("Found feedback according to current card");
+        console.log(data);
+        that.current_feedback_list = data;
+      } else {
+        that.current_feedback_list = [];
+      }
+    });
+    return d;
+  }
+
   //  Handle loaded student info
   handleStudentInfo(data){
     console.log('Student Info:');
@@ -339,15 +469,33 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.Option.setOptions(data.options);
     //  Check if start position is setted
     if(typeof data.start !== 'undefined' && !this.sidetripmode) this.start_position = data.start;
+
+    //  Check if course expired
+    if(typeof data.course_expired !== 'undefined' && data.course_expired) {
+      
+      this.show_course_expire_msg = true;
+
+      this.page_is_loading_screen = false;
+      this.main_app_screen = true;
+      setTimeout(()=>{
+        //that.el.nativeElement.querySelector('#main-app-screen').style.opacity = '1';
+        $('#main-app-screen').css('opacity', '1');
+      }, 10);
+      return;
+      
+    }
     
     //  Start loading cards according to last uncomplete lesson
     if(!this.sidetripmode){
       this.loadCards(this.student.lu);
       this.current_lesson_title = this.getCurrentLessonTitle(this.student.lu);
+      this.card_descriptor.lesson = this.student.lu;
       console.log('Run normally, start position setted to '+this.start_position+'!');
+      this.title.setTitle('LTK-Lesson-'+this.card_descriptor.lesson);
     } else {
       this.loadCards(this.n);
       this.current_lesson_title = this.getCurrentLessonTitle(this.n);
+      this.card_descriptor.lesson = this.n;
       this.start_position = 0;
       console.log('Run sidetrip, start position setted to start!');
       //  Setup lesson for testing
@@ -355,6 +503,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
       //  set lu for sidetrip with some delay
       let that = this;
       setTimeout(()=>{ that.DL.lu = +that.n; }, 20);
+      this.title.setTitle('LTK-Lessons-Sidetrip'+this.n);
     }
     
   }
@@ -407,6 +556,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
         that.blinkEnter(); 
       });
 
+      (<CardComponent>componentRef.instance).blinkrule.subscribe(function(){
+        that.blinkRule(); 
+      });
+
       (<CardComponent>componentRef.instance).blinknextnavbtn.subscribe(function(){
         that.blinkNextNavBtn(); 
       });
@@ -415,6 +568,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
       (<CardComponent>componentRef.instance).option_hide.subscribe(function(){
         that.optionHide(); 
+      });
+
+      (<CardComponent>componentRef.instance).enter_hide.subscribe(function(){
+        that.enterHide(); 
       });
 
       (<CardComponent>componentRef.instance).show_good_bad.subscribe(function(){
@@ -431,6 +588,14 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
       (<CardComponent>componentRef.instance).show_clear.subscribe(function(){
         that.showClear();
+      });
+
+      (<CardComponent>componentRef.instance).show_rule.subscribe(function(){
+        that.showRule();
+      });
+
+      (<CardComponent>componentRef.instance).show_enter.subscribe(function(){
+        that.showEnter();
       });
 
       (<CardComponent>componentRef.instance).set_card_id.subscribe(function(e){
@@ -553,6 +718,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   startLesson() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.show_start_screen = false;
     let that = this;
     if(!this.recorder.recorder_init_ready) this.recorder.init();
@@ -564,29 +731,21 @@ export class LessonComponent implements OnInit, AfterViewInit {
         //that.setGlobalRecorder(that.global_recorder);
         that.playmedia.setVolume(that.global_volume);
         
-        that.beep_start_sound = new Howl({
-              src: 'beep.mp3',
-              autoplay: false,
-              loop: false,
-              volume: 0.7,
-              rate: 1.8
-            });
-
         that.updateLesson();
         that.lesson_finished = false;
       }
 
       let wait_audio_ctx_counter = 0;
       let waitForAudioContext = function() {
-        if(!that.recorder.audio_context_enable) {
-          if(wait_audio_ctx_counter > 50){
-            alert('Please enable microphone or check if your browser support it and reload the lesson!');
-            that.global_recorder = false;
+        if(!that.recorder.recorder_init_ready) {
+          if(wait_audio_ctx_counter > 10){
+            alert(that.translate.instant('mic_disabled_msg'));
+            that.global_recorder = true;
             that.setGlobalRecorder(that.global_recorder);
             enableLesson();
             return;
           } else {
-            setTimeout(waitForAudioContext, 100);
+            setTimeout(waitForAudioContext, 150);
             wait_audio_ctx_counter++;
             return;
           }
@@ -597,7 +756,14 @@ export class LessonComponent implements OnInit, AfterViewInit {
           enableLesson();
         }
       }
-      waitForAudioContext();
+      //waitForAudioContext();
+      setTimeout(()=>{
+        that.global_recorder = true;
+        that.setGlobalRecorder(that.global_recorder);
+        enableLesson();
+      }, 20);
+      
+
       //  Send activity log begin Lesson message
       if(!this.sidetripmode){
         this.logging.lessonBegin(this.student.lu)
@@ -609,6 +775,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
             }
           );
       }
+
+      //  Start snooze timer
+      this.startSnoozeTimer();
   }
 
   setCurrentCardPosition(pos) {
@@ -764,6 +933,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public navigation_switch_flag: boolean = false;
 
   moveNext() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     let that = this;
     
     //  Try to resume audio context
@@ -828,7 +999,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
     //  method on current card before switch, where performs validation of user input
     //  and shows/plays some messages to user
     let sc = this.getChildCardScope(this.current_id);
-    if(typeof sc !== 'undefined' && sc !== null && typeof sc.complete !== 'undefined' && sc.complete < 100 && !this.sidetripmode){
+    if(typeof sc !== 'undefined' && sc !== null && typeof sc.complete !== 'undefined' && sc.complete < 100 && this.cpos === sc.card.pos && !this.sidetripmode){
+    //if(typeof sc !== 'undefined' && sc !== null && typeof sc.complete !== 'undefined' && sc.complete < 100 && this.cpos === sc.card.pos){
       this.showWarnComplete();
       return;
     } 
@@ -844,6 +1016,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
     //  }, 30);
     //  return;
     //}
+
+    //  Clear feedback list
+    that.current_feedback_list = [];
     
     this.switchToNextCard();
 
@@ -879,9 +1054,14 @@ export class LessonComponent implements OnInit, AfterViewInit {
     //  Preload media
     let that = this;
     setTimeout(()=>{ that.preloader.loadCard(this.cpos); }, 1600);
+
+    this.setCurrentCardDescriptor();
+    
   }
 
   movePrev() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     let that = this;
     
     //  Check delay
@@ -920,7 +1100,27 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.cpos--;
     this.setCurrentCardPosition(this.cpos);
     this.refreshNav(); 
+    //  Clear feedback list
+    that.current_feedback_list = [];
+    this.setCurrentCardDescriptor();
     
+  }
+
+  setCurrentCardDescriptor() {
+    let that = this;
+    setTimeout(()=>{
+      that.card_descriptor.position = that.cpos;
+      let sc = this.getChildCardScope(that.current_id);
+      if(typeof sc !== 'undefined' && sc !== null && typeof sc.card !== 'undefined'){
+        that.card_descriptor.activity = sc.card.activity;
+      } else {
+        that.card_descriptor.activity = '';
+      }
+
+      //  Store updated descriptor to DataLoader service to share it between other components
+      that.DL.card_descriptor = that.getCardDescriptor();
+
+    }, 200);
   }
 
   disableNextSlide() {
@@ -945,6 +1145,25 @@ export class LessonComponent implements OnInit, AfterViewInit {
           that.blinkenter = true;
           setTimeout(()=>{
             that.blinkenter = false;
+          }, 400);
+        }, 400);
+      }, 400);
+    }, 400);
+
+  }
+
+  blinkRule() {
+
+    let that = this;
+
+    setTimeout(()=>{
+      that.blinkrule = true;
+      setTimeout(()=>{
+        that.blinkrule = false;
+        setTimeout(()=>{
+          that.blinkrule = true;
+          setTimeout(()=>{
+            that.blinkrule = false;
           }, 400);
         }, 400);
       }, 400);
@@ -1045,7 +1264,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   enter() {
-
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    if(this.action_media_stop) this.playmedia.stop();
     //  Check cards and sent enter event to active card
     //  in case if any other component is hidden
     if(!this.show_grammar && !this.show_notebook && !this.show_testing){
@@ -1078,6 +1299,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   repeat() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    if(this.action_media_stop) this.playmedia.stop();
     if(this.lesson_finished) return;
     //  Check cards and sent enter event to active card
     for(let i in this.ccs){
@@ -1090,6 +1314,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   hint() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    if(this.action_media_stop) this.playmedia.stop();
     //  Check cards and sent enter event to active card
     for(let i in this.ccs){
       let c = this.ccs[i];
@@ -1100,6 +1327,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   clear() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    if(this.action_media_stop) this.playmedia.stop();
     //  Check cards and sent enter event to active card
     for(let i in this.ccs){
       let c = this.ccs[i];
@@ -1109,11 +1339,30 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
   }
 
+  rule() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    if(this.action_media_stop) this.playmedia.stop();
+    //  Check cards and sent enter event to active card
+    for(let i in this.ccs){
+      let c = this.ccs[i];
+      if(c.instance.isActive()){
+        c.instance.rule(); 
+      }
+    }
+  }
+
   optionHide() {
     this.rui_button_hint = false;
     this.rui_button_clear = false;
+    this.rui_button_rule = false;
     this.rui_button_goodbad = false;
     this.rui_button_prev = false;
+    //this.rui_button_enter = false;
+  }
+
+  enterHide() {
+    this.rui_button_enter = false;
   }
 
   //  Change option button from hint to clear
@@ -1122,6 +1371,16 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_clear = true;
     this.rui_button_goodbad = false;
     this.rui_button_prev = false;
+    this.rui_button_rule = false;
+  }
+
+  //  Change option button from hint to clear
+  showRule(){
+    this.rui_button_hint = false;
+    this.rui_button_clear = false;
+    this.rui_button_goodbad = false;
+    this.rui_button_prev = false;
+    this.rui_button_rule = true;
   }
 
   //  Change option button from clear to hint
@@ -1130,6 +1389,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_clear = false;
     this.rui_button_goodbad = false;
     this.rui_button_prev = false;
+    this.rui_button_rule = false;
   }
 
   //  Change option button to good/bad
@@ -1138,6 +1398,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_clear = false;
     this.rui_button_goodbad = true;
     this.rui_button_prev = false;
+    this.rui_button_rule = false;
   }
 
   //  Change option button to prev
@@ -1146,6 +1407,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.rui_button_clear = false;
     this.rui_button_goodbad = false;
     this.rui_button_prev = true;
+    this.rui_button_rule = false;
+  }
+
+  //  Show enter button
+  showEnter(){
+    this.rui_button_enter = true;
   }
 
   setCurrentCardId(id) {
@@ -1233,17 +1500,27 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
     this.playmedia.stop();
     this.global_desc = '';
+    this.stopSnoozeTimer();
   }
 
   good() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    if(this.action_media_stop) this.playmedia.stop();
     this.good_btn.emit();
   }
 
   bad() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    if(this.action_media_stop) this.playmedia.stop();
     this.bad_btn.emit();
   }
 
   prev() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    if(this.action_media_stop) this.playmedia.stop();
     this.prev_btn.emit();
   }
 
@@ -1256,6 +1533,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   onShowFeedback() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    this.playmedia.stop();
     this.show_feedback_modal = true;
   }
 
@@ -1316,6 +1596,20 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
   }
 
+  onCloseNotebook(){
+    console.log("Close Notebook.");
+    this.show_grammar = false;
+    this.show_testing = false;
+    let that = this;
+    this.show_notebook = false;
+    setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
+    if(this.mode === 'single') this.onCloseMenu();
+    if(!this.global_start){
+      if(this.show_notebook) this.show_start_screen = false;
+      if(!this.show_notebook) this.show_start_screen = true;
+    }
+  }
+
   //  Show Testing
   onShowTesting() {
     this.show_notebook = false;
@@ -1365,18 +1659,20 @@ export class LessonComponent implements OnInit, AfterViewInit {
       this.rec_toggle = true;
       this.rec_stoped = false;
       this.rec_exists = false;
+
+      if(typeof that.beep_start_sound !== 'undefined' && typeof that.beep_start_sound.play !== 'undefined') {
+        
+        that.beep_start_sound.volume(that.global_volume);
+        that.beep_start_sound.play();
+        
+      }
       
       //  Start recording
       setTimeout(function(){ 
         that.recorder.start(); 
         that.recstart_event.emit();
-      }, 600);
+      }, 400);
       
-      if(typeof this.beep_start_sound.play !== 'undefined') {
-        this.beep_start_sound.volume(this.global_volume);
-        this.beep_start_sound.play();
-      }
-
     } else {
       //  Change rec flag
       this.rec_toggle = false;
@@ -1384,26 +1680,130 @@ export class LessonComponent implements OnInit, AfterViewInit {
       this.rec_exists = true;
       
       //  Stop recording
-      setTimeout(function(){ 
+      //setTimeout(function(){ 
         that.recorder.stop(); 
         that.recstop_event.emit();
-      }, 500);
+      //}, 500);
     }
   }
 
   //  Max record time include waiting delay
   public max_rec_duration = 11000;
+  //  Min record time include waiting delay
+  public min_rec_duration = 3000;
   //  Rec interval instance
   public rec_start_interval = null;
   //  Delay before start
-  public delay_before_rec_start = 140;
+  public delay_before_rec_start = 160;
   //  Time of current record
   public rec_time = 0;
-  
+  //  Flag that represent record button state
+  public rec_button_release = false;
+  //  Waiting for audio context timer
+  public waiting_audioctx_timer = null;
+
+  startRecordingOfInitSample() {
+    let that = this;
+    if(that.rec_toggle) return;
+    //this.recToggle();
+    clearInterval(that.rec_start_interval);
+    this.rec_start_interval = setInterval(function() {
+      if(that.recorder.audio_context_enable && that.recorder.recording_started) that.rec_time += 80;
+      if(!that.global_recorder && !that.recorder.audio_context_enable && that.rec_toggle) {
+        /*
+        clearInterval(that.rec_start_interval);
+        that.rec_time = 0;
+        if(that.rec_toggle) that.recToggle();
+        return;
+        */
+        //that.rec_time += 40;
+      }
+      if(!that.rec_toggle){
+        that.recToggle();
+      }
+      //  Check if recording was started and it duration is more than allowed
+      //  stop recording
+      if(that.rec_time >= that.max_rec_duration){
+        clearInterval(that.rec_start_interval);
+        that.rec_time = 0;
+        if(that.rec_toggle) that.recToggle();
+      }
+
+      //  Check if rec button was released and minimal duration reached
+      if(that.rec_time >= that.min_rec_duration && that.rec_button_release){
+        clearInterval(that.rec_start_interval);
+        that.rec_time = 0;
+        if(that.rec_toggle) that.recToggle();
+      }
+
+    }, 80);
+  }
+
+  recUp() {
+    this.rec_button_release = true;
+  } 
+
+  recDown() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    let that = this;
+    this.rec_button_release = false;
+    //  Intermediate function to check audio context and start recording
+    let wait_audio_ctx_counter = 0;
+    clearTimeout(that.waiting_audioctx_timer);
+    that.waiting_audioctx_timer = null;
+    let waitForAudioContext = function() {
+      if(!that.recorder.audio_context_enable) {
+        if(wait_audio_ctx_counter > 20){
+          alert(that.translate.instant('mic_disabled_msg'));
+          that.global_recorder = false;
+          that.setGlobalRecorder(that.global_recorder);
+          clearTimeout(that.waiting_audioctx_timer);
+          return;
+        } else {
+          that.waiting_audioctx_timer = setTimeout(waitForAudioContext, 100);
+          wait_audio_ctx_counter++;
+          return;
+        }
+        
+      } else {
+        that.global_recorder = true;
+        setTimeout(()=>{ that.setGlobalRecorder(that.global_recorder); }, 100);
+        clearTimeout(that.waiting_audioctx_timer);
+      }
+    }
+    
+    this.playmedia.stop();
+
+    if(!this.recorder.audio_context_enable && !this.waiting_audioctx_timer) {
+      
+      //  Enable audio context
+      if(!this.recorder.recorder_init_ready) this.recorder.init();
+      //waitForAudioContext();
+      this.startRecordingOfInitSample();
+      return;
+
+    }
+    
+    if(this.recorder.audio_context_enable && !that.global_recorder) {
+      that.global_recorder = true;
+      that.setGlobalRecorder(that.global_recorder);
+      clearTimeout(that.waiting_audioctx_timer);
+    }
+    
+    //clearInterval(this.rec_start_interval);
+    
+    this.startRecordingOfInitSample();
+
+  }
+
+
+  /*
   //  Handler for mouseup rec button event
   recUp() {
     
-    if(!this.global_start || !this.recorder.audio_context_enable) return;
+    //if(!this.global_start || !this.recorder.audio_context_enable) return;
+    if(!this.recorder.audio_context_enable) return;
     clearTimeout(this.rec_start_interval);
     //  If recording was started, stop it
     if(this.rec_toggle){
@@ -1424,7 +1824,10 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   //  Handler for mousedown rec button event
   recDown() {
-    if(!this.global_start || !this.recorder.audio_context_enable) return
+    if(this.action_media_stop) this.playmedia.stop();
+    if(!this.recorder.recorder_init_ready) this.recorder.init();
+    //if(!this.global_start || !this.recorder.audio_context_enable) return
+    if(!this.recorder.audio_context_enable) return
     //  if play in progress or setting page is shown, return
     if(this.show_rec_setting) return;
     if(this.rec_play) this.playStop();
@@ -1447,12 +1850,47 @@ export class LessonComponent implements OnInit, AfterViewInit {
       }
     }, 20);
   }
+  */
+
+  setNoRecordItem() {
+    let that = this;
+    this.global_desc = this.translate.instant('no_recording_msg');
+    if(typeof this.yhnry_sound !== 'undefined' && typeof this.yhnry_sound.play !== 'undefined') {
+      this.yhnry_sound.stop();
+      this.yhnry_sound.volume(this.global_volume);
+      this.yhnry_sound.play();
+      this.yhnry_sound.on('end', function(){
+        that.playstop_event.emit();
+      });
+      
+    }
+  }
 
   //  Event handler for start play button
   playStart() {
-    if(!this.global_start || !this.recorder.audio_context_enable) return;
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    if(this.action_media_stop) this.playmedia.stop();
+    //if(!this.global_start || !this.recorder.audio_context_enable) return;
+    if(!this.recorder.audio_context_enable){
+      this.setNoRecordItem(); return;
+    }
     let that = this;
     that.playstart_event.emit();
+
+    //  Check if there is no any record yet
+    if(!this.recorder.lastrec) {
+      this.setNoRecordItem();
+    }
+
+    // Stop recording
+    clearInterval(that.rec_start_interval);
+    that.rec_time = 0;
+    if(that.rec_toggle) {
+      that.recToggle();
+      return;
+    }
+
     //  Start play audio and set callback when playing will finished
     this.recorder.playStart(function() {
       that.rec_play = false;
@@ -1473,6 +1911,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   disableSidetrip() {
+    //	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
     this.end_lesson_flag = true;
     this.router.navigateByUrl('/home');
   }
@@ -1492,8 +1932,68 @@ export class LessonComponent implements OnInit, AfterViewInit {
       //  Prepare and show help mask to choose required element
       this.hs.prepareHelp();
     }
-
+  }
     
+  showToolPageListMenu() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    this.show_tool_pages_list = true;
+  }
+
+  startSnoozeTimer() {
+    let that = this;
+    this.snooze_timer = setInterval(function(){
+      that.snooze_time++;
+      if(that.snooze_time >= that.snooze_delay){
+        that.goToSnooze();
+        clearTimeout(that.snooze_timer);
+      } 
+      //else console.log("Snooze time: " + that.snooze_time);
+    }, 1000);
+  }
+
+  stopSnoozeTimer() {
+    this.snooze_time = 0;
+    clearTimeout(this.snooze_timer);
+  }
+
+  continueLesson() {
+    //  Hide Snooze message
+    this.show_snooze = false;
+    this.startSnoozeTimer();
+
+    //  Send activity log begin Lesson message
+    if(!this.sidetripmode){
+      this.logging.lessonBegin(this.student.lu)
+        .subscribe(
+          data => {},
+          error => {
+            console.log(error);
+            this.notify.error('Lesson Begin status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
+          }
+        );
+      
+      let sc = this.getChildCardScope(this.current_id);
+      if(typeof sc !== 'undefined' && sc !== null && typeof sc.render !== 'undefined'){
+        sc.card_begin_flag = false;
+        sc.render();
+      }
+    }
+
+
+
+  }
+
+  resetSnoozeTime() {
+    this.snooze_time = 0;
+  }
+
+  goToSnooze() {
+    //  Show snooze message
+    this.show_snooze = true;
+    this.snooze_time = 0;
+    this.urgentLeaveLesson();
+    clearTimeout(this.snooze_timer);
   }
 
 

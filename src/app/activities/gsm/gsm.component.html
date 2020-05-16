@@ -15,14 +15,14 @@
       <div class="col-lg-5 col-md-5 col-sm-5">
           <h3>Column 1</h3>
           <div class='diw-hint-letters gsc-letters gwm-words'>
-              <span *ngFor='let l of Displaywordsarray; let kl = index' [attr.data-index]='kl' (click)='addAnswer(kl)'>
+              <span *ngFor='let l of Displaywordsarray; let kl = index' [ngClass]="{'current-number': kl === currentIndex}" [attr.data-index]='kl'>
               {{ l.number }}</span>
           </div>
       </div>
       <div class="col-lg-7 col-md-7 col-sm-7">
           <h3>Column 2</h3>
           <div class='diw-hint-letters gsc-letters gwm-words'>
-              <span *ngFor='let l of Displaywordsarray; let kl = index' [ngClass]="{'current-number': kl === currentIndex}"  [attr.data-index]='kl'>
+              <span *ngFor='let l of Displaynumbers; let kl = index' [attr.data-index]='kl' (click)='addAnswer(kl)'>
               {{ l.word }}</span>
           </div>
       </div>

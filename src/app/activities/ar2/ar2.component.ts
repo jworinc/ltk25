@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-ar2',
@@ -19,8 +20,9 @@ export class Ar2Component extends BaseComponent implements OnInit {
 								private playmedia: PlaymediaService, 
 								private ar2log: LoggingService, 
 								private ar2cs: ColorschemeService,
-								private op: OptionService) {
-  		super(elm, sanitizer, playmedia, ar2log, ar2cs);
+								private op: OptionService,
+								private ar2pe: PickElementService) {
+  		super(elm, sanitizer, playmedia, ar2log, ar2cs, ar2pe);
     } 
 
     ngOnInit() {
@@ -47,7 +49,7 @@ export class Ar2Component extends BaseComponent implements OnInit {
 		this.uinputph = '';
 
 
-		this.setCard();
+		//this.setCard();
     }
 
 
@@ -187,6 +189,8 @@ export class Ar2Component extends BaseComponent implements OnInit {
 
 	//	Handle clicks on buttons, btn - is a button number
 	handleAnswer(btn) {
+		//	If mouse event locked by feedback
+		if(this.ar2pe.mouseLock()) return;
 		if(this.validate()) return;
 		//	Change style of pushed button
 		this.elm.nativeElement.querySelectorAll('button').forEach((e)=>{
@@ -200,13 +204,14 @@ export class Ar2Component extends BaseComponent implements OnInit {
 		this.input_data = btn;
 		
 		//	Validate user answer and enable next slide if it's allright
-		if(this.validate()) this.enableMoveNext();
+		if(this.validate()) this.disableMoveNext();
 		else {
 			//	Log user error
 			this.card_object = 'Question';
 			this.card_instance = this.expected_string = 'How Many Syllables? ' + this.answer_word + ' ('+this.expected+')';
 			this.result();
 			this.disableMoveNext();
+			//this.enter();
 		}
 		this.checkIfComplete();
 
@@ -217,20 +222,27 @@ export class Ar2Component extends BaseComponent implements OnInit {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()) {
-				
+			//if(!this.validate()) {
+				this.current_presented = 1;
+				this.current_card_instance = 0;
+				this.elm.nativeElement.querySelector('.card-syllables-body-wrap-ar2').style.opacity = '0';
+				this.setCard();
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
-				
-			} else {
-				this.enableMoveNext();
-			}
+				this.disableNextSlide();
+			//} else {
+			//	this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 			this.showHint();
 			this.input_data = 0;
 		}
 		
+	}
+
+	next() {
+		if(this.current_presented < this.max_presented) this.repeat();
 	}
 	
 	//	Used to play task word and sound exactly after instructions play finished
@@ -256,6 +268,7 @@ export class Ar2Component extends BaseComponent implements OnInit {
 		this.elm.nativeElement.querySelectorAll('button').forEach((e)=>{
 			e.classList.remove('btn-success');
 			e.classList.remove('btn-warning');
+			e.blur();
 		});
 		this.input_data = 0;
 		
@@ -273,20 +286,22 @@ export class Ar2Component extends BaseComponent implements OnInit {
 		setTimeout(function(){ that.elm.nativeElement.querySelector('.card-syllables-body-wrap-ar2').style.opacity = '0';; }, 3000);
 	}
 
+	public config_next_task_in_progress = false;
 	checkIfComplete() {
 
 		//	Filter all user data 
 		this.input_data = +this.input_data;
-		
+		this.playmedia.stop();
 		//	Get user answer
 		let result = this.input_data;
 		let that = this;
 		//	If user input is not wrong
 		if(result === this.expected){
-
+			this.clearUserInput();
 			this.elm.nativeElement.querySelector('.card-syllables-body-wrap-ar2').style.opacity = '1';
-
+			
 			if(this.current_presented < this.max_presented){
+				this.config_next_task_in_progress = true;
 				this.playmedia.action('CHIMES', function(){
 
 					//	Play 'The word is...'
@@ -302,7 +317,9 @@ export class Ar2Component extends BaseComponent implements OnInit {
 
 								//	Continue with next word
 								that.current_card_instance++;
+								that.input_data = 0;
 								that.setCard();
+								that.config_next_task_in_progress = false;
 								setTimeout(function(){ 
 									that.current_presented++; 
 									that.playContentDescription();
@@ -326,12 +343,19 @@ export class Ar2Component extends BaseComponent implements OnInit {
 					that.setGlobalDesc(fst.pointer_to_value);
 					if(typeof fst.audio !== 'undefined' && fst.audio !== ''){
 						that.playmedia.sound(fst.audio, function(){});
-						that.playmedia.word(that.answer_word, function(){ that.enter(); });
+						that.playmedia.word(that.answer_word, function(){ 
+							that.playCorrectSound(function(){ 
+								that.enableMoveNext(); that.moveNext();
+							});
+						});
 					}
 				}
 			}
+		} else {
+			this.enter();
 		}
 		//	If current card is active
+		/*
 		if(this.isActive()){
 			let scope = this;
 			//	Validate user input and decide enable or not next card
@@ -339,10 +363,12 @@ export class Ar2Component extends BaseComponent implements OnInit {
 				else scope.disableMoveNext();
 			
 		}
+		*/
 		
 	}
 
 	enter(silent = false) {
+		//return;
 		let that = this;
 		this.playmedia.stop();
 		if(!this.validate()){
@@ -367,6 +393,22 @@ export class Ar2Component extends BaseComponent implements OnInit {
 					});
 				} else {
 					that.enableNextCard();
+				}
+			} else {
+				//	When next task configuration process was interrupted by enter, restart it
+				if(this.config_next_task_in_progress) {
+					//	Continue with next word
+					that.elm.nativeElement.querySelector('.card-syllables-body-wrap-ar2').style.opacity = '0';
+					that.current_card_instance++;
+					that.input_data = 0;
+					that.setCard();
+					that.config_next_task_in_progress = false;
+					setTimeout(function(){ 
+						that.current_presented++; 
+						that.playContentDescription();
+					}, 300);
+				} else {
+					that.playContentDescription();
 				}
 			}
 		}

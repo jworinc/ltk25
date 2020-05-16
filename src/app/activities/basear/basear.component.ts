@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { flatMap } from "rxjs/operators";
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-basear',
@@ -14,8 +15,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class BasearComponent extends BaseComponent implements OnInit {
 
-	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private barlog: LoggingService, private barcs: ColorschemeService) {
-		super(elm, sanitizer, playmedia, barlog, barcs);
+	constructor(private elm:ElementRef, 
+				private sanitizer: DomSanitizer, 
+				private playmedia: PlaymediaService, 
+				private barlog: LoggingService, 
+				private barcs: ColorschemeService,
+				private barpe: PickElementService) {
+		super(elm, sanitizer, playmedia, barlog, barcs, barpe);
 
 	}
 

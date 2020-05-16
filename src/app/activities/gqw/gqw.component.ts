@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gqw',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class GqwComponent extends BaseComponent implements OnInit {
 
-	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gqwlog:LoggingService, private gqwcs: ColorschemeService) {
-	  	super(elm, sanitizer, playmedia, gqwlog, gqwcs);
+	constructor(private elm:ElementRef, 
+				private sanitizer: DomSanitizer, 
+				private playmedia: PlaymediaService, 
+				private gqwlog:LoggingService, 
+				private gqwcs: ColorschemeService,
+				private gqwpe: PickElementService) {
+	  	super(elm, sanitizer, playmedia, gqwlog, gqwcs, gqwpe);
 	}
 
 	ngOnInit() {
@@ -87,24 +93,30 @@ export class GqwComponent extends BaseComponent implements OnInit {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()) {
+			//if(!this.validate()) {
 				
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
+				this.disableNextSlide();
 				
-			} else {
-				this.enableMoveNext();
-			}
+			//} else {
+			//	this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 		}
 		
+	}
+
+	next() {
+		this.repeat();
 	}
 
 	hide() {
 		this.prevent_dubling_flag = false;
 		//	Hide option buttons
 		this.optionHide();
+		this.enterHide();
 	}
 
 	setFocus(){
@@ -157,6 +169,8 @@ export class GqwComponent extends BaseComponent implements OnInit {
 	}
 
 	addAnswer(ind) {
+		//	If mouse event locked by feedback
+		if(this.gqwpe.mouseLock()) return;
 
 		this.input_data = this.words[ind];
 
@@ -204,7 +218,7 @@ export class GqwComponent extends BaseComponent implements OnInit {
 	//	Enter click handler
 	enter() {
 		if(this.uinputph === 'finish'){
-			this.enableNextCard();
+			this.enableNextCard(); this.moveNext();
 		} 
 	}
 

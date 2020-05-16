@@ -5,7 +5,7 @@
 
 <div class="card-block-item card-style-obj-single card-block-bw3">
     <div class='bw1-block bw1-word-wrap bw3-word-wrap'>
-		<span class='bw1-word' (click)='playWord()' [innerHTML]='display_answer_word | bindhtml'></span>
+		<span class='bw1-word' (click)='playWord()' [innerHTML]='display_answer_word | bindhtml' appWordtranslate></span>
 	</div>
 	<div class='bw1-block bw1-letters-wrap bw3-letters-wrap'>
 		<span class='bw1-letter' *ngFor="let l of syllables; let kl = index" [attr.data-letter]='kl' ngClass="{'bw3hilight': l===expected}">
@@ -13,7 +13,7 @@
 		</span>
 	</div>
 	<div class='bw1-block bw1-user-input'>
-		<input type='text' [(ngModel)]='input_data' (input)="valueChange($event)" />
+		<input autocomplete="off" type='text' [(ngModel)]='input_data' (input)="valueChange($event)" />
 	</div>
 	<div class='bw1-block bw1-description'>
 		{{ card.content[0].desc }}

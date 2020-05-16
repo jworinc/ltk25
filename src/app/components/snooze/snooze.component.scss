@@ -1,0 +1,20 @@
+@keyframes snoozehilight {
+    0%   {opacity: 0.3;}
+    50%  {opacity: 1;}
+    100%   {opacity: 0.3;}
+}
+.icon-snooze{
+    background-image: url(../../../assets/img/snooze_icon.png);
+    display: block;
+    position: relative;
+    width: 30%;
+    height: 200px;
+    margin: auto;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    transition: opacity 2s linear;
+    animation-name: snoozehilight;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+}

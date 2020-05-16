@@ -5,6 +5,10 @@ import { SnotifyService } from 'ng-snotify';
 import { TranslateService } from '@ngx-translate/core';
 import { OptionService } from '../../services/option.service';
 import { NotebookComponent } from '../notebook/notebook.component';
+import { AuthService } from '../../services/auth.service';
+import { TokenService } from '../../services/token.service';
+import { Title } from '@angular/platform-browser';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -67,6 +71,8 @@ export class DashboardComponent implements OnInit {
 
   public lang_change_event: any;
 
+  public show_course_expire_msg = false;
+
   @ViewChild(NotebookComponent) nb: NotebookComponent;
 
   constructor(
@@ -75,7 +81,11 @@ export class DashboardComponent implements OnInit {
     private translate: TranslateService,
     private Option: OptionService,
     private router: Router,
-    private el: ElementRef
+    private el: ElementRef,
+    private Auth: AuthService,
+    private Token: TokenService,
+    private title: Title,
+    private pe: PickElementService
   ) {
         // this language will be used as a fallback when a translation isn't found in the current language
         this.translate.setDefaultLang(Option.getFallbackLocale());
@@ -86,11 +96,17 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
 
+    //  Set dashboard title
+    this.title.setTitle("LTK-Lessons-Main");
+
     this.DL.getStudentInfo().subscribe(
         data => this.handleStudentInfo(data),
         error => {
           console.log(error);
           this.notify.error('Student info load status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
+          this.Auth.changeAuthStatus(false);
+          this.router.navigateByUrl('/login');
+          this.Token.remove();
         }
     );
 
@@ -121,6 +137,8 @@ export class DashboardComponent implements OnInit {
   }
 
   setLesson(l) {
+    //	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
     this.current_lesson = l;
     for(let i in this.lessons){
       if(parseInt(this.lessons[i].number) === parseInt(l)) this.cl = this.lessons[i];
@@ -149,14 +167,25 @@ export class DashboardComponent implements OnInit {
       });
       
     }
+
+    //  Check if course expired
+    if(typeof data.course_expired !== 'undefined' && data.course_expired) {
+      //  Show main screen
+      this.el.nativeElement.querySelector('.book-container').style.opacity = '1';
+
+      this.show_course_expire_msg = true;
+      
+    } else {
+      this.DL.getLessons().subscribe(
+        data => this.handleLessons(data),
+          error => {
+            console.log(error);
+            this.notify.error('Lessons list load status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
+          }
+      );
+    }
     
-  	this.DL.getLessons().subscribe(
-  		data => this.handleLessons(data),
-      	error => {
-      		console.log(error);
-      		this.notify.error('Lessons list load status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
-      	}
-  	);
+  	
 
   }
 
@@ -274,7 +303,8 @@ export class DashboardComponent implements OnInit {
 
   //  Handle click event on lesson
   showLesson(n) {
-
+    //	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
     //  Check if sidetrip mode is enabled, redirect user to sidetrip lessons
     if(this.sidetripmode){
       this.router.navigateByUrl('/sidetrip/'+n);
@@ -348,6 +378,8 @@ export class DashboardComponent implements OnInit {
   }
 
   disableSidetrip() {
+    //	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
     this.sidetripmode = false;
   }
 
@@ -398,6 +430,16 @@ export class DashboardComponent implements OnInit {
     let that = this;
     this.show_notebook = !this.show_notebook;
     this.nb.lesson_num = this.student.lu;
+    setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
+  }
+
+  onCloseNotebook() {
+    console.log("Close Notebook.");
+    this.show_grammar = false;
+    this.show_testing = false;
+    let that = this;
+    this.show_notebook = false;
+    //this.nb.lesson_num = this.student.lu;
     setTimeout(()=>{ that.scale = that.defineCurrentScale(); }, 10);
   }
 

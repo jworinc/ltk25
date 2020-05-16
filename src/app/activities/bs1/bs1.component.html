@@ -3,25 +3,29 @@
 [ngClass]="{'blinkhighlight': blinknext}"></div>
 
 
-<div class="card-block-item card-style-obj-single card-block-gmu">
+<div class="card-block-item card-style-obj-single card-block-gmu card-block-bs1">
 
   <div class="header-div">
-    <h4 class="text-center">{{header}}</h4>
-    <h6 class="text-center">{{subtitle}}</h6>
+    <h4 class="text-center" app-playwords [silentPlay]="true">{{subtitle}}</h4>
+    <!--<h6 class="text-center" app-playwords [silentPlay]="true">{{subtitle}}</h6>-->
   </div>
 
-  <div class="row cust-row">
-    <div class="sen-parts">
-      <div class="col-sm-5 sen-p sen-begin" [ngClass]="{'showitem': show_sentence_begin}" [hidden]="this.uinputph === 'finish'">
+  <div class="row cust-row introductory-frame" [hidden]="uinputph !== 'introductory'">
+    <span *ngFor="let ins of intro_inst">{{ ins }}</span>
+  </div>
+
+  <div class="row cust-row" [hidden]="uinputph === 'introductory'">
+    <div class="sen-parts" [hidden]="this.uinputph === 'finish'">
+      <div class="col-sm-5 sen-p sen-begin" [ngClass]="{'showitem': show_sentence_begin}" [hidden]="this.uinputph === 'finish'" appFontadjuster>
         <span [innerHTML]="current_sentence | bindhtml" [attr.data-ind]='i_sentence_begin' app-playsentence></span>
       </div>
       <div class="col-sm-1 sen-p sen-sn" [ngClass]="{'showitem': show_sentence_var}">+</div>
-      <div class="col-sm-5 sen-p sen-variant" [ngClass]="{'showitem': show_sentence_var}" [hidden]="this.uinputph === 'finish'">
+      <div class="col-sm-5 sen-p sen-variant" [ngClass]="{'showitem': show_sentence_var}" [hidden]="this.uinputph === 'finish'" appFontadjuster>
         <span [innerHTML]="current_variant | bindhtml" [attr.data-ind]='i_sentence_var' app-playsentence></span>
       </div>
     </div>
     <div class="col-sm-12 sen-ready-list">
-      <span class="sentence" *ngFor="let s of s_pull; let ks = index" [ngStyle]="s.style" [hidden]="currentinnerWidth <= 1024">
+      <span class="sentence" *ngFor="let s of s_pull; let ks = index" [ngStyle]="s.style" [hidden]="currentinnerWidth <= 1024" appFontadjuster [fontcorrection]="4">
           <div class="sen-begin">
             <span [innerHTML]="s.beg | bindhtml" [attr.data-ind]='(s.ind*10)+s.ind+4' app-playsentence></span>
           </div>
@@ -33,15 +37,20 @@
             <span [innerHTML]="s.sen | bindhtml" [attr.data-ind]='s.ind' app-playsentence></span>
           </div>
       </span>
-      <span class="sentence" *ngFor="let s of s_pull; let ks = index" [ngStyle]="s.style" [hidden]="currentinnerWidth > 1024"
-        [innerHTML]="s.sen | bindhtml" [attr.data-ind]='s.ind' app-playsentence></span>
+      <span class="sentence" *ngFor="let s of s_pull; let ks = index" [ngStyle]="s.style" [hidden]="currentinnerWidth > 1024" appFontadjuster [fontcorrection]="3">
+        <div class="col-sm-12">
+          <span [innerHTML]="s.sen | bindhtml" [attr.data-ind]='s.ind' app-playsentence></span>
+        </div>
+      </span>
       
     </div>
 
   </div>
 
+  <!--
   <div class='card-description-wrap-ar2 diw-card-description bs1-description'>
     <span>{{ card.content[0].desc }}</span>
   </div>
+  -->
 
 </div>

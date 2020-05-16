@@ -13,7 +13,9 @@
 }
 .card-style-obj-left, .card-style-obj-right, .card-style-obj-single {
     left: 50%;
-    display: block;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
     width: 600px;
     height: 444px;
     margin-top: -222px;
@@ -95,7 +97,7 @@
     border-style: solid;
     border-width: 2px;
     padding: 5px 7px;
-    font-size: 72px;
+    font-size: 61px;
     font-weight: 300;
     color: white;
     text-align: center;
@@ -159,6 +161,18 @@
     .sen-begin, .sen-variant{
         text-decoration: underline;
     }
+    .sentence:nth-child(odd){
+        background-color: #FFF9E6;
+        border-style: solid;
+        border-left-style: none;
+        border-right-style: none;
+        border-color: #84A4FB;
+        border-width: 2px;
+    }
+    .sentence:nth-child(even){
+        background-color: #E6EAF4;
+    }
+    
 }
 
 
@@ -191,7 +205,7 @@
     }
     .card-description-wrap-ar2 {margin-top: 4px;}
     .card-description-wrap-ar2{
-        display: block;
+        /*display: block;*/
     }
 
 }
@@ -209,7 +223,7 @@
 }
 .card-ar1-syllable {
     padding: 5px 4px;
-    height: 103px;
+    height: 90px;
     line-height: 1.1em;
     margin-right: 3px;
     margin-left: 3px;
@@ -234,7 +248,7 @@
 }
 @media screen and (max-width: 1024px) {
     .card-ar1-digraph-input {
-        width: 30px;
+        width: 54px;
         margin-top: -4px;
     }
     .card-ar1-syllable {
@@ -258,7 +272,7 @@
 
 .bw1-description{
     display: none;
-    font-size: 12px;
+    font-size: 16px;
     color: #C2272D;
     line-height: 1;
 }
@@ -299,14 +313,22 @@
         margin-top: 0;
     }
     .bw1-description{
-        display: block;
+        /*display: block;*/
     }
 
 }
 
 .blinkhighlight{
-    opacity: 0.6 !important;
-    background-color: rgba(100, 255, 100, 0.9) !important;
+    /*
+    opacity: 1 !important;
+    background-color: rgb(15, 255, 15) !important;
+    */
+    
+    border-style: solid !important;
+    border-width: 5px !important;
+    border-color: rgb(252, 86, 86) !important;
+    border-radius: 4px !important;
+    box-sizing: content-box !important;
 }
 .or3-question-word-input{
     display: inline-block;
@@ -332,12 +354,12 @@
     }
     .card-style-obj-single {
         width: 400px;
-        height: 200px;
-        margin-top: -100px;
+        height: 270px;
+        margin-top: -135px;
         margin-left: -200px;
     }
     .bw1-description{
-        display: block;
+        /*display: block;*/
         margin-top: 10px;
     }
     .bw1-word, .bw1-letter {
@@ -456,7 +478,13 @@
 .card-description-wrap-al1 {text-align: center;}
 
 .card-content-body-wrap-ar2, .card-syllables-body-wrap-ar2 {margin-top: 0;text-align: center;}
-.card-ar2-syllable.card-ar1-syllable {font-size: 24px;height: 39px;font-weight: 400;margin: 10px 2px;padding: 5px 10px;}
+.card-ar2-syllable.card-ar1-syllable {
+    font-size: 50px;
+    height: 71px;
+    font-weight: 400;
+    margin: 10px 1px;
+    padding: 5px 5px;
+}
 .card-ar1-digraph-input {padding: 0 !important;}
 .card-content-ar1-answer {margin-top: 0;}
 .card-description-wrap-ar2 {margin-top: 4px;}
@@ -513,7 +541,7 @@
 @media screen and (min-width:769px) and (max-width:1024px)
 {
 .card-content-body-wrap-ar2.card-content-ar1-word, .card-syllables-body-wrap-ar2.card-content-ar1-word {    min-width: 100%;text-align: center; margin-top: 9px;}
-.card-content-body-wrap-ar2.card-content-ar1-word .card-ar2-syllable, .card-syllables-body-wrap-ar2.card-content-ar-word .card-ar2-syllable{float: none;display: inline-block;  height: 40px !important;font-size: 27px;padding: 4px 6px !important;margin: 0 4px !important;   font-weight: 400;}
+.card-content-body-wrap-ar2.card-content-ar1-word .card-ar2-syllable, .card-syllables-body-wrap-ar2.card-content-ar-word .card-ar2-syllable{float: none;display: inline-block;  height: 40px !important;font-size: 27px;padding: 4px 6px !important;margin: 0 1px !important;   font-weight: 400;}
 .card-ar1-digraph-input {padding: 0 !important;}
 .card-content-body-btn-wrap.card-content-ar1-answer {padding-top: 20px; text-align: center;}
 .card-content-body-btn-wrap.card-content-ar1-answer {text-align: center;min-width: 100%;padding-top: 0;}

@@ -5,7 +5,7 @@
 
 <div class="card-block-item card-style-obj-single card-block-gmu">
   <div class='bw1-block bw1-word-wrap gmu-word-wrap' *ngIf="showword && !showresult">
-		<span class='bw1-word' (click)="playWord()" [innerHTML]="display_answer_word | bindhtml"></span>
+		<span class='bw1-word' (click)="playWord()" [innerHTML]="display_answer_word | bindhtml" appWordtranslate></span>
 	</div>
 	<div class='bw1-block bw1-letters-wrap gmu-letters-wrap'  *ngIf="!showresult">
 		<span class='gmu-syllables-selector gmu-syllables-selector-letters'>
@@ -26,7 +26,7 @@
 		<span class='gmu-result-wrong'>Wrong: {{ display_result.wrong }}</span>
   </div>
   <div class="bw1-block bw1-word-wrap gmu-word-wrap custom-input text-center" *ngIf="!showresult">
-    <input type="text" class="text-center form-control input-sm" [(ngModel)]="entered_val" #focus>
+    <input type="text" autocomplete="off" class="text-center form-control input-sm" [(ngModel)]="entered_val" #focus>
   </div>
 	<div class='bw1-block bw1-description gmu-description'>
 		{{ card.content[0].desc }}

@@ -6,8 +6,8 @@
 <div class="card-block-item card-style-obj-single card-block-ar6">
     <div class='card-content-body-wrap-ar5'>
 		<div class='card-input-field-ar5'>
-			<input type='text' class='card-input-ar5' [(ngModel)]='input_data' (focus)='handleLetterFocus()' />
-			<div class='card-content-hint1-ar5 card-content-hint1-ar6' [ngStyle]='hint_2_show'>{{ the_word }}</div>
+			<input autocomplete="off" type='text' class='card-input-ar5' [(ngModel)]='input_data' (focus)='handleLetterFocus()' />
+			<div class='card-content-hint1-ar5 card-content-hint1-ar6' [ngStyle]='hint_2_show' appWordtranslate>{{ the_word }}</div>
 			<div class='card-content-hint3-ar5' [ngStyle]='hint_3_show'>
 				<span class='card-content-hint3-letter-ar5'><span [ngStyle]='hint_3_letter_1'>{{ letter_1 }}</span></span>
 				<span class='card-content-hint3-letter-ar5'><span [ngStyle]='hint_3_letter_2'>{{ letter_2 }}</span></span>

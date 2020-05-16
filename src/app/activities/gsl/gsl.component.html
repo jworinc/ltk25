@@ -10,10 +10,10 @@
 			</span>
     </div>
     <div *ngIf=" data.content.length == answered.length? false: true" class='diw-hint-letters gsc-letters gnb-words'>
-      <span>{{temp_word}}</span>
+      <span appWordtranslate>{{temp_word}}</span>
     </div>
     <div *ngIf=" data.content.length == answered.length? false: true" class="word text-center">
-      <input type="text" class="text-center form-control" [(ngModel)]="entered_val" #focus>
+      <input type="text" autocomplete="off" class="text-center form-control" [(ngModel)]="entered_val" #focus>
     </div>
     <div *ngIf=" data.content.length == answered.length? true: false">
       <div class='gsc-results'>

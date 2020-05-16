@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { PlaysentenceDirective } from '../../directives/playsentence.directive';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { LoggingService } from '../../services/logging.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gnb',
@@ -15,8 +16,13 @@ import { LoggingService } from '../../services/logging.service';
 export class GnbComponent extends BaseComponent implements OnInit {
 
     @ViewChild(PlaysentenceDirective) psn;
-  	constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gnblog: LoggingService, private gnbcs: ColorschemeService) {
-  	  	super(elm, sanitizer, playmedia, gnblog, gnbcs);
+    constructor(private elm:ElementRef, 
+                private sanitizer: DomSanitizer, 
+                private playmedia: PlaymediaService, 
+                private gnblog: LoggingService, 
+                private gnbcs: ColorschemeService,
+                private gnbpe: PickElementService) {
+  	  	super(elm, sanitizer, playmedia, gnblog, gnbcs, gnbpe);
     }
 
     ngOnInit() {
@@ -62,6 +68,7 @@ export class GnbComponent extends BaseComponent implements OnInit {
     public current_set = 0;
     public expected_string: any;
     public current_blend: any;
+    public move_next_timer: any = null;
     
     //	Validation of user input
     validate() {
@@ -103,6 +110,7 @@ export class GnbComponent extends BaseComponent implements OnInit {
           this.enableMoveNext();
         }
         this.prevent_dubling_flag = true;
+        clearTimeout(this.move_next_timer);
       }
       
     }
@@ -111,6 +119,7 @@ export class GnbComponent extends BaseComponent implements OnInit {
       this.prevent_dubling_flag = false;
       //	Hide option buttons
       this.optionHide();
+      this.enterHide();
     }
   
     setFocus(){
@@ -126,6 +135,9 @@ export class GnbComponent extends BaseComponent implements OnInit {
     }
     
     addAnswer(ind) {
+
+      //	If mouse event locked by feedback
+		  if(this.gnbpe.mouseLock()) return;
   
       this.input_data = this.blends[ind];
   
@@ -177,6 +189,10 @@ export class GnbComponent extends BaseComponent implements OnInit {
     enter() {
       if(this.uinputph === 'finish'){
         this.enableNextCard();
+        let that = this;
+        this.move_next_timer = setTimeout(()=>{
+          that.moveNext();
+        }, 1000);
       } 
     }
   

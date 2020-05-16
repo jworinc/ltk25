@@ -5,5 +5,6 @@
      	<option *ngFor="let lesson of lessons" [ngValue]="lesson" [selected]="lesson === current_lesson">{{ 'lesson' | translate }} {{ lesson }}</option>
 	</select>
 	<span class='show-me-loading'><span></span></span>
-    <canvas id="showme-report-canvas" style='min-height:200px; max-height: 100%;'></canvas>
+	<canvas id="showme-report-canvas" style='min-height:200px; max-height: 100%;'></canvas>
+	<span [hidden]="!noinfo_available" class="showme-noinfo-msg">{{ 'report_no_info_msg' | translate }}</span>
 </div>

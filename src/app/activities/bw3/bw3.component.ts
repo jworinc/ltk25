@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-bw3',
@@ -20,8 +21,9 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 							private pms: PlaymediaService, 
 							private bw3log: LoggingService, 
 							private bw3cs: ColorschemeService,
-							private op: OptionService) {
-  	super(element, sz, pms, bw3log, bw3cs);
+							private op: OptionService,
+							private bw3pe: PickElementService) {
+  	super(element, sz, pms, bw3log, bw3cs, bw3pe);
   }
 
   public display_answer_word: any;
@@ -125,6 +127,7 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 			}
 			this.prevent_dubling_flag = true;
 			this.input_data = '';
+			this.uinputph = 'syllable';
 		}
 		
 	}
@@ -135,6 +138,7 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 		//	Play the first instruction insequence
 		function instructionFirst() {
 			let that = this;
+			this.showEnter();
 			this.lastUncomplete = this.card.content[0].instructions[0];
 			let i = this.card.content[0].instructions[0];
 			this.card.content[0].desc = i.pointer_to_value;
@@ -161,7 +165,7 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 	playContentDescription() {
 
 		let that = this;
-		
+		this.enterHide();
 		//	Phase 4 rec instructions, if mic is enabled
 		if(typeof this.card.content[0].RecInst !== 'undefined' && this.card.content[0].RecInst.length > 0 && this.uinputph === 'rec' && this.global_recorder){
 			this.lastUncomplete = this.card.content[0].RecInst[0];
@@ -173,7 +177,7 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 		}
 		//	Phase 4 rec instructions, if mic is disabled
 		else if(typeof this.card.content[0].RecInst !== 'undefined' && this.card.content[0].RecInst.length > 0 && this.uinputph === 'rec' && !this.global_recorder){
-			this.finishOrContinueBW(function(){ this.playCardDescription(); });
+			this.finishOrContinueBW(function(){ that.playCardDescription(); });
 		}
 		//	Phase 5 listen instructions
 		else if(typeof this.card.content[0].PlayInst !== 'undefined' && this.card.content[0].PlayInst.length > 0 && this.uinputph === 'listen'){
@@ -251,9 +255,11 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 			if(this.getUserInputString() !== ''){
 				this.playCorrectSound(function(){ 
 					that.enableNextCard();
+					that.moveNext();
 				});
 			} else {
 				that.enableNextCard();
+				that.moveNext();
 			}
 		}
 		/*
@@ -275,7 +281,12 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 	public play_word_busy_flag:boolean = false;
 	playWord(){
 
-		if(this.play_word_busy_flag) return;
+		//	If mouse event locked by feedback
+		if(this.bw3pe.mouseLock()) return;
+
+		this.pms.stop();
+		this.play_pronouce_busy_flag = false;
+		//if(this.play_word_busy_flag) return;
 		this.play_word_busy_flag = true;
 		let hletter = 0;
 		let pr = this.card.content[this.current_card_instance].parts;
@@ -342,12 +353,13 @@ export class Bw3Component extends BasebwComponent implements OnInit, DoCheck {
 	//ngDoCheck() {
 	valueChange($event){
 	    //const change = this.differ.diff(this.input_data);
-	    if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
-
-	    	this.old_input_data = JSON.stringify(this.input_data);
+	    //if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
+		if(this.isActive()){
+	    	//this.old_input_data = JSON.stringify(this.input_data);
 
 	    	let that = this;
-
+			this.pms.stop();
+			this.play_pronouce_busy_flag = false;
 			//	When current phase is letters, check if num letters match with user input and switch to next
 			if(this.uinputph === 'letters' && this.input_data !== ''){
 				if(this.input_data == this.expected){

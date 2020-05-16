@@ -34,8 +34,8 @@
 .gsc-user-input span, .gsc-letters span {
     display: inline-block;
     position: relative;
-    padding: 0px 8px;
-    padding-bottom: 11px;
+    padding: 4px 8px;
+    padding-bottom: 5px;
     background-color: #C69C6C;
     color: white;
     margin: 0 0px;
@@ -117,7 +117,7 @@
     }
     .card-description-wrap-ar2 {margin-top: 4px;}
     .card-description-wrap-ar2{
-        display: block;
+        /*display: block;*/
     }
 }
 
@@ -159,8 +159,8 @@
 }
 .diw-hint-letters span{
     display: inline-block;
-    padding: 0px 8px;
-    padding-bottom: 11px;
+    padding: 4px 8px;
+    padding-bottom: 5px;
     background-color: #C69C6C;
     color: white;
     margin: 0 3px;
@@ -192,8 +192,8 @@
     }
     .card-description-wrap-ar2 {margin-top: 4px;}
     .card-description-wrap-ar2{
-        display: block;
-        font-size: 12px;
+        /*display: block;*/
+        font-size: 16px;
     }
     .row {
         flex-wrap: initial;

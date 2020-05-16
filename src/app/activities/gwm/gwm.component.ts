@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-gwm',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class GwmComponent extends BaseComponent implements OnInit {
 
-    constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private gwmlog: LoggingService, private gwmcs: ColorschemeService) {
-  		super(elm, sanitizer, playmedia, gwmlog, gwmcs);
+	constructor(private elm:ElementRef, 
+				private sanitizer: DomSanitizer, 
+				private playmedia: PlaymediaService, 
+				private gwmlog: LoggingService, 
+				private gwmcs: ColorschemeService,
+				private gwmpe: PickElementService) {
+  		super(elm, sanitizer, playmedia, gwmlog, gwmcs, gwmpe);
     }
 
     ngOnInit() {
@@ -122,6 +128,7 @@ export class GwmComponent extends BaseComponent implements OnInit {
 			var w = this.card.content[0].parts[this.current_set][i];
 			this.words.push(w.title);
 			this.audios.push(w.wavename);
+			if(+i >= 3) break;
 		}
 
 		this.current_word = Math.floor(Math.random() * (this.card.content[0].parts[this.current_set].length));
@@ -152,6 +159,8 @@ export class GwmComponent extends BaseComponent implements OnInit {
 	}
 
 	addAnswer(ind) {
+		//	If mouse event locked by feedback
+		if(this.gwmpe.mouseLock()) return;
 
 		if(this.answers.length >= this.expected.length) return;
 
@@ -194,6 +203,7 @@ export class GwmComponent extends BaseComponent implements OnInit {
 	enter() {
 		if(this.uinputph === 'finish'){
 			this.enableNextCard();
+			this.moveNext();
 		} 
 	}
 

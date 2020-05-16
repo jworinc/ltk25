@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-rp1',
@@ -13,8 +14,13 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Rp1Component extends BaseComponent implements OnInit {
 
-    constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private rp1log: LoggingService, private rp1cs: ColorschemeService) {
-  	  super(elm, sanitizer, playmedia, rp1log, rp1cs);
+	constructor(private elm:ElementRef, 
+				private sanitizer: DomSanitizer, 
+				private playmedia: PlaymediaService, 
+				private rp1log: LoggingService, 
+				private rp1cs: ColorschemeService,
+				private rp1pe: PickElementService) {
+  	  super(elm, sanitizer, playmedia, rp1log, rp1cs, rp1pe);
     }
 
     ngOnInit() {
@@ -36,6 +42,7 @@ export class Rp1Component extends BaseComponent implements OnInit {
 			//	Get current list item
 			this.letters.push(this.data.content[0].parts[i].title);
 			this.audios.push(this.data.content[0].parts[i].wave);
+			this.sounds.push(this.data.content[0].parts[i].title);
 			if(typeof this.data.content[0].parts[i].format !== 'undefined'){
 				let f = this.data.content[0].parts[i].format.toLowerCase();
 				if(f === 'wmf'){
@@ -86,6 +93,7 @@ export class Rp1Component extends BaseComponent implements OnInit {
 	
 	public letters = [];
 	public audios = [];
+	public sounds = [];
 	public pictures = [];
 	public current_letter = 0;
 	
@@ -102,6 +110,7 @@ export class Rp1Component extends BaseComponent implements OnInit {
 		if(this.uinputph === 'finish'){
 			if(this.getUserInputString() !== '') this.playCorrectSound();
 			this.enableNextCard();
+			this.moveNext();
 		} else {
 			if(this.getUserInputString() !== '') this.playmedia.sound('_STNQR', function(){});
 		}
@@ -130,6 +139,7 @@ export class Rp1Component extends BaseComponent implements OnInit {
 		this.prevent_dubling_flag = false;
 		//	Hide option buttons
 		this.optionHide();
+		this.enterHide();
 	}
 
 	setFocus(){
@@ -155,7 +165,7 @@ export class Rp1Component extends BaseComponent implements OnInit {
 			}, 300);
 
 		} else {
-			this.playmedia.word(a, function(){
+			this.playmedia.sound('_S'+a, function(){
 				callback();
 			}, 300);
 		}
@@ -171,7 +181,11 @@ export class Rp1Component extends BaseComponent implements OnInit {
 			this.card.content[0].desc = this.card.content[0].RecInst[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].desc);
 			this.blinkRec();
-			this.playmedia.sound(this.card.content[0].RecInst[0].audio, function(){});
+			this.playmedia.sound(this.card.content[0].RecInst[0].audio, function(){
+				if(that.card.content[0].RecInst.length > 1) {
+					that.playmedia.sound(that.card.content[0].RecInst[1].audio, function(){});
+				}
+			});
 			//this.playLetterOrSound(this.audios[this.current_letter], function(){});
 		}
 		//	Phase 1 rec instructions, if mic is disabled
@@ -198,9 +212,11 @@ export class Rp1Component extends BaseComponent implements OnInit {
 	}
 	
 	playLetter(){
+		//	If mouse event locked by feedback
+		if(this.rp1pe.mouseLock()) return;
 		let that = this;
 		this.playmedia.stop();
-		this.playLetterOrSound(this.audios[this.current_letter], function(){
+		this.playLetterOrSound(this.sounds[this.current_letter], function(){
 			if(that.uinputph === 'compare'){
 				if(that.current_letter < that.letters.length - 1){
 					setTimeout(function(){

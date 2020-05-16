@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TokenService } from './token.service';
 import { share } from 'rxjs/operators';
+import { empty } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,8 @@ export class DataloaderService {
 
   private base_url = 'https://api.ltk.cards/api';
   public lu = 10;
+  public card_descriptor = 'none';
+  public current_locale = 'en';
 
   constructor(
     private http: HttpClient, 
@@ -17,6 +20,9 @@ export class DataloaderService {
   ) { 
     this.base_url = Token.getApiUrl();
   }
+
+  getLocale(){ return this.current_locale; }
+  setLocale(locale) { this.current_locale = locale; }
 
   //	Use login and pass to login user in app
   login(data) {
@@ -138,6 +144,7 @@ export class DataloaderService {
 
 
   logMissingAudio(m) {
+    if(!this.Token.loggedIn()) return empty();
     return this.http.post(`${this.base_url}/media/log/missing/audio`, {'url': m}, {
       headers: this.Token.getAuthHeader()
     }).pipe(share());
@@ -174,5 +181,36 @@ export class DataloaderService {
       }).toPromise();
   }
 
+  getTranslation(word, locale = null) {
+    if(typeof word == 'undefined' || word === "") return empty().toPromise();
+    if(!locale && this.Token.loggedIn()) {
+      return this.http.get(`${this.base_url}/service/word/translation/${word}`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+    } else {
+      let loc = this.getLocale();
+      if(locale) loc = locale;
+      return this.http.get(`${this.base_url}/service/word/translation/${word}/${loc}`, {}).toPromise();
+    }
+  }
+
+  getLastFeedbacks(descriptor) {
+    if(descriptor) {
+      let d = descriptor.replace('#', 'N');
+      return this.http.get(`${this.base_url}/feedback/${d}`, {
+          headers: this.Token.getAuthHeader()
+        }).toPromise();
+    } else return empty().toPromise();
+  }
+
+  sendCourseExpiredNotificationEmail() {
+    return this.http.get(`${this.base_url}/notification/course/expired`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+  }
+
+  sendLinkExpiredNotificationEmail(link) {
+    return this.http.get(`${this.base_url}/service/expired/${link}`).toPromise();
+  }
 
 }

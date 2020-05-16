@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-ar1',
@@ -19,8 +20,9 @@ export class Ar1Component extends BaseComponent implements OnInit {
 								private playmedia: PlaymediaService, 
 								private ar1log: LoggingService, 
 								private ar1cs: ColorschemeService,
-								private op: OptionService) {
-  		super(elm, sanitizer, playmedia, ar1log, ar1cs);
+								private op: OptionService,
+								private ar1pe: PickElementService) {
+  		super(elm, sanitizer, playmedia, ar1log, ar1cs, ar1pe);
   	}
 
   	ngOnInit() {
@@ -92,6 +94,8 @@ export class Ar1Component extends BaseComponent implements OnInit {
 	//	User input phase
 	public uinputph: any;
 
+	public hide_translation_icon: boolean = true;
+
 
 	setCard() {
 
@@ -128,7 +132,7 @@ export class Ar1Component extends BaseComponent implements OnInit {
 
 			//	Create box for digraph
 			if(typeof cn !== 'undefined' && cn !== '' && r.test(cn)) {
-				cn = cn.replace(r, "<input class='card-ar1-digraph-input' id='user_input' type='text' />");
+				cn = cn.replace(r, "<input autocomplete='off' class='card-ar1-digraph-input' id='user_input' type='text' />");
 				content += "<span class='card-ar2-syllable card-ar1-syllable'>"+cn+"</span>";
 			}
 			//	Create box for normal letters
@@ -212,19 +216,26 @@ export class Ar1Component extends BaseComponent implements OnInit {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()) {
+			//if(!this.validate()) {
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
-			} else {
-				this.enableMoveNext();
-			}
+				this.disableNextSlide();
+			//} else {
+				//this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 			this.showHint();
 			this.clearUserInput();
 		}
 		
 	}
+
+	
+	next() {
+		this.enter();
+	}
+	
 
 	//	Callback for hide card event
 	hidden() {
@@ -300,6 +311,8 @@ export class Ar1Component extends BaseComponent implements OnInit {
 
 	//	Play answer word on user click
 	answerPlay() {
+		//	If mouse event locked by feedback
+		if(this.ar1pe.mouseLock()) return;
 		//	If playing is enabled
 		if(this.enable_answer_play) this.playmedia.word(this.answer_word, ()=>{});
 
@@ -398,9 +411,11 @@ export class Ar1Component extends BaseComponent implements OnInit {
 								that.card.content[0].desc = fst.pointer_to_value;
 								that.setGlobalDesc(fst.pointer_to_value);
 								that.elm.nativeElement.querySelector('.content_right_answer_word').style.opacity = '1';
+								that.hide_translation_icon = false;
 								
 								setTimeout(function(){ 
 									that.elm.nativeElement.querySelector('.content_right_answer_word').style.opacity = '0'; 
+									that.hide_translation_icon = true;
 									that.elm.nativeElement.querySelector('.content_right_missing_letter').style.display = 'block'; 
 									that.elm.nativeElement.querySelector('.content_right_missing_letter').style.opacity = '1';
 									setTimeout(function(){ 
@@ -475,7 +490,7 @@ export class Ar1Component extends BaseComponent implements OnInit {
 					 that.result(); that.enableNextCard(); that.clearUserInput(); that.play_card_description_busy = false; that.setFocus(); //scope.playCardDescription();
 				}, 0);
 			} 
-			else if(!silent && this.getUserInputString() === ''){
+			else if(!silent && this.getUserInputString() === '' && this.uinputph !== "finish"){
 				this.repeat();
 			}
 			else {
@@ -487,7 +502,7 @@ export class Ar1Component extends BaseComponent implements OnInit {
 			if(that.current_presented >= that.max_presented){
 				if(!silent && this.getUserInputString() !== ''){
 					this.playCorrectSound(function(){ 
-						that.enableNextCard();
+						that.enableNextSlide(); that.moveNext();
 					});
 				} else {
 					that.enableNextCard();
@@ -540,18 +555,23 @@ export class Ar1Component extends BaseComponent implements OnInit {
 				e.target.style.borderStyle = 'none';
 				this.elm.nativeElement.querySelector('.content_right_answer_word').style.opacity = '1';
 				this.elm.nativeElement.querySelector('.content_right_answer_word').style.cursor = 'pointer';
+				this.hide_translation_icon = false;
 
 				if(this.current_presented < this.max_presented){
 					this.playmedia.action('CHIMES', function(){
+						
+					}, 1000);
+					setTimeout(()=>{
 						that.current_card_instance++;
 						that.elm.nativeElement.querySelector('.content_right_answer_word').style.opacity = '0';
+						that.hide_translation_icon = true;
 						that.elm.nativeElement.querySelector('.content_right_answer_word').style.cursor = 'default';
 						that.setCard();
 						setTimeout(function(){ 
 							that.current_presented++; 
 							that.playContentDescription();
 						}, 300);
-					}, 300);
+					}, 1000);
 						
 				} else {
 					
@@ -565,19 +585,20 @@ export class Ar1Component extends BaseComponent implements OnInit {
 						if(typeof fst.audio !== 'undefined' && fst.audio !== ''){
 							this.playmedia.sound(fst.audio, function(){});
 							if(this.card.content[0].RespAtEnd.length === 1)
-								this.playmedia.word(this.answer_word, function(){ that.enter(false); that.uinputph = 'finish'; that.blurInput(); });
+								this.playmedia.word(this.answer_word, function(){ that.enter(false); that.uinputph = 'finish'; that.enableMoveNext(); that.blurInput(); });
 							else{
 								let fst = this.card.content[0].RespAtEnd[1];
 								this.card.content[0].desc = fst.pointer_to_value;
 								this.setGlobalDesc(fst.pointer_to_value);
 								if(typeof fst.audio !== 'undefined' && fst.audio !== ''){
 									this.playmedia.sound(fst.audio, function(){});
-									this.playmedia.word(this.answer_word, function(){ that.enter(false); that.uinputph = 'finish'; that.blurInput(); });
+									this.playmedia.word(this.answer_word, function(){ that.enter(false); that.uinputph = 'finish'; that.enableMoveNext(); that.blurInput(); });
 								}
 							}
 						}
 					} else {
 						this.uinputph = 'finish';
+						this.enableMoveNext();
 						this.enter(false);
 					}
 				}
@@ -585,7 +606,7 @@ export class Ar1Component extends BaseComponent implements OnInit {
 			}
 			
 			//	Validate user input and decide enable or not next card
-			if(this.validate()) this.enableMoveNext();
+			if(this.validate()) this.disableMoveNext();
 			else this.disableMoveNext();
 	    	
 	    }

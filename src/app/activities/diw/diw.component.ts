@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-diw',
@@ -19,8 +20,9 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 							private playmedia: PlaymediaService, 
 							private diwlog: LoggingService, 
 							private diwcs: ColorschemeService,
-							private op: OptionService) {
-  	super(elm, sanitizer, playmedia, diwlog, diwcs);
+							private op: OptionService,
+							private diwpe: PickElementService) {
+  	super(elm, sanitizer, playmedia, diwlog, diwcs, diwpe);
   }
 
   ngOnInit() {
@@ -130,9 +132,16 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 
 	//	Enter click handler
 	enter() {
+		this.playmedia.stop();
+		this.lock_user_input = false;
 		if(this.uinputph === 'finish'){
 			if(this.getUserInputString() !== '') this.playCorrectSound();
 			this.enableNextCard();
+			let that = this;
+			this.playCorrectSound(()=>{
+				that.moveNext();
+			});
+			
 		} else {
 			if(this.getUserInputString() !== '') this.playmedia.sound('_STNQR', function(){});
 		}
@@ -143,20 +152,25 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()) {
+			//if(!this.validate()) {
 				
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
+				this.disableNextSlide();
 				this.input_data = '';
 				
-			} else {
-				this.enableMoveNext();
-			}
+			//} else {
+			//	this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 			this.showHint();
 		}
 		
+	}
+
+	next() {
+		this.enter();
 	}
 
 	prehide() {
@@ -176,6 +190,7 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 		this.prevent_dubling_flag = false;
 		//	Hide option buttons
 		this.optionHide();
+		this.enterHide();
 	}
 
 	setFocus(){
@@ -187,11 +202,11 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 
 	//	Overload default repeat and play last uncomplete question
 	repeat() {
-		if(this.uinputph === 'finish'){
-			this.playCorrectSound();
-			this.enableNextCard();
-			return;
-		}
+		//if(this.uinputph === 'finish'){
+		//	this.playCorrectSound();
+		//	this.enableNextCard();
+		//	return;
+		//}
 		let scope = this;
 		//	Check if we have RepInst instance
 		if(typeof this.card.content[0].RepInst !== 'undefined' && this.card.content[0].RepInst.length > 0){
@@ -228,7 +243,7 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 			that.elm.nativeElement.querySelector('.diw-hint-word').style.opacity = '0';
 			//	Wait 400ms until transition will complete and remove it from from DOM
 			setTimeout(function(){ that.elm.nativeElement.querySelector('.diw-hint-word').style.display = 'none'; that.hint_busy = false; that.setFocus(); }, 400);
-		}, 3000);
+		}, 4000);
 
 	}
 
@@ -274,6 +289,8 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 		//	Check if hint 1 or hint 3 is already started, then return
 		if(this.hint_3_started) return;
 		this.hint_3_started = true;
+		this.hint_1_started = false;
+		this.hintLevel1();
 		let that = this;
 		//	Show letters
 		this.elm.nativeElement.querySelector('.diw-hint-letters-show').style.display = 'flex';
@@ -353,8 +370,10 @@ export class DiwComponent extends BaseComponent implements OnInit, DoCheck {
 		let n = value.length;
 
 		//	Check if input data length bigger that 0
-		if(n <= 0) return;
-
+		if(n <= 0){
+			this.lock_user_input = false;
+			return;
+		}
 		//	Check if user complete answer
 		if(this.answer_word.toLowerCase() === value.toLowerCase()){
 			//	Save errors

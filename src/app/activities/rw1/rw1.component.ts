@@ -1,9 +1,12 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PlaysentenceDirective } from '../../directives/playsentence.directive';
+import { FontadjusterDirective } from '../../directives/fontadjuster.directive';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-rw1',
@@ -13,8 +16,16 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Rw1Component extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private rw1log: LoggingService, private rw1cs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, rw1log, rw1cs);
+  @ViewChildren(PlaysentenceDirective) psn !: QueryList<PlaysentenceDirective>;
+  @ViewChildren(FontadjusterDirective) fads;
+
+  constructor(private elm:ElementRef, 
+              private sanitizer: DomSanitizer, 
+              private playmedia: PlaymediaService, 
+              private rw1log: LoggingService, 
+              private rw1cs: ColorschemeService,
+              private rw1pe: PickElementService) {
+  	super(elm, sanitizer, playmedia, rw1log, rw1cs, rw1pe);
   }
 
   ngOnInit() {
@@ -27,6 +38,7 @@ export class Rw1Component extends BaseComponent implements OnInit {
     this.eventStatus = false;
     console.log(this.data);
     this.current_header = this.card.header;
+    this.sentence_index = Math.floor(Math.random() * 100000);
     let that = this;
     setTimeout(()=>{ 
       that.updateWordblocks(); 
@@ -59,6 +71,7 @@ export class Rw1Component extends BaseComponent implements OnInit {
       if(that.isActive()) that.showPrevWord();
     });
 
+    this.compilePlaySentences();
 
   }
   
@@ -69,6 +82,7 @@ export class Rw1Component extends BaseComponent implements OnInit {
   public showTranslation:any;
   public eventStatus:any;
   public uinputph = 'review';
+  public sentence_index = 0;
   //  Current word
   public cw: number = 0;
 
@@ -91,6 +105,9 @@ export class Rw1Component extends BaseComponent implements OnInit {
       this.resetViewStates();
       this.updateWordblocks();
       this.updateViewStates();
+      //  Init new interactivity sentence
+      this.initISS();
+      this.updateFonts();
 		}
 		
   }
@@ -109,7 +126,10 @@ export class Rw1Component extends BaseComponent implements OnInit {
 
   repeat() {
     if(this.uinputph === 'finish'){
-      this.eslCustomInstructions('RespAtEnd');
+      let that = this;
+      this.eslCustomInstructions('RespAtEnd', ()=>{
+        that.moveNext();
+      });
       return;
     }
     this.playContentDescription();
@@ -173,6 +193,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
 
   showTranslationStatus(e)
   {
+    //	If mouse event locked by feedback
+		if(this.rw1pe.mouseLock()) return;
     if(this.showTranslation)
       this.showTranslation = false;
     else
@@ -221,10 +243,12 @@ export class Rw1Component extends BaseComponent implements OnInit {
   next() {
     if(this.isActive()){
       let cw = this.cw;
-      if(this.wbvs[cw].view === 'sentence' && cw >= this.wbvs.length) this.enableNextSlide();
+      if(this.wbvs[cw].view === 'sentence' && cw > this.wbvs.length) this.enableNextSlide();
       else this.disableNextSlide();
       this.showNextWord();
     }
+
+    //this.compilePlaySentences();
 
   }
 
@@ -242,20 +266,29 @@ export class Rw1Component extends BaseComponent implements OnInit {
       //  Max word blocks
       let m = this.wblength;
       this.cw++;
+
       //  Check overhead
       if(this.cw >= m) {
         this.cw = m-1;
         //  Finish card
         this.uinputph = 'finish';
         this.enableNextCard();
+      } else {
+
       }
+      
       //  Update word blocks
       this.updateWordblocks();
       this.repeat();
     }
     //  Else switch to the next view
     else {
+
       this.showNextView();
+      
+      //  Init new interactivity sentence
+      this.updateISS();
+
     }
 
     
@@ -287,6 +320,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
     //  Else switch to the prev view
     else {
       this.showPrevView();
+      //  Init new interactivity sentence
+      this.updateISS(true);
     }
     this.uinputph = 'review';
     this.disableNextSlide();
@@ -312,8 +347,10 @@ export class Rw1Component extends BaseComponent implements OnInit {
 
   //  Play word
   playWord(name) {
+    //	If mouse event locked by feedback
+		if(this.rw1pe.mouseLock()) return;
     this.playmedia.stop();
-    this.playmedia.word(name, ()=>{});
+    this.playmedia.word(name, ()=>{}, 300);
   }
 
   public pronounce_play_sequence_started: boolean = false;
@@ -321,6 +358,8 @@ export class Rw1Component extends BaseComponent implements OnInit {
   public mask_syl_pos = [];
 
   playPronounce(id) {
+    //	If mouse event locked by feedback
+		if(this.rw1pe.mouseLock()) return;
     this.playmedia.stop();
     this.elm.nativeElement.querySelectorAll('.phoneme-syllable span').forEach((e)=>{
       e.style.backgroundColor = 'transparent';
@@ -346,6 +385,7 @@ export class Rw1Component extends BaseComponent implements OnInit {
               that.elm.nativeElement.querySelectorAll('.phoneme-box[wordblock="'+id+'"] .phoneme-syllable span').forEach((e)=>{
                 e.style.backgroundColor = 'transparent';
               });
+              that.playWord(c.title);
             } else {
               let s = that.mask_syl_pos[that.pronounce_play_counter];
               that.elm.nativeElement.querySelectorAll('.phoneme-box[wordblock="'+id+'"] .phoneme-syllable span').forEach((e)=>{
@@ -409,5 +449,236 @@ export class Rw1Component extends BaseComponent implements OnInit {
 
 
   }
+
+  compilePlaySentences() {
+    let that = this;
+		//	After setting card story we have to wait before angular process playwords directive
+		setTimeout(()=>{
+			that.psn.forEach((d)=>{
+        d.compileSentence();
+      });
+			//
+		}, 20);
+
+
+  }
+
+
+  //  Max number of showing sentences
+  public issmax = 3;
+  //  Current iss index in current word instance
+  public issindex = 0;
+  //  Interactiv Sample Sentence to show
+  public iss_display = '';
+  //  Variants of words for display
+  public iss_variants = [];
+  //  Current word
+  public iss_word = '';
+  //  Origin sentence
+  public iss_origin_sentence = '';
+  //  Buffer for sentence groups (for each word)
+  public iss_buffer = [];
+
+  public current_sentences = [];
+  public current_sentence = "";
+
+  //  Sample Sentence interaction
+  initISS() {
+
+    //  Current sentence subset
+    let current_sentences = [];
+    this.current_sentence = "";
+    this.iss_buffer = [];
+
+    for(let n in this.card.content){
+      current_sentences = [];
+      //  Check if we have several sentences
+      if(typeof this.card.content[n].sentences !== 'undefined' &&
+      this.card.content[n].sentences.length > 0){
+        for(let i in this.card.content[n].sentences)
+          current_sentences.push({sentence: this.card.content[n].sentences[i].sentence, word: this.card.content[n].title, pos: n });
+      } 
+      else if(typeof this.card.content[n].sentence !== 'undefined'){
+        current_sentences.push({sentence: this.card.content[n].sentence, word: this.card.content[n].title, pos: n });
+      }
+
+      let iss_item = this.processISS(current_sentences);
+
+      //  Save instance to buffer
+      this.iss_buffer.push(iss_item);
+
+    }
+
+  }
+
+  processISS(current_sentences) {
+
+    let out = [];
+
+    for(let i in current_sentences) {
+      let cs = current_sentences[i].sentence;
+      let cw = current_sentences[i].word;
+      let pos = current_sentences[i].pos;
+      
+      //  Check if sentence contains current word
+      let r = new RegExp('\\b'+cw+'\\b', 'i');
+      if(cs.search(r) >= 0) {
+
+        //  Replace for display sentence required word with dots
+        let iss_display = cs.replace(r, '<span class="gwf-answer-placeholder">&nbsp;&nbsp;&nbsp;&nbsp;____&nbsp;&nbsp;&nbsp;&nbsp;</span>');
+        //  Clear variants
+        let iss_variants = [];
+        //  Get variants
+        iss_variants.push(cw);
+        while(iss_variants.length < this.issmax) {
+          //  Get random index
+          let ri = Math.round(Math.random() * (this.card.content.length-1));
+          //  Check if index is not current word index
+          if(ri === pos) continue;
+          //  Push the word to variants
+          if(iss_variants.indexOf(this.card.content[ri].title) < 0 && this.card.content[ri].title !== "") 
+            iss_variants.push(this.card.content[ri].title);
+        }
+
+        //  Save processed data
+        out.push({iss_display: iss_display, iss_variants: iss_variants, pos: pos, answered: false, origin_sentence: cs, word: cw});
+  
+      } else {
+
+        out.push({iss_display: cs, iss_variants: [cw], pos: pos, answered: true, origin_sentence: cs, word: cw});
+
+      }
+
+
+
+    }
+
+    return out;
+
+    
+  }
+
+  updateISS(backward = false) {
+
+    //  Get iss instance for current word (for now work with only first sentence)
+    let issi = null;
+    if(!backward) issi = this.iss_buffer[this.cw][0];
+    else if(backward && this.cw > 0) issi = this.iss_buffer[this.cw-1][0];
+    else issi = this.iss_buffer[this.cw][0];
+    if(typeof issi !== 'undefined' && issi && typeof issi.answered !== 'undefined'){
+      //  Reset answer flag if not answered
+      if(!issi.answered) this.user_answer_received_flag = false;
+      
+      //  Display sentence
+      this.iss_display = issi.iss_display;
+      //  Display variants
+      this.iss_variants = issi.iss_variants;
+      //  Expected word
+      this.iss_word = issi.word;
+      //  Origin sentence
+      this.iss_origin_sentence = issi.origin_sentence;
+      
+      this.compileInteractiveSS(issi.iss_display);
+
+
+    } else {
+      //  Reset answer flag if not answered
+      this.user_answer_received_flag = true;
+      
+      //  Display sentence
+      this.iss_display = "No sentence";
+      //  Display variants
+      this.iss_variants = [];
+      //  Expected word
+      this.iss_word = this.card.content[this.cw].title;
+      //  Origin sentence
+      this.iss_origin_sentence = "No sentence";
+      this.compileInteractiveSS(this.iss_display);
+    }
+
+
+  }
+
+  compileInteractiveSS(origin_sentence = '') {
+    //  Update sentences translation and play feature
+    let that = this;
+    setTimeout(()=>{
+      //console.log(that.psn);
+      that.psn.forEach(function(s){ 
+        if((<any>s).elmt.nativeElement.classList.contains('interactive-ss') && that.isActive()) {
+          if(origin_sentence !== '') (<any>s).origin_text = origin_sentence;
+          (<any>s).compileSentence();
+        }
+      });
+    }, 200);
+  }
+
+  saveISSAnswerResult() {
+    
+    //  Get iss instance for current word (for now work with only first sentence)
+    let issi = this.iss_buffer[this.cw][0];
+    //  Display sentence
+    issi.iss_display = issi.origin_sentence;
+    //  Display variants
+    issi.iss_variants = [this.iss_word];
+    issi.answered = true;
+
+  }
+
+  public user_answer_received_flag: boolean = false;
+	addAnswer(w) {
+    //	If mouse event locked by feedback
+		if(this.rw1pe.mouseLock()) return;
+		let that = this;
+		if(this.user_answer_received_flag) return;
+		this.user_answer_received_flag = true;
+
+		//	Check if answer right or not
+		if(w.toLowerCase() === this.iss_word.toLowerCase()){
+			this.playmedia.action('DING', function(){
+        that.iss_variants = [that.iss_word];
+        that.blinkOnlyNext();
+      });
+      if(this.elm.nativeElement.querySelector('span[data-wrdsspos="'+this.cw+'"] .gwf-answer-placeholder'))
+			  this.elm.nativeElement.querySelector('span[data-wrdsspos="'+this.cw+'"] .gwf-answer-placeholder').innerText = w;
+			//setTimeout(function(){ 
+				//that.psn.origin_text = that.card.content[0].parts[that.current_set].title.replace(/\(/ig, '').replace(/\)/ig, ''); 
+				//that.psn.compileSentence(); 
+				//setTimeout(()=>{ that.playSentence(); }, 10);
+			//}, 1400);
+		} else {
+			//	Logging wrong answer
+			//this.result();
+			//	Play wrong sound and show right answer
+			this.playmedia.action('CHONG', function(){
+				//that.blinkAP(true);
+        //that.elm.nativeElement.querySelector('.gwf-answer-placeholder').style.width = 'auto';
+        if(that.elm.nativeElement.querySelector('span[data-wrdsspos="'+that.cw+'"] .gwf-answer-placeholder'))
+          that.elm.nativeElement.querySelector('span[data-wrdsspos="'+that.cw+'"] .gwf-answer-placeholder').innerText = that.iss_word;
+        that.iss_variants = [that.iss_word];
+        that.blinkOnlyNext();
+				//setTimeout(function(){
+				//	that.psn.origin_text = that.card.content[0].parts[that.current_set].title.replace(/\(/ig, '').replace(/\)/ig, '');
+				//	that.psn.compileSentence();
+				//	setTimeout(()=>{ that.playSentence(); }, 10);
+					
+				//}, 1400);
+			});
+			
+
+		}
+
+    this.compileInteractiveSS(this.iss_origin_sentence);
+    
+  }
+  
+  //	Update font size
+  updateFonts() {
+    this.fads.forEach((fa)=>{
+      if(typeof fa.update !== 'undefined') fa.update();
+    });
+  }
+
+
 
 }

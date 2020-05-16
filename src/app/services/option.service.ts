@@ -33,6 +33,7 @@ export class OptionService {
   public change_language_event = new EventEmitter<boolean>();
   public last_requested_lang = '';
   public pause_on_instruction: boolean = false;
+  public show_word_translation: boolean = true;
 
   public opt = {
       expertlevel: "2",
@@ -75,6 +76,7 @@ export class OptionService {
         this.current_locale = this.langs[i].locale;
         this.current_language = this.langs[i].lang;
         this.change_language_event.emit();
+        this.dl.setLocale(this.current_locale);
         break;
       }
     }
@@ -86,6 +88,7 @@ export class OptionService {
         this.current_locale = this.langs[i].locale;
         this.current_language = this.langs[i].lang;
         this.change_language_event.emit();
+        this.dl.setLocale(this.current_locale);
         break;
       }
     }

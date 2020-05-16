@@ -5,7 +5,7 @@
 
 <div class="card-block-item card-style-obj-single card-block-gis">
     <div class='bw1-block bw1-word-wrap gis-word-wrap' *ngIf="!showresult">
-		<span class='bw1-word' (click)="playWord()" [innerHTML]="display_answer_word | bindhtml"></span>
+		<span class='bw1-word' (click)="playWord()" [innerHTML]="display_answer_word | bindhtml" appWordtranslate></span>
 	</div>
 	<div class='bw1-block bw1-letters-wrap gis-letters-wrap'  *ngIf="!showresult">
 		<span class='gis-syllables-selector gis-syllables-selector-letters' *ngIf="split_letters_show">

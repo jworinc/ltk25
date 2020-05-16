@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -26,12 +26,20 @@ export class RecorderService {
 	//	Test volume level flag
 	public test_volume_level_flag: boolean = false;
 
+	public recording_started: boolean = false;
+
+	public gain_level: any = 1;
+
 	public volume: any;
 	public analyser: any;
 	public recording: any;
 	public currCallback: any;
 	public linkAdded: any;
 	public current_sound: any;
+	public stream: any;
+
+	public start_recording_ev = new EventEmitter<any>();
+	public mic_disabled_ev = new EventEmitter<any>();
 
 	//	Initialization
 	init() {
@@ -39,160 +47,215 @@ export class RecorderService {
 		console.log('Recording Service invoked');
 		let that = this;
 		//let bufferLen = 2048;	//	Length of one sample buffer, bigger values better quality
+		let numChannels = 2;	//	Number of chaanels, must be 2 for normal wav encoding
+	    let audio_context = null;		//	Audio context	
+	    
+		let navigator = null;
+
+	    this.test_volume_level_flag = false;	//	Disable volume test by default
+		
+		//	Switch off recording by default
+		let recording = this.recording = false; 
+		(window as any).AudioContext = (window as any).AudioContext || (window as any).webkitAudioContext;
+		let context = new AudioContext();
+		//	Create worker instance which allows to perform operations in different thread
+		//	this approach prevents frees of main user interface
+		let worker = that.worker = new Worker(
+			window.location.protocol+'//'+window.location.host+'/recorderWorker.js');
+		worker.postMessage({
+			command: 'init',
+			config: {
+				sampleRate: context.sampleRate,
+				numChannels: numChannels
+			}
+		});
+
+		//	Worker callback function, received wav encoded data as blob
+		that.worker.onmessage = function(e){
+			let blob = e.data;
+			//self.recs.push(blob);
+
+			//	Set last record
+			that.lastrec = blob;
+			that.wait_convertation_flag = false;
+			//	Continue audio processing with callback
+			that.currCallback(blob);
+			//self.linkAdded(self.recs.length - 1);
+		}
+
+		context.close();
+
+	}
+
+	
+	//	Callback function for processing user mic
+	startUserMedia(stream) {
+		this.stream = stream;
 		let bufferLen = 0;		//	Set buffer length to 0 allow enviroument define this value, it is better for quality, cross device and cross browser
 		let numChannels = 2;	//	Number of chaanels, must be 2 for normal wav encoding
 	    let self = this;		//	Create link to the current context, needed for closures
 	    
 	    let outputFormat = 'wav';		//	Format
-	    let callback = 'console.log';	//	Default callback
-	    let audio_context = null;		//	Audio context	
-	    let source = null;				//	Source of audio stream
-	    let processor = null;			//	Processor of audio stream
+		let callback = 'console.log';	//	Default callback
+		let source = null;				//	Source of audio stream
+		let processor = null;			//	Processor of audio stream
 
-	    this.test_volume_level_flag = false;	//	Disable volume test by default
+			
+		//	Set true to audio context flag
+		self.audio_context_enable = true;
 
-	    try {
+		//	Check if rec cycle already terminated, stop a context
+		if (!self.recording){
+			self.stop();
+			return;
+		}
+
+		//	Get new instance of audio context
+		let audio_context = this.actx = new (window as any).AudioContext();
+		//let audio_context = this.actx;
+		//	Receive audio stream source
+		source = audio_context.createMediaStreamSource(stream);
+		console.log('Media stream created.');
+		console.log('input sample rate ' + source.context.sampleRate);
+
+		//	creates a gain node
+		let volume = self.volume = audio_context.createGain();
+		volume.gain.value = this.gain_level+0.7;
+
+		//	connect the stream to the gain node
+		source.connect(volume);
+		if(self.test_volume_level_flag){
+			//	create analyser node
+			let analyser = self.analyser = audio_context.createAnalyser();
+			analyser.smoothingTimeConstant = 0.3;
+			analyser.fftSize = 1024;
+
+			//	connect the stream to the analyser node
+			volume.connect(analyser);
+		}
+
+		//	Create audio processor node
+		processor = audio_context.createScriptProcessor(bufferLen, 2, 2);
+
+		
+		//	Void callback function, will overloaded below, used for wav encoding operations
+		self.currCallback = function() { };
+		//	Void callback function, will overloaded below, 
+		//	used for creation download links if it will needed in code
+		self.linkAdded = function() { };
+
+		processor.removeAllListeners();
+		//	Callback for processing audio stream messages
+		processor.onaudioprocess = function(e) {
+
+			if(!self.recording_started && self.recording) self.start_recording_ev.emit();
+			self.recording_started = true;
+
+			//	If volume test is enable
+			if(self.test_volume_level_flag){
+				//	Perform volume test
+				self.testVolumeLevel(e);
+				//	And nothing more, any record
+				return;
+			}
+
+			//	If record is swithed off, do nothing
+			if (!self.recording) return;
+
+			//	Buffer for audio stream data
+			let buffer = [];
+			//	Fill buffer
+			for (let channel = 0; channel < numChannels; channel++){
+				buffer.push(e.inputBuffer.getChannelData(channel));
+			}
+			//alert(buffer[0][0] + ' ' + buffer[0][1] + ' ' + buffer[0][2] + ' ' + buffer[0][3] + ' ' + buffer[0][4] + ' ' + buffer[0][5]);
+			//	Send buffer to the worker for further operations
+			self.worker.postMessage({
+				command: 'record',
+				buffer: buffer
+			});
+
+		};
+
+		//	Connect processor node
+		if(self.test_volume_level_flag){
+			self.analyser.connect(processor);
+		} else {
+			volume.connect(processor);
+		}
+		//source.connect(processor);
+		//	Connect to the destination
+		processor.connect(audio_context.destination);
+		audio_context.resume();
+		//audio_context.suspend();
+
+	};
+
+
+
+	//	Start recording
+	start() {
+		let that = this;
+		console.log('Recording started');
+		if(this.recording) return;
+		this.recording = true;	//	Start recording
+
+		let navigator = null;
+
+		try {
+
 			// webkit shim, receive audio context cross browser
 			//window.AudioContext = window.AudioContext; || window.webkitAudioContext;
-			//navigator.getUserMedia = (navigator.getUserMedia ||
-			//navigator.webkitGetUserMedia ||
-			//navigator.mozGetUserMedia ||
-			//navigator.msGetUserMedia);
+			navigator = (window as any).navigator;
+			
+			navigator.getUserMedia = (navigator.getUserMedia ||
+											navigator.webkitGetUserMedia ||
+											navigator.mozGetUserMedia ||
+											navigator.msGetUserMedia);
 			window.URL = window.URL;// || window.webkitURL;
 
 			(window as any).AudioContext = (window as any).AudioContext || (window as any).webkitAudioContext;
 			//let context = new AudioContext();
 
 			//	Get new instance of audio context
-			audio_context = this.actx = new AudioContext();
+			//audio_context = this.actx = new AudioContext();
 			console.log('Audio context set up.');
-			console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
-	    	//alert('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
-	    } catch (e) {
-			alert('No web audio support in this browser!');
-	    }
-
-	    //	Callback function for processing user mic
-	    let startUserMedia = function(stream) {
+			//console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
 			
-	    	//	Set true to audio context flag
-	    	self.audio_context_enable = true;
-
-			//	Receive audio stream source
-			source = audio_context.createMediaStreamSource(stream);
-			console.log('Media stream created.');
-			console.log('input sample rate ' + source.context.sampleRate);
-
-			//	creates a gain node
-		    let volume = self.volume = audio_context.createGain();
-		    //volume.gain.value = 100;
-		 
-		    //	connect the stream to the gain node
-		    source.connect(volume);
-
-		    //	create analyser node
-		    let analyser = self.analyser = audio_context.createAnalyser();
-		    analyser.smoothingTimeConstant = 0.3;
-			analyser.fftSize = 1024;
-
-			//	connect the stream to the analyser node
-		    volume.connect(analyser);
-
-		    //	Create audio processor node
-			processor = audio_context.createScriptProcessor(bufferLen, 2, 2);
-
-			//	Create worker instance which allows to perform operations in different thread
-			//	this approach prevents frees of main user interface
-			let worker = self.worker = new Worker(
-				window.location.protocol+'//'+window.location.host+'/recorderWorker.js');
-		    worker.postMessage({
-				command: 'init',
-				config: {
-					sampleRate: audio_context.sampleRate,
-    				numChannels: numChannels
-				}
-		    });
-
-		    //	Switch off recording by default
-		    let recording = self.recording = false; 
-		    //	Void callback function, will overloaded below, used for wav encoding operations
-		    self.currCallback = function() { };
-		    //	Void callback function, will overloaded below, 
-		    //	used for creation download links if it will needed in code
-		    self.linkAdded = function() { };
-
-
-		    //	Callback for processing audio stream messages
-		    processor.onaudioprocess = function(e) {
-		    	//	If volume test is enable
-		    	if(self.test_volume_level_flag){
-		    		//	Perform volume test
-		    		self.testVolumeLevel(e);
-		    		//	And nothing more, any record
-		    		return;
-		    	}
-
-		    	//	If record is swithed off, do nothing
-				if (!self.recording) return;
-
-				//	Buffer for audio stream data
-				let buffer = [];
-				//	Fill buffer
-				for (let channel = 0; channel < numChannels; channel++){
-					buffer.push(e.inputBuffer.getChannelData(channel));
-				}
-				//alert(buffer[0][0] + ' ' + buffer[0][1] + ' ' + buffer[0][2] + ' ' + buffer[0][3] + ' ' + buffer[0][4] + ' ' + buffer[0][5]);
-				//	Send buffer to the worker for further operations
-				worker.postMessage({
-					command: 'record',
-					buffer: buffer
+			//alert('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+			
+			
+			//	Request access to the user mic, if success link callback function startUserMedia
+			if(typeof navigator !== 'undefined' && navigator !== null && typeof navigator.mediaDevices !== 'undefined' && navigator.mediaDevices.getUserMedia){
+				navigator.mediaDevices.getUserMedia({
+					//audio: {sampleRate: 22050, channelCount: 2, volume: 1.0 }
+					audio: true
+				}).then((stream)=>{
+					that.startUserMedia(stream);
+				})
+				.catch(function(e) {
+					console.log('No live audio input: ' + e);
+					that.audio_context_enable = false;
+					that.mic_disabled_ev.emit();
+					that.recording = false;	
 				});
-
-			};
-
-			//	Connect processor node
-			analyser.connect(processor);
-			//source.connect(processor);
-			//	Connect to the destination
-			processor.connect(audio_context.destination);
-
-			//audio_context.suspend();
-
-			//	Worker callback function, received wav encoded data as blob
-			self.worker.onmessage = function(e){
-				let blob = e.data;
-				//self.recs.push(blob);
-
-				//	Set last record
-				self.lastrec = blob;
-				self.wait_convertation_flag = false;
-				//	Continue audio processing with callback
-				self.currCallback(blob);
-				//self.linkAdded(self.recs.length - 1);
+			} else {
+				//alert('No web audio support in this browser!');
+				console.log('No web audio support in this browser!');
+				that.audio_context_enable = false;
+				that.mic_disabled_ev.emit();
+				that.recording = false;	
 			}
-		};
-
-
-		//	Request access to the user mic, if success link callback function startUserMedia
-	    if(navigator.mediaDevices.getUserMedia){
-		    navigator.mediaDevices.getUserMedia({
-				//audio: {sampleRate: 22050, channelCount: 2, volume: 1.0 }
-				audio: true
-		    }).then(startUserMedia)
-		    	.catch(function(e) {
-				  console.log('No live audio input: ' + e);
-				});
-		}
 		
 
-	}
+	    } catch (e) {
+			//alert('No web audio support in this browser!');
+			console.log('No web audio support in this browser!');
+			that.audio_context_enable = false;
+			that.mic_disabled_ev.emit();
+			that.recording = false;	
+		}
 
-	//	Start recording
-	start() {
-
-		console.log('Recording started');
-		this.actx.resume();
-		this.recording = true;	//	Start recording
 		//	Clear worker audio buffer for new record
 		this.worker.postMessage({
 			command: 'clear'
@@ -212,7 +275,14 @@ export class RecorderService {
 		this.exportWAV(function(blob) {
 			
 		});
-
+		if(typeof this.stream !== 'undefined' && this.stream) {
+			this.stream.getTracks().forEach(function(track) {
+				track.stop();
+			});
+		}
+		if(this.actx && this.actx.state !== 'closed') this.actx.close();
+		this.recording_started = false;
+		//this.audio_context_enable = false;
 	}
 
 	//	Start playing of last recorded audio
@@ -398,7 +468,21 @@ export class RecorderService {
 
 	//	Start volume test, recording is not possible
 	enableVolumeTest() {
-		this.actx.resume();
+		//this.actx.resume();
+		let that = this;
+		//	Request access to the user mic, if success link callback function startUserMedia
+	    if(typeof navigator !== 'undefined' && navigator !== null && typeof navigator.mediaDevices !== 'undefined' && navigator.mediaDevices.getUserMedia){
+		    navigator.mediaDevices.getUserMedia({
+				//audio: {sampleRate: 22050, channelCount: 2, volume: 1.0 }
+				audio: true
+		    }).then((stream)=>{
+				that.startUserMedia(stream);
+			})
+			.catch(function(e) {
+				console.log('No live audio input: ' + e);
+			});
+		}
+		
 		this.test_volume_level_flag = true;
 	}
 
@@ -406,6 +490,7 @@ export class RecorderService {
 	disableVolumeTest() {
 		//this.actx.suspend();
 		this.test_volume_level_flag = false;
+		this.stop();
 	}
 
 	//	Set gain, g is values between 0 - 100, 50 is 1 gain
@@ -420,7 +505,8 @@ export class RecorderService {
 			k = k*(((g-50)/3)+1);
 		}
 		//	Set gain
-		if(typeof this.volume !== 'undefined') this.volume.gain.value = k;
+		//if(typeof this.volume !== 'undefined') this.volume.gain.value = k;
+		this.gain_level = k; 
 	}
 
 

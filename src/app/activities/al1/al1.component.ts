@@ -4,6 +4,7 @@ import { BaseComponent } from '../base/base.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-al1',
@@ -13,8 +14,14 @@ import { ColorschemeService } from '../../services/colorscheme.service';
 })
 export class Al1Component extends BaseComponent implements OnInit {
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, differs: IterableDiffers, private al1log: LoggingService, private al1cs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, al1log, al1cs);
+  constructor(private elm:ElementRef, 
+			  private sanitizer: DomSanitizer, 
+			  private playmedia: PlaymediaService, 
+			  differs: IterableDiffers, 
+			  private al1log: LoggingService, 
+			  private al1cs: ColorschemeService,
+			  private al1pe: PickElementService) {
+  	super(elm, sanitizer, playmedia, al1log, al1cs, al1pe);
   	//this.differ = differs.find([]).create(null);
   }
 
@@ -128,11 +135,13 @@ export class Al1Component extends BaseComponent implements OnInit {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
+			this.clearUserInput(true);
 			if(!this.validate()){
 				//	Set focus on first empty input element
 				//this.setFocus();
 				//	Play card description
 				this.playCardDescription();
+				this.disableNextSlide();
 			} else {
 				this.enableMoveNext();
 			}
@@ -141,6 +150,14 @@ export class Al1Component extends BaseComponent implements OnInit {
 			this.showHint();
 		}
 		
+	}
+
+	next() {
+		this.enter();
+		if(this.validate()){
+			this.enableMoveNext();
+			this.moveNext();
+		}
 	}
 
 	//	Callback for hide card event
@@ -174,17 +191,24 @@ export class Al1Component extends BaseComponent implements OnInit {
 			//	If input letter is wrong, mark it with light coral color
 			if(!d.disabled && d.letter !== '' && d.letter !== d.expected) {
 				//	Check for newly entered letter
-				if(typeof d.mark["background-color"] === 'undefined'){
+				//if(typeof d.mark["background-color"] === 'undefined'){
 					//	Logging user input errors
 					this.last_user_letter = d.letter;
 					this.last_expected_letter = d.expected;
 					this.card_object = 'letter';
 					this.card_instance = d.expected;
 					this.result();
-				}
-				d.mark = {
-					'background-color': 'lightcoral'
-				};
+
+
+					this.clearUserInput();
+					this.setFocus();
+					this.playmedia.stop();
+					this.playmedia.action('DING', function(){}, 30);
+
+				//}
+				//d.mark = {
+				//	'background-color': 'lightcoral'
+				//};
 			} else {
 				d.mark = {};
 			}
@@ -227,6 +251,9 @@ export class Al1Component extends BaseComponent implements OnInit {
 	//	Set focus on first empty input
 	setFocus() {
 		let set_focus = false;
+		this.elm.nativeElement.querySelectorAll('input[data-pos]').forEach((e)=>{
+			if(e.value == "") e.removeAttribute('disabled');
+		});
 		//	Iterate over all input elements
 		for(let i in this.input_data){
 
@@ -240,6 +267,11 @@ export class Al1Component extends BaseComponent implements OnInit {
 				let inps = this.elm.nativeElement.querySelector('input[data-pos="'+index+'"]');
 				//	Small delay which allow Angular to rebuid page markup before focus set
 				setTimeout(function() { inps.focus(); }, 30);
+				continue;
+			}
+			else if(set_focus && d.letter == '') {
+				let inps = this.elm.nativeElement.querySelector('input[data-pos="'+index+'"]');
+				if(inps) inps.setAttribute('disabled', true);
 			}
 
 		};
@@ -260,6 +292,8 @@ export class Al1Component extends BaseComponent implements OnInit {
 
 	//	Play letter sound
 	playLetter(i) {
+		//	If mouse event locked by feedback
+		if(this.al1pe.mouseLock()) return;
 		let d = this.input_data[i];
 		if(d.letter === d.expected) {
 			this.playmedia.word(d.letter, function(){}, 0);
@@ -278,7 +312,7 @@ export class Al1Component extends BaseComponent implements OnInit {
 	}
 	
 	//	Clear wrong inputs
-	clearUserInput() {
+	clearUserInput(all = false) {
 		let parts = [];
 		let that = this;
 		if(typeof this.card !== 'undefined' && this.card.content !== 'undefined' && this.card.content.length > 0){
@@ -291,6 +325,10 @@ export class Al1Component extends BaseComponent implements OnInit {
 			let index = +i;
 			if(parts.length > 0 && parts[index].expected !== '' && parts[index].expected !== d.letter){
 				this.input_data[index].letter = '';
+			}
+			else if(all) {
+				this.input_data[index].letter = '';
+				this.input_data[index].disabled = false;
 			}
 		};
 
@@ -367,9 +405,19 @@ export class Al1Component extends BaseComponent implements OnInit {
 			this.input_data[ki].letter = inp.currentTarget.value;
 
 	    //const change = this.differ.diff(this.input_data);
-	    if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
+	    //if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
+		if(this.isActive()){
 	    	
 	    	console.log('collection changed');
+			
+			if(this.input_data[ki].letter !== this.input_data[ki].expected) {
+				/*
+				this.clearUserInput();
+				this.setFocus();
+				this.playmedia.stop();
+				this.playmedia.action('DING', function(){}, 30);
+				*/
+			}
 
 	    	for(let i in this.input_data){
 	    		let d = this.input_data[i];
@@ -377,14 +425,15 @@ export class Al1Component extends BaseComponent implements OnInit {
 	    		this.input_data[index].letter = this.al2filter(d.letter);
 	    	}
 
-	    	this.old_input_data = JSON.stringify(this.input_data);
+	    	//this.old_input_data = JSON.stringify(this.input_data);
 
 	    	let scope = this;
 			//	Validate user input and decide to enable next card or not
 			if(scope.validate() && !this.inp_data_watcher_doubling) {
-				this.inp_data_watcher_doubling = true;
-				scope.enableMoveNext();
-				setTimeout(function(){ scope.enter(false); }, 1000);
+				//this.inp_data_watcher_doubling = true;
+				scope.enableNextSlide();
+				
+				setTimeout(function(){ scope.playCorrectSound(()=>{ scope.enableMoveNext(); scope.moveNext(); }) }, 1000);
 
 			}
 			else {

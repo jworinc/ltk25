@@ -6,14 +6,14 @@
 <div class="card-block-item card-style-obj-single card-block-diw">
     <div class='card-content-body-wrap-diw'>
 		<div class='diw-input-wrap'>
-			<input type='text' [(ngModel)]='input_data' (input)="valueChange($event)" [disabled]="uinputph === 'finish'"/>
+			<input type='text' autocomplete="off" [(ngModel)]='input_data' (input)="valueChange($event)" [disabled]="uinputph === 'finish'"/>
 		</div>
 		<div class='diw-hint-letters diw-hint-letters-show'>
 			<span *ngFor='let l of letters; let kl = index' [attr.data-index]='kl'>
 			{{ l }}</span>
 		</div>
 		<div class='diw-hint-letters diw-hint-word'>
-			<span>{{ answer_word }}</span>
+			<span appWordtranslate>{{ answer_word }}</span>
 		</div>
 		<div class='card-description-wrap-ar2 diw-card-description'>
             <span>{{ card.content[0].desc }}</span>

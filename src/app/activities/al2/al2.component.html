@@ -7,16 +7,16 @@
     <div class='card-content-body-wrap-al2'>
 
         <span class='card-al2-letter' (click)='playMediaWord(cn[0].letter)' *ngIf="cn[0].letter !== ''">{{ cn[0].letter }}</span>
-        <input class='card-al2-letter' data-pos='0' [(ngModel)]='input_data[0]' (focus)='input_data[0] = ""' *ngIf="cn[0].expected !== ''" [ngClass]="{'m-letter-mark': input_data[0] !== '' && input_data[0] !== cn[0].expected}" />
+        <input autocomplete="off" class='card-al2-letter' data-pos='0' [(ngModel)]='input_data[0]' (focus)='input_data[0] = ""' *ngIf="cn[0].expected !== ''" [ngClass]="{'m-letter-mark': input_data[0] !== '' && input_data[0] !== cn[0].expected}" />
 
         <span class='card-al2-letter' (click)='playMediaWord(cn[1].letter)' *ngIf="cn[1].letter !== ''">{{ cn[1].letter }}</span>
-        <input class='card-al2-letter' data-pos='1' [(ngModel)]='input_data[1]' (focus)='input_data[1] = ""' *ngIf="cn[1].expected !== ''" [ngClass]="{'m-letter-mark': input_data[1] !== '' && input_data[1] !== cn[1].expected}" />
+        <input autocomplete="off" class='card-al2-letter' data-pos='1' [(ngModel)]='input_data[1]' (focus)='input_data[1] = ""' *ngIf="cn[1].expected !== ''" [ngClass]="{'m-letter-mark': input_data[1] !== '' && input_data[1] !== cn[1].expected}" />
 
         <span class='card-al2-letter' (click)='playMediaWord(cn[2].letter)' *ngIf="cn[2].letter !== ''">{{ cn[2].letter }}</span>
-        <input class='card-al2-letter' data-pos='2' [(ngModel)]='input_data[2]' (focus)='input_data[2] = ""' *ngIf="cn[2].expected !== ''" [ngClass]="{'m-letter-mark': input_data[2] !== '' && input_data[2] !== cn[2].expected}" />
+        <input autocomplete="off" class='card-al2-letter' data-pos='2' [(ngModel)]='input_data[2]' (focus)='input_data[2] = ""' *ngIf="cn[2].expected !== ''" [ngClass]="{'m-letter-mark': input_data[2] !== '' && input_data[2] !== cn[2].expected}" />
 
         <span class='card-al2-letter' (click)='playMediaWord(cn[3].letter)' *ngIf="cn[3].letter !== ''">{{ cn[3].letter }}</span>
-        <input class='card-al2-letter' data-pos='3' [(ngModel)]='input_data[3]' (focus)='input_data[3] = ""' *ngIf="cn[3].expected !== ''" [ngClass]="{'m-letter-mark': input_data[3] !== '' && input_data[3] !== cn[3].expected}" />
+        <input autocomplete="off" class='card-al2-letter' data-pos='3' [(ngModel)]='input_data[3]' (focus)='input_data[3] = ""' *ngIf="cn[3].expected !== ''" [ngClass]="{'m-letter-mark': input_data[3] !== '' && input_data[3] !== cn[3].expected}" />
 
         <div class='clearfix'></div>
     </div>

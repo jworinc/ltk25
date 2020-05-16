@@ -1,7 +1,9 @@
 /*		LTK Feedback Directive styles      */
 
 #app-feedback-modal{
-
+  transition: all 0.3s ease;
+  top: 0;
+  opacity: 1;
 }
 .app-feedback-intro{
 
@@ -15,7 +17,7 @@
   margin-bottom: 10px;
 }
 .app-feedback-message{
-
+  position: relative;
 }
 .app-feedback-like-btn{
 
@@ -27,10 +29,71 @@
   margin-right: 5px;
 }
 .app-feedback-category .btn i, .app-feedback-category .btn svg{
-  margin-right: 2px;
+  margin-right: 7px;
 }
 .btn{
 	margin: 2px;
+}
+
+.modal-body{
+  display: flex;
+}
+.app-feedback-category{
+  display: flex;
+  flex-flow: column;
+  padding: 10px;
+}
+.app-feedback-message{
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+  padding: 10px;
+}
+.app-prev-feedback-desc{
+  position: relative;
+  margin: 7px 0;
+  margin-left: 16px;
+  display: inline-block;
+  cursor: pointer;
+  color: blue;
+  font-size: 12px;
+}
+span.app-prev-feedback-desc:before{
+  position: absolute;
+  top: 0;
+  left: -16px;
+  width: 8px;
+  height: 19px;
+  content: "⮟";
+}
+.app-prev-feedback-items-wrap{
+  max-height: 260px;
+  overflow: auto;
+  font-size: 12px;
+  color: #6c757d;
+}
+.app-prev-feedback-items-wrap i, .app-prev-feedback-items-wrap svg {
+  margin-right: 7px;
+}
+.feedback-pick-element-btn{
+  display: flex;
+  flex-flow: column;
+  position: absolute;
+  width: 12px;
+  height: 32px;
+  top: 12px;
+  left: 100%;
+  margin-left: -28px;
+  color: blue;
+  font-size: 12px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+.hide-feedback-screen{
+  top: -100% !important;
+  opacity: 0 !important;
 }
 
 @media screen and (max-width: 347px) {

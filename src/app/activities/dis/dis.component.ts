@@ -6,6 +6,7 @@ import { PlaysentenceDirective } from '../../directives/playsentence.directive';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-dis',
@@ -22,8 +23,9 @@ export class DisComponent extends BaseComponent implements OnInit {
 								private playmedia: PlaymediaService, 
 								private dislog: LoggingService, 
 								private discs: ColorschemeService,
-								private op: OptionService) {
-  	  super(elm, sanitizer, playmedia, dislog, discs);
+								private op: OptionService,
+								private dispe: PickElementService) {
+  	  super(elm, sanitizer, playmedia, dislog, discs, dispe);
     }
 
     ngOnInit() {
@@ -91,6 +93,7 @@ export class DisComponent extends BaseComponent implements OnInit {
 
 	public hint_string = '';
 	public input_data: any;
+	
 
 	/*
 	$element.find('.dis-input-wrap input').bind('keyup keydown keypress', function(e){
@@ -134,6 +137,7 @@ export class DisComponent extends BaseComponent implements OnInit {
 		//	After setting card story we have to wait before angular process playwords directive
 		setTimeout(()=>{
 			let d = this.psn;
+			d.origin_text = '';
 			d.compileSentence();
 			d.end_callback = ()=>{
 				that.playSentenceFinish();
@@ -163,9 +167,15 @@ export class DisComponent extends BaseComponent implements OnInit {
 
 	//	Enter click handler
 	enter() {
+		this.playmedia.stop();
+		this.lock_user_input = false;
 		if(this.uinputph === 'finish'){
 			if(this.getUserInputString() !== '') this.playCorrectSound();
 			this.enableNextCard();
+			let that = this;
+			this.playCorrectSound(()=>{
+				that.moveNext();
+			});
 		} else {
 			if(this.getUserInputString() !== '') this.playmedia.sound('_STNQR', function(){});
 		}
@@ -180,21 +190,28 @@ export class DisComponent extends BaseComponent implements OnInit {
 		//	If card is active and it is not dubling
 		if(this.isActive() && !this.prevent_dubling_flag){
 			//	If user not enter valid data yet
-			if(!this.validate()) {
+			//if(!this.validate()) {
 				
 				//	Play card description
 				this.playCardDescription();
 				this.disableMoveNext();
+				this.disableNextSlide();
 				this.input_data = '';
 				
-			} else {
-				this.enableMoveNext();
-			}
+			//} else {
+			//	this.enableMoveNext();
+			//}
 			this.prevent_dubling_flag = true;
 			this.showHint();
 		}
 		
 	}
+
+	
+	next() {
+		this.enter();
+	}
+
 
 	prehide() {
 		this.playmedia.stop();
@@ -213,7 +230,7 @@ export class DisComponent extends BaseComponent implements OnInit {
 		this.prevent_dubling_flag = false;
 		//	Hide option buttons
 		this.optionHide();
-		
+		this.enterHide();
 	}
 
 	setFocus(){
@@ -237,10 +254,13 @@ export class DisComponent extends BaseComponent implements OnInit {
 			this.card.content[0].desc = this.card.content[0].RepInst[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].desc);
 			this.playmedia.sound(this.card.content[0].RepInst[0].audio, function(){
+				that.playSentenceFinish();
 				that.setFocus();
 				
 			});
 		} else {
+			this.play_card_description_busy = false;
+			this.playmedia.stop();
 			this.playSentenceFinish();
 			this.playCardDescription();
 			return;
@@ -249,9 +269,27 @@ export class DisComponent extends BaseComponent implements OnInit {
 		this.playContentDescription();
 	}
 
+	showSentence() {
+		if(this.current_hint_level === 0) return;
+		let that = this;
+		this.elm.nativeElement.querySelector('.dis-sentence-wrap').style.display = 'block';
+		setTimeout(function(){ that.elm.nativeElement.querySelector('.dis-sentence-wrap').style.opacity = '1'; }, 10);
+	}
+
+	hideSentence() {
+		if(this.current_hint_level === 0) return;
+		let that = this;
+		setTimeout(function(){ 
+			that.elm.nativeElement.querySelector('.dis-sentence-wrap').style.opacity = '0';
+			//	Wait 400ms until transition will complete and remove it from from DOM
+			setTimeout(function(){ that.elm.nativeElement.querySelector('.dis-sentence-wrap').style.display = 'none'; that.hint_busy = false; that.setFocus(); }, 400);
+		}, 2000);
+	}
+
 	playSentenceFinish() {
 		this.playsentence_started_flag = false;
-		this.setFocus()
+		this.setFocus();
+		this.hideSentence();
 	}
 
 	
@@ -259,6 +297,9 @@ export class DisComponent extends BaseComponent implements OnInit {
 		if(this.playsentence_started_flag) return; 
 		this.playsentence_started_flag = true;
 		let that = this;
+		this.showSentence();
+		this.playmedia.stop();
+		this.psn.play_busy = false;
 		//$rootScope.$broadcast('rootScope:playSentenceByIndex', {ind: this.sentence_index, cb: this.playSentenceFinish});
 		this.psn.playSentenceByIndex(this.sentence_index, ()=>{
 			that.playSentenceFinish.call(that);
@@ -276,11 +317,13 @@ export class DisComponent extends BaseComponent implements OnInit {
 		let that = this;
 		let words = this.answer_sent.trim().replace(/[\.\!\?\;\,]/ig, '').split(' ');
 		let uwords = this.input_data.trim().replace(/[\.\!\?\;\,]/ig, '').split(' ');
+
 		if(uwords.length > 0 && words[uwords.length - 1] === uwords[uwords.length - 1] && 
 			!this.playsentence_started_flag && 
 			this.played_words.indexOf(uwords[uwords.length - 1]+(uwords.length - 1)) < 0){
+			//true){
 
-			this.played_words.push(uwords[uwords.length - 1]+(uwords.length - 1));
+			//this.played_words.push(uwords[uwords.length - 1]+(uwords.length - 1));
 			this.playmedia.word(uwords[uwords.length - 1].replace(/[\.\!\?\;\,]/ig, ''), function(){
 
 				//	Reset hint level for a new word
@@ -291,6 +334,15 @@ export class DisComponent extends BaseComponent implements OnInit {
 				that.current_hint_level = 0;
 			}, 10);
 		}
+		
+		//	Clean played words in case when user delete some input text
+		this.played_words = [];
+		for(let i in uwords){
+			if(words[i] === uwords[i]){
+				this.played_words.push(uwords[i]+i);
+			}
+		}
+
 
 	}
 
@@ -409,9 +461,12 @@ export class DisComponent extends BaseComponent implements OnInit {
 		let n = value.length;
 
 		//	Check if input data length bigger that 0
-		if(n <= 0) return;
+		if(n <= 0){
+			this.lock_user_input = false;
+			return;
+		}
 
-		let pr = /[\.\?\!]/;
+		let pr = /[\.\?\!\,\:\;\"\~\`\'\@\#\$\%\^\&\*\(\)\-\_\+\=\{\}\[\]\<\>\/]/ig;
 
 		//	Check if user complete answer
 		if(this.answer_sent.toLowerCase().replace(pr, '') === value.toLowerCase().replace(pr, '')){
@@ -441,9 +496,17 @@ export class DisComponent extends BaseComponent implements OnInit {
 		let s = this.answer_sent.substring(0, n);
 
 		//	Compare user input with right answer
-		if(s.toLowerCase() === value.toLowerCase()){
+		if(s.replace(pr, '').toLowerCase().trim() === value.replace(pr, '').toLowerCase().trim()){
+			
+			//	Check if next char is punctuation, input it automaticaly
+			//let nch = this.answer_sent.substring(n, 1);
+			//if(pr.test(nch)) {
+			//	s = this.answer_sent.substring(0, n + 1);
+			//}
+
 			inp.currentTarget.value = s;
 			setTimeout(()=>{ that.input_data = s; that.lock_user_input = false; }, 1);
+
 		} else {
 			//	Save for logging user mistake
 			if(this.user_answers === ''){
@@ -463,6 +526,7 @@ export class DisComponent extends BaseComponent implements OnInit {
 			setTimeout(()=>{ that.input_data = newval; that.lock_user_input = false; }, 3);
 			this.playmedia.stop();
 			this.playmedia.action('DING', function(){}, 30);
+			this.playsentence_started_flag = false;
 		}
 
 

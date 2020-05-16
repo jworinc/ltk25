@@ -6,7 +6,7 @@
 <div class="card-block-item card-style-obj-single card-block-dis">
     <div class='gwf-body-wrap dis-body-wrap'>
 		<div class='diw-input-wrap dis-input-wrap'>
-			<input type='text' [(ngModel)]='input_data' (input)="valueChange($event)" [disabled]="uinputph === 'finish'" data-ng-trim='false'/>
+			<input type='text' autocomplete="off" [(ngModel)]='input_data' (input)="valueChange($event)" [disabled]="uinputph === 'finish'" data-ng-trim='false'/>
 		</div>
 		<div class='diw-hint-letters diw-hint-word dis-hint-word' >
 			<span>

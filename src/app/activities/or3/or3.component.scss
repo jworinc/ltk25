@@ -14,9 +14,14 @@
     margin-top: 2%;
     max-height: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
+    /*overflow: scroll;*/
     background-color: lightblue;
     z-index: 9999;
     box-shadow: 0 0 3px #777;
+    padding-top: 17px;
+    text-align: justify;
+    -webkit-overflow-scrolling: touch;
 }
 .or3-story-wrap span{
 	cursor: pointer;	
@@ -75,6 +80,7 @@
         margin-top: 0;
         max-height: 72%;
         height: 72%;
+        padding-top: 26px;
     }
     .card-content-body-wrap-or3{
         padding-bottom: 0;

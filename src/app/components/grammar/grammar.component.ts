@@ -3,7 +3,8 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DataloaderService } from '../../services/dataloader.service';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
-import { trigger, transition, animate, style, state } from '@angular/animations'
+import { trigger, transition, animate, style, state } from '@angular/animations';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-grammar',
@@ -96,7 +97,8 @@ export class GrammarComponent implements OnInit {
               private sanitizer: DomSanitizer, 
               private playmedia: PlaymediaService, 
               private rw1cs: ColorschemeService,
-              private dl: DataloaderService) {
+              private dl: DataloaderService,
+              private pe: PickElementService) {
   	//super(elm, sanitizer, playmedia, rw1cs);
   }
 
@@ -153,7 +155,8 @@ filtered_topic:any;
   filtered_subtopic:any = [];
 
   getSubtopics(topic,i){
-  
+    //	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
     this.subtopic_index = -1;
      
     if(i == this.ind){
@@ -175,6 +178,8 @@ filtered_topic:any;
   }
 
   getDescription(topic, subtopic, i, topic_id){
+    //	If mouse event locked by feedback
+		if(this.pe.mouseLock()) return;
     this.subtopic_index = i;
     this.title = subtopic;
     // this.description = this.topics.filter(item=>{
@@ -209,6 +214,8 @@ filtered_topic:any;
   }
 
   getMenu(){
+      //	If mouse event locked by feedback
+      if(this.pe.mouseLock()) return;
       console.log("GET MENUS");
       this.title = "Grammar Handbook";
       this.description = "";

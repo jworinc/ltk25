@@ -2,13 +2,16 @@
 .card-al1-letter{
 	padding: 0;
 }
+.card-style-obj-single{
+	justify-content: flex-start;
+}
 @media only screen and (min-width:1025px)
 {
 .card-content-body-wrap-al1 ,.card-content-body-wrap-al2,.card-content-body-wrap-ar1,.card-syllables-body-wrap-ar2{
 	display: block;
 	position: relative;
 	max-width: 600px;
-	margin: auto;
+	margin: 0;
 	padding-top: 90px;
 	z-index: 100;
 	text-align: center;
@@ -20,13 +23,16 @@
 	padding-top: 6px;
 }
 .card-description-wrap-al1, .card-hint-wrap-al1{
-    display: none;
+    display: block;
     position: relative;
     width: 100%;
     text-align: center;
     margin-top: 13px;
     font-size: 18px;
     z-index: 100;
+}
+.card-description-wrap-al1{
+	display: none;
 }
 .card-hint-wrap-al1{
 	margin-top: 10px;
@@ -44,7 +50,7 @@
 }
 .card-content-body-wrap-al1 > input {
 	width: 65px;
-	height: 65px;
+	height: 60px;
 	margin: 9px 10px;
 }
 .card-content-body-wrap-ar2 > .card-ar2-syllable, .card-syllables-body-wrap-ar2 > .card-ar2-syllable {
@@ -141,9 +147,9 @@
         padding-top: 40px;
     }
     .card-al1-letter {
-        width: 34px;
-        height: 37px;
-        font-size: 22px;
+        width: 47px;
+		height: 47px;
+		font-size: 40px;
         text-align: center;
     }
 }
@@ -167,7 +173,7 @@
 .card-content-body-btn-wrap.card-content-ar1-answer {text-align: center;min-width: 100%;padding-top: 0;}
 .card-description-wrap-ar2 {margin-top: 21px;}
 .card-content-body-btn-wrap.card-content-ar1-answer > span {float: none;display: inline-block;}
-.card-content-body-wrap-al1 input {width: 35px;	height:35px; background-color: #C69C6D; color: white; border: 1px solid #ccc; border-color: #8E704F; box-shadow: inset 1px 2px 3px rgba(0,0,0,.1);
+.card-content-body-wrap-al1 input {width: 49px;	height:49px; background-color: #C69C6D; color: white; border: 1px solid #ccc; border-color: #8E704F; box-shadow: inset 1px 2px 3px rgba(0,0,0,.1); font-size: 44px;
 margin: 3px 2px;display: inline-block;text-align:center;}
 .card-content-body-wrap-al1 {text-align: center;padding: 6px 8px;}
 .card-description-wrap-al1 {text-align: center;}	
@@ -205,7 +211,7 @@ margin: 3px 2px;display: inline-block;text-align:center;}
 
 @media screen and (max-width: 1024px) {
     .card-description-wrap-al1{
-    	display: block;
+    	display: none;
     	color: #C2272D;
 		line-height: 1;
 		font-size: 12px;

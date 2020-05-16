@@ -12,7 +12,7 @@
 			<h1>{{ student.name }}</h1>
             <h4>{{ student.sid_message }}</h4>
 		</div>
-		<div class="row ltk-breaks-list" [hidden]="show_notebook || show_grammar || show_testing">
+		<div class="row ltk-breaks-list" [hidden]="show_notebook || show_grammar || show_testing || show_course_expire_msg">
 	        <div class="col-md-12">
 	            <div class="tab" role="tabpanel">
 	                <!-- Nav tabs -->
@@ -551,7 +551,7 @@
         </div>
         <div class="row zoom-frame" style="margin: 0; height: 600px" [hidden]="!show_notebook && !show_grammar && !show_testing">
             <!-- Notebook   -->
-            <app-notebook [show]="show_notebook" [scale]="scale" [hidden]="!show_notebook"></app-notebook>
+            <app-notebook [show]="show_notebook" [scale]="scale" [hidden]="!show_notebook" (closenotebook)="onCloseNotebook()"></app-notebook>
 
             <!-- Grammar   -->
             <app-grammar [show]="show_grammar" [scale]="scale" [hidden]="!show_grammar"></app-grammar>
@@ -559,6 +559,8 @@
             <!-- Testing -->
             <app-showtesting [show]="show_testing" [scale]="scale" [hidden]="!show_testing" (closetesting)="onCloseTesting()"></app-showtesting>
         </div>
+
+        <app-course-expire-msg [hidden]="!show_course_expire_msg"></app-course-expire-msg>
         
         <!--  Lesson pointer arrow  -->
         <div class="lesson-ponter-arrow" [ngStyle]="arrow_pointer"><i class="fas fa-arrow-down"></i></div>

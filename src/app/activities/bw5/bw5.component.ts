@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, DoCheck, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { BasebwComponent } from '../basebw/basebw.component';
 import { PlaymediaService } from '../../services/playmedia.service';
@@ -7,6 +7,8 @@ import { flatMap } from "rxjs/operators";
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { MultiselectComponent } from '../../components/multiselect/multiselect.component';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-bw5',
@@ -21,11 +23,17 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 							private pms: PlaymediaService, 
 							private bw5log: LoggingService, 
 							private bw5cs: ColorschemeService,
-							private op: OptionService) {
-  	super(element, sz, pms, bw5log, bw5cs);
+							private op: OptionService,
+							private bw5pe: PickElementService) {
+  	super(element, sz, pms, bw5log, bw5cs, bw5pe);
   }
 
   public expected_digraf: any;
+
+  
+	@ViewChild(MultiselectComponent) msel: MultiselectComponent;
+
+
 
   ngOnInit() {
 
@@ -68,6 +76,7 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 	});
 
 	this.old_input_data = JSON.stringify(this.input_data);
+	this.element.nativeElement.querySelector('.bw1-word-wrap').style.opacity = '0';
 
   }
 
@@ -130,6 +139,9 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 
 		//	Expected num of letters
 		this.expected = this.answer_word.replace(/\'/ig, '').length;
+		this.mselshow = true;
+		this.mseltype = 'numbers';
+		if(typeof (this as any).msel !== 'undefined') (this as any).msel.update();
 	}
 
 	//	Callback for show card event
@@ -148,9 +160,11 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 				this.enableMoveNext();
 			}
 			this.prevent_dubling_flag = true;
+			this.play_pronouce_busy_flag = false;
 			this.input_data = '';
+
 		}
-		
+		if(this.isActive()) this.play_pronouce_busy_flag = false;
 	}
 
 	//	Overload default play description function
@@ -348,9 +362,11 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 			if(this.getUserInputString() !== ''){
 				this.playCorrectSound(function(){ 
 					that.enableNextCard();
+					that.moveNext();
 				});
 			} else {
 				that.enableNextCard();
+				that.moveNext();
 			}
 		}
 		/*
@@ -424,6 +440,7 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 	//	Used to play task word and sound exactly after instructions play finished
 	playContentDescription() {
 		let that = this;
+		this.enterHide();
 		//	Phase 1 how many letters
 		if(typeof this.card.content[0].Question1 !== 'undefined' && this.card.content[0].Question1.length > 0 && this.uinputph === 'letters'){
 			this.lastUncomplete = this.card.content[0].Question1[0];
@@ -450,6 +467,7 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 			this.lastUncomplete = this.card.content[0].Question3[0];
 			this.card.content[0].desc = this.card.content[0].Question3[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].Question3[0].pointer_to_value);
+			this.showEnter();
 			this.pms.sound(this.card.content[0].Question3[0].audio, function(){
 				that.setFocus();
 				that.input_data = '';
@@ -498,10 +516,11 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 	//ngDoCheck() {
 	valueChange($event){
 	    //const change = this.differ.diff(this.input_data);
-	    if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
-
-	    	this.old_input_data = JSON.stringify(this.input_data);
-
+	    //if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
+		if(this.isActive()) {
+	    	//this.old_input_data = JSON.stringify(this.input_data);
+			this.pms.stop();
+			this.play_pronouce_busy_flag = false;
 	    	let that = this;
 
 			//	When current phase is letters, check if num letters match with user input and switch to next
@@ -522,7 +541,8 @@ export class Bw5Component extends BasebwComponent implements OnInit, DoCheck {
 				if(+this.input_data === this.expected){
 					this.uinputph = 'digraf';
 					this.expected = this.expected_digraf;
-					
+					this.input_data = '';
+					this.mselshow = false;
 					this.playCardDescription();
 					return;
 				} else {

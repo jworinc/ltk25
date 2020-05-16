@@ -11,6 +11,7 @@ export class PlaymediaService {
    constructor(private opt: OptionService, private dl: DataloaderService) { 
 		this.ltkmediaurl = opt.getMediaStorage();
 		this.immidiate_stop_event = new EventEmitter<boolean>();
+		Howler.autoSuspend = false;
    }
 
   public play_sequence = [];
@@ -73,12 +74,15 @@ export class PlaymediaService {
 
 		let that = this;
 
+		//	Rate saturation
+		let srate = this.rate >=1 ? this.rate : 1;
+
 		let props = {
 			src: this.ltkmediaurl + path,
 			autoplay: false,
 			loop: false,
 			volume: this.volume,
-			rate: this.rate,
+			rate: srate,
 			html5: false,
 		}
 
@@ -145,6 +149,7 @@ export class PlaymediaService {
 	}
 
 	word(word, cb, del=1) {
+		if(!word) return;
 		del = del || 1;
 		if(word === ''){
 			console.log('Try to play empty word!');
@@ -156,6 +161,7 @@ export class PlaymediaService {
 	}
 
 	sound(sound, cb, del=1) {
+		if(!sound) return;
 		del = del || 1;
 		if(sound.length < 3){
 			console.log('Try to play empty sound!');

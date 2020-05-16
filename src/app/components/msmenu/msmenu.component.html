@@ -17,10 +17,12 @@
             <div class='tool-sidebar-scroll-wrap' style="display: flex; flex-flow: column; width: 100%; min-height: 450px; height: 100%;" >
     		    <!--    Options     -->
     		    <span class='tool-sidebar-button tool-sidebar-options-button' (click)='showSettingsModal()' title="{{ 'settings' | translate }}"></span>
-    		    <!--    Chatroom    -->
+                <!--    Chatroom    -->
+                <!--
     		    <span class='tool-sidebar-button tool-sidebar-keyboard-button' title="{{ 'chatroom' | translate }}" (click)='location("/start_messages")' ></span>
-    		    <!--    Sidetrip    -->
-    		    <span class='tool-sidebar-button tool-sidebar-sidetrip-button' (click)='toggleSidetrip()' title="{{ 'st_mode' | translate }}"></span>
+                -->
+                <!--    Sidetrip    -->
+    		    <span class='tool-sidebar-button tool-sidebar-sidetrip-button' (click)='toggleSidetrip()' title="{{ 'st_mode' | translate }}" [hidden]="router.url !== '/home'"></span>
                 <!--    Fullscreen    -->
                 <span class='tool-sidebar-button tool-sidebar-fullscreen-max' (click)='fullscreenMax()' title="{{ 'fullscreen_max' | translate }}" [hidden]="fullscreen_mode"></span>
                 <span class='tool-sidebar-button tool-sidebar-fullscreen-min' (click)='fullscreenMin()' title="{{ 'fullscreen_min' | translate }}" [hidden]="!fullscreen_mode"></span>
@@ -31,22 +33,31 @@
                 <span class='tool-sidebar-button tool-sidebar-grammar-button' (click)='showGrammar()' title="{{ 'grammar' | translate }}"></span>
                 -->
                 <!--    Testing    -->
-                <span class='tool-sidebar-button tool-sidebar-testing-button' (click)='showTesting()' title="{{ 'testing' | translate }}"></span>
+                <span class='tool-sidebar-button tool-sidebar-testing-button' (click)='showTesting()' title="{{ 'testing' | translate }}" [hidden]="router.url !== '/home'"></span>
     		    <!--    Reports    -->
     		    <span class='tool-sidebar-button tool-sidebar-mail-button' (click)='location("/reports")' title="{{ 'reports' | translate }}"></span>
 
                 <!-- Feedback button -->
+                <!--
                 <span class='tool-sidebar-button tool-sidebar-feedback-btn' (click)='showFeedbackModal()' title="{{ 'feedback_btn' | translate }}">
-                    <!--<i class='main-app-feedback-icon'></i>-->
+                    //<i class='main-app-feedback-icon'></i>
                 </span>
+                -->
                 <!-- /Feedback button -->
 
     		    <!--    Help    -->
     		    <span class='tool-sidebar-button tool-sidebar-help-button' (click)='showHelp()' title="{{ 's_help' | translate }}"></span>
+                <!--    Help    -->
+                <!--
+                <span class='tool-sidebar-button tool-sidebar-help-button' title="{{ 's_help' | translate }}"></span>
+                -->
     		    <!--    Exit    -->
     		    <span class='tool-sidebar-button tool-sidebar-exit-button' (click)='logout($event)' title="{{ 'logout' | translate }}"></span>
-    		    <!--    LTK    -->
-    		    <span class='tool-sidebar-button tool-sidebar-ltk-button' (click)='location("/home")' title="{{ 'home' | translate }}"></span>
+                <!--    LTK    -->
+                <!--
+                <span class='tool-sidebar-button tool-sidebar-ltk-button' (click)='location("/home")' title="{{ 'home' | translate }}"></span>
+                -->
+                <span class='tool-sidebar-button tool-sidebar-ltk-button' title="{{ 's_help' | translate }}"></span>
             </div>
 		</div>
         
@@ -55,16 +66,16 @@
 
     <!--  Menu Open/Hide button  -->
     <div class='tool-sidebar-open-close' [ngClass]="{'toolsidebarocb': show_tool_pages_list}" *ngIf='show_menu_open_button || show_tool_pages_list'>
-        <span class='tool-sidebar-open-icon' [ngClass]="{'toolsidebaroi': !show_tool_pages_list}" (click)='show_tool_pages_list = true'>
+        <span class='tool-sidebar-open-icon' [ngClass]="{'toolsidebaroi': !show_tool_pages_list}" (click)='showMenu()'>
             <i class="fas fa-ellipsis-v"></i>
         </span>
-        <span class='tool-sidebar-close-icon' [ngClass]="{'toolsidebarci': show_tool_pages_list}" (click)='show_tool_pages_list = false; closeMenu()'>
+        <span class='tool-sidebar-close-icon' [ngClass]="{'toolsidebarci': show_tool_pages_list}" (click)='closeMenu()'>
             <i class="fas fa-times"></i>
         </span>
     </div>
     <!--/Menu Open/Hide button   -->
 
-    <div class='tool-sidebar-background-shadow' [ngClass]="{'sbbshadowopen': show_tool_pages_list}"></div>
+    <div class='tool-sidebar-background-shadow' [ngClass]="{'sbbshadowopen': show_tool_pages_list}" (click)='closeMenu()'></div>
 
 
 </div>

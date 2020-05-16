@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { PlaysentenceDirective } from '../../directives/playsentence.directive';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-idm',
@@ -16,8 +17,13 @@ export class IdmComponent extends BaseComponent implements OnInit {
 
   @ViewChild(PlaysentenceDirective) psn;
 
-  constructor(private elm:ElementRef, private sanitizer: DomSanitizer, private playmedia: PlaymediaService, private idmlog: LoggingService, private rw1cs: ColorschemeService) {
-  	super(elm, sanitizer, playmedia, idmlog, rw1cs);
+  constructor(private elm:ElementRef, 
+              private sanitizer: DomSanitizer, 
+              private playmedia: PlaymediaService, 
+              private idmlog: LoggingService, 
+              private rw1cs: ColorschemeService,
+              private idmpe: PickElementService) {
+  	super(elm, sanitizer, playmedia, idmlog, rw1cs, idmpe);
   }
 
   ngOnInit() {

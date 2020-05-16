@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, ElementRef, EventEmitter } from '@angular/core';
 import { DataloaderService } from '../../services/dataloader.service';
 import { addToViewTree } from '@angular/core/src/render3/instructions';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-feedback',
@@ -10,13 +11,14 @@ import { addToViewTree } from '@angular/core/src/render3/instructions';
 export class FeedbackComponent implements OnInit {
 
   constructor(private el: ElementRef, 
-  			  private dl: DataloaderService,) { }
+  			  private dl: DataloaderService, public pe: PickElementService) { }
 
 
   public _show: boolean = false;
   public feedback_shown: boolean = false;
   public save_feedback_started: boolean = false;
   public success_result = false;
+  public temphide_feedback = false;
   
   @Output() closefeedback = new EventEmitter<boolean>();
   @Input('show')
@@ -24,16 +26,24 @@ export class FeedbackComponent implements OnInit {
      this._show = show;
      this.initFeedback();
   }
+  @Input() card_descriptor: string = '';
+  @Input() prev_feedbacks: string = '';
 
   ngOnInit() {
-
+    let that = this;
+    this.pe.element_set.subscribe((eltext)=>{
+      that.temphide_feedback = false;
+      that.feedback.element = eltext;
+    });
   }
 
   	public feedback = {
         like: 0,
         dislike: 0,
-        category: 'no',
-        message: ''
+        category: 'correction',
+        message: '',
+        card_descriptor: '',
+        element: ''
     }
 
     //  Init clean feedback object
@@ -41,8 +51,10 @@ export class FeedbackComponent implements OnInit {
         this.feedback = {
             like: 0,
             dislike: 0,
-            category: 'no',
-            message: ''
+            category: 'correction',
+            message: '',
+            card_descriptor: '',
+            element: ''
         }
         this.success_result = false;
     }
@@ -56,12 +68,13 @@ export class FeedbackComponent implements OnInit {
 
 	submitFeedback() {
     console.log('Save feedback.');
-    if(this.feedback.like === 0 && this.feedback.dislike === 0 && this.feedback.message === ''){
+    if(this.feedback.category === '' && this.feedback.message === ''){
       console.log('Empty feedback!');
       alert('Please fill in form before saving!');
       return;
     }
-		console.log(this.feedback);
+    console.log(this.feedback);
+    this.feedback.card_descriptor = this.card_descriptor;
         let that = this;
         this.dl.saveFeedback(this.feedback).subscribe(
 		        data => { that.save_feedback_started = false; that.success_result = true; },
@@ -86,7 +99,20 @@ export class FeedbackComponent implements OnInit {
 
 	setCategory(cat){
 		this.feedback.category = cat;
-	}
+  }
+  
+  startElementPicking() {
+
+    //  Hide feedback screen
+    let that = this;
+    that.temphide_feedback = true;
+    setTimeout(()=>{
+      that.pe.setMouseLock();
+    }, 500);
+    
+
+
+  }
 
 
 }

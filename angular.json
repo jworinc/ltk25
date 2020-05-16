@@ -27,7 +27,9 @@
               "src/.htaccess",
               "src/beep.mp3",
               "src/recorderWorker.js",
-              "src/assets"
+              "src/assets",
+              "src/sitemap.xml",
+              "src/YHNRY.mp3"
             ],
             "styles": [
               "node_modules/ng-snotify/styles/material.css",
@@ -97,6 +99,62 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "debug": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
+            "dev1": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev1.ts"
+                }
+              ]
+            },
+            "dev1prod": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev1prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
             }
           }
         },
@@ -108,6 +166,9 @@
           "configurations": {
             "production": {
               "browserTarget": "LTKLessons:build:production"
+            },
+            "dev": {
+              "browserTarget": "LTKLessons:build:dev"
             }
           }
         },

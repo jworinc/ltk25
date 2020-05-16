@@ -21,7 +21,7 @@ export class ColorschemeService {
 		{card: '#BABABA'},
 		{card: '#FFDE9E'}
 	];
-	public scheme_change: any;
+	public scheme_change = new EventEmitter<boolean>();
 
 	getBackgroundImage(){
 
@@ -46,7 +46,7 @@ export class ColorschemeService {
 	onChange() {
 		if(typeof this.scheme_change !== 'undefined') return this.scheme_change;
 		else{
-			this.scheme_change = new EventEmitter<boolean>();
+			//this.scheme_change = new EventEmitter<boolean>();
 			return this.scheme_change;
 		}
 	}

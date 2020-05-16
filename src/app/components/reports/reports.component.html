@@ -55,5 +55,8 @@
     <!--    Feedback window   -->
     <app-feedback  [show]='show_feedback_modal' [hidden]="!show_feedback_modal" (closefeedback)="onCloseFeedback()"></app-feedback>
         
-        
+    <!-- Close button for reports -->
+    <button class="button-close-report" (click)="onCloseBack()"><i class="far fa-window-close"></i></button>
+    
+
 </div>

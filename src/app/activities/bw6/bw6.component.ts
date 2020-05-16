@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { OptionService } from '../../services/option.service';
+import { PickElementService } from '../../services/pick-element.service';
 
 @Component({
   selector: 'app-bw6',
@@ -19,8 +20,9 @@ export class Bw6Component extends Bw3Component implements OnInit {
 							private bw6pm: PlaymediaService, 
 							private bw6log: LoggingService, 
 							private bw6cs: ColorschemeService,
-							private opbw6: OptionService) {
-  	super(bw6el, bw6sn, bw6pm, bw6log, bw6cs, opbw6);
+							private opbw6: OptionService,
+							private bw6pe: PickElementService) {
+  	super(bw6el, bw6sn, bw6pm, bw6log, bw6cs, opbw6, bw6pe);
   }
 
   ngOnInit() {
@@ -184,8 +186,10 @@ export class Bw6Component extends Bw3Component implements OnInit {
 				this.enableMoveNext();
 			}
 			this.prevent_dubling_flag = true;
+			this.play_pronouce_busy_flag = false;
 			this.input_data = '';
 		}
+		if(this.isActive()) this.play_pronouce_busy_flag = false;
 		
 	}
 
@@ -197,11 +201,13 @@ export class Bw6Component extends Bw3Component implements OnInit {
 	//	Used to play task word and sound exactly after instructions play finished
 	playContentDescription() {
 		let that = this;
+		this.enterHide();
 		//	Phase 4 question
 		if(typeof this.card.content[0].Question !== 'undefined' && this.card.content[0].Question.length > 0 && this.uinputph === 'question'){
 			this.lastUncomplete = this.card.content[0].Question[0];
 			this.card.content[0].desc = this.card.content[0].Question[0].pointer_to_value;
 			this.setGlobalDesc(this.card.content[0].desc);
+			this.showEnter();
 			this.bw6pm.sound(this.card.content[0].Question[0].audio, function(){
 				that.setFocus();
 				that.input_data = '';
@@ -381,9 +387,11 @@ export class Bw6Component extends Bw3Component implements OnInit {
 			if(this.getUserInputString() !== ''){
 				this.playCorrectSound(function(){ 
 					that.enableNextCard();
+					that.moveNext();
 				});
 			} else {
 				that.enableNextCard();
+				that.moveNext();
 			}
 		}
 		/*
@@ -396,7 +404,13 @@ export class Bw6Component extends Bw3Component implements OnInit {
 
 
 	playWord(){
+
+		//	If mouse event locked by feedback
+		if(this.bw6pe.mouseLock()) return;
+
 		let that = this;
+		this.bw6pm.stop();
+		this.play_pronouce_busy_flag = false;
 		this.bw6pm.word(this.answer_sound, function(){
 			
 				that.playPronounce(function(){
@@ -467,12 +481,13 @@ export class Bw6Component extends Bw3Component implements OnInit {
 	//ngDoCheck() {
 	valueChange($event){
 	    //const change = this.differ.diff(this.input_data);
-	    if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
-
-	    	this.old_input_data = JSON.stringify(this.input_data);
+	    //if(this.isActive() && JSON.stringify(this.input_data) !== this.old_input_data){
+		if(this.isActive()) {
+	    	//this.old_input_data = JSON.stringify(this.input_data);
 
 	    	let that = this;
-
+			this.bw6pm.stop();
+			this.play_pronouce_busy_flag = false;
 			//	When current phase is letters, check if num letters match with user input and switch to next
 			if(this.uinputph === 'letters' && this.input_data !== ''){
 				if(this.input_data == this.expected){

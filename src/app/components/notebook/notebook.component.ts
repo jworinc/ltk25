@@ -1,9 +1,11 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DataloaderService } from '../../services/dataloader.service';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
-import { trigger, transition, animate, style, state } from '@angular/animations'
+import { trigger, transition, animate, style, state } from '@angular/animations';
+import { PickElementService } from '../../services/pick-element.service';
+//import { EventEmitter } from 'protractor';
 
 @Component({
   selector: 'app-notebook',
@@ -85,11 +87,14 @@ export class NotebookComponent implements OnInit {
      this.updateLayout();
   }
 
+  @Output() closenotebook = new EventEmitter<boolean>();
+
   constructor(private elm:ElementRef, 
               private sanitizer: DomSanitizer, 
               private playmedia: PlaymediaService, 
               private rw1cs: ColorschemeService,
-              private dl: DataloaderService) {
+              private dl: DataloaderService,
+              private pe: PickElementService) {
   	//super(elm, sanitizer, playmedia, rw1cs);
   }
 
@@ -112,6 +117,8 @@ export class NotebookComponent implements OnInit {
   }
 
   getDetails(i){
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.isNotebook = false;
     // // this.show_word = this.data[i].title;;
     // // this.desc = this.data[i].definition;
@@ -128,6 +135,8 @@ export class NotebookComponent implements OnInit {
   }
   counter = 0;
   showNextWord(){
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.move = true;
     console.log(this.ind);
     if(this.ind != this.card.length-1){
@@ -144,6 +153,8 @@ export class NotebookComponent implements OnInit {
   }
 
   showPrevWord(){
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.move = false;
 
     // if(this.ind != 0){
@@ -163,11 +174,14 @@ export class NotebookComponent implements OnInit {
   }
 
   showDescription(){
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     //this.isDescription = !this.isDescription;
     this.playWord();
   }
 
   playWord(){
+    this.playmedia.stop();
     this.playmedia.word(this.card[this.counter].wavename,function(){});
   }
 
@@ -205,5 +219,9 @@ export class NotebookComponent implements OnInit {
 
   }
 
-
+  onCloseBack() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    this.closenotebook.emit();
+  }
 }
