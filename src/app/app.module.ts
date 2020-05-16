@@ -41,11 +41,8 @@ import { BindhtmlPipe } from './pipes/bindhtml.pipe';
 import { MediapreloaderService } from './services/mediapreloader.service';
 import { LoggingService } from './services/logging.service';
 import { ColorschemeService } from './services/colorscheme.service';
-<<<<<<< HEAD
 import { HelpService } from './services/help.service';
-=======
 import { ErrorLogService } from './services/error-log.service';
->>>>>>> master
 
 import { CardDirective } from './directives/card.directive';
 import { Al1Component } from './activities/al1/al1.component';
@@ -117,10 +114,8 @@ import { ResultsComponent } from './tests/results/results.component';
 import { TestResultItemComponent } from './components/test-result-item/test-result-item.component';
 import { CustomfieldService } from './services/customfield.service';
 import { CfcComponent } from './activities/cfc/cfc.component';
-<<<<<<< HEAD
 import { HelpTooltipComponent } from './components/help-tooltip/help-tooltip.component';
 import { HelpComponent } from './components/help/help.component';
-=======
 import { SnoozeComponent } from './components/snooze/snooze.component';
 import { WordtranslateDirective } from './directives/wordtranslate.directive';
 import { MultiselectComponent } from './components/multiselect/multiselect.component';
@@ -128,7 +123,6 @@ import { ReversePipe } from './pipes/reverse.pipe';
 import { FontadjusterDirective } from './directives/fontadjuster.directive';
 import { PickElementService } from './services/pick-element.service';
 import { CourseExpireMsgComponent } from './components/course-expire-msg/course-expire-msg.component';
->>>>>>> master
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -220,17 +214,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     ResultsComponent,
     TestResultItemComponent,
     CfcComponent,
-<<<<<<< HEAD
     HelpTooltipComponent,
     HelpComponent,
-=======
     SnoozeComponent,
     WordtranslateDirective,
     MultiselectComponent,
     ReversePipe,
     FontadjusterDirective,
     CourseExpireMsgComponent,
->>>>>>> master
   ],
   imports: [
     BrowserModule,
@@ -250,15 +241,10 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [DataloaderService, TokenService, AuthService, BeforeLoginService, AfterLoginService, PickElementService,
   { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
     SnotifyService, OptionService, CardbuilderService, PlaymediaService, RecorderService, MediapreloaderService, 
-<<<<<<< HEAD
-    LoggingService, ColorschemeService, CustomfieldService, HelpService,
-    { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true } ],
-=======
-    LoggingService, ColorschemeService, CustomfieldService, ErrorLogService, Title,
+    LoggingService, ColorschemeService, CustomfieldService, ErrorLogService, Title, HelpService,
     { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
     { provide: ErrorHandler, useClass: GlobalErrorHandler } ],
     //{ provide: ErrorHandler, useClass: GlobalErrorHandler }],
->>>>>>> master
   entryComponents: [ Al1Component, CarComponent, Al2Component, Ar1Component, Ar2Component, Ar3Component, Ar4Component, Ar5Component,
   Ar6Component, Or1Component, Or2Component, Or3Component, Or4Component, Bw1Component, Bw2Component, Bw3Component, Bw5Component,
   Bw6Component, Bw7Component, SypComponent, DiwComponent, GscComponent, Rp1Component, Rp2Component, GwmComponent, SiwComponent,
