@@ -178,6 +178,10 @@ export class PlaymediaService {
 
 	help(help, cb, del=1) {
 		del = del || 1;
+		if(help.length < 3){
+			console.log('Try to play empty help!');
+			return;
+		}
 		let path = '/storage/app/public/audio/help/'+help+'.mp3';
 		this.play(path, cb, del);
 	}

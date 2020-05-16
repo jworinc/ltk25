@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild, ComponentFactoryResolver, AfterViewInit, ViewEncapsulation, ElementRef, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ComponentFactoryResolver, AfterViewInit, ViewEncapsulation, ElementRef, OnDestroy, EventEmitter, QueryList, ViewChildren } from '@angular/core';
 import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { DataloaderService } from '../../services/dataloader.service';
 import { SnotifyService } from 'ng-snotify';
@@ -11,6 +11,7 @@ import { MediapreloaderService } from '../../services/mediapreloader.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { CustomfieldService } from '../../services/customfield.service';
+import { HelpService } from '../../services/help.service';
 import { AuthService } from '../../services/auth.service';
 import { TokenService } from '../../services/token.service';
 import { CardDirective } from '../../directives/card.directive';
@@ -22,6 +23,7 @@ import { Howl, Howler } from 'howler';
 import * as $ from 'jquery';
 import { GrammarComponent } from '../grammar/grammar.component';
 import { filter } from 'rxjs/operators';
+import { HelpTooltipComponent } from '../help-tooltip/help-tooltip.component';
 import { Title } from '@angular/platform-browser';
 import { PickElementService } from '../../services/pick-element.service';
 
@@ -71,6 +73,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   @ViewChild(NotebookComponent) nb: NotebookComponent;
   @ViewChild(ShowtestingComponent) sht: ShowtestingComponent;
   @ViewChild(GrammarComponent) grm: GrammarComponent;
+  @ViewChildren(HelpTooltipComponent) helps !: QueryList<HelpTooltipComponent>;
 
   public cards: CardItem[];
   public downloaded_cards = [];
@@ -171,6 +174,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     private logging: LoggingService,
     private cs: ColorschemeService,
     private cf: CustomfieldService,
+    public hs: HelpService,
     private Auth: AuthService,
     private Token: TokenService,
     private title: Title,
@@ -322,7 +326,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
 
   ngAfterViewInit() {
-
+    //  Setup help context
+    this.hs.setItems(this.helps.toArray());
+    this.hs.setRootElement(this.el.nativeElement);
   }
 
   updateLesson() {
@@ -1934,6 +1940,23 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.router.navigateByUrl('/home');
   }
 
+  showHelp() {
+
+    //  Close menu on mobile before show help
+    if(this.mode === 'single') {
+      this.onCloseMenu();
+      let that = this;
+      //  Wait until menu will be closed
+      setTimeout(()=>{
+        //  Prepare and show help mask to choose required element
+        that.hs.prepareHelp();
+      }, 400);
+    } else {
+      //  Prepare and show help mask to choose required element
+      this.hs.prepareHelp();
+    }
+  }
+    
   showToolPageListMenu() {
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;

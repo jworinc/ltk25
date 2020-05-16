@@ -41,6 +41,7 @@ import { BindhtmlPipe } from './pipes/bindhtml.pipe';
 import { MediapreloaderService } from './services/mediapreloader.service';
 import { LoggingService } from './services/logging.service';
 import { ColorschemeService } from './services/colorscheme.service';
+import { HelpService } from './services/help.service';
 import { ErrorLogService } from './services/error-log.service';
 
 import { CardDirective } from './directives/card.directive';
@@ -113,6 +114,8 @@ import { ResultsComponent } from './tests/results/results.component';
 import { TestResultItemComponent } from './components/test-result-item/test-result-item.component';
 import { CustomfieldService } from './services/customfield.service';
 import { CfcComponent } from './activities/cfc/cfc.component';
+import { HelpTooltipComponent } from './components/help-tooltip/help-tooltip.component';
+import { HelpComponent } from './components/help/help.component';
 import { SnoozeComponent } from './components/snooze/snooze.component';
 import { WordtranslateDirective } from './directives/wordtranslate.directive';
 import { MultiselectComponent } from './components/multiselect/multiselect.component';
@@ -213,6 +216,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ResultsComponent,
     TestResultItemComponent,
     CfcComponent,
+    HelpTooltipComponent,
+    HelpComponent,
     SnoozeComponent,
     WordtranslateDirective,
     MultiselectComponent,
@@ -240,7 +245,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [DataloaderService, TokenService, AuthService, BeforeLoginService, AfterLoginService, PickElementService,
   { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
     SnotifyService, OptionService, CardbuilderService, PlaymediaService, RecorderService, MediapreloaderService, 
-    LoggingService, ColorschemeService, CustomfieldService, ErrorLogService, Title,
+    LoggingService, ColorschemeService, CustomfieldService, ErrorLogService, Title, HelpService,
     { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
     { provide: ErrorHandler, useClass: GlobalErrorHandler } ],
     //{ provide: ErrorHandler, useClass: GlobalErrorHandler }],
