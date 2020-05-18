@@ -107,14 +107,14 @@ export class PlaymediaService {
 		}
 		sound.on('end', function(){
 			that.clearDisable();
-			that.noWordFound.emit(false);
+			//that.noWordFound.emit(false);
 			if(typeof cb !== 'undefined' && !that.disable_callback_flag) cb();
 			
 		});
 		sound.on('loaderror', function(){
 			console.log('Error to load audio: ' + this._src);
 			that.logMissingAudio(this._src);
-			that.noWordFound.emit(true);
+			//that.noWordFound.emit(true);
 			setTimeout(function(){
 				that.clearDisable();
 			}, 300);
@@ -257,6 +257,63 @@ export class PlaymediaService {
 
 	}
 
+	playTalk(word, cb, del=1) {
 
+		if(!word) return;
+		del = del || 1;
+		if(word === ''){
+			console.log('Try to play empty word!');
+			return;
+		}
+		let first_letter = word.substr(0, 1).toUpperCase();
+		let path = '/storage/app/public/audio/ltkmedia/'+first_letter+'/'+word.toUpperCase().replace(/[\,\:\;\!\.]/g, '')+'.mp3';
+		
+		//	Check if pause was enabled
+		if(this.play_pause_flag) return;
+
+		this.cb = cb;
+
+		console.log('Playmedia service - talking notepad, request to play audio from path: ' + path + '.');
+
+		let that = this;
+
+		//	Rate saturation
+		let srate = this.rate >=1 ? this.rate : 1;
+
+		let props = {
+			src: this.ltkmediaurl + path,
+			autoplay: false,
+			loop: false,
+			volume: this.volume,
+			rate: srate,
+			html5: false,
+		}
+
+		//	Init word sound
+		if(this.play_sound) this.play_sound.stop();
+		let sound = this.play_sound = new Howl(props);
+
+		//	Play sound if it already loaded
+		if(sound.state() === 'loaded') this.start_play_delay_timer = setTimeout(function(){ that.disable_callback_flag = false; sound.play(); }, del);
+		else{
+			//	If sound is not loaded yet, play it when ready
+			sound.on('load', function(){
+				that.start_play_delay_timer = setTimeout(function(){ that.disable_callback_flag = false; sound.play(); }, del);
+			});
+		}
+		sound.on('end', function(){
+			
+			that.noWordFound.emit(false);
+			if(typeof cb !== 'undefined' && !that.disable_callback_flag) cb();
+			
+		});
+		sound.on('loaderror', function(){
+			
+			that.noWordFound.emit(true);
+			
+			if(typeof cb !== 'undefined') cb();
+		});
+
+	}
 
 }

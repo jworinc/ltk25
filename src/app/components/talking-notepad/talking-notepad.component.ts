@@ -11,15 +11,21 @@ export class TalkingNotepadComponent implements OnInit {
   message: string = '';
   subString: string = '';
   count = 0;
+  pm_noword_event: any = null;
+
   constructor(private playmedia: PlaymediaService) { }
 
   ngOnInit() {
-    this.playmedia.noWordFound.subscribe((res) => {
+    this.pm_noword_event = this.playmedia.noWordFound.subscribe((res) => {
       if (res) {
         this.count = 0;
         this.playWordEndSound();
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.pm_noword_event.unsubscribe();
   }
 
   checkEndsWith(lastWord, endChar) {
@@ -56,7 +62,7 @@ export class TalkingNotepadComponent implements OnInit {
       // this.playmedia.noWordFound.emit(false);
       const path = _s ? '_S/_SS' :
         _es ? '_E/_SES' : _ed ? '_E/_SED' : _ing ? '_I/_SING' : '';
-      this.playmedia.word(this.subString, () => {
+      this.playmedia.playTalk(this.subString, () => {
         this.playmedia.noWordFound.subscribe((res) => {
           if (!res && this.count == 0) {
             this.count = 1;
@@ -76,7 +82,7 @@ export class TalkingNotepadComponent implements OnInit {
     }
     this.playmedia.stop();
     this.subString = '';
-    this.playmedia.word(this.getlastWord(this.message.trim()), () => {
+    this.playmedia.playTalk(this.getlastWord(this.message.trim()), () => {
     });
   }
 
