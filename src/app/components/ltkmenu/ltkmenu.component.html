@@ -43,8 +43,8 @@
                   <button class="btn btn-success" (click)="saveStudentName()">{{ 'save' | translate }}</button>
               </div>
             </div>
-            <div class=" col-xl-12 col-lg-12">
-              <button class="btn btn-primary app-setting-item">{{ 'join_chatroom' | translate }}</button>
+            <div class=" col-xl-12 col-lg-12" [hidden]="!student.chatroom || student.chatroom == ''">
+              <a [attr.href]="student.chatroom" target="_blank"><button class="btn btn-primary app-setting-item">{{ 'join_chatroom' | translate }}</button></a>
             </div>
             <div class='clearfix'></div>
           </div>
