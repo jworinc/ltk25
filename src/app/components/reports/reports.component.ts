@@ -32,7 +32,7 @@ export class ReportsComponent implements OnInit {
 		//	set Reports title
 		this.title.setTitle('LTK-Lessons-Reports');
     	//  Init studetn information
-	    this.dataloader.getStudentInfo().subscribe(
+	    this.student_info_event = this.dataloader.getStudentInfo().subscribe(
 	        data => this.handleStudentInfo(data),
 	        error => { 
 				console.log(error);
@@ -52,9 +52,11 @@ export class ReportsComponent implements OnInit {
 		
 		ngOnDestroy() {
 			this.lang_change_event.unsubscribe();
+			this.student_info_event.unsubscribe();
 		}
 
   public lang_change_event: any;
+  public student_info_event: any;
 
 	public show_tool_pages_list: boolean = true;
 
@@ -75,7 +77,8 @@ export class ReportsComponent implements OnInit {
 	public student = {
 		name: 'Admin',
 	  	lu: 0,
-		sid_message: 'Message'
+		sid_message: 'Message',
+		chatroom: ""
 	}
 
 	//	Reports show flags
@@ -164,7 +167,7 @@ export class ReportsComponent implements OnInit {
 		console.log(data);
 		this.student.name = data.user_name;
     	this.student.lu = data.last_uncomplete;
-
+		this.student.chatroom = data.chatroom;
 	    this.Option.setLanguage(data.options.language);
 	    
       this.current_lesson_title = this.getCurrentLessonTitle(data.last_uncomplete);

@@ -19,21 +19,24 @@ export class HelpComponent implements OnInit {
 
   public targets = [];
 
+  public show_help_dialog_event: any;
+  public build_help_mask_event: any;
+
   ngOnInit() {
     let that = this;
-    this.hs.show_help_dialog.subscribe(()=>{
+    this.show_help_dialog_event = this.hs.show_help_dialog.subscribe(()=>{
       that.show_dialog = true;
       that.pm.stop();
       that.pm.help('_SCOEYAII', ()=>{}, 200);
     });
-    this.hs.build_help_mask.subscribe((tgs)=>{
+    this.build_help_mask_event = this.hs.build_help_mask.subscribe((tgs)=>{
       that.buildMask(tgs);
     });
   }
 
   ngOnDestroy() {
-    this.hs.show_help_dialog.unsubscribe();
-    this.hs.build_help_mask.unsubscribe();
+    this.show_help_dialog_event.unsubscribe();
+    this.build_help_mask_event.unsubscribe();
   }
 
   @HostListener('click', ['$event']) onClick($event) {

@@ -20,7 +20,8 @@ export class DashboardComponent implements OnInit {
   public student = {
   	name: 'Admin',
     lu: 0,
-  	sid_message: 'Message'
+    sid_message: 'Message',
+    chatroom: ""
   }
 
   public lessons = [];
@@ -156,7 +157,7 @@ export class DashboardComponent implements OnInit {
     this.student.name = data.user_name;
     this.student.lu = data.last_uncomplete;
     this.student.sid_message = data.sid_message;
-    
+    this.student.chatroom = data.chatroom;
     this.Option.setLanguage(data.options.language);
 
     if(typeof data.link_expire !== 'undefined' && data.link_expire){

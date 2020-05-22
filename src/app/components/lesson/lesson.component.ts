@@ -37,7 +37,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public student = {
   	name: 'Admin',
     lu: 0,
-  	sid_message: 'Message',
+    sid_message: 'Message',
+    chatroom: "",
     options: {
       expertlevel: "5",
       language: "english",
@@ -468,6 +469,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.student.name = data.user_name;
     this.student.lu = data.last_uncomplete;
     this.student.sid_message = data.sid_message;
+    this.student.chatroom = data.chatroom;
     this.logging.setCurrentLesson(this.student.lu);
     this.recorder.setGain(+data.options.mic);
     this.playmedia.setVolume(+data.options.volume);
