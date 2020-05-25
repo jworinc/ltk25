@@ -77,7 +77,7 @@ export class TalkingNotepadComponent implements OnInit {
   }
 
   playWord() {
-    if (!this.message || this.message === '') {
+    if (!this.message || this.message === '' || this.message.trim() === '') {
       return;
     }
     this.playmedia.stop();
@@ -88,8 +88,15 @@ export class TalkingNotepadComponent implements OnInit {
 
   getlastWord(message): string {
     this.playmedia.stop();
-    const lastWord = message.match(/\w+$/)[0];
-    return lastWord;
+    if(typeof message !== 'undefined' && message !== ''){
+      let mtchs = message.match(/\w+$/);
+      if(mtchs && mtchs.length > 0) {
+        const lastWord = mtchs[0];
+        return lastWord;
+      } else return "";
+     
+    } else return "";
+    
   }
 
 }
