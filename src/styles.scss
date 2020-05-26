@@ -221,3 +221,43 @@ span:hover[data-playw], span:hover[data-psword] {
 		font-size: 14px;
 	}
 }
+
+
+.app-button-close{
+	display: block;
+    position: absolute;
+    top: 8px;
+    left: 100%;
+    width: 35px;
+    height: 30px;
+    margin-left: -43px;
+    border: none;
+    background: transparent;
+    font-size: 30px;
+    /* line-height: 51px; */
+    cursor: pointer;
+    color: #10A9FF;
+    z-index: 999;
+    /* margin: 0; */
+    padding: 0;
+    line-height: 30px;
+}
+
+.app-button-close:hover{
+    color: rgb(12, 107, 161);
+}
+.app-button-close:focus{
+    border: none;
+    outline: none;
+}
+.app-close-icon{
+	display: block;
+	position: relative;
+	width: 98%;
+	height: 98%;
+	background-image: url(assets/img/exit_button.png);
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}

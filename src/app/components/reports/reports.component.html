@@ -57,7 +57,12 @@
     <app-feedback  [show]='show_feedback_modal' [hidden]="!show_feedback_modal" (closefeedback)="onCloseFeedback()"></app-feedback>
         
     <!-- Close button for reports -->
-    <button class="button-close-report" (click)="onCloseBack()"><i class="far fa-window-close"></i></button>
+    <!--<button class="button-close-report" (click)="onCloseBack()"><i class="far fa-window-close"></i></button>-->
+    
+    <button class="app-button-close" (click)="onCloseBack()">
+        <!--<i class="far fa-window-close"></i>-->
+        <span class="app-close-icon"></span>
+    </button>
         
     <!--    LTK Menu   -->
     <app-ltkmenu [show]='show_ltk_menu' [hidden]='!show_ltk_menu' (closeltkmenu)='onCloseLtkMenu()' [student]="student"></app-ltkmenu>
