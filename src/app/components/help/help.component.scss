@@ -17,7 +17,7 @@
 .help-label{
     display: block;
     position: absolute;
-    width: 50px;
+    width: 145px;
     height: 27px;
     color: white;
     background-color: rgb(104, 104, 252);
@@ -27,6 +27,8 @@
     border-radius: 0 0 0 13px;
     right: 0;
     top: 0;
+    cursor: pointer;
+    z-index: 10;
 }
 .target-element{
     display: block;

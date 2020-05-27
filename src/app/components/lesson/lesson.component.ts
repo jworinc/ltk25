@@ -395,7 +395,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   onKeydow(event) {
       this.resetSnoozeTime();
       if(event.keyCode == 37) this.movePrev();
-      if(event.keyCode == 39) this.moveNext();
+      if(event.keyCode == 39) this.moveNext(event);
       if(event.keyCode == 13) this.enter();
   }
 
@@ -732,7 +732,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
       
   }
 
-  startLesson() {
+  startLesson($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.startLesson.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.show_start_screen = false;
@@ -947,7 +952,13 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   public navigation_switch_flag: boolean = false;
 
-  moveNext() {
+  moveNext($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.moveNext.bind(this, [$event]));
+      return;
+    }
+
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     let that = this;
@@ -1278,7 +1289,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   }
 
-  enter() {
+  enter($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.enter.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
@@ -1313,7 +1329,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   }
 
-  repeat() {
+  repeat($event) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.repeat.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
@@ -1328,7 +1349,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   }
 
-  hint() {
+  hint($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.hint.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
@@ -1341,7 +1367,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
   }
 
-  clear() {
+  clear($event = null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.clear.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
@@ -1354,7 +1385,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
   }
 
-  rule() {
+  rule($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.rule.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
@@ -1518,21 +1554,36 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.stopSnoozeTimer();
   }
 
-  good() {
+  good($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.good.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
     this.good_btn.emit();
   }
 
-  bad() {
+  bad($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.bad.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
     this.bad_btn.emit();
   }
 
-  prev() {
+  prev($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.prev.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
@@ -1547,7 +1598,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.show_setting_modal = true;
   }
 
-  onShowFeedback() {
+  onShowFeedback($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.onShowFeedback.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.playmedia.stop();
@@ -1892,7 +1948,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   //  Event handler for start play button
-  playStart() {
+  playStart($event = null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.playStart.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
@@ -1935,7 +1996,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
     that.playstop_event.emit();
   }
 
-  disableSidetrip() {
+  disableSidetrip($event = null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.disableSidetrip.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
 		if(this.pe.mouseLock()) return;
     this.end_lesson_flag = true;
@@ -1959,7 +2025,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
   }
     
-  showToolPageListMenu() {
+  showToolPageListMenu($event = null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.showToolPageListMenu.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.show_tool_pages_list = true;

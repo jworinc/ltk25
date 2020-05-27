@@ -50,6 +50,7 @@ export class HelpComponent implements OnInit {
     let that = this;
     //  Make delay to prevent closing help mask
     setTimeout(()=>{ that.show_dialog = false; }, 200);
+    this.hs.closeAllItems();
   }
   
 	goNext($event) {

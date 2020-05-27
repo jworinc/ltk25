@@ -13,7 +13,7 @@
                     </div>
                     <!-- Sidetrip mode enabled message -->
                     <div class='row sidetrip-mode' *ngIf='sidetripmode'>
-                        <span class='sidetrip-message'>{{ 'sidetrip_mode' | translate }}<span class='sidetrip-disable-btn' (click)="disableSidetrip()">&nbsp;&nbsp;&nbsp;{{ 'here' | translate }}</span>.</span>
+                        <span class='sidetrip-message'>{{ 'sidetrip_mode' | translate }}<span class='sidetrip-disable-btn' (click)="disableSidetrip($event)">&nbsp;&nbsp;&nbsp;{{ 'here' | translate }}</span>.</span>
                     </div>
 
                     <!--     Top Toolbar     -->
@@ -22,7 +22,7 @@
                         <!--    Lessons App Top Toolbar      -->
 
                         <!--    Menu open button    -->
-                        <span class='tool-sidebar-open-icon-top' *ngIf='!show_tool_pages_list' (click)='showToolPageListMenu()'>
+                        <span class='tool-sidebar-open-icon-top' *ngIf='!show_tool_pages_list' (click)='showToolPageListMenu($event)'>
                             <i class="fas fa-ellipsis-v"></i>
                         </span>
 
@@ -32,9 +32,9 @@
                                 <span class='top-toolbar-rec-redcircle' *ngIf='rec_toggle && recorder.recording_started'></span>
                             </span>
                         </span>
-                        <span class='top-toolbar-listen' (click)='playStart();' title="{{ 'listen_btn' | translate }}"
+                        <span class='top-toolbar-listen' (click)='playStart($event);' title="{{ 'listen_btn' | translate }}"
                              [ngClass]="{'blinkhighlight': blinkplay}"></span>
-                        <span class='top-toolbar-repeat' (click)='repeat();' title="{{ 'repeat_btn' | translate }}"></span>
+                        <span class='top-toolbar-repeat' (click)='repeat($event);' title="{{ 'repeat_btn' | translate }}"></span>
 
                     </div><!--     Top Toolbar     -->
 
@@ -46,15 +46,15 @@
 
                             <!-- <span class='zoom-card-sequence-hint' (click)='hint();'></span> -->
                             <span class='zoom-card-sequence-goodbad' *ngIf='rui_button_goodbad' [ngClass]="{'blinkhighlight': blinkgoodbad}">
-                                <span class='zoom-card-sequence-good zoom-card-sequence-good-mb' (click)='good();' title="{{ 'good_btn' | translate }}"></span>
-                                <span class='zoom-card-sequence-bad zoom-card-sequence-bad-mb' (click)='bad();' title="{{ 'bad_btn' | translate }}"></span>
+                                <span class='zoom-card-sequence-good zoom-card-sequence-good-mb' (click)='good($event);' title="{{ 'good_btn' | translate }}"></span>
+                                <span class='zoom-card-sequence-bad zoom-card-sequence-bad-mb' (click)='bad($event);' title="{{ 'bad_btn' | translate }}"></span>
                             </span>
-                            <span class='zoom-card-sequence-clear zoom-card-sequence-clear-mb' *ngIf='rui_button_clear' (click)='clear();' title="{{ 'clear_input' | translate }}"></span>
-                            <span class='zoom-card-sequence-rule' *ngIf='rui_button_rule' (click)='rule();' title="{{ 'rule_input' | translate }}" [ngClass]="{'blinkhighlight': blinkrule}"></span>
-                            <span class='zoom-card-sequence-hint zoom-card-sequence-hint-mb' *ngIf='rui_button_hint' (click)='hint();' title="{{ 'show_hint' | translate }}"></span>
-                            <span class='zoom-card-sequence-prev zoom-card-sequence-prev-mb' *ngIf='rui_button_prev' (click)='prev();' title="{{ 'move_to_prev' | translate }}"></span>
-                            <span class='zoom-card-sequence-enter zoom-card-sequence-enter-mb' *ngIf='rui_button_enter' (click)='enter();' title="{{ 'enter_answer' | translate }}" [ngClass]="{'blinkhighlight': blinkenter}"></span>
-                            <span class='zoom-card-next' (click)='moveNext()' title="{{ 'move_to_next' | translate }}" [ngClass]="{'blinkhighlight': blinknextnavbtn}"></span>
+                            <span class='zoom-card-sequence-clear zoom-card-sequence-clear-mb' *ngIf='rui_button_clear' (click)='clear($event);' title="{{ 'clear_input' | translate }}"></span>
+                            <span class='zoom-card-sequence-rule' *ngIf='rui_button_rule' (click)='rule($event);' title="{{ 'rule_input' | translate }}" [ngClass]="{'blinkhighlight': blinkrule}"></span>
+                            <span class='zoom-card-sequence-hint zoom-card-sequence-hint-mb' *ngIf='rui_button_hint' (click)='hint($event);' title="{{ 'show_hint' | translate }}"></span>
+                            <span class='zoom-card-sequence-prev zoom-card-sequence-prev-mb' *ngIf='rui_button_prev' (click)='prev($event);' title="{{ 'move_to_prev' | translate }}"></span>
+                            <span class='zoom-card-sequence-enter zoom-card-sequence-enter-mb' *ngIf='rui_button_enter' (click)='enter($event);' title="{{ 'enter_answer' | translate }}" [ngClass]="{'blinkhighlight': blinkenter}"></span>
+                            <span class='zoom-card-next zoom-card-next-mobile' (click)='moveNext($event)' title="{{ 'move_to_next' | translate }}" [ngClass]="{'blinkhighlight': blinknextnavbtn}"></span>
     
                         </span>
                         <!-- Card Sequence buttons for mobile layout -->
@@ -97,7 +97,7 @@
                                     <h2>{{ 'lets_begin' | translate }}</h2>
                                 </span>
                                 <span class='main-app-start-lesson-btn'>
-                                    <button class='main-app-start-btn' (click)='startLesson()'>{{ 'lstart' | translate }} <i class='main-app-start-lesson-icon'></i></button>
+                                    <button class='main-app-start-btn' (click)='startLesson($event)'>{{ 'lstart' | translate }} <i class='main-app-start-lesson-icon'></i></button>
                                 </span>
                             </span>
 
@@ -129,7 +129,7 @@
                             <span class='lesson-position-activity-tag' 
                                 [hidden]="card_descriptor.lesson==0&&card_descriptor.position==0&&card_descriptor.activity==''" 
                                 title="{{ 'feedback_btn' | translate }}"
-                                (click)="onShowFeedback()">
+                                (click)="onShowFeedback($event)">
                                 #{{ card_descriptor.lesson }}-{{ card_descriptor.position }}:{{ card_descriptor.activity }}
                                 <span [hidden]="current_feedback_list.length < 1" class="lesson-description-feedback-exists">
                                     <i class="fas fa-check-double"></i>
@@ -152,14 +152,14 @@
                     <span class='zoom-card-sequence-buttons'>
                         <span class='zoom-card-sequence-buttons-wrap'>
                             <span class='zoom-card-sequence-goodbad' *ngIf='rui_button_goodbad' [ngClass]="{'blinkhighlight': blinkgoodbad}">
-                                <span class='zoom-card-sequence-good zoom-card-sequence-good-dsk' (click)='good();' title="{{ 'good_btn' | translate }}"></span>
-                                <span class='zoom-card-sequence-bad zoom-card-sequence-bad-dsk' (click)='bad();' title="{{ 'bad_btn' | translate }}"></span>
+                                <span class='zoom-card-sequence-good zoom-card-sequence-good-dsk' (click)='good($event);' title="{{ 'good_btn' | translate }}"></span>
+                                <span class='zoom-card-sequence-bad zoom-card-sequence-bad-dsk' (click)='bad($event);' title="{{ 'bad_btn' | translate }}"></span>
                             </span>
-                            <span class='zoom-card-sequence-clear zoom-card-sequence-clear-dsk' *ngIf='rui_button_clear' (click)='clear();' title="{{ 'clear_input' | translate }}"></span>
-                            <span class='zoom-card-sequence-rule' *ngIf='rui_button_rule' (click)='rule();' title="{{ 'rule_input' | translate }}" [ngClass]="{'blinkhighlight': blinkrule}"></span>
-                            <span class='zoom-card-sequence-hint zoom-card-sequence-hint-dsk' *ngIf='rui_button_hint' (click)='hint();' title="{{ 'show_hint' | translate }}"></span>
-                            <span class='zoom-card-sequence-prev zoom-card-sequence-prev-dsk' *ngIf='rui_button_prev' (click)='prev();' title="{{ 'move_to_prev' | translate }}"></span>
-                            <span class='zoom-card-sequence-enter zoom-card-sequence-enter-dsk' *ngIf='rui_button_enter' (click)='enter();' title="{{ 'enter_answer' | translate }}" [ngClass]="{'blinkhighlight': blinkenter}"></span>
+                            <span class='zoom-card-sequence-clear zoom-card-sequence-clear-dsk' *ngIf='rui_button_clear' (click)='clear($event);' title="{{ 'clear_input' | translate }}"></span>
+                            <span class='zoom-card-sequence-rule' *ngIf='rui_button_rule' (click)='rule($event);' title="{{ 'rule_input' | translate }}" [ngClass]="{'blinkhighlight': blinkrule}"></span>
+                            <span class='zoom-card-sequence-hint zoom-card-sequence-hint-dsk' *ngIf='rui_button_hint' (click)='hint($event);' title="{{ 'show_hint' | translate }}"></span>
+                            <span class='zoom-card-sequence-prev zoom-card-sequence-prev-dsk' *ngIf='rui_button_prev' (click)='prev($event);' title="{{ 'move_to_prev' | translate }}"></span>
+                            <span class='zoom-card-sequence-enter zoom-card-sequence-enter-dsk' *ngIf='rui_button_enter' (click)='enter($event);' title="{{ 'enter_answer' | translate }}" [ngClass]="{'blinkhighlight': blinkenter}"></span>
                         </span>       
                     </span>
                     <!-- Card Sequence Buttons -->
@@ -167,7 +167,7 @@
                     <!-- Card Next Button -->
                     <span class='zoom-card-next-button'>
                         <span class='zoom-card-next-button-wrap' title="{{ 'move_to_next' | translate }}">
-                            <span class='zoom-card-next' (click)='moveNext()' [ngClass]="{'blinkhighlight': blinknextnavbtn}"></span>
+                            <span class='zoom-card-next' (click)='moveNext($event)' [ngClass]="{'blinkhighlight': blinknextnavbtn}"></span>
                         </span>       
                     </span>
                     <!-- Card Next Button -->

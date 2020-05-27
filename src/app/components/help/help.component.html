@@ -19,8 +19,8 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<div class="help-label">Help</div>
+<div class="help-label"><i class="fas fa-ellipsis-h"></i>&nbsp;&nbsp;{{ 'help_menu' | translate }}</div>
 
 <!-- Target elements -->
-<div *ngFor="let e of targets" class="target-element" (click)="hs.chooseElement(e)" 
+<div *ngFor="let e of targets" class="target-element" (click)="hs.chooseElement($event, e)" (hover)="hs.chooseElement($event, e)"
     [ngStyle]="{width: e.rect.width+'px', height: (e.rect.height+10)+'px', top: (e.rect.top-7)+'px', left: e.rect.left+'px'}"></div>
