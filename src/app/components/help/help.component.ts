@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { HelpService } from '../../services/help.service';
 import { PlaymediaService } from '../../services/playmedia.service';
+import { DataloaderService } from '../../services/dataloader.service';
 
 @Component({
   selector: 'app-help',
@@ -10,7 +11,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 })
 export class HelpComponent implements OnInit {
 
-  constructor(public hs: HelpService, public pm: PlaymediaService) { }
+  constructor(public hs: HelpService, public pm: PlaymediaService, public dl: DataloaderService) { }
 
   @Output() closehelp = new EventEmitter<boolean>();
   @Output() gonextcard = new EventEmitter<boolean>();
@@ -21,6 +22,9 @@ export class HelpComponent implements OnInit {
 
   public show_help_dialog_event: any;
   public build_help_mask_event: any;
+
+  public help_menu: boolean = false;
+  public help_menu_items: any = [];
 
   ngOnInit() {
     let that = this;
@@ -40,7 +44,10 @@ export class HelpComponent implements OnInit {
   }
 
   @HostListener('click', ['$event']) onClick($event) {
-    if(!this.show_dialog) this.hs.handleMaskHelp($event);
+    if(!this.show_dialog) {
+      this.hs.handleMaskHelp($event);
+      this.closeHelpMenu();
+    }
   }
 
     //  Perform some actions before close
@@ -51,6 +58,7 @@ export class HelpComponent implements OnInit {
     //  Make delay to prevent closing help mask
     setTimeout(()=>{ that.show_dialog = false; }, 200);
     this.hs.closeAllItems();
+    this.closeHelpMenu();
   }
   
 	goNext($event) {
@@ -60,6 +68,31 @@ export class HelpComponent implements OnInit {
 
   buildMask(tgs){
     this.targets = tgs;
+  }
+
+  showHelpMenu($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    let that = this;
+    this.dl.getHelpConfiguration().then((data)=>{
+      console.log("Help Menu configuration loaded", data);
+      that.help_menu_items = data;
+    }).catch((e)=>{
+      console.log("Erro during loading help menu configuration", e);
+    });
+
+    //this.help_menu = true;
+
+  }
+
+  closeHelpMenu($event = null) {
+
+    if($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
+    
+    this.help_menu = false;
   }
 
 }

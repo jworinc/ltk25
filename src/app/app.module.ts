@@ -125,6 +125,7 @@ import { PickElementService } from './services/pick-element.service';
 import { CourseExpireMsgComponent } from './components/course-expire-msg/course-expire-msg.component';
 import { LtkmenuComponent } from './components/ltkmenu/ltkmenu.component';
 import { TalkingNotepadComponent } from './components/talking-notepad/talking-notepad.component';
+import { FilterByArrayPipe } from './pipes/filter-by-array.pipe';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -225,7 +226,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     FontadjusterDirective,
     CourseExpireMsgComponent,
     LtkmenuComponent,
-    TalkingNotepadComponent
+    TalkingNotepadComponent,
+    FilterByArrayPipe
   ],
   imports: [
     BrowserModule,

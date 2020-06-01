@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostBinding, ElementRef, HostListener } from '@angular/core';
 import { HelpService } from '../../services/help.service';
 import { PlaymediaService } from '../../services/playmedia.service';
+import { DataloaderService } from '../../services/dataloader.service';
 
 @Component({
   selector: 'app-help-tooltip',
@@ -15,6 +16,7 @@ export class HelpTooltipComponent implements OnInit {
   @Input() public content: string;
   @Input() public align: string;
   @Input() public audio: string;
+  @Input() public menus: string;
   public read_more_link: string = "";
   //@Input() public align_mobile: string;
   
@@ -38,8 +40,11 @@ export class HelpTooltipComponent implements OnInit {
   public align_center_bottom: boolean = false;
   public align_center_left: boolean = false;
   public align_center_right: boolean = false;
+  public help_menu_items: any;
+  public help_menu_items_ev: any;
+  public menu_items_filter = [];
 
-  constructor(public hs: HelpService, public el: ElementRef, public pm: PlaymediaService) { }
+  constructor(public hs: HelpService, public el: ElementRef, public pm: PlaymediaService, public dl: DataloaderService) { }
 
   @HostListener('click', ['$event']) onClick($event) {
     //this.hideHelpItem();
@@ -57,9 +62,18 @@ export class HelpTooltipComponent implements OnInit {
     if(this.align === 'align-center-right') this.align_center_right = true;
     if(this.align === 'align-center-bottom') this.align_center_bottom = true;
     if(this.align === 'align-center-top') this.align_center_top = true;
+    let that = this;
+    
+    this.menus.split(",").map((v) => { that.menu_items_filter.push(parseInt(v)); });
+    
+    this.help_menu_items_ev = this.hs.getConfigItems().subscribe((next)=>{
+      that.help_menu_items = next.items;
+    });
 
+  }
 
-
+  ngOnDestroy() {
+    this.help_menu_items_ev.unsubscribe();
   }
 
   getTargetRect() {
@@ -135,7 +149,7 @@ export class HelpTooltipComponent implements OnInit {
       //that.pm.stop();
       //that.pm.help(that.audio, ()=>{}, 200);
     }, 20);
-
+    
   }
 
   hideHelpItem() {
@@ -167,7 +181,7 @@ export class HelpTooltipComponent implements OnInit {
   outlineHelpItem() {
     this.selfzindex = 1110;
     this.pm.stop();
-    this.pm.help(this.audio, ()=>{}, 200);
+    //this.pm.help(this.audio, ()=>{}, 200);
   }
 
   outbackHelpItem() {

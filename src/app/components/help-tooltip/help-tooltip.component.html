@@ -6,6 +6,16 @@
         [ngClass]="{'align-top-left': align_top_left, 'align-top-right': align_top_right, 'align-bottom-left': align_bottom_left, 'align-bottom-right': align_bottom_right, 'align-center-left': align_center_left, 'align-center-right': align_center_right, 'align-center-bottom': align_center_bottom, 'align-center-top': align_center_top}">
         <span class="help-item-pointer-item"></span>
     </div>
+
+    <!-- Display Configurable menu  -->
+    <div class="cfmenu-item" *ngFor="let cfi of help_menu_items | filterByArray:menu_items_filter">
+
+        <a [attr.href]="cfi.redirect_url" target="_blank" *ngIf="cfi.type === 'link_button'">
+            <button class="btn btn-sm btn-primary">{{ cfi.caption_key | translate }}</button>
+        </a>
+
+    </div>
+
     <div class="read-more-link-wrap">
         <button class="btn btn-sm btn-primary" (click)="closeHelpItem($event)">{{ 'close' | translate }}</button>
         <a [attr.href]="read_more_link"><button class="btn btn-sm btn-primary ">{{ 'read_more_link' | translate }}</button></a>

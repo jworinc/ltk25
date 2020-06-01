@@ -225,4 +225,10 @@ export class DataloaderService {
     }).toPromise();
   }
 
+  getHelpConfiguration() {
+    return this.http.get(`${this.base_url}/config/help/menu`, {
+      headers: this.Token.getAuthHeader()
+    }).toPromise();
+  }
+
 }
