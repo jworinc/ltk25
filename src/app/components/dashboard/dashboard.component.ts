@@ -25,12 +25,20 @@ export class DashboardComponent implements OnInit {
   }
 
   public lessons = [];
+
   //  Lessons sorted by breaks
   public break_1 = [];
   public break_2 = [];
   public break_3 = [];
   public break_4 = [];
   public break_5 = [];
+
+  //  Break borders to define first and last lessons
+  public bborder_1 = [];
+  public bborder_2 = [];
+  public bborder_3 = [];
+  public bborder_4 = [];
+  public bborder_5 = [];
 
   //  Transformed breaks to columns according to screen width
   public break_to_display_1 = {col_1: [], col_2: [], col_3: [], col_4: [], col_5: [], col_6: []};
@@ -216,6 +224,14 @@ export class DashboardComponent implements OnInit {
       if(l.section === 'Break 4') this.break_4.push(l);
       if(l.section === 'Break 5') this.break_5.push(l);
     }
+
+    //  Define break borders
+    if(this.break_1.length > 0) this.bborder_1 = [this.break_1[0].number, this.break_1[this.break_1.length - 1].number];
+    if(this.break_2.length > 0) this.bborder_2 = [this.break_2[0].number, this.break_2[this.break_2.length - 1].number];
+    if(this.break_3.length > 0) this.bborder_3 = [this.break_3[0].number, this.break_3[this.break_3.length - 1].number];
+    if(this.break_4.length > 0) this.bborder_4 = [this.break_4[0].number, this.break_4[this.break_4.length - 1].number];
+    if(this.break_5.length > 0) this.bborder_5 = [this.break_5[0].number, this.break_5[this.break_5.length - 1].number];
+
   }
 
 
@@ -296,8 +312,8 @@ export class DashboardComponent implements OnInit {
   getCurrentLessonTitle(lu){
     for(let i in this.lessons){
       if(parseInt(this.lessons[i].number) === +lu) {
-        let n:string = String(this.lessons[i].number);
-        n = n.length === 3 ? n : n.length === 2 ? '0' + n : n.length === 1 ? '00' + n : n;
+        let n:string = String(this.lessons[i].alias);
+        //n = n.length === 3 ? n : n.length === 2 ? '0' + n : n.length === 1 ? '00' + n : n;
         return n;
       }
     }
@@ -341,7 +357,7 @@ export class DashboardComponent implements OnInit {
               timeout: 5000,
               buttons: [
                 {text: res.sidetrip_btn, action: (toast)=>{console.log('Clicked: Sidetrip'); that.location("/sidetrip/"+n); that.notify.remove(toast.id);}, bold: false},
-                {text: res.lesson + ' ' + that.student.lu, action: (toast) => {console.log('Clicked: Yes'); that.location("/lesson"); that.notify.remove(toast.id);}, bold: false},
+                {text: res.lesson + ' ' + that.getCurrentLessonTitle(that.student.lu), action: (toast) => {console.log('Clicked: Yes'); that.location("/lesson"); that.notify.remove(toast.id);}, bold: false},
                 {text: res.close, action: (toast) => {console.log('Clicked: Close'); that.notify.remove(toast.id); }, bold: true},
               ],
               bodyMaxLength: 200
