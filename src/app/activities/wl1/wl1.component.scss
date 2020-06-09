@@ -9,7 +9,7 @@
 .words-columns{
     display: flex;
     flex-flow: row nowrap;
-    height: 82%;
+    // height: 82%;
 }
 .words-list{
     display: block;
@@ -119,6 +119,71 @@
     color: #C2272D;
 }
 
+.word-bg{
+    background-color: #C69C6D !important;
+}
+
+.text-cursor{
+    cursor: pointer;
+}
+
+
+.fa-w-14{
+    color: #C69C6D !important;
+
+}
+
+.more-words{
+   
+
+    display: block;
+    /* min-height: 30%; */
+    /* width: 100%; */
+    /* float: left; */
+    width: 34%;
+    margin: 0px auto;
+}
+.more-words span{
+    width: 100%;
+    float: left;
+    text-align: center;
+    font-size: 18px;
+    line-height: normal;
+    margin-top: 30px;
+    padding: 11px 10px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.more-words{
+    // margin-top: 240px !important;
+}
+.more-words span {
+    font-size: 17px;
+    line-height: 1em;
+    color: #fff;
+}
+
+.learn-more-words{
+     cursor: pointer;
+    // width: 25%;
+    // height: 35px;
+    border: 1px solid;
+    /* left: 20px; */
+    // margin-left: 193px;
+    // margin-top: 14px;
+    background-color: #625AF8;
+    // padding: 3px;
+}
+
+.display-blk{
+    display: block !important;
+}
+
+
+.display-none{
+    display: none !important;
+}
 /*        Mobile layout         */
 @media screen and (max-width: 1024px) {
     .card-block-wl1 h3{
@@ -128,6 +193,12 @@
     .words-list span{
         height: 22px;
         font-size: 9px;
+    }
+    .card-style-obj-single {
+        width: 400px;
+        height: 240px !important;
+        margin-top: -100px;
+        margin-left: -200px;
     }
     .word-text{
         line-height: 15px;
@@ -152,4 +223,11 @@
     .card-description-wrap-ar2{
         /*display: block;*/
     }
+    .more-words[_ngcontent-c3] span[_ngcontent-c3] {
+        font-size: 13px !important;
+
+    }
+    // .more-words{ margin-top: 140px !important;}
+    // .learn-more-words {margin-left: 101px;}
+    
 }
