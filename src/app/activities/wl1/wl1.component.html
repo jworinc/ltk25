@@ -6,23 +6,28 @@
 <div class="card-block-item card-style-obj-single card-block-wl1">
   <h3>{{ card.comment }}</h3>
   <div class="words-columns">
-    <div class="words-list english-words">
+    <div class="words-list english-words" [ngClass]="{'display-blk' : isShowRemainWords}">
       <span *ngFor="let w of words; let i = index" [ngStyle]="w.word_position" [ngClass]="{'hilight-word': w.hilight}">
-        <div class="word-background" [ngStyle]="{'background-color': w.color}"></div>
-        <div class="word-text">{{ w.word }}</div>
+        <div class="word-background word-bg" [ngStyle]="{'background-color': w.color}"></div>
+        <div class="word-text text-cursor" (click)="playSelected(w.word)">{{ w.word }}</div>
       </span>
     </div>
-    <div class="words-list word-link-space" [hidden]="is_mixed">
+    <!-- [ngClass]="{'display-blk' :  is_mixed === true , 'display-none' : is_mixed === false}"  -->
+    <div class="words-list word-link-space" [hidden]="is_mixed" >
       <span *ngFor="let ar of translations; let a = index" [attr.dataWrodindex]="a" [ngStyle]="ar.trans_position" class="word-arrow">
           <i class="fas fa-long-arrow-alt-right" [ngStyle]="{'color': ar.color}"></i>
       </span>
     </div>
-    <div class="words-list word-link-space" [hidden]="!is_mixed">
+    <!-- [ngClass]="{'display-blk' :  is_mixed === false , 'display-none' : is_mixed === true}" -->
+    <div class="words-list word-link-space" [hidden]="!is_mixed"  >
         <canvas style="width: 100%; height:100%"></canvas>
     </div>
-    <div class="words-list translations">
+    <!-- <div class="words-list word-link-space" [hidden]="isShowCanvas" [ngClass]="{'display-none' : !isShowCanvas}">
+      <canvas style="width: 100%; height:100%"></canvas>
+  </div> -->
+    <div class="words-list translations"  [ngClass]="{'display-blk' : isShowRemainWords}">
         <span *ngFor="let tr of translations; let t = index" [attr.dataWrodindex]="t" [ngStyle]="tr.trans_position" (click)="selectWord(tr)">
-          <div class="word-background" [ngStyle]="{'background-color': tr.color}"></div>
+          <div class="word-background  word-bg" [ngStyle]="{'background-color': tr.color}"></div>
           <div class="word-text">{{ tr.translation }}</div>
         </span>
     </div>
@@ -30,7 +35,12 @@
       <span class='gsc-result-right'>Right: {{ display_result.right }}</span>
       <span class='gsc-result-wrong'>Wrong: {{ display_result.wrong }}</span>
     </div>
+
+  
     
+  </div>
+  <div class='more-words' *ngIf="isShowNextWordBtn && !isAllWordMatched">
+    <span class='learn-more-words' (click)="showRemainWords()">Learn More Words</span>
   </div>
   <div class='card-description-wrap-ar2 diw-card-description'>
       <span>{{ card.content[0].desc }}</span>
