@@ -65,6 +65,11 @@ export class DashboardComponent implements OnInit {
   public show_grammar: boolean = false;
   public show_testing: boolean = false;
 
+  public sku: any = {
+    title: "",
+    desc: ""
+  };
+
   public arrow_pointer: any = {
     opacity: 0,
     top: '-200px',
@@ -159,6 +164,8 @@ export class DashboardComponent implements OnInit {
     this.student.sid_message = data.sid_message;
     this.student.chatroom = data.chatroom;
     this.Option.setLanguage(data.options.language);
+
+    if(typeof data.sku !== 'undefined' && data.sku) this.sku = data.sku;
 
     if(typeof data.link_expire !== 'undefined' && data.link_expire){
       //  Timeout needed to wait until lang setup will ready

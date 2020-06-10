@@ -11,6 +11,10 @@
 		<div class='row ltk-student'>
 			<h1>{{ student.name }}</h1>
             <h4>{{ student.sid_message }}</h4>
+        </div>
+        <div class='row ltk-student' [hidden]="!sku">
+			<h2>{{ sku.title }}</h2>
+            <h4>{{ sku.desc }}</h4>
 		</div>
 		<div class="row ltk-breaks-list" [hidden]="show_notebook || show_grammar || show_testing || show_course_expire_msg">
 	        <div class="col-md-12">
