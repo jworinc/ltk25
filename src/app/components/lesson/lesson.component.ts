@@ -140,6 +140,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public mic_disabled_event: any;
   public on_leave_lesson_event: any;
   public student_info_event_subscription: any;
+  public lessons_list_load_event: any;
+  public current_route_lesson = 0;
 
   public card_descriptor = {
     lesson: 0,
@@ -158,6 +160,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public current_feedback_list: any = [];
 
   public show_course_expire_msg = false;
+  
+  public lessons = [];
+
 
   constructor(
     private DL: DataloaderService,
@@ -309,8 +314,6 @@ export class LessonComponent implements OnInit, AfterViewInit {
       rate: 1
     });
 
-
-    
      
   }
 
@@ -323,6 +326,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.mic_disabled_event.unsubscribe();
     this.student_info_event_subscription.unsubscribe();
     this.on_leave_lesson_event.unsubscribe();
+    if(this.lessons_list_load_event) this.lessons_list_load_event.unsubscribe();
   }
 
 
@@ -330,6 +334,18 @@ export class LessonComponent implements OnInit, AfterViewInit {
     //  Setup help context
     this.hs.setItems(this.helps.toArray());
     this.hs.setRootElement(this.el.nativeElement);
+  }
+
+  handleLessons(data){
+  	console.log('Lessons:');
+  	console.log(data);
+    this.lessons = data;
+    if(!this.sidetripmode && !this.nextlessonmode && this.student.lu !== 0) {
+      this.current_lesson_title = this.getCurrentLessonTitle(this.student.lu);
+    } else {
+      this.current_lesson_title = this.getCurrentLessonTitle(this.current_route_lesson);
+    }
+
   }
 
   updateLesson() {
@@ -437,12 +453,23 @@ export class LessonComponent implements OnInit, AfterViewInit {
     
   }
 
+  /*
   getCurrentLessonTitle(lu){
     
         let n:string = String(lu);
         n = n.length === 3 ? n : n.length === 2 ? '0' + n : n.length === 1 ? '00' + n : n;
         return n;
      
+  }
+  */
+  getCurrentLessonTitle(lu){
+    for(let i in this.lessons){
+      if(parseInt(this.lessons[i].number) === +lu) {
+        let n:string = String(this.lessons[i].alias);
+        //n = n.length === 3 ? n : n.length === 2 ? '0' + n : n.length === 1 ? '00' + n : n;
+        return n;
+      }
+    }
   }
 
   getCardDescriptor() {
@@ -518,8 +545,19 @@ export class LessonComponent implements OnInit, AfterViewInit {
       //  set lu for sidetrip with some delay
       let that = this;
       setTimeout(()=>{ that.DL.lu = +that.n; }, 20);
+      this.current_route_lesson = +that.n;
       this.title.setTitle('LTK-Lessons-Sidetrip'+this.n);
     }
+
+    
+    this.lessons_list_load_event = this.DL.getLessons().subscribe(
+      data => this.handleLessons(data),
+        error => {
+          console.log(error);
+          this.notify.error('Lessons list load status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
+        }
+    );
+    
     
   }
 
