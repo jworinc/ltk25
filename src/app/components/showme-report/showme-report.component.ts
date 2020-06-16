@@ -347,14 +347,15 @@ export class ShowmeReportComponent implements OnInit {
 
     getLessonsCallback(data) {
       this.lessons = data;
-      if(this._lu === 0 && data.length > 0 && typeof data[0] === 'string'){
-        this.current_lesson = data[0];
+      if(this.lessons.length > 0) this.current_lesson = this.lessons[this.lessons.length - 1].number;
+      if(this._lu === 0 && data.length > 0 && typeof data[0] === 'object'){
+        this.current_lesson = data[0].number;
         this.updateLesson();
       }
       //  Set last complete lesson
       else if(this._lu > 0 && data.length > 0){
         for(let i in data){
-          if(parseInt(data[i]) === this._lu) this.current_lesson = data[i];
+          if(parseInt(data[i].number) === this._lu) this.current_lesson = data[i].number;
         }
         this.updateLesson();
       } else {
@@ -381,6 +382,8 @@ export class ShowmeReportComponent implements OnInit {
     updateReport() {
       let that = this;
       this.current_lesson = 0;
+      //  Set current lesson according to last lesson in a list
+      
       this.noinfo_available = false;
       this.dataloader.getStudentLessons().subscribe(
         data => { that.getLessonsCallback(data); },

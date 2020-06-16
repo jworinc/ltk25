@@ -126,6 +126,7 @@ import { CourseExpireMsgComponent } from './components/course-expire-msg/course-
 import { LtkmenuComponent } from './components/ltkmenu/ltkmenu.component';
 import { TalkingNotepadComponent } from './components/talking-notepad/talking-notepad.component';
 import { FilterByArrayPipe } from './pipes/filter-by-array.pipe';
+import { LangfilterPipe } from './pipes/langfilter.pipe';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -227,7 +228,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     CourseExpireMsgComponent,
     LtkmenuComponent,
     TalkingNotepadComponent,
-    FilterByArrayPipe
+    FilterByArrayPipe,
+    LangfilterPipe
   ],
   imports: [
     BrowserModule,

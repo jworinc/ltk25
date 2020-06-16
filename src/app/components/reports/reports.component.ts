@@ -94,6 +94,8 @@ export class ReportsComponent implements OnInit {
 	public detail_update: boolean = false;
 	public summary_update: boolean = false;
 	public placement_update: boolean = false;
+	
+	public lessons: any = [];
 
 	//	Reports show actions
 
@@ -152,14 +154,27 @@ export class ReportsComponent implements OnInit {
 		if(this.detail_report) this.detail_update = true;
 		if(this.summary_report) this.summary_update = true;
 	}
-
+	/*
 	getCurrentLessonTitle(lu){
     
         let n:string = String(lu);
         n = n.length === 3 ? n : n.length === 2 ? '0' + n : n.length === 1 ? '00' + n : n;
         return n;
      
-  	}
+	  }
+	  */
+
+	  
+	getCurrentLessonTitle(lu){
+		for(let i in this.lessons){
+		if(parseInt(this.lessons[i].number) === +lu) {
+			let n:string = String(this.lessons[i].alias);
+			//n = n.length === 3 ? n : n.length === 2 ? '0' + n : n.length === 1 ? '00' + n : n;
+			return n;
+		}
+		}
+	}
+
 
 	//  Handle loaded student info
 	handleStudentInfo(data){
@@ -170,9 +185,31 @@ export class ReportsComponent implements OnInit {
 		this.student.chatroom = data.chatroom;
 	    this.Option.setLanguage(data.options.language);
 	    
-      this.current_lesson_title = this.getCurrentLessonTitle(data.last_uncomplete);
-			this.lu = data.last_uncomplete;
+      	//this.current_lesson_title = this.getCurrentLessonTitle(data.last_uncomplete);
+		//this.lu = data.last_uncomplete;
+
+		this.dataloader.getLessons().subscribe(
+			  data => this.handleLessons(data),
+			  error => {
+				console.log(error);
+			  }
+		  );
+		
+		
+	
+	
+	  
 	    
+	}
+
+	handleLessons(data){
+		console.log('Lessons:');
+		console.log(data);
+	  this.lessons = data;
+	  if(this.student.lu !== 0) {
+		this.current_lesson_title = this.getCurrentLessonTitle(this.student.lu);
+	  }
+  
 	}
 
 	

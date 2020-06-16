@@ -82,6 +82,16 @@ export class DataloaderService {
 
   }
 
+  //  Get SKU params
+  getSKUParams() {
+
+    return this.http.get(`${this.base_url}/settings/sku/params`, {
+      headers: this.Token.getAuthHeader()
+    }).toPromise();
+
+  }
+  
+
   //  Save Options
   saveOptions(data) {
     
