@@ -51,3 +51,13 @@ RewriteRule     ^(.*)$ https://%{SERVER_NAME}%{REQUEST_URI} [L,R]
 # not rewrite css, js and images
 RewriteCond %{REQUEST_URI} !\.(?:css|js|map|jpe?g|gif|png|mp3|wav|json)$ [NC]
 RewriteRule ^(.*)$ /index.html?path=$1 [NC,L,QSA]
+
+# 1 week
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|swf|mp3|eot|ttf|woff2|woff|svg)$">
+    Header set Cache-Control "max-age=604800, public"
+</FilesMatch>
+
+# 1 hour
+<FilesMatch "\.(js|css|json)$">
+    Header set Cache-Control "max-age=3600, public"
+</FilesMatch>
