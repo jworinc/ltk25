@@ -64,14 +64,22 @@ export class PlacementReportComponent implements OnInit {
       if(this.placement.results.length > 0){
         for(let i in this.placement.results){
           let br = this.placement.results[i];
-          for(let n in br){
-            let t = br[n];
-            if(typeof t.details !== 'undefined' && t.details.length > 0){
-              for(let k in t.details){
-                this.placement.details.push(t.details[k]);
+          if(typeof br.details !== 'undefined' && br.details.length > 0){
+            for(let k in br.details){
+              this.placement.details.push(br.details[k]);
+            }
+          } 
+          else if(typeof br.length !== 'undefined'){
+            for(let n in br){
+              let t = br[n];
+              if(typeof t.details !== 'undefined' && t.details.length > 0){
+                for(let k in t.details){
+                  this.placement.details.push(t.details[k]);
+                }
               }
             }
           }
+          
         }
       }
 
