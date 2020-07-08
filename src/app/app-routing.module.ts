@@ -21,6 +21,54 @@ const routes: Routes = [
     canActivate: [BeforeLoginService],
   },
   {
+<<<<<<< HEAD
+=======
+    path: 'pcm/:code',
+    component: StartComponent,
+    canActivate: [BeforeLoginService],
+  },
+  {
+    path: 'pcm/:code/:e',
+    component: StartComponent,
+    canActivate: [BeforeLoginService],
+  },
+  {
+    path: 'pcm/:code/:e/:n',
+    component: StartComponent,
+    canActivate: [BeforeLoginService],
+  },
+  {
+    path: 'test/:type',
+    component: StartComponent,
+    canActivate: [BeforeLoginService],
+  },
+  {
+    path: 'test/:type/:e',
+    component: StartComponent,
+    canActivate: [BeforeLoginService],
+  },
+  {
+    path: 'test/:type/:e/:n',
+    component: StartComponent,
+    canActivate: [BeforeLoginService],
+  },
+  {
+    path: 'test-code/:code/:type',
+    component: StartComponent,
+    canActivate: [BeforeLoginService],
+  },
+  {
+    path: 'test-code/:code/:type/:e',
+    component: StartComponent,
+    canActivate: [BeforeLoginService],
+  },
+  {
+    path: 'test-code/:code/:type/:e/:n',
+    component: StartComponent,
+    canActivate: [BeforeLoginService],
+  },
+  {
+>>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
     path: 'home',
     component: DashboardComponent,
     canActivate: [AfterLoginService],

@@ -148,6 +148,65 @@ export class CustomfieldService {
 
   }
 
+  addStartCardToTest(cards, cpos) {
+    let cfc = {
+      activity: "CFT",
+      comment: "Custom field card lesson start",
+      cross_number: 1,
+      display_number: 1,
+      id: 0,
+      lesson: "",
+      content: [this.getStartLesson()],
+      description: "",
+      pos: 1,
+      position: 1,
+      type: "cft"
+    }
+
+    //  Increase all positions of cards
+    for(let i in cards) {
+      cards[i].position++;
+    }
+
+    //  Add custom field card to cards list
+    cards.push(cfc);
+
+    //  Define current position depending on previous
+    //  if lesson starts from begining (pos 2) then return 2
+    //  else we have to shift by one card forward
+    if(cpos === 2) return 2;
+    else return cpos+1;
+
+  }
+
+  addEndCardToTest(cards) {
+
+    //  Get last card position
+    let lcp = 0;
+    for(let i in cards) {
+      if(lcp < cards[i].position) lcp = cards[i].position;
+    }
+
+    let cfc = {
+      activity: "CFT",
+      audio: [],
+      comment: "Custom field card lesson end",
+      content: [this.getEndLesson()],
+      cross_number: lcp+1,
+      display_number: lcp+1,
+      description: "",
+      id: 0,
+      lesson: "",
+      pos: lcp+1,
+      position: lcp+1,
+      type: "cft"
+    }
+
+    //  Add custom field card to cards list
+    cards.push(cfc);
+
+  }
+
 
 
 }

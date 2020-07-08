@@ -4,7 +4,6 @@ import { BasetestComponent } from '../basetest/basetest.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { PickElementService } from '../../services/pick-element.service';
 
-
 @Component({
   selector: 'app-auditory',
   templateUrl: './auditory.component.html',
@@ -18,7 +17,7 @@ export class AuditoryComponent extends BasetestComponent implements OnInit {
   public ind = 0;
   public count = 0;
   public isResult:boolean = false;
-  public type = '';
+  
   public test_complete = false;
 
   public result:any= [];
@@ -96,7 +95,8 @@ export class AuditoryComponent extends BasetestComponent implements OnInit {
   }
 
   getTestResult() {
-    if(this.test_complete) this.saveResults({type: this.type, presented: this.presented, wrong: this.wrong, results: this.result});
+    if(this.test_complete) return this.saveResults({type: this.type, presented: this.presented, wrong: this.wrong, results: this.result});
+    else return null;
   }
 
   enter(){

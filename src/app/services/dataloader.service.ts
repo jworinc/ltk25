@@ -226,6 +226,76 @@ export class DataloaderService {
       }).toPromise();
   }
 
+<<<<<<< HEAD
+=======
+  getTest() {
+    return this.http.get(`${this.base_url}/testing/${this.lu}`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+  }
+
+  getPlacement() {
+    if(this.Token.getCode() !== ""){
+      return this.http.get(`${this.base_url}/placement/${this.Token.getCode()}/${this.Token.getEmail()}`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+    } else {
+      return this.http.get(`${this.base_url}/placement/${this.Token.getEmail()}`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+    }
+  }
+
+  getProfPlacement(prof) {
+    return this.http.get(`${this.base_url}/placement/prof/${prof}/${this.Token.getEmail()}`, {
+      headers: this.Token.getAuthHeader()
+    }).toPromise();
+  }
+
+  getTypedTest(type) {
+    if(this.Token.getCode() !== ""){
+      return this.http.get(`${this.base_url}/testing/typed/${this.Token.getCode()}/${type}/${this.Token.getEmail()}`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+    } else {
+      return this.http.get(`${this.base_url}/testing/typed/${type}/${this.Token.getEmail()}`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+    }
+    
+  }
+
+  getAssesmentLevels() {
+    if(this.Token.loggedIn() && this.Token.getCode() !== '') {
+      return this.http.get(`${this.base_url}/assesment/levels/${this.Token.getCode()}`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+    } 
+    else if(this.Token.loggedIn() && this.Token.getCode() === ''){
+      return this.http.get(`${this.base_url}/assesment/levels`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+    } else {
+      if(this.Token.getCode() !== '') return this.http.get(`${this.base_url}/assesment/levels/${this.Token.getCode()}`).toPromise();
+      else return this.http.get(`${this.base_url}/assesment/levels`).toPromise();
+    }
+    
+  }
+
+  startTest(data) {
+    return this.http.post(`${this.base_url}/placement/start`, data).toPromise();
+  }
+
+  sendRegisterRequest(email, name='none') {
+    return this.http.get(`${this.base_url}/placement/register/${this.logid}/${email}/${name}`).toPromise();
+  }
+
+  setLogId(logid) {
+    this.logid = logid;
+  }
+
+
+>>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
   sendLinkExpiredNotificationEmail(link) {
     return this.http.get(`${this.base_url}/service/expired/${link}`).toPromise();
   }

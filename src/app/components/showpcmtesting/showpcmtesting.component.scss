@@ -1,0 +1,101 @@
+:host, .testing-wrapper-slide{
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 92%;
+    overflow: hidden;
+}
+.testing-container{
+    display: block;
+    position: absolute;
+    width: 1000px;
+    height: 550px;
+    margin-top: -275px;
+    margin-left: -500px;
+    background-color: #E5EAEA;
+    opacity: 0;
+    transition: opacity 1s ease;
+    padding: 0;
+    left: 50%;
+    top: 50%;
+}
+.tc-container{
+    display: flex;
+    position: relative;
+    flex-flow: column nowrap;
+    width: 100%;
+    height: 100%;
+}
+.tc-slider{
+    display: flex;
+    min-height: 90%;
+    width: 100%;
+    order: 1;
+    position: relative;
+    perspective: 1000px;
+}
+.tc-nav{
+    display: flex;
+    min-height: 10%;
+    width: 100%;
+    order: 2;
+    padding: 4px 30px;
+    padding-bottom: 15px;
+}
+.tc-nav-panel{
+    display: flex;
+    flex-flow: row nowrap;
+    position: relative;
+    width: 13%;
+    height: 100%;
+    background-color: #F4F6F5;
+    border-radius: 6px;
+    box-shadow: 0 0 3px #777;
+    align-items: center;
+    justify-content: space-around;
+}
+.tc-nav-panel-subtitles{
+    width: 85%;
+    margin-left: 2%;
+}
+.tc-nav-item{
+    font-size: 20px;
+    font-weight: 600;
+    color: #5B7EA5;
+    cursor: pointer;
+}
+.tc-nav-item:hover{
+    color: #45607C;
+}
+.tc-nav-pages{
+    cursor: default;
+}
+.tc-nav-pages:hover{
+    color: #5B7EA5;
+}
+
+@media only screen and (max-width:1024px)
+{
+    .testing-container{
+        width: 400px;
+        height: 540px;
+        margin-top: -270px;
+        margin-left: -200px;
+    }
+    .tc-slider{
+        min-height: 90%;
+        order: 2;
+    }
+    .tc-nav{
+        min-height: 10%;
+        order: 1;
+        padding: 5px 0px;
+    }
+    .tc-nav-panel{
+        border-radius: 0;
+        width: 16%
+    }
+    .tc-nav-panel-subtitles{
+        width: 82%;
+    }
+}

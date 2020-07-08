@@ -125,9 +125,13 @@ import { PickElementService } from './services/pick-element.service';
 import { CourseExpireMsgComponent } from './components/course-expire-msg/course-expire-msg.component';
 import { LtkmenuComponent } from './components/ltkmenu/ltkmenu.component';
 import { TalkingNotepadComponent } from './components/talking-notepad/talking-notepad.component';
+<<<<<<< HEAD
 import { FilterByArrayPipe } from './pipes/filter-by-array.pipe';
 import { LangfilterPipe } from './pipes/langfilter.pipe';
 import { RelatedLoginComponent } from './components/related-login/related-login.component';
+=======
+import { CftComponent } from './tests/cft/cft.component';
+>>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -229,9 +233,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     CourseExpireMsgComponent,
     LtkmenuComponent,
     TalkingNotepadComponent,
+<<<<<<< HEAD
     FilterByArrayPipe,
     LangfilterPipe,
     RelatedLoginComponent
+=======
+    CftComponent
+>>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
   ],
   imports: [
     BrowserModule,
@@ -260,7 +268,12 @@ export function HttpLoaderFactory(http: HttpClient) {
   Bw6Component, Bw7Component, SypComponent, DiwComponent, GscComponent, Rp1Component, Rp2Component, GwmComponent, SiwComponent,
   GwfComponent, GqwComponent, DisComponent, SplComponent, GdnComponent, GcpComponent, GcsComponent, GisComponent, GmuComponent,
   GnbComponent, GslComponent, GsmComponent, GssComponent, Rw1Component, IdmComponent, Wl1Component, Bs1Component, AuditoryComponent,
+<<<<<<< HEAD
   ComprehensionComponent, SpellingComponent, CccComponent, TstComponent, IntroComponent, ResultsComponent, CfcComponent ],
+=======
+  ComprehensionComponent, SpellingComponent, CccComponent, TstComponent, IntroComponent, ResultsComponent, ResultspcmComponent,
+  CfcComponent, CftComponent ],
+>>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
   bootstrap: [AppComponent]
 })
 export class AppModule { }

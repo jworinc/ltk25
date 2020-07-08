@@ -78,6 +78,10 @@
     max-width: 33.3333%;
     flex: 0 0 33.3333%;
 }
+.common-div>.col-12{
+    margin: 0;
+    padding: 0;
+}
 
 @media only screen and (max-width:1024px){
     .col-10{

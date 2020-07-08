@@ -77,7 +77,8 @@ export class ComprehensionComponent extends BasetestComponent implements OnInit 
   }
 
   getTestResult() {
-    if(this.test_complete) this.saveResults({type: this.type, presented: this.presented, wrong: this.wrong, results: this.result});
+    if(this.test_complete) return this.saveResults({type: this.type, presented: this.presented, wrong: this.wrong, results: this.result});
+    return null;
   }
 
   enter(){

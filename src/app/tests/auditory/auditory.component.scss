@@ -92,6 +92,10 @@
     color: #0071BD;
     cursor: pointer;
 }
+.common-div>.col-12{
+    margin: 0;
+    padding: 0;
+}
 
 @media only screen and (max-width:1024px){
     .col-10{

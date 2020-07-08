@@ -4,9 +4,30 @@
     {{ r.desc }} - wrong: {{ r.wrong }} - total: {{ r.presented }}
   </p>
   -->
+  <div class="result-test-details">
+    <app-test-result-item *ngFor="let r of complete_res" 
+            [header]="r.description" [value]="r.average" [units]="'%'">
+    </app-test-result-item>
+  </div>
 
-  <app-test-result-item *ngFor="let r of card.content.results" 
-        [header]="r.desc" [value]="getValue(r)" [units]="'%'">
-  </app-test-result-item>
+  <div class="result-test-level">
+    <table class="table table-striped">
+      <tr>
+        <th>Description</th>
+        <th>Success</th>
+        <th>Presented</th>
+        <th>Wrong</th>
+      </tr>
+      <tr *ngFor="let r of complete_res">
+          <td>{{ r.description }}</td>
+          <td>{{ r.average }}%</td>
+          <td>{{ r.presented }}</td>
+          <td>{{ r.wrong }}</td>
+      </tr>
+    </table>
+    <p [hidden]="!continue"><button (click)="next()"><!--Continue-->{{ 'continue_testing_btn' | translate }}</button></p>
+  </div>
+
+  
 
 </section>

@@ -3,6 +3,8 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { TestComponent } from '../../components/test/test.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { ShowtestingComponent } from 'src/app/components/showtesting/showtesting.component';
+import { ResultItem } from '../../tests/result.item';
+
 
 @Component({
   selector: 'app-basetest',
@@ -15,6 +17,7 @@ export class BasetestComponent implements OnInit, TestComponent {
   public presented = 0;
   public wrong = 0;
   public card: any;
+  public type = '';
 
   @Input('cpos')
 	set cpos(cpos: number) {
@@ -130,8 +133,42 @@ export class BasetestComponent implements OnInit, TestComponent {
     this.pm.stop();
   }
 
+  //  Returns result item
   saveResults(r) {
-    this.save_results.emit(r);
+    //this.save_results.emit(r);
+    return new ResultItem(this.data.type, this.data.description, r.presented, r.wrong, parseInt(this.data.break), r.results);
   }
+
+  
+  //  Get complete result array according to each test type
+  parseCompleteResult(tr) {
+    
+    console.log("Current test result", tr);
+
+    // Take each break and group results by test type
+    let out = [];
+    
+    for(let k in tr){
+      let t = tr[k];
+      //  Check if test is in result
+      let ti = null;
+      for(let n in out){
+        if(out[n].type === t.type){
+          ti = out[n];
+          ti.average = Math.round((ti.average + t.average) / 2);
+        }
+      }
+      if(!ti) out.push(t);
+    }
+    
+    return out;
+  }
+
+  getValue(r) {
+    if(r.presented > 0)
+      return Math.round(((r.presented-r.wrong)/r.presented)*100);
+    else return 0;
+  }
+
 
 }
