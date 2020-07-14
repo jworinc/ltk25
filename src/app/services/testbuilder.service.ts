@@ -181,6 +181,10 @@ addResult(r: ResultItem) {
   this.results.push(r);
 }
 
+deleteResults() {
+  this.results = [];
+}
+
   getTests(data) {
 
     let out = [];
@@ -393,11 +397,12 @@ addResult(r: ResultItem) {
       //  Check if level exists
       let le = null;
       for(let k in r) { if(r[k].level === level && r[k].type == type) { le = r[k]; break; } }
-      if(!le) { le = {level: level, type: type, success: [], average: 0, description: description, presented: 0, wrong: 0, details: []}; r.push(le); }
+      if(!le) { le = {level: level, type: type, success: [], average: 0, description: description, presented: 0, wrong: 0, details: [], treshold: 0}; r.push(le); }
       le.success.push(this.results[i].getSuccess());
       le.presented += this.results[i].presented;
       le.wrong += this.results[i].wrong;
       le.details = le.details.concat(this.results[i].details);
+      le.treshold = this.results[i].treshold;
     }
     
     //  calc average for each level
@@ -405,7 +410,16 @@ addResult(r: ResultItem) {
       let s = r[k].success;
       let sum = 0;
       for(let i in s) { sum +=s[i]; }
-      r[k].average = Math.round(sum / s.length);
+      //r[k].average = Math.round(sum / s.length);
+      
+      let clear_success = Math.round(sum / s.length);;
+      //  Success without treshold
+      let st = clear_success - r[k].treshold;
+      //  Get percentage of corrected success, treshold correction
+      let rs = 0;
+      if(st > 0) rs = Math.round((st / (100 - r[k].treshold)) * 100);
+      r[k].average = rs;
+      
     };
     return r;
   }

@@ -8,20 +8,28 @@ export class ResultItem {
     public level: number;
     public details: any[];
     public description: string;
+    public treshold: number;
 
-    constructor(type, description, presented, wrong, level, details) {
+    constructor(type, description, presented, wrong, level, details, treshold) {
         this.type = type;
         this.presented = presented;
         this.wrong = wrong;
         this.level = level;
         this.description = description;
+        this.treshold = parseInt(treshold);
         let that = this;
         that.details = [];
         details.map((i)=>{ that.details.push(i); });
     }
 
     getSuccess() {
-        return 100 - Math.round((this.wrong / this.presented) * 100);
+        let clear_success = Math.round(((this.presented - this.wrong) / this.presented) * 100);
+        //  Success without treshold
+        //let st = clear_success - this.treshold;
+        //  Get percentage of corrected success, treshold correction
+        //let r = 0;
+        //if(st > 0) r = Math.round((st / (100 - this.treshold)) * 100);
+        return clear_success;
     }
 
 }

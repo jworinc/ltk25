@@ -14,8 +14,9 @@ export class TestResultItemComponent implements OnInit {
   @Input() header: string;
   @Input('value')
   set value(value: number) {
-     this._value = value;
-     this.updateBar();
+    
+    this._value = value;
+    this.updateBar();
   }
   @Input() units: string;
 

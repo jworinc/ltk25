@@ -266,17 +266,17 @@ export class DataloaderService {
   }
 
   getAssesmentLevels() {
-    if(this.Token.loggedIn() && this.Token.getCode() !== '') {
+    if(this.Token.loggedIn() && this.Token.getCode() && this.Token.getCode() !== '') {
       return this.http.get(`${this.base_url}/assesment/levels/${this.Token.getCode()}`, {
         headers: this.Token.getAuthHeader()
       }).toPromise();
     } 
-    else if(this.Token.loggedIn() && this.Token.getCode() === ''){
+    else if(this.Token.loggedIn() && (!this.Token.getCode() || this.Token.getCode() === '')){
       return this.http.get(`${this.base_url}/assesment/levels`, {
         headers: this.Token.getAuthHeader()
       }).toPromise();
     } else {
-      if(this.Token.getCode() !== '') return this.http.get(`${this.base_url}/assesment/levels/${this.Token.getCode()}`).toPromise();
+      if(this.Token.getCode() && this.Token.getCode() !== '') return this.http.get(`${this.base_url}/assesment/levels/${this.Token.getCode()}`).toPromise();
       else return this.http.get(`${this.base_url}/assesment/levels`).toPromise();
     }
     

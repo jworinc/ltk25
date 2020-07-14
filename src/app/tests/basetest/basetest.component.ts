@@ -136,7 +136,7 @@ export class BasetestComponent implements OnInit, TestComponent {
   //  Returns result item
   saveResults(r) {
     //this.save_results.emit(r);
-    return new ResultItem(this.data.type, this.data.description, r.presented, r.wrong, parseInt(this.data.break), r.results);
+    return new ResultItem(this.data.type, this.data.description, r.presented, r.wrong, parseInt(this.data.break), r.results, this.data.parameter ? this.data.parameter : 0);
   }
 
   
@@ -149,18 +149,39 @@ export class BasetestComponent implements OnInit, TestComponent {
     let out = [];
     
     for(let k in tr){
-      let t = tr[k];
+      let ktr = tr[k];
+      let t = {
+        level: ktr.level, 
+        type: ktr.type, 
+        success: ktr.success, 
+        average: ktr.average, 
+        description: ktr.description, 
+        presented: ktr.presented, 
+        wrong: ktr.wrong, 
+        details: ktr.details, 
+        treshold: ktr.treshold,
+        count: 1,
+        sum: ktr.average
+      };
       //  Check if test is in result
       let ti = null;
       for(let n in out){
         if(out[n].type === t.type){
           ti = out[n];
-          ti.average = Math.round((ti.average + t.average) / 2);
+          //ti.average = Math.round((ti.average + t.average) / 2);
+          ti.presented += t.presented;
+          ti.wrong += t.wrong; 
+          ti.count += t.count;
+          ti.sum += t.sum;
         }
       }
       if(!ti) out.push(t);
     }
-    
+    //  Calc average success
+    for(let n in out){
+      let ti = out[n];
+      ti.average = Math.round(ti.sum  / ti.count);    
+    }
     return out;
   }
 

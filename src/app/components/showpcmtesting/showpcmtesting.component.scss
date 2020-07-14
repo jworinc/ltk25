@@ -1,9 +1,13 @@
 :host, .testing-wrapper-slide{
-    display: block;
+    display: flex;
     position: relative;
     width: 100%;
-    height: 92%;
+    height: 100%;
     overflow: hidden;
+    min-width: 100%;
+    min-height: 100%;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
 }
 .testing-container{
     display: block;
@@ -57,6 +61,8 @@
 .tc-nav-panel-subtitles{
     width: 85%;
     margin-left: 2%;
+    text-align: center;
+    line-height: 1;
 }
 .tc-nav-item{
     font-size: 20px;
@@ -74,6 +80,88 @@
     color: #5B7EA5;
 }
 
+.testing-sidebar{
+    display: flex;
+    position: relative;
+    max-width: 140px;
+    min-width: 140px;
+    height: 100%;
+    background-color: white;
+    box-shadow: 0 0 3px #777;
+    flex-flow: column nowrap;
+}
+.testing-wrap {
+    display: flex;
+    flex: 1;
+    min-height: 100%;
+    position: relative;
+}
+
+.zoom-card-next{
+    display: block;
+    background-image: url(../../../assets/img/next_button.png);
+    background-size: contain;
+    margin: 0;
+    max-height: 64px;
+    max-width: 64px;
+    min-height: 64px;
+    min-width: 64px;
+    /*border-style: none;*/
+    border-color: transparent;
+    border-width: 2px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    cursor: pointer;
+}
+.testing-sb-group{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+    flex: 1;
+    flex-flow: column;
+}
+.testing-edit-pcm-result, .testing-see-pcm-result, .testing-enable-practice, .testing-retake-test{
+    background-color: transparent;
+    background: none;
+    color: #19b3e5;
+    font-size: 62px;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    line-height: 62px;
+    text-align: center;
+}
+.next-section{
+    order: 1;
+}
+.register-section{
+    order: 2;
+}
+.sidetrip-mode{
+    display: flex;
+    position: fixed;
+    background: red;
+    color: white;
+    width: 100%;
+    justify-content: center;
+    z-index: 10;
+    margin: 0;
+    font-size: 14px;
+}
+.sidetrip-disable-btn{
+    cursor: pointer;
+    font-weight: 600;
+}
+.testing-next{
+    order: 2;
+}
+.testing-enable-practice{
+    order: 1;
+}
+
+
 @media only screen and (max-width:1024px)
 {
     .testing-container{
@@ -88,7 +176,7 @@
     }
     .tc-nav{
         min-height: 10%;
-        order: 1;
+        order: 2;
         padding: 5px 0px;
     }
     .tc-nav-panel{
@@ -96,6 +184,41 @@
         width: 16%
     }
     .tc-nav-panel-subtitles{
-        width: 82%;
+        width: 84%;
+        margin-left: 0;
+    }
+    .testing-wrap{
+        order: 2;
+        min-height: auto;
+        width: 100%;
+    }
+    .testing-sidebar{
+        min-width: 100%;
+        min-height: 55px;
+        max-height: 55px;
+        order: 1;
+        flex-flow: row nowrap;
+    }
+    :host, .testing-wrapper-slide{
+        flex-flow: column nowrap;
+    }
+    .testing-sb-group{
+        flex-flow: row;
+    }
+    .next-section{
+        order: 2;
+    }
+    .register-section{
+        order: 1;
+    }
+    .zoom-card-next {
+        min-height: 40px;
+        min-width: 40px;
+    }
+    .testing-edit-pcm-result, .testing-see-pcm-result, .testing-enable-practice, .testing-retake-test{
+        font-size: 36px;
+    }
+    .sidetrip-mode{
+        position: static;
     }
 }

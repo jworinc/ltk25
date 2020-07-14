@@ -20,7 +20,7 @@ export class BeforeLoginService implements CanActivate {
     let r = route.routeConfig.path.split('/')[0];
     if(this.Token.loggedIn() && r !== 'entrance'){
       
-      if(r === 'pcm' || r === 'test' || r === 'test-code' || (r === 'demo' && p === 'demo')) {
+      if(r === 'pcm' || r === 'test' || r === 'testing' || (r === 'demo' && p === 'demo')) {
         return true;
       } else this.router.navigateByUrl('/test');
 >>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results

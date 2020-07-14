@@ -40,6 +40,10 @@ export class StartComponent implements OnInit {
 
   ngOnInit() {
     let that = this;
+
+    //  Clear previous user test info
+    this.tn.clearUserTestingInfo();
+
     if(that.ar.snapshot.routeConfig.path.split("/")[0] === "start") {
       let sub = that.ar.params.subscribe(params => {
         if(params.hasOwnProperty('e') && params.hasOwnProperty('n')){
@@ -81,7 +85,13 @@ export class StartComponent implements OnInit {
         else if(params.hasOwnProperty('code')){
           that.form.code = params['code'];
           that.form.email = this.tn.getEmail();
-          if(this.tn.loggedIn()) that.handleResponse(that.form);
+          if(this.tn.loggedIn()) {
+            that.handleResponse(that.form);
+          } else {
+            if(that.form.code !== "") {
+              this.tn.setCode(that.form.code);
+            } 
+          }
         }
   
       });
@@ -110,12 +120,16 @@ export class StartComponent implements OnInit {
           if(this.tn.loggedIn()) {
             that.form.email = this.tn.getEmail();
             that.handleResponse(that.form);
+          } else {
+            if(that.form.type !== "") {
+              this.tn.setType(that.form.type);
+            } 
           }
         }
   
       });
     }
-    else if(that.ar.snapshot.routeConfig.path.split("/")[0] === "test-code") {
+    else if(that.ar.snapshot.routeConfig.path.split("/")[0] === "testing") {
       let sub = that.ar.params.subscribe(params => {
         if(params.hasOwnProperty('code') && params.hasOwnProperty('type') && params.hasOwnProperty('e') && params.hasOwnProperty('n')){
 
@@ -142,6 +156,13 @@ export class StartComponent implements OnInit {
           if(this.tn.loggedIn()) {
             that.form.email = this.tn.getEmail();
             that.handleResponse(that.form);
+          } else {
+            if(that.form.code !== "") {
+              this.tn.setCode(that.form.code);
+            } 
+            if(that.form.type !== "") {
+              this.tn.setType(that.form.type);
+            } 
           }
         }
   

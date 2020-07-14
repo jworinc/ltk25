@@ -14,6 +14,7 @@ export class ResultsComponent extends BasetestComponent implements OnInit {
 
   public complete_res = [];
   public continue: boolean = false;
+  public show_next: boolean = false;
 
   constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService) { 
     super(element, sz, pms);
@@ -29,8 +30,15 @@ export class ResultsComponent extends BasetestComponent implements OnInit {
   }
 
   getValue(r) {
-    if(r.presented > 0)
-      return Math.round(((r.presented-r.wrong)/r.presented)*100);
+    if(r.presented > 0){
+      //  Success without treshold
+      //let st = r.average - r.treshold;
+      //  Get percentage of corrected success, treshold correction
+      //let rs = 0;
+      //if(st > 0) rs = Math.round((st / (100 - r.treshold)) * 100);
+      return r.average;
+    }
+      
     else return 0;
   }
 

@@ -27,6 +27,9 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
   public ctestpos: number = 0;
   public max: number = 0;
   public min: number = 0;
+  //  Positions for progress calc with including info about custom fields
+  public pg_max: number = 0;
+  public pg_min: number = 0;
 
   public global_header = "";
   public global_desc = "";
@@ -44,6 +47,15 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
   public end_position;
   public logid: any = 0;
   public levels_screen: boolean = false;
+  public show_next: boolean = true;
+  public show_results: boolean = false;
+  public rrrequest_sent = false;
+  public rrrequest_start = false;
+  public u_email = '';
+  public u_name = 'none';
+  public test_description = 'Test';
+  public practice_show: boolean = true;
+  public practice_mode: boolean = false;
 
   showPage(show = true) {
     this._show = show;
@@ -88,7 +100,7 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
       private translate: TranslateService,
       private Auth: AuthService,
       private pr: MediapreloaderService,
-      private tn: TokenService,
+      public tn: TokenService,
       private router: Router,
       public cf: CustomfieldService
   ) {
@@ -145,7 +157,7 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
     //  Calc initial scale to fit card on the page
     //  Take width of 90% available card space
     //let zb = this.el.nativeElement.parentNode.parentElement;
-    let zb = this.el.nativeElement;
+    let zb = this.el.nativeElement.querySelector('.testing-wrap');
     if(zb === null){
       this._scale = 1;
       this.updateLayout();
@@ -155,6 +167,7 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
 
     
     //  Default double cards width
+    //  Container element
     let cbi = null;
     this.el.nativeElement.querySelectorAll('.testing-container').forEach((e)=>{
       if(e.clientWidth !== 0 && e.clientHeight !== 0) cbi = e;
@@ -185,8 +198,10 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
   //  Load test
   async getTest() {
     let data: any = null;
-    if(this.tn.getProf() === "" && this.tn.getType() === "") data = await this.dl.getPlacement();
-    else if(this.tn.getProf() === "" && this.tn.getType() !== "") data = await this.dl.getTypedTest(this.tn.getType());
+    if((!this.tn.getProf() || this.tn.getProf() === "") && (!this.tn.getType() || this.tn.getType() === "")) 
+      data = await this.dl.getPlacement();
+    else if((!this.tn.getProf() || this.tn.getProf() === "") && this.tn.getType() && this.tn.getType() !== "") 
+      data = await this.dl.getTypedTest(this.tn.getType());
     else data = await this.dl.getProfPlacement(this.tn.getProf());
     console.log(data);
     this.logid = +(data as any).logid;
@@ -194,6 +209,10 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
 
     //  If email is not defined (it happens for registered users)
     if(typeof data.email !== 'undefined' && data.email !== "") this.tn.setEmail(data.email);
+
+    //  Set test description
+    if(typeof data.test !== 'undefined' && typeof data.test.desc !== 'undefined' && data.test.desc && data.test.desc !== "")
+      this.test_description = data.test.desc;
 
     let td = [];
 
@@ -204,10 +223,17 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
       td.push(test_item);
     }
 
+    //  Set position for progress calc, max
+    this.pg_max = td.length;
+
     //  Check for custom fields
     if(typeof data.custom_fields !== 'undefined') this.cf.setFields(data.custom_fields);
     //  Check for start and end custom fields in lesson
-    if(this.cf.has_start_lesson) this.cf.addStartCardToTest(td, this.ctestpos);
+    if(this.cf.has_start_lesson) {
+      this.cf.addStartCardToTest(td, this.ctestpos);
+      //  Shift start position for progress calc
+      this.pg_min++;
+    }
     if(this.cf.has_end_lesson) this.cf.addEndCardToTest(td);
 
     //  Add intro and result screen
@@ -221,6 +247,8 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
       type: "intro",
       custom_field: ''
     };
+    //  Shift start position for progress calc
+    this.pg_min++;
     if(this.cf.has_start_screen) itr_screen.custom_field = this.cf.getStartScreen();
     td.unshift(itr_screen);
     this.test_results = this.tb.getResultsInst(td);
@@ -324,7 +352,21 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
 
   //  Update tests
   updateTests() {
-    this.setCurrentTestPosition(this.ctestpos)
+    this.setCurrentTestPosition(this.ctestpos);
+    if(this.ctestpos <= this.max){
+      
+      for(let i in this.cts){
+        let c = this.cts[i];
+        if(c.instance.isActive() && typeof c.instance.getTestResult !== 'undefined'){
+          
+          //  Check if it is needed to show next for current instance
+          if(typeof c.instance.show_next !== 'undefined' && c.instance.show_next) this.show_next = true;
+          else this.show_next = false;
+
+        }
+      
+      }
+    }
   }
 
   //  Move next event
@@ -338,14 +380,15 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
           let r = c.instance.getTestResult();
           if(r) this.tb.addResult(r);
           c.instance.pm.stop();
+
         }
       }
       
       this.ctestpos = this.tb.getNextPosition(this.ctestpos);
       //this.current_break = this.tb.getCurrentBreak(this.ctestpos);
 
-      //  Move to next test
-      //this.ctestpos++;
+      //  Hide practice mode button in case when mode was not enabled
+      this.practice_show = false;
 
       //  If last card (finish) shows, get user level info and load it to finish card instance
       if(this.end_position === this.ctestpos || ((this.end_position - 1) === this.ctestpos && this.levels_screen)){
@@ -355,17 +398,30 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
             this.test_results = c.instance.card.content.results = this.tb.combineResults();
             c.instance.complete_level = this.tb.getLevelByResults(c.instance.card.content.results);
             
+            //  Show message for practice mode
+            if(typeof c.instance.practice_mode !== 'undefined') c.instance.practice_mode = this.practice_mode;
+
             if(this.end_position === this.ctestpos) {
-              this.logging.placementEnd(this.test_results, this.logid, c.instance.complete_level.level, c.instance.complete_level.break, c.instance.complete_level.lesson).then(e=>{ console.log(e); });
-              console.log("Defined level:");
-              console.log(c.instance.complete_level);
-              console.log("Test results details:");
-              console.log(this.test_results);
+              this.show_results = true;
+              if(!this.practice_mode){
+                this.logging.placementEnd(this.test_results, this.logid, c.instance.complete_level.level, c.instance.complete_level.break, c.instance.complete_level.lesson).then(e=>{ console.log(e); });
+                console.log("Defined level:");
+                console.log(c.instance.complete_level);
+                console.log("Test results details:");
+                console.log(this.test_results);
+              } else {
+                console.log("Test was taken in practice mode, results not saved!", this.test_results);
+              }
             }
             
           }
           else if(c.instance.data.type === 'results'){
-            if(this.levels_screen) c.instance.enableContinue();
+            if(this.levels_screen) {
+              c.instance.enableContinue();
+              c.instance.show_next = true;
+            } else {
+              this.show_results = true;
+            }
             c.instance.card.content.results = this.tb.combineResults();
             console.log("Test results details prepared!", c.instance.card.content.results);
           }
@@ -376,7 +432,12 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
       
 
       //  Calc completeness
-      this.complete = Math.round((this.ctestpos / (this.max - 1)) * 100);
+      //this.complete = Math.round((this.ctestpos / (this.max - 1)) * 100);
+      if(this.ctestpos < this.pg_min) this.complete = 0;
+      else if(this.ctestpos >= this.pg_max) this.complete = 100;
+      else {
+        this.complete = Math.round(((this.ctestpos - this.pg_min) / this.pg_max) * 100);
+      }
       //this.pr.loadCard(this.ctestpos);
       this.updateTests();
     } else {
@@ -444,6 +505,61 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
 
   clearResults() {
     this.tb.clearResults(this.test_results);
+  }
+
+  getPlacementResultInstance() {
+    
+    //  Get corrected data from pcm result instance
+    let pcm_inst = null;
+    for(let i in this.cts){
+      let c = this.cts[i];
+      if(c.instance.isActive() && typeof c.instance.getTestResult !== 'undefined' && typeof c.instance.rrrequest_sent !== 'undefined'){
+        pcm_inst = c.instance;
+      }
+    }
+
+    return pcm_inst;
+  }
+
+  sendRegisterRequest() {
+    let that = this;
+    this.rrrequest_start = true;
+    let pcm_inst = this.getPlacementResultInstance();
+    this.dl.sendRegisterRequest(this.tn.getEmail()).then((e)=>{
+      that.rrrequest_sent = true;
+      if(pcm_inst) pcm_inst.rrrequest_sent = true;
+    });
+  }
+
+  sendCorrectRegisterRequest() {
+    let that = this;
+    this.rrrequest_start = true;
+    
+    let pcm_inst = this.getPlacementResultInstance();
+    if(pcm_inst) {
+      if(pcm_inst.u_email !== '') this.u_email = pcm_inst.u_email;
+      if(pcm_inst.u_name !== '') this.u_name = pcm_inst.u_name;
+    }
+
+    this.dl.sendRegisterRequest(this.u_email, this.u_name).then((e)=>{
+      that.rrrequest_sent = true;
+      if(pcm_inst) pcm_inst.rrrequest_sent = true;
+    });
+  }
+
+  enablePractice() {
+    this.practice_mode = true;
+    this.mvNext();
+  }
+  disablePractice() {
+    this.reloadTest();
+    //this.practice_mode = false;
+  }
+
+  reloadTest() {
+    this.tb.deleteResults();
+    this.router.navigateByUrl('/demo', {skipLocationChange: true})
+      .then(() => this.router.navigate(['/test']));
   }
 
 }

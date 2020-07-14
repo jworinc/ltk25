@@ -16,6 +16,8 @@ export class IntroComponent extends BasetestComponent implements OnInit {
     super(element, sz, pms);
   }
 
+  public show_next: boolean = true;
+
   ngOnInit() {
   }
 

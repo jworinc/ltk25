@@ -53,17 +53,17 @@ const routes: Routes = [
     canActivate: [BeforeLoginService],
   },
   {
-    path: 'test-code/:code/:type',
+    path: 'testing/:code/:type',
     component: StartComponent,
     canActivate: [BeforeLoginService],
   },
   {
-    path: 'test-code/:code/:type/:e',
+    path: 'testing/:code/:type/:e',
     component: StartComponent,
     canActivate: [BeforeLoginService],
   },
   {
-    path: 'test-code/:code/:type/:e/:n',
+    path: 'testing/:code/:type/:e/:n',
     component: StartComponent,
     canActivate: [BeforeLoginService],
   },

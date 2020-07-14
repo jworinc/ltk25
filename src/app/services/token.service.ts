@@ -93,6 +93,14 @@ export class TokenService {
     return e;
   }
 
+  clearUserTestingInfo() {
+    //localStorage.removeItem('email');
+    //localStorage.removeItem('name');
+    localStorage.removeItem('prof');
+    localStorage.removeItem('pcmcode');
+    localStorage.removeItem('testtype');
+  }
+
 
 >>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
   getAuthHeader() {
@@ -102,6 +110,7 @@ export class TokenService {
 
   remove() {
     localStorage.removeItem('token');
+    //this.clearUserTestingInfo();
   }
 
   isValid() {

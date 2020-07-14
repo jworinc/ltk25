@@ -6,26 +6,26 @@
   -->
   <div class="result-test-details">
     <app-test-result-item *ngFor="let r of complete_res" 
-            [header]="r.description" [value]="r.average" [units]="'%'">
+        [header]="r.description | translate" [value]="getValue(r)" [units]="'%'">
     </app-test-result-item>
   </div>
 
   <div class="result-test-level">
     <table class="table table-striped">
       <tr>
-        <th>Description</th>
-        <th>Success</th>
-        <th>Presented</th>
-        <th>Wrong</th>
+        <th>{{ 'description' | translate }}</th>
+        <th>{{ 'success' | translate }}</th>
+        <th>{{ 'presented' | translate }}</th>
+        <th>{{ 'wrong' | translate }}</th>
       </tr>
       <tr *ngFor="let r of complete_res">
-          <td>{{ r.description }}</td>
-          <td>{{ r.average }}%</td>
+          <td>{{ r.description | translate }}</td>
+          <td>{{ getValue(r) }}%</td>
           <td>{{ r.presented }}</td>
           <td>{{ r.wrong }}</td>
       </tr>
     </table>
-    <p [hidden]="!continue"><button (click)="next()"><!--Continue-->{{ 'continue_testing_btn' | translate }}</button></p>
+    <!--<p [hidden]="!continue"><button (click)="next()"><!--Continue--><!--{{ 'continue_testing_btn' | translate }}</button></p>-->
   </div>
 
   

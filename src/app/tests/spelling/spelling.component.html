@@ -3,29 +3,37 @@
 <div class="row common-div">
   <!--<div class="col-2 left-side"><h1>{{data.position}}.</h1></div>-->
 
-  <div class="col-12">
+  <div class="col-12 testing-main-block">
 
     <div class="row cust-row">
 
-      <div class="col-12">
+      <div class="col-12 header-description">
           <!--<h4>{{data?.description}}</h4> Type missing letter in the word.-->
           <h4>{{ 'type_missing_letter' | translate }}</h4>
+          <span class="repeat-button" (click)="repeat()"><i class="fas fa-redo-alt"></i></span>
       </div>
     </div>
 
     <!-- <div class="text-center">
         <span *ngFor="let word of words" class="ques_span"><span>{{word}}</span><input class="ques_ip" type="text"></span>
     </div> -->
-    <div class="temp">
-      <div *ngIf="ind < data.content.length ? true: false" class="text-center word-cls row cust-row vert-mid" [ngClass]=" result?.length <= 6 ? 'answer-div': '' ">
+    <div class="temp spelling-content">
+      <div *ngIf="ind < data.content.length ? true: false" class="text-center word-cls vert-mid">
           <span [innerHTML]="content | bindhtml"></span><!--<input class="ques_ip" type="text">-->
       </div>
 
-      <div class="row cust-row word-row">
+      <div class="word-row testing-answers">
         <div class="col-3" *ngFor="let res of result">
             <p class="p_design" [ngClass]="res.isCorrect ? 'correct_answer': 'wrong_answer'">{{res?.word}}<span class="float-right"><i class="fa" [ngClass]="res.isCorrect ? 'fa-check': 'fa-times'" aria-hidden="true"></i></span></p>
         </div>
       </div>
+      
+      <div class="word-row">
+        <div class="col-4" *ngFor="let word of var_for_display">
+            <p class="p_design" (click)="setAnswerLetter(word)">{{word}}</p>
+        </div>
+    </div>
+
     </div>
 
   </div>

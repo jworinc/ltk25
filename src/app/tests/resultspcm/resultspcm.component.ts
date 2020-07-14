@@ -28,6 +28,7 @@ export class ResultspcmComponent extends BasetestComponent implements OnInit {
   public rrrequest_start = false;
   public u_email = '';
   public u_name = '';
+  public practice_mode: boolean = false;
 
   ngOnInit() {
     this.card = this.data;

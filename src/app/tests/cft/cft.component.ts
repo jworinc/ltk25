@@ -14,6 +14,8 @@ export class CftComponent extends BasetestComponent implements OnInit {
   constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService) { 
     super(element, sz, pms);
   }
+  
+  public show_next: boolean = true;
 
   ngOnInit() {
   }
