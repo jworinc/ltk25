@@ -228,7 +228,13 @@
 	"retake_a_test" : "Retake a test",
 	"test_in_practice" : "Take a test in practice mode",
 	"you_finished_practice" : "You finished practice, try again or take a test.",
+<<<<<<< HEAD
 >>>>>>> cf89eee... Testing changes, ui change, sidebar, translations, treshold, buttons, spelling multi-choise
+=======
+	"complete" : "Complete",
+	"submit" : "SUBMIT",
+	"level" : "Level",
+>>>>>>> 0d6f410... Testing various UI changes
 	"help_lesson_header_desc" : "Shows the lesson student is on",
 	"help_option_desc" : "Change LTK various settings (Options)",
 	"help_chat_desc" : "Use this button to access chat and communicate with other students and teachers.",

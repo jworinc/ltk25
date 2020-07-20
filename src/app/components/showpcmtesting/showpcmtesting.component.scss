@@ -43,8 +43,8 @@
     min-height: 10%;
     width: 100%;
     order: 2;
-    padding: 4px 30px;
-    padding-bottom: 15px;
+    padding: 3px 30px;
+    padding-bottom: 10px;
 }
 .tc-nav-panel{
     display: flex;
@@ -53,7 +53,7 @@
     width: 13%;
     height: 100%;
     background-color: #F4F6F5;
-    border-radius: 6px;
+    border-radius: 3px;
     box-shadow: 0 0 3px #777;
     align-items: center;
     justify-content: space-around;
@@ -133,6 +133,23 @@
     line-height: 62px;
     text-align: center;
 }
+.testing-edit-pcm-result{
+    border-style: solid;
+    border-color: transparent;
+    border-radius: 4px;
+    border-width: 4px;
+    box-sizing: content-box;
+    transition: border-color 0.4s ease;
+}
+.testing-retake-test{
+    background-color: #BD1E2C;
+    color: white;
+    border-radius: 40px;
+    padding: 12px;
+    font-size: 41px;
+    text-align: center;
+    line-height: 41px;
+}
 .next-section{
     order: 1;
 }
@@ -156,10 +173,43 @@
 }
 .testing-next{
     order: 2;
+    border-style: solid;
+    border-color: transparent;
+    border-radius: 4px;
+    border-width: 4px;
+    box-sizing: content-box;
+    transition: border-color 0.4s ease;
+}
+.testing-next-hlight{
+    border-color: red;
+}
+.testing-prev{
+    transform: rotate(180deg);
 }
 .testing-enable-practice{
     order: 1;
 }
+.lesson-position-activity-tag{
+    display: block;
+    position: absolute;
+    z-index: 2200;
+    bottom: 10px;
+    right: 32px;
+    color: #a3a0a087;
+    font-size: 10px;
+    cursor: pointer;
+}
+.lesson-position-activity-tag:hover{
+    background-color: lightblue;
+}
+.lesson-description-feedback-exists{
+    display: block;
+    position: absolute;
+    top: 0;
+    left: -13px;
+    color: blue;
+}
+
 
 
 @media only screen and (max-width:1024px)
@@ -217,8 +267,18 @@
     }
     .testing-edit-pcm-result, .testing-see-pcm-result, .testing-enable-practice, .testing-retake-test{
         font-size: 36px;
+        line-height: 40px;
     }
     .sidetrip-mode{
         position: static;
+    }
+    .lesson-position-activity-tag {
+        bottom: 4px;
+        right: 2px;
+    }
+    .testing-retake-test{
+        font-size: 26px;
+        padding: 6px;
+        line-height: 26px;
     }
 }

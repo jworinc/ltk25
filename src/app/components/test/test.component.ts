@@ -5,4 +5,6 @@ export interface TestComponent {
   save_results: any;
   mnext: any;
   mprev: any;
+  request_complete: any;
+  set_subtitles: any;
 }

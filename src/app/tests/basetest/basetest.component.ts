@@ -18,6 +18,7 @@ export class BasetestComponent implements OnInit, TestComponent {
   public wrong = 0;
   public card: any;
   public type = '';
+  public intro_sub_played: boolean = false;
 
   @Input('cpos')
 	set cpos(cpos: number) {
@@ -31,6 +32,8 @@ export class BasetestComponent implements OnInit, TestComponent {
   @Output() set_global_desc = new EventEmitter<any>();
   @Output() set_global_header = new EventEmitter<any>();
   @Output() save_results = new EventEmitter<any>();
+  @Output() request_complete = new EventEmitter<any>();
+  @Output() set_subtitles = new EventEmitter<any>();
   
   public data: any;
 

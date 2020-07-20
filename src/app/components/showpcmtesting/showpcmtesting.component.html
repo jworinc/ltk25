@@ -34,6 +34,18 @@
             -->
             {{ test_description }}
         </div>
+
+        <!-- Card lesson position activity tag -->
+        <span class='lesson-position-activity-tag' 
+            [hidden]="card_descriptor.lesson==0&&card_descriptor.position==0&&card_descriptor.activity==''" 
+            title="{{ 'feedback_btn' | translate }}"
+            (click)="onShowFeedback()">
+            #{{ card_descriptor.lesson }}-{{ card_descriptor.position }}:{{ card_descriptor.activity }}
+            <span [hidden]="current_feedback_list.length < 1" class="lesson-description-feedback-exists">
+                <i class="fas fa-check-double"></i>
+            </span>
+        </span>
+
       </div>
 
     </div>
@@ -42,28 +54,43 @@
 </div>
 
 <div class="testing-sidebar">
-  <div class="testing-sb-group next-section" [hidden]="show_results">
+  <!--<div class="testing-sb-group next-section" [hidden]="show_results">-->
+  <div class="testing-sb-group next-section">
     <span class='zoom-card-next testing-next' (click)='mvNext()' 
                                   title="{{ 'move_to_next' | translate }}" 
-                                  [ngClass]="{'blinkhighlight': blinknextnavbtn}"
+                                  [ngClass]="{'testing-next-hlight': blinknextnavbtn}"
                                   [hidden]="!show_next"></span>
+    <span class='zoom-card-next testing-next testing-prev' (click)='mvPrev()' 
+                                  title="{{ 'move_to_prev' | translate }}" 
+                                  [ngClass]="{'testing-next-hlight': blinkprevnavbtn}"
+                                  [hidden]="!show_prev"></span>
     <span class='zoom-card-next testing-enable-practice' (click)="enablePractice()" [hidden]="!practice_show" title="{{ 'test_in_practice' | translate }}">
       <i class="fab fa-cloudscale"></i>
     </span>
   </div>
   <div class="testing-sb-group register-section">
     <span class='zoom-card-next testing-edit-pcm-result'
+          [ngClass]="{'testing-next-hlight': blinkcompletenavbtn}"
           (click)="sendCorrectRegisterRequest()"
-          [hidden]="!show_results || tn.loggedIn() || rrrequest_sent || rrrequest_start || practice_mode || !levels_screen" title="{{ 'correct' | translate }}">
-      <i class="far fa-edit"></i>
+          [hidden]="!show_results || tn.loggedIn() || rrrequest_sent || rrrequest_start || practice_mode || !levels_screen" title="{{ 'complete' | translate }}">
+          <i class="fas fa-check"></i>
     </span>
+    <!--
     <span class='zoom-card-next testing-see-pcm-result'
           (click)="sendRegisterRequest()"
           [hidden]="!show_results || tn.loggedIn() || rrrequest_sent || rrrequest_start || practice_mode || !levels_screen" title="{{ 'see_a_result' | translate }}">
       <i class="fas fa-chart-line"></i>
     </span>
-    <span class='zoom-card-next testing-retake-test' [hidden]="!show_results" (click)="reloadTest()" title="{{ 'retake_a_test' | translate }}">
-      <i class="fas fa-redo-alt"></i>
+    -->
+    <span class='zoom-card-next testing-retake-test' (click)="reloadTest()" title="{{ 'retake_a_test' | translate }}">
+      <i class="fas fa-power-off"></i>
     </span>
   </div>
 </div>
+
+<!--    Feedback window   -->
+<app-feedback  [show]='show_feedback_modal' 
+[hidden]="!show_feedback_modal"
+[card_descriptor]="'N'+card_descriptor.lesson+'-'+card_descriptor.position+'-'+card_descriptor.activity"
+[prev_feedbacks]="current_feedback_list"
+(closefeedback)="onCloseFeedback()"></app-feedback>

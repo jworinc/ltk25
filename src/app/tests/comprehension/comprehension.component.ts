@@ -3,6 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { BasetestComponent } from '../basetest/basetest.component';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { PickElementService } from '../../services/pick-element.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-comprehension',
@@ -19,10 +20,21 @@ export class ComprehensionComponent extends BasetestComponent implements OnInit 
   public result:any=[];
   public test_complete = false;
 
+  
+  public subtitles: any[] = [
+    {
+      type: 'intro',
+      key: 'chs_thebest_word',
+      vawe: '_SCTBWTCTS'
+    }
+  ];
+
+
   constructor(private element:ElementRef, 
               private sz: DomSanitizer, 
               private pms: PlaymediaService,
-              private pe: PickElementService) { 
+              private pe: PickElementService,
+              public translate: TranslateService) { 
     super(element, sz, pms);
   }
 
@@ -32,6 +44,7 @@ export class ComprehensionComponent extends BasetestComponent implements OnInit 
   }
 
   show() {
+    let that = this;
     console.log(this.data);
     this.result = [];
     this.card = this.data['content'];
@@ -39,6 +52,11 @@ export class ComprehensionComponent extends BasetestComponent implements OnInit 
     this.test_complete = false;
     console.log(this.card);
     this.presented++;
+    this.set_subtitles.emit(this.translate.instant(this.subtitles[0].key));
+    this.pms.stop();
+    this.pms.sound(this.subtitles[0].vawe, ()=>{
+      that.intro_sub_played = true;
+    }, 500);
   }
 
   // getAnswer(answer){

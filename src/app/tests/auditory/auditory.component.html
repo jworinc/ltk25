@@ -9,8 +9,8 @@
     <div class="row cust-row">
 
       <div class="col-12 header-description">
-          <!--<h4>{{data?.description}}</h4> Click on the word that you hear. -->
-          <h4>{{ 'clck_onthe_word' | translate }}</h4>
+          <h4>{{ data?.description | translate }}, {{ 'level' | translate }} {{ data?.break }}</h4> 
+          <!--<h4>{{ 'clck_onthe_word' | translate }}</h4>-->
           <span class="repeat-button" (click)="repeat()"><i class="fas fa-redo-alt"></i></span>
       </div>
     </div>

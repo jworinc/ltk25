@@ -38,7 +38,7 @@ export class ResultspcmComponent extends BasetestComponent implements OnInit {
     console.log(this.data);
     this.u_email = this.tn.getEmail();
     this.u_name = this.tn.getName();
-    this.rrrequest_sent = false;
+    //this.rrrequest_sent = false;
     this.rrrequest_start = false;
     this.complete_res = this.parseCompleteResult(this.data.content.results);
   }
@@ -57,6 +57,11 @@ export class ResultspcmComponent extends BasetestComponent implements OnInit {
     this.dl.sendRegisterRequest(this.u_email, this.u_name).then((e)=>{
       that.rrrequest_sent = true;
     });
+  }
+
+  complete() {
+    this.rrrequest_start = true;
+    this.request_complete.emit();
   }
 
 }

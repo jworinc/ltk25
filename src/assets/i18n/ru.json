@@ -228,7 +228,13 @@
 	"retake_a_test" : "Повторить тест",
 	"test_in_practice" : "Пройти тест в режиме практики",
 	"you_finished_practice" : "Вы закончили практику, попробуйте еще раз или пройдите тест.",
+<<<<<<< HEAD
 >>>>>>> cf89eee... Testing changes, ui change, sidebar, translations, treshold, buttons, spelling multi-choise
+=======
+	"complete" : "Завершить",
+	"submit" : "ОТПРАВИТЬ",
+	"level" : "Уровень",
+>>>>>>> 0d6f410... Testing various UI changes
 	"help_option_desc" : "почему ключ назыв option а не settings?",
 	"help_sidetrip_desc" : "Включает режим просмотра при выборе урока. Студент может пройти урок в режиме просмотра, урок не будет отмечен как выполненный",
 	"help_fullscreen_desc" : "Включает полноэкранный режим",

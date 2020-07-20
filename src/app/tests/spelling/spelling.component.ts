@@ -2,7 +2,8 @@ import { Component, OnInit, ElementRef, HostListener } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BasetestComponent } from '../basetest/basetest.component';
 import { PlaymediaService } from '../../services/playmedia.service';
-
+import { PickElementService } from '../../services/pick-element.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-spelling',
@@ -22,8 +23,21 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
   public test_complete = false;
   public variants: string[] = [];
   public var_for_display: string[] = [];
+  
+  public subtitles: any[] = [
+    {
+      type: 'intro',
+      key: 'type_missing_letter',
+      vawe: '_STMLITW'
+    }
+  ];
 
-  constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService) { 
+
+  constructor(private element:ElementRef, 
+              private sz: DomSanitizer, 
+              private pms: PlaymediaService, 
+              public pe: PickElementService,
+              public translate: TranslateService) { 
     super(element, sz, pms);
   }
 
@@ -33,13 +47,19 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
   }
 
   show() {
+    let that = this;
     console.log(this.data);
     // this.card = this.data['content'];
     this.ind = 0;
     this.result = [];
     this.test_complete = false;
     this.getWords();
-    
+    this.set_subtitles.emit(this.translate.instant(this.subtitles[0].key));
+    this.pms.stop();
+    this.pms.sound(this.subtitles[0].vawe, ()=>{
+      that.intro_sub_played = true;
+      that.pms.word(that.words.replace(/,/g , ""),function(){});
+    }, 500);
   }
 
   // getWords(){
@@ -81,7 +101,7 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
     let w = this.data.content[this.ind].parts.toString();
     this.words = w.replace(this.r,this.data.content[this.ind].missing);
 
-    this.pms.word(this.words.replace(/,/g , ""),function(){});
+    if(this.intro_sub_played) this.pms.word(this.words.replace(/,/g , ""),function(){});
 
 		//	Add word parts to markup
 		for(let i in this.data.content[this.ind].parts){
@@ -155,6 +175,8 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
   }
 
   setAnswerLetter(l) {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.entered_val = l;
     let ielm = this.element.nativeElement.querySelector('#user_input');
     if(ielm) ielm.value = l;
@@ -203,6 +225,8 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
   }
 
   repeat() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.pms.stop();
     this.pms.word(this.words.replace(/,/g , ""),function(){});
   }

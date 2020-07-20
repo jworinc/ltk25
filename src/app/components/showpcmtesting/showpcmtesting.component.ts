@@ -10,6 +10,9 @@ import { MediapreloaderService } from 'src/app/services/mediapreloader.service';
 import { TokenService } from '../../services/token.service';
 import { Router } from '@angular/router';
 import { CustomfieldService } from '../../services/customfield.service';
+import { PlaymediaService } from '../../services/playmedia.service';
+import { PickElementService } from '../../services/pick-element.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-showpcmtesting',
@@ -48,14 +51,27 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
   public logid: any = 0;
   public levels_screen: boolean = false;
   public show_next: boolean = true;
+  public show_prev: boolean = false;
   public show_results: boolean = false;
   public rrrequest_sent = false;
   public rrrequest_start = false;
   public u_email = '';
   public u_name = 'none';
   public test_description = 'Test';
+  public default_test_description = 'Test';
   public practice_show: boolean = true;
   public practice_mode: boolean = false;
+  public card_descriptor = {
+    lesson: 0,
+    position: 0,
+    activity: ''
+  }
+  //  Sent Feedback List according to current card descriptor
+  public current_feedback_list: any = [];
+  public show_feedback_modal: boolean = false;
+  public blinknextnavbtn: boolean = false;
+  public blinkprevnavbtn: boolean = false;
+  public blinkcompletenavbtn: boolean = false;
 
   showPage(show = true) {
     this._show = show;
@@ -102,7 +118,10 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
       private pr: MediapreloaderService,
       public tn: TokenService,
       private router: Router,
-      public cf: CustomfieldService
+      public cf: CustomfieldService,
+      public playmedia: PlaymediaService,
+      public pe: PickElementService,
+      public title: Title
   ) {
     // this language will be used as a fallback when a translation isn't found in the current language
     this.translate.setDefaultLang('en');
@@ -137,6 +156,8 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
     //setTimeout(()=>{ this.translate.use(locale); }, 100);
     this.calcScsale();
     this.showPage();
+    //  Set lessons title
+    this.title.setTitle('LTK-Testing');
   }
 
   ngAfterViewInit() {
@@ -207,12 +228,18 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
     this.logid = +(data as any).logid;
     this.dl.setLogId(this.logid);
 
+    this.card_descriptor.lesson = (data as any).test.id;
+    
+
     //  If email is not defined (it happens for registered users)
     if(typeof data.email !== 'undefined' && data.email !== "") this.tn.setEmail(data.email);
 
     //  Set test description
-    if(typeof data.test !== 'undefined' && typeof data.test.desc !== 'undefined' && data.test.desc && data.test.desc !== "")
+    if(typeof data.test !== 'undefined' && typeof data.test.desc !== 'undefined' && data.test.desc && data.test.desc !== "") {
       this.test_description = data.test.desc;
+      this.default_test_description = data.test.desc;
+      this.title.setTitle('LTK-Testing-' + data.test.title);
+    }
 
     let td = [];
 
@@ -325,11 +352,21 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
       //  that.tb.addResult(e.type, e.presented, e.wrong, e.results, that.test_results[that.current_break]);
       //});
       //this.le.ccs.push(componentRef);
+      if(card.data.type === 'resultspcm') {
+        //  Link global header
+        (<TestComponent>componentRef.instance).request_complete.subscribe(function(e){
+          that.sendCorrectRegisterRequest();
+        });
+      }
+      //  Set subtitles
+      (<TestComponent>componentRef.instance).set_subtitles.subscribe(function(e){
+        that.test_description = e;
+      });
       this.cts.push(componentRef);
     }
 
-    setTimeout(()=>{ that.updateTests(); }, 20);
-
+    setTimeout(()=>{ that.updateTests(); that.setCurrentCardDescriptor(); }, 20);
+    setTimeout(()=>{ that.blinkNextNavBtn(); }, 1600);
   }
 
 
@@ -367,10 +404,21 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
       
       }
     }
+
+    //  Show prev button for placement test results last screen
+    if(this.end_position === this.ctestpos && this.levels_screen) {
+      let that = this;
+      this.show_prev = true;
+      setTimeout(()=>{ that.blinkCompleteNavBtn(); }, 1000);
+    }
+    else this.show_prev = false;
+
   }
 
   //  Move next event
   mvNext(){
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     //  Check limit
     if(this.ctestpos < this.max){
       
@@ -400,6 +448,7 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
             
             //  Show message for practice mode
             if(typeof c.instance.practice_mode !== 'undefined') c.instance.practice_mode = this.practice_mode;
+            if(typeof c.instance.rrrequest_sent !== 'undefined') c.instance.rrrequest_sent = this.rrrequest_sent;
 
             if(this.end_position === this.ctestpos) {
               this.show_results = true;
@@ -419,12 +468,18 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
             if(this.levels_screen) {
               c.instance.enableContinue();
               c.instance.show_next = true;
+              let that = this;
+              setTimeout(()=>{ that.blinkNextNavBtn(); }, 1000);
             } else {
               this.show_results = true;
             }
             c.instance.card.content.results = this.tb.combineResults();
             console.log("Test results details prepared!", c.instance.card.content.results);
           }
+
+          //  Set default test description
+          this.test_description = this.default_test_description;
+
         }
         
       }
@@ -446,15 +501,20 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
       this.close();
     }
 
+    this.setCurrentCardDescriptor();
+
   }
 
   //  Move prev event
   mvPrev(){
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     //  Check limit
     if(this.ctestpos > this.min){
       this.ctestpos--;
       this.updateTests();
     }
+    this.setCurrentCardDescriptor();
   }
 
   setCurrentTestPosition(pos) {
@@ -522,6 +582,8 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
   }
 
   sendRegisterRequest() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     let that = this;
     this.rrrequest_start = true;
     let pcm_inst = this.getPlacementResultInstance();
@@ -532,6 +594,8 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
   }
 
   sendCorrectRegisterRequest() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     let that = this;
     this.rrrequest_start = true;
     
@@ -548,18 +612,107 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
   }
 
   enablePractice() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.practice_mode = true;
     this.mvNext();
   }
   disablePractice() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.reloadTest();
     //this.practice_mode = false;
   }
 
   reloadTest() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.tb.deleteResults();
     this.router.navigateByUrl('/demo', {skipLocationChange: true})
       .then(() => this.router.navigate(['/test']));
   }
+
+  getCardDescriptor() {
+    let that = this;
+    let d = '#'+this.card_descriptor.lesson+'-'+this.card_descriptor.position+':'+this.card_descriptor.activity;
+    //  Check if feedback already exist for current card
+    this.dl.getLastFeedbacks(encodeURIComponent('N'+this.card_descriptor.lesson+'-'+this.card_descriptor.position+'-'+this.card_descriptor.activity)).then((data)=>{
+      if(typeof (data as any).length !== 'undefined' && (data as any).length > 0){
+        console.log("Found feedback according to current card");
+        console.log(data);
+        that.current_feedback_list = data;
+      } else {
+        that.current_feedback_list = [];
+      }
+    });
+    return d;
+  }
+
+  setCurrentCardDescriptor() {
+    let that = this;
+    for(let i in this.cts){
+      let c = this.cts[i];
+      if(c.instance.isActive()){
+        let r = c.instance.getTestResult();
+        that.card_descriptor.position = that.ctestpos;
+        if(typeof c.instance.card !== 'undefined') that.card_descriptor.activity = c.instance.card.id;
+      }
+    }
+    
+    //  Store updated descriptor to DataLoader service to share it between other components
+    that.dl.card_descriptor = that.getCardDescriptor();
+
+  }
+
+  
+  onShowFeedback() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    this.playmedia.stop();
+    this.show_feedback_modal = true;
+  }
+
+  onCloseFeedback() {
+    this.show_feedback_modal = false;
+  }
+
+  blinkNextNavBtn() {
+
+    let that = this;
+
+    setTimeout(()=>{
+      that.blinknextnavbtn = true;
+      setTimeout(()=>{
+        that.blinknextnavbtn = false;
+        setTimeout(()=>{
+          that.blinknextnavbtn = true;
+          setTimeout(()=>{
+            that.blinknextnavbtn = false;
+          }, 600);
+        }, 600);
+      }, 600);
+    }, 600);
+
+  }
+
+  blinkCompleteNavBtn() {
+
+    let that = this;
+
+    setTimeout(()=>{
+      that.blinkcompletenavbtn = true;
+      setTimeout(()=>{
+        that.blinkcompletenavbtn = false;
+        setTimeout(()=>{
+          that.blinkcompletenavbtn = true;
+          setTimeout(()=>{
+            that.blinkcompletenavbtn = false;
+          }, 600);
+        }, 600);
+      }, 600);
+    }, 600);
+
+  }
+
 
 }

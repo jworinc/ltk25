@@ -29,11 +29,11 @@
       <p [hidden]="rrrequest_sent">{{ 'r_to_see_level' | translate }}</p>
       <div class="reg-form" [hidden]="rrrequest_sent">
         <div>
-          <span>{{ 'email' | translate }}</span>&nbsp;
+          <span>{{ 'email' | translate }}</span>
           <input type="email" [(ngModel)]="u_email" />
         </div>
         <div>
-          <span>{{ 'your_name' | translate }}</span>&nbsp;
+          <span>{{ 'your_name' | translate }}</span>
           <input type="text" [(ngModel)]="u_name" />
         </div>
       </div>
@@ -43,6 +43,8 @@
         <button (click)="sendRegisterRequest()" [disabled]="rrrequest_start">{{ 'see_a_result' | translate }}</button>
       </p>
       -->
+      <button [hidden]="rrrequest_sent"  [disabled]="rrrequest_start" (click)="complete()">{{ 'submit' | translate }}</button>
+      
       <p [hidden]="!rrrequest_sent">{{ 't_ch_e_further' | translate }}</p>
     </div>
 
