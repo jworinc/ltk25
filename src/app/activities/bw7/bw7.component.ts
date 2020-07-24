@@ -109,8 +109,10 @@ export class Bw7Component extends BasebwComponent implements OnInit, DoCheck {
 					return this.rules[i].rule;
 				}
 			}
+		} else {
+			throw new Error('Word doesn\'t has a skill');
 		}
-		if(!rf) return 'Rule1';
+		if(!rf) throw new Error('Word must have a skill from next list: cw, fcLE, fcLEex, IaslE, open, openex, rcer, vcccv, vcccvBG, vcccvBL, vcccvDG, vccv, vce, vcv, vcvY, vtEX, YasSI');
 		
 	}
 
