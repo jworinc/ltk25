@@ -19,8 +19,22 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<div class="help-label">Help</div>
+<div class="help-label" (click)="showHelpMenu($event)"><!--<i class="fas fa-ellipsis-h"></i>&nbsp;&nbsp;-->{{ 'help_menu' | translate }}</div>
+<div class="help-menu" [hidden]="!help_menu">
+    <h3>{{ 'help_menu' | translate }}</h3>
+
+    <!-- Display Configurable menu  -->
+    <div class="cfmenu-item" *ngFor="let cfi of help_menu_items">
+
+        <a [attr.href]="cfi.redirect_url" target="_blank" *ngIf="cfi.type === 'link_button'">
+            <button class="btn btn-sm btn-primary">{{ cfi.caption_key | translate }}</button>
+        </a>
+
+    </div>
+
+    <button class="btn btn-sm btn-primary" (click)="closeHelpMenu($event)">{{ 'close' | translate }}</button>
+</div>
 
 <!-- Target elements -->
-<div *ngFor="let e of targets" class="target-element" (click)="hs.chooseElement(e)" 
+<div *ngFor="let e of targets" class="target-element" (click)="hs.chooseElement($event, e)" (hover)="hs.chooseElement($event, e)"
     [ngStyle]="{width: e.rect.width+'px', height: (e.rect.height+10)+'px', top: (e.rect.top-7)+'px', left: e.rect.left+'px'}"></div>

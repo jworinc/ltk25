@@ -11,31 +11,35 @@
 		<div class='row ltk-student'>
 			<h1>{{ student.name }}</h1>
             <h4>{{ student.sid_message }}</h4>
+        </div>
+        <div class='row ltk-student' [hidden]="!sku">
+			<h2>{{ sku.title }}</h2>
+            <h4>{{ sku.desc }}</h4>
 		</div>
 		<div class="row ltk-breaks-list" [hidden]="show_notebook || show_grammar || show_testing || show_course_expire_msg">
 	        <div class="col-md-12">
 	            <div class="tab" role="tabpanel">
 	                <!-- Nav tabs -->
 	                <ul class="nav nav-tabs" role="tablist">
-	                    <li class="nav-item">
-                            <a href="#break_1" aria-controls="break_1-tab" role="tab" data-toggle="tab" [ngClass]="{'active': student.lu <= 22}"><span>{{ 'break' | translate }} 1</span></a>
+	                    <li class="nav-item" *ngIf="break_1.length > 0">
+                            <a href="#break_1" aria-controls="break_1-tab" role="tab" data-toggle="tab" [ngClass]="{'active': student.lu <= bborder_1[1]}"><span>{{ 'break' | translate }} 1</span></a>
                         </li>
-	                    <li class="nav-item">
-                            <a href="#break_2" aria-controls="break_2-tab" role="tab" data-toggle="tab" [ngClass]="{'active': student.lu > 22 && student.lu <= 41}"><span>{{ 'break' | translate }} 2</span></a>
+	                    <li class="nav-item" *ngIf="break_2.length > 0">
+                            <a href="#break_2" aria-controls="break_2-tab" role="tab" data-toggle="tab" [ngClass]="{'active': student.lu >= bborder_2[0] && student.lu <= bborder_2[1]}"><span>{{ 'break' | translate }} 2</span></a>
                         </li>
-	                    <li class="nav-item">
-                            <a href="#break_3" aria-controls="break_3-tab" role="tab" data-toggle="tab" [ngClass]="{'active': student.lu > 41 && student.lu <= 58}"><span>{{ 'break' | translate }} 3</span></a>
+	                    <li class="nav-item" *ngIf="break_3.length > 0">
+                            <a href="#break_3" aria-controls="break_3-tab" role="tab" data-toggle="tab" [ngClass]="{'active': student.lu >= bborder_3[0] && student.lu <= bborder_3[1]}"><span>{{ 'break' | translate }} 3</span></a>
                         </li>
-	                    <li class="nav-item">
-                            <a href="#break_4" aria-controls="break_4-tab" role="tab" data-toggle="tab" [ngClass]="{'active': student.lu > 58 && student.lu <= 75}"><span>{{ 'break' | translate }} 4</span></a>
+	                    <li class="nav-item" *ngIf="break_4.length > 0">
+                            <a href="#break_4" aria-controls="break_4-tab" role="tab" data-toggle="tab" [ngClass]="{'active': student.lu >= bborder_4[0] && student.lu <= bborder_4[1]}"><span>{{ 'break' | translate }} 4</span></a>
                         </li>
-	                    <li class="nav-item">
-                            <a href="#break_5" aria-controls="break_5-tab" role="tab" data-toggle="tab" [ngClass]="{'active': student.lu > 75}"><span>{{ 'break' | translate }} 5</span></a>
+	                    <li class="nav-item" *ngIf="break_5.length > 0">
+                            <a href="#break_5" aria-controls="break_5-tab" role="tab" data-toggle="tab" [ngClass]="{'active': student.lu >= bborder_5[0]}"><span>{{ 'break' | translate }} 5</span></a>
                         </li>
 	                </ul>
 	                <!-- Tab panes -->
 	                <div class="tab-content">
-	                    <div role="tabpanel" class="tab-pane fade" id="break_1" aria-labelledby="break_1-tab" [ngClass]="{'in active': student.lu <= 22, 'show': student.lu <= 22}">
+	                    <div role="tabpanel" class="tab-pane fade" id="break_1" aria-labelledby="break_1-tab" [ngClass]="{'in active': student.lu <= bborder_1[1], 'show': student.lu <= bborder_1[1]}">
 	                        <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_1.col_1.length > 0">
                                 <ul>
                                     <li *ngFor='let lsn of break_to_display_1.col_1' (click)='setLesson(lsn.number)'
@@ -129,7 +133,7 @@
                             <div class='clearfix'></div>
                             <div class="alert alert-success" role="alert">{{ 'checkbox_mark' | translate }}</div>
 	                    </div>
-	                    <div role="tabpanel" class="tab-pane fade" id="break_2" aria-labelledby="break_2-tab" [ngClass]="{'in active': student.lu > 22 && student.lu <= 41, 'show': student.lu > 22 && student.lu <= 41}">
+	                    <div role="tabpanel" class="tab-pane fade" id="break_2" aria-labelledby="break_2-tab" [ngClass]="{'in active': student.lu >= bborder_2[0] && student.lu <= bborder_2[1], 'show': student.lu >= bborder_2[0] && student.lu <= bborder_2[1]}">
 	                        <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_2.col_1.length > 0">
                                 <ul>
                                     <li *ngFor='let lsn of break_to_display_2.col_1' (click)='setLesson(lsn.number)'
@@ -223,7 +227,7 @@
                             <div class='clearfix'></div>
                             <div class="alert alert-success" role="alert">{{ 'checkbox_mark' | translate }}</div>
 	                    </div>
-	                    <div role="tabpanel" class="tab-pane fade" id="break_3" aria-labelledby="break_3-tab" [ngClass]="{'in active': student.lu > 41 && student.lu <= 58, 'show': student.lu > 41 && student.lu <= 58}">
+	                    <div role="tabpanel" class="tab-pane fade" id="break_3" aria-labelledby="break_3-tab" [ngClass]="{'in active': student.lu >= bborder_3[0] && student.lu <= bborder_3[1], 'show': student.lu >= bborder_3[0] && student.lu <= bborder_3[1]}">
 	                        <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_3.col_1.length > 0">
                                 <ul>
                                     <li *ngFor='let lsn of break_to_display_3.col_1' (click)='setLesson(lsn.number)'
@@ -317,7 +321,7 @@
                             <div class='clearfix'></div>
                             <div class="alert alert-success" role="alert">{{ 'checkbox_mark' | translate }}</div>
 	                    </div>
-	                    <div role="tabpanel" class="tab-pane fade" id="break_4" aria-labelledby="break_4-tab" [ngClass]="{'in active': student.lu > 58 && student.lu <= 75, 'show': student.lu > 58 && student.lu <= 75}">
+	                    <div role="tabpanel" class="tab-pane fade" id="break_4" aria-labelledby="break_4-tab" [ngClass]="{'in active': student.lu >= bborder_4[0] && student.lu <= bborder_4[1], 'show': student.lu >= bborder_4[0] && student.lu <= bborder_4[1]}">
 	                        <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_4.col_1.length > 0">
                                 <ul>
                                     <li *ngFor='let lsn of break_to_display_4.col_1' (click)='setLesson(lsn.number)'
@@ -411,7 +415,7 @@
                             <div class='clearfix'></div>
                             <div class="alert alert-success" role="alert">{{ 'checkbox_mark' | translate }}</div>
 	                    </div>
-	                    <div role="tabpanel" class="tab-pane fade" id="break_5" aria-labelledby="break_5-tab" [ngClass]="{'in active': student.lu > 75, 'show': student.lu > 75}">
+	                    <div role="tabpanel" class="tab-pane fade" id="break_5" aria-labelledby="break_5-tab" [ngClass]="{'in active': student.lu >= bborder_5[0], 'show': student.lu >= bborder_5[0]}">
 	                        <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_5.col_1.length > 0">
                                 <ul>
                                     <li *ngFor='let lsn of break_to_display_5.col_1' (click)='setLesson(lsn.number)'

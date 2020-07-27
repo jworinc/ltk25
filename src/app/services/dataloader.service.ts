@@ -82,6 +82,16 @@ export class DataloaderService {
 
   }
 
+  //  Get SKU params
+  getSKUParams() {
+
+    return this.http.get(`${this.base_url}/settings/sku/params`, {
+      headers: this.Token.getAuthHeader()
+    }).toPromise();
+
+  }
+  
+
   //  Save Options
   saveOptions(data) {
     
@@ -221,6 +231,12 @@ export class DataloaderService {
 
   sendStudentFindTutorRequest(email) {
     return this.http.post(`${this.base_url}/student/send/findtutor`, {'email': email}, {
+      headers: this.Token.getAuthHeader()
+    }).toPromise();
+  }
+
+  getHelpConfiguration() {
+    return this.http.get(`${this.base_url}/config/help/menu`, {
       headers: this.Token.getAuthHeader()
     }).toPromise();
   }

@@ -140,6 +140,8 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public mic_disabled_event: any;
   public on_leave_lesson_event: any;
   public student_info_event_subscription: any;
+  public lessons_list_load_event: any;
+  public current_route_lesson = 0;
 
   public card_descriptor = {
     lesson: 0,
@@ -158,6 +160,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
   public current_feedback_list: any = [];
 
   public show_course_expire_msg = false;
+  
+  public lessons = [];
+
 
   constructor(
     private DL: DataloaderService,
@@ -309,8 +314,6 @@ export class LessonComponent implements OnInit, AfterViewInit {
       rate: 1
     });
 
-
-    
      
   }
 
@@ -323,6 +326,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.mic_disabled_event.unsubscribe();
     this.student_info_event_subscription.unsubscribe();
     this.on_leave_lesson_event.unsubscribe();
+    if(this.lessons_list_load_event) this.lessons_list_load_event.unsubscribe();
   }
 
 
@@ -330,6 +334,18 @@ export class LessonComponent implements OnInit, AfterViewInit {
     //  Setup help context
     this.hs.setItems(this.helps.toArray());
     this.hs.setRootElement(this.el.nativeElement);
+  }
+
+  handleLessons(data){
+  	console.log('Lessons:');
+  	console.log(data);
+    this.lessons = data;
+    if(!this.sidetripmode && !this.nextlessonmode && this.student.lu !== 0) {
+      this.current_lesson_title = this.getCurrentLessonTitle(this.student.lu);
+    } else {
+      this.current_lesson_title = this.getCurrentLessonTitle(this.current_route_lesson);
+    }
+
   }
 
   updateLesson() {
@@ -395,7 +411,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   onKeydow(event) {
       this.resetSnoozeTime();
       if(event.keyCode == 37) this.movePrev();
-      if(event.keyCode == 39) this.moveNext();
+      if(event.keyCode == 39) this.moveNext(event);
       if(event.keyCode == 13) this.enter();
   }
 
@@ -437,12 +453,23 @@ export class LessonComponent implements OnInit, AfterViewInit {
     
   }
 
+  /*
   getCurrentLessonTitle(lu){
     
         let n:string = String(lu);
         n = n.length === 3 ? n : n.length === 2 ? '0' + n : n.length === 1 ? '00' + n : n;
         return n;
      
+  }
+  */
+  getCurrentLessonTitle(lu){
+    for(let i in this.lessons){
+      if(parseInt(this.lessons[i].number) === +lu) {
+        let n:string = String(this.lessons[i].alias);
+        //n = n.length === 3 ? n : n.length === 2 ? '0' + n : n.length === 1 ? '00' + n : n;
+        return n;
+      }
+    }
   }
 
   getCardDescriptor() {
@@ -518,8 +545,19 @@ export class LessonComponent implements OnInit, AfterViewInit {
       //  set lu for sidetrip with some delay
       let that = this;
       setTimeout(()=>{ that.DL.lu = +that.n; }, 20);
+      this.current_route_lesson = +that.n;
       this.title.setTitle('LTK-Lessons-Sidetrip'+this.n);
     }
+
+    
+    this.lessons_list_load_event = this.DL.getLessons().subscribe(
+      data => this.handleLessons(data),
+        error => {
+          console.log(error);
+          this.notify.error('Lessons list load status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
+        }
+    );
+    
     
   }
 
@@ -732,7 +770,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
       
   }
 
-  startLesson() {
+  startLesson($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.startLesson.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.show_start_screen = false;
@@ -947,7 +990,13 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   public navigation_switch_flag: boolean = false;
 
-  moveNext() {
+  moveNext($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.moveNext.bind(this, [$event]));
+      return;
+    }
+
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     let that = this;
@@ -1278,7 +1327,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   }
 
-  enter() {
+  enter($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.enter.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
@@ -1313,7 +1367,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   }
 
-  repeat() {
+  repeat($event) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.repeat.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
@@ -1328,7 +1387,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   }
 
-  hint() {
+  hint($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.hint.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
@@ -1341,7 +1405,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
   }
 
-  clear() {
+  clear($event = null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.clear.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
@@ -1354,7 +1423,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
   }
 
-  rule() {
+  rule($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.rule.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
@@ -1518,21 +1592,36 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.stopSnoozeTimer();
   }
 
-  good() {
+  good($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.good.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
     this.good_btn.emit();
   }
 
-  bad() {
+  bad($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.bad.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
     this.bad_btn.emit();
   }
 
-  prev() {
+  prev($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.prev.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
@@ -1547,7 +1636,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
     this.show_setting_modal = true;
   }
 
-  onShowFeedback() {
+  onShowFeedback($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.onShowFeedback.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.playmedia.stop();
@@ -1892,7 +1986,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   //  Event handler for start play button
-  playStart() {
+  playStart($event = null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.playStart.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this.action_media_stop) this.playmedia.stop();
@@ -1935,7 +2034,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
     that.playstop_event.emit();
   }
 
-  disableSidetrip() {
+  disableSidetrip($event = null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.disableSidetrip.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
 		if(this.pe.mouseLock()) return;
     this.end_lesson_flag = true;
@@ -1959,7 +2063,12 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
   }
     
-  showToolPageListMenu() {
+  showToolPageListMenu($event = null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.showToolPageListMenu.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.show_tool_pages_list = true;

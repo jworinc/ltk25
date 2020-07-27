@@ -30,6 +30,7 @@ export class SettingsComponent implements OnInit {
   public settings_shown: boolean = false;
   public save_settings_started: boolean = false;
   public locales: any = [];
+  public sku: any = null;
   
   @Output() closesettings = new EventEmitter<boolean>();
   @Input('show')
@@ -153,6 +154,13 @@ export class SettingsComponent implements OnInit {
         this.recgain = parseInt(data.mic);
         this.options.quickpace = this.options.quickpace === '1'?true:false;
 		this.op.setLanguage(data.language);
+		let that = this;
+		//	Get SKU params and update limit settings
+		this.dl.getSKUParams().then((data)=>{
+			console.log("SKU Params received", data);
+			that.sku = data;
+		});
+
 	}
 	
 

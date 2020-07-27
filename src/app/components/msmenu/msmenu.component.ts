@@ -8,6 +8,7 @@ import { OptionService } from '../../services/option.service';
 import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { PickElementService } from '../../services/pick-element.service';
+import { HelpService } from '../../services/help.service';
 
 @Component({
   selector: 'app-msmenu',
@@ -42,7 +43,8 @@ export class MsmenuComponent implements OnInit {
     private playmedia: PlaymediaService,
     private logging: LoggingService,
     private lcn: Location,
-    private pe: PickElementService
+    private pe: PickElementService,
+    public hs: HelpService
   ) {
         // this language will be used as a fallback when a translation isn't found in the current language
         translate.setDefaultLang(Option.getFallbackLocale());
@@ -74,6 +76,11 @@ export class MsmenuComponent implements OnInit {
   }
 
   logout(event: MouseEvent){
+    //  Check double click
+    if(!this.hs.checkForDbClick() && event){ 
+      this.hs.proxyDbClick(event, this.logout.bind(this, event));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
   	console.log('Logout');
@@ -101,7 +108,12 @@ export class MsmenuComponent implements OnInit {
   }
 
 
-  toggleSidetrip() {
+  toggleSidetrip($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.toggleSidetrip.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     if(this._sidetripmode) this._sidetripmode = false;
@@ -109,27 +121,47 @@ export class MsmenuComponent implements OnInit {
     this.sidetripmode.emit(this._sidetripmode);
   }
 
-  closeMenu() {
+  closeMenu($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.closeMenu.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.show_tool_pages_list = false;
     this.closemenu.emit();
   }
 
-  showMenu() {
+  showMenu($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.showMenu.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.show_tool_pages_list = true;
   }
 
-  location(u) {
+  location(u, $event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.location.bind(this, u, $event));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.playmedia.stop();
     this.router.navigateByUrl(u);
   }
 
-  showSettingsModal() {
+  showSettingsModal($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.showSettingsModal.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.playmedia.stop();
@@ -143,7 +175,12 @@ export class MsmenuComponent implements OnInit {
     this.showfeedback.emit();
   }
 
-  showNotebook() {
+  showNotebook($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.showNotebook.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.playmedia.stop();
@@ -157,19 +194,34 @@ export class MsmenuComponent implements OnInit {
     this.showgrammar.emit();
   }
 
-  showTesting() {
+  showTesting($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.showTesting.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.playmedia.stop();
     this.showtesting.emit();
   }
 
-  fullscreenMax() {
+  fullscreenMax($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.fullscreenMax.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.toggleFullScreen();
   }
-  fullscreenMin() {
+  fullscreenMin($event) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.fullscreenMin.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.toggleFullScreen();
@@ -210,14 +262,26 @@ export class MsmenuComponent implements OnInit {
     }
   }
 
-  showLtkMenuModal() {
+  showLtkMenuModal($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.showLtkMenuModal.bind(this, [$event]));
+      return;
+    }
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.playmedia.stop();
     this.showltkmenu.emit();
   }
   
-  showHelp() {
+  showHelp($event=null) {
+    //  Check double click
+    if(!this.hs.checkForDbClick() && $event){ 
+      this.hs.proxyDbClick($event, this.showHelp.bind(this, [$event]));
+      return;
+    }
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
     this.playmedia.stop();
     this.showhelp.emit();
   }
