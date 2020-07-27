@@ -124,6 +124,10 @@ export class StartComponent implements OnInit {
             if(that.form.type !== "") {
               this.tn.setType(that.form.type);
             } 
+            if(that.tn.getEmail() && that.tn.getEmail() !== "" && that.tn.getEmail() !== 'none') {
+              that.form.email = that.tn.getEmail();
+              that.handleResponse(that.form);
+            }
           }
         }
   
@@ -162,7 +166,11 @@ export class StartComponent implements OnInit {
             } 
             if(that.form.type !== "") {
               this.tn.setType(that.form.type);
-            } 
+            }
+            if(that.tn.getEmail() && that.tn.getEmail() !== "" && that.tn.getEmail() !== 'none') {
+              that.form.email = that.tn.getEmail();
+              that.handleResponse(that.form);
+            }
           }
         }
   

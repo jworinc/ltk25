@@ -235,7 +235,7 @@ export class DataloaderService {
   }
 
   getPlacement() {
-    if(this.Token.getCode() !== ""){
+    if(this.Token.getCode() && this.Token.getCode() !== ""){
       return this.http.get(`${this.base_url}/placement/${this.Token.getCode()}/${this.Token.getEmail()}`, {
         headers: this.Token.getAuthHeader()
       }).toPromise();
@@ -253,7 +253,7 @@ export class DataloaderService {
   }
 
   getTypedTest(type) {
-    if(this.Token.getCode() !== ""){
+    if(this.Token.getCode() && this.Token.getCode() !== ""){
       return this.http.get(`${this.base_url}/testing/typed/${this.Token.getCode()}/${type}/${this.Token.getEmail()}`, {
         headers: this.Token.getAuthHeader()
       }).toPromise();
