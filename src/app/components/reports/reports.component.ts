@@ -51,8 +51,8 @@ export class ReportsComponent implements OnInit {
 		}
 		
 		ngOnDestroy() {
-			this.lang_change_event.unsubscribe();
-			this.student_info_event.unsubscribe();
+			if(this.lang_change_event) this.lang_change_event.unsubscribe();
+			if(this.student_info_event) this.student_info_event.unsubscribe();
 		}
 
   public lang_change_event: any;

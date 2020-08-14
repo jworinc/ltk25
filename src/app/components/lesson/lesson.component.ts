@@ -318,14 +318,14 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
-    this.route_change_event.unsubscribe();
-    this.lang_change_event.unsubscribe();
-    this.color_change_event.unsubscribe();
-    this.start_recording_event.unsubscribe();
-    this.mic_disabled_event.unsubscribe();
-    this.student_info_event_subscription.unsubscribe();
-    this.on_leave_lesson_event.unsubscribe();
+    if(this.sub) this.sub.unsubscribe();
+    if(this.route_change_event) this.route_change_event.unsubscribe();
+    if(this.lang_change_event) this.lang_change_event.unsubscribe();
+    if(this.color_change_event) this.color_change_event.unsubscribe();
+    if(this.start_recording_event) this.start_recording_event.unsubscribe();
+    if(this.mic_disabled_event) this.mic_disabled_event.unsubscribe();
+    if(this.student_info_event_subscription) this.student_info_event_subscription.unsubscribe();
+    if(this.on_leave_lesson_event) this.on_leave_lesson_event.unsubscribe();
     if(this.lessons_list_load_event) this.lessons_list_load_event.unsubscribe();
   }
 

@@ -340,13 +340,36 @@ html, body, .book-container, #main-app-screen, .tool-window{
     font-weight: 700;
     font-size: 12px;
 }
+.rel-account-btn{
+    display: inline;
+    cursor: pointer;
+    color: #FF007A;
+    font-size: 28px;
+}
+.ltk-related-accounts {
+    width: 300px;
+    left: 50%;
+    margin-left: -65px;
+    position: absolute;
+    z-index: 1000;
+    justify-content: center;
+    margin-top: -23px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 2px #777;
+    min-height: 220px;
+    max-height: 600px;
+    overflow: auto;
+}
 
 @media screen and (max-width: 1222px) {
 
 }
 
 @media screen and (max-width: 1024px) {
-    
+    .ltk-related-accounts {
+        margin-left: -150px;
+    }
 }
 
 @media screen and (max-width: 630px) {
@@ -404,3 +427,15 @@ html, body, .book-container, #main-app-screen, .tool-window{
 	    left: 4%;
 	}
 } 
+
+.report-loading{
+	display: flex;
+	flex-flow: row;
+	min-height: 100px;
+	width: 100%;
+	font-size: 20px;
+	justify-content: center;
+	justify-items: center;
+	align-content: center;
+	align-items: center
+}

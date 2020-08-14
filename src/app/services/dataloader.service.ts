@@ -29,6 +29,13 @@ export class DataloaderService {
     return this.http.post(`${this.base_url}/login`, data)
   }
 
+  //	Use login and pass to login user in app
+  relatedLogin(data) {
+    return this.http.post(`${this.base_url}/rel/login`, data, {
+      headers: this.Token.getAuthHeader()
+    });
+  }
+
   entrance(link) {
     return this.http.get(`${this.base_url}/entrance/${link}`)
   }

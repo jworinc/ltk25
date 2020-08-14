@@ -25,7 +25,7 @@ export class TalkingNotepadComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.pm_noword_event.unsubscribe();
+    if(this.pm_noword_event) this.pm_noword_event.unsubscribe();
   }
 
   checkEndsWith(lastWord, endChar) {

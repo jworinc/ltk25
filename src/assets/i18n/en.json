@@ -213,6 +213,7 @@
 	"save_new_student_name_error" : "Save new student name error!",
 	"your_request_was_sent" : "Your request was successfully sent to the tutor!",
 	"find_tutor_request_error" : "Error during send your request, please contact administrator!",
+	"related_accounts": "Related Accounts",
 	"help_lesson_header_desc" : "Shows the lesson student is on",
 	"help_option_desc" : "Change LTK various settings (Options)",
 	"help_chat_desc" : "Use this button to access chat and communicate with other students and teachers.",

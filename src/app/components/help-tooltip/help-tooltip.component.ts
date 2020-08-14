@@ -73,7 +73,7 @@ export class HelpTooltipComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.help_menu_items_ev.unsubscribe();
+    if(this.help_menu_items_ev) this.help_menu_items_ev.unsubscribe();
   }
 
   getTargetRect() {

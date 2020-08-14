@@ -21,7 +21,8 @@ export class DashboardComponent implements OnInit {
   	name: 'Admin',
     lu: 0,
     sid_message: 'Message',
-    chatroom: ""
+    chatroom: "",
+    related_accounts: []
   }
 
   public lessons = [];
@@ -62,6 +63,8 @@ export class DashboardComponent implements OnInit {
   public show_setting_modal: boolean = false;
   public show_feedback_modal: boolean = false;
   public show_ltk_menu: boolean = false;
+  public show_rel_accounts: boolean = false;
+  public show_switch_account: boolean = false;
 
   public current_lesson = 0;
   public cl: any = {};
@@ -151,6 +154,12 @@ export class DashboardComponent implements OnInit {
     this.scale = this.defineCurrentScale();
   }
 
+  @HostListener('click', ['$event'])
+  onClick(event) {
+    this.loading_flag = false;
+    this.show_rel_accounts = false;
+  }
+
   setLesson(l) {
     //	If mouse event locked by feedback
 		if(this.pe.mouseLock()) return;
@@ -171,6 +180,10 @@ export class DashboardComponent implements OnInit {
     this.student.lu = data.last_uncomplete;
     this.student.sid_message = data.sid_message;
     this.student.chatroom = data.chatroom;
+    if(typeof data.related_accounts !== 'undefined') {
+      this.student.related_accounts = data.related_accounts;
+      if(data.related_accounts.length > 0) this.show_switch_account = true;
+    }
     this.Option.setLanguage(data.options.language);
 
     if(typeof data.sku !== 'undefined' && data.sku) this.sku = data.sku;
@@ -410,6 +423,20 @@ export class DashboardComponent implements OnInit {
     this.show_ltk_menu = false;
   }
 
+  onShowRelaccounts($event) {
+    this.show_rel_accounts = !this.show_rel_accounts;
+    $event.preventDefault();
+    $event.stopPropagation();
+  }
+  onRelaccountsScreenPrevent($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+  }
+
+  onCloseRelaccounts() {
+    this.show_rel_accounts = false;
+  }
+
   disableSidetrip() {
     //	If mouse event locked by feedback
 		if(this.pe.mouseLock()) return;
@@ -550,6 +577,39 @@ export class DashboardComponent implements OnInit {
 
     }
 
+  }
+
+  public loading_flag: boolean = false;
+  relLogin(email) {
+    let that = this;
+    this.DL.relatedLogin({email: email}).subscribe(
+      data => this.handleResponse(data),
+      //error => this.handleError(error)
+      error => {
+        alert(error.error.error);
+        console.log(error);
+        that.loading_flag = false;
+      }
+    );
+    this.loading_flag = true;
+  }
+
+  handleResponse(data) {
+
+    //  Check if we received expired link message
+    if(typeof data.expired !== 'undefined' && data.expired){
+      console.log('Link expired');
+      console.log(data);
+      alert('Link expired');
+      return;
+    }
+
+    this.Token.handle(data.access_token);
+    this.Auth.changeAuthStatus(true);
+    //this.router.navigateByUrl('/home');
+    this.router.navigateByUrl('/reports', {skipLocationChange: true})
+      .then(() => this.router.navigate(['/home']));
+      this.loading_flag = false;
   }
 
 }

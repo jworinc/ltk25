@@ -37,11 +37,15 @@ export class GscComponent extends BaseComponent implements OnInit {
 	this.current_header = this.card.header;
 
 	//	Select 10 random letters
-	for(var i = 0; i < 10; i++) {
+	//for(var i = 0; i < 10; i++) {
 
-		this.letters.push(this.selectRandomLetter());
+	//	this.letters.push(this.selectRandomLetter());
 
-	}
+	//}
+	let that = this;
+	this.card.content.map((c)=>{
+		that.letters.push(c.title.toLowerCase());
+	});
 
 	this.expected.push(this.letters[this.current_letter]);
 

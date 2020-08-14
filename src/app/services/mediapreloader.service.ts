@@ -290,6 +290,7 @@ export class MediapreloaderService {
 	}
 
 	addWordsFromText(text, cmedia){
+		if(typeof text === 'undefined') return;
 		//	RegExp for seaching HTML tags in text
 		let html = /<[\w\s\d=\"\;\:\-\.\/]*>/ig;
 		//	RegExp find extra spaces

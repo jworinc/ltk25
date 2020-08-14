@@ -1,0 +1,22 @@
+<div id='app-snooze-modal' class="modal fade show" tabindex="-1" role="dialog" style='z-index: 10100; display: block; padding-left: 0px; background-color: rgba(0, 0, 0, 0.7); overflow-y: auto;'>
+  <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">{{ 'related_accounts' | translate }}</h4>
+              
+          </div>
+          <div class="modal-body">
+            <div id='page-is-loading-screen' class="report-loading" [hidden]="!loading_flag" style='margin-top: 20px;'><img src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PGxpbmVhckdyYWRpZW50IGlkPSdGYXN0TG9hZGluZ0luZGljYXRvci1saW5lYXJHcmFkaWVudCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnIHgxPScxLjc4MDQnIHkxPScxNi4wMzc5JyB4Mj0nMzAuMTQzOScgeTI9JzE2LjAzNzknPjxzdG9wIG9mZnNldD0nMC40MTY5JyBzdG9wLWNvbG9yPScjQ0RDRkQyJy8+PHN0b3Agb2Zmc2V0PScwLjkzNzYnIHN0b3AtY29sb3I9J3JnYmEoMjQ4LDI0OCwyNDksMCknLz48L2xpbmVhckdyYWRpZW50PjxjaXJjbGUgY3g9JzE2JyBjeT0nMTYnIHI9JzEyLjcnIHN0eWxlPSdmaWxsOiBub25lOyBzdHJva2U6IHVybCgjRmFzdExvYWRpbmdJbmRpY2F0b3ItbGluZWFyR3JhZGllbnQpOyBzdHJva2Utd2lkdGg6IDI7Jz48L2NpcmNsZT48L3N2Zz4=' alt='' /></div>  
+            <ul class="list-group" [hidden]="loading_flag">
+              <li *ngFor="let a of relaccounts" (click)="relLogin(a.email)" class="list-group-item list-group-item-action">
+                <i class="far fa-user"></i> {{ a.name }}<br><small>({{ a.email }})</small>
+              </li>
+            </ul>
+              
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary" (click)='close()'>{{ 'close' | translate }}</button>
+          </div>
+      </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -39,8 +39,8 @@ export class HelpComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.show_help_dialog_event.unsubscribe();
-    this.build_help_mask_event.unsubscribe();
+    if(this.show_help_dialog_event) this.show_help_dialog_event.unsubscribe();
+    if(this.build_help_mask_event) this.build_help_mask_event.unsubscribe();
   }
 
   @HostListener('click', ['$event']) onClick($event) {

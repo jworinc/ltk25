@@ -1,0 +1,28 @@
+.report-loading{
+	display: flex;
+	flex-flow: row;
+	min-height: 100px;
+	width: 100%;
+	font-size: 20px;
+	justify-content: center;
+	justify-items: center;
+	align-content: center;
+	align-items: center
+}
+@keyframes rotation {
+    0%   {transform: rotate(0deg);}
+    20%  {transform: rotate(72deg);}
+    40%  {transform: rotate(144deg);}
+    60% {transform: rotate(216deg);}
+    80% {transform: rotate(288deg);}
+    100% {transform: rotate(360deg);}
+}
+#page-is-loading-screen img, #list-is-loading-screen img{
+    width: 36px;
+    height: 36px;
+    margin-left: 13px;
+    transition: transform 1s linear;
+    animation-name: rotation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}

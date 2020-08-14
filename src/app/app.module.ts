@@ -127,6 +127,7 @@ import { LtkmenuComponent } from './components/ltkmenu/ltkmenu.component';
 import { TalkingNotepadComponent } from './components/talking-notepad/talking-notepad.component';
 import { FilterByArrayPipe } from './pipes/filter-by-array.pipe';
 import { LangfilterPipe } from './pipes/langfilter.pipe';
+import { RelatedLoginComponent } from './components/related-login/related-login.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -229,7 +230,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     LtkmenuComponent,
     TalkingNotepadComponent,
     FilterByArrayPipe,
-    LangfilterPipe
+    LangfilterPipe,
+    RelatedLoginComponent
   ],
   imports: [
     BrowserModule,

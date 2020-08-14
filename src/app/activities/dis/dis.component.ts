@@ -42,7 +42,7 @@ export class DisComponent extends BaseComponent implements OnInit {
 		//this.max_presented = this.card.content.length;
 
 		//	Define number of repetitions
-		this.max_repetitions = this.card.content.length;
+		this.max_repetitions = Math.round(this.card.content.length / 2);
 		let op = this.op.getOptions();
 		this.max_presented = this.getMaxPresented(this.max_repetitions, op);
 

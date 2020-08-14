@@ -8,12 +8,14 @@ export class TokenService {
 
   private iss = {
     login: 'https://api.ltk.cards/api/login',
+    rellogin: 'https://api.ltk.cards/api/rel/login',
     signup: 'http://localhost:8000/api/signup',
     entrance: 'https://api.ltk.cards/api/entrance'
   };
 
   constructor() { 
     this.iss.login = `${this.getApiUrl()}/login`;
+    this.iss.rellogin = `${this.getApiUrl()}/rel/login`;
     this.iss.entrance = `${this.getApiUrl()}/entrance`;
   }
 
