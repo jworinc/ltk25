@@ -361,6 +361,18 @@ html, body, .book-container, #main-app-screen, .tool-window{
     max-height: 600px;
     overflow: auto;
 }
+.ltk-set-starting{
+    justify-content: center;
+}
+.ltk-set-starting-caption{
+    line-height: 38px;
+    margin-right: 20px;
+    font-size: 20px;
+}
+.dropdown-menu.show {
+    max-height: 300px;
+    overflow: auto;
+}
 
 @media screen and (max-width: 1222px) {
 

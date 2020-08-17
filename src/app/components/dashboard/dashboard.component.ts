@@ -22,7 +22,8 @@ export class DashboardComponent implements OnInit {
     lu: 0,
     sid_message: 'Message',
     chatroom: "",
-    related_accounts: []
+    related_accounts: [],
+    new_user: false
   }
 
   public lessons = [];
@@ -91,6 +92,9 @@ export class DashboardComponent implements OnInit {
 
   public show_course_expire_msg = false;
 
+  //  Starting lesson
+  public starting_lesson: any;
+
   @ViewChild(NotebookComponent) nb: NotebookComponent;
 
   constructor(
@@ -139,7 +143,9 @@ export class DashboardComponent implements OnInit {
     this.lang_change_event = this.Option.change_language_event.subscribe(()=>{
       console.log('Change language event.');
       this.translate.use(this.Option.getLocale());
-    })
+    });
+
+    this.starting_lesson = { alias: '001' };
 
   }
 
@@ -183,6 +189,9 @@ export class DashboardComponent implements OnInit {
     if(typeof data.related_accounts !== 'undefined') {
       this.student.related_accounts = data.related_accounts;
       if(data.related_accounts.length > 0) this.show_switch_account = true;
+    }
+    if(typeof data.new_user !== 'undefined') {
+      this.student.new_user = data.new_user;
     }
     this.Option.setLanguage(data.options.language);
 
@@ -610,6 +619,18 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/reports', {skipLocationChange: true})
       .then(() => this.router.navigate(['/home']));
       this.loading_flag = false;
+  }
+
+  setStartingLesson(l) {
+    let that = this;
+    this.starting_lesson = l;
+    this.DL.setStartingLesson(l.number).then(()=>{
+      that.router.navigateByUrl('/reports', {skipLocationChange: true})
+      .then(() => that.router.navigate(['/home']));
+    }).catch((e)=>{
+      console.log("Error during set starting lesson", e);
+      alert("Error during set starting lesson");
+    });
   }
 
 }

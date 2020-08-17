@@ -27,7 +27,19 @@
         <div class='row ltk-student' [hidden]="!sku">
 			<h2>{{ sku.title }}</h2>
             <h4>{{ sku.desc }}</h4>
-		</div>
+        </div>
+        <div class='row ltk-student ltk-set-starting' [hidden]="lessons.length == 0 || !student.new_user">
+            <div class="ltk-set-starting-caption">{{ 'select_starting_lesson' | translate }}:</div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ 'lesson' | translate }} {{ starting_lesson.alias }}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <span class="dropdown-item" *ngFor="let l of lessons" (click)="setStartingLesson(l)">{{ 'lesson' | translate }} {{ l.alias }}</span>
+                </div>
+            </div>
+            
+        </div>
 		<div class="row ltk-breaks-list" [hidden]="show_notebook || show_grammar || show_testing || show_course_expire_msg">
 	        <div class="col-md-12">
 	            <div class="tab" role="tabpanel">

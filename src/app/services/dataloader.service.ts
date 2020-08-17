@@ -248,4 +248,10 @@ export class DataloaderService {
     }).toPromise();
   }
 
+  setStartingLesson(ln) {
+    return this.http.get(`${this.base_url}/student/set/starting/${ln}`, {
+      headers: this.Token.getAuthHeader()
+    }).toPromise();
+  }
+
 }
