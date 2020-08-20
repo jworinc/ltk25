@@ -18,6 +18,7 @@ export class BasetestComponent implements OnInit, TestComponent {
   public wrong = 0;
   public card: any;
   public type = '';
+  public inst = '';
   public intro_sub_played: boolean = false;
 
   @Input('cpos')
@@ -139,7 +140,7 @@ export class BasetestComponent implements OnInit, TestComponent {
   //  Returns result item
   saveResults(r) {
     //this.save_results.emit(r);
-    return new ResultItem(this.data.type, this.data.description, r.presented, r.wrong, parseInt(this.data.break), r.results, this.data.parameter ? this.data.parameter : 0);
+    return new ResultItem(this.data.type, this.data.description, r.presented, r.wrong, parseInt(this.data.break), r.results, this.data.parameter ? this.data.parameter : 0, this.inst);
   }
 
   

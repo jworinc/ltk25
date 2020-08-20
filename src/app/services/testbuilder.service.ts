@@ -5,9 +5,8 @@ import { ComprehensionComponent } from '../tests/comprehension/comprehension.com
 import { SpellingComponent } from '../tests/spelling/spelling.component';
 import { IntroComponent } from '../tests/intro/intro.component';
 import { ResultsComponent } from '../tests/results/results.component';
+import { ResultspcmComponent } from '../tests/resultspcm/resultspcm.component';
 import { TranslateService } from '@ngx-translate/core';
-<<<<<<< HEAD
-=======
 import { DataloaderService } from '../services/dataloader.service';
 import { ResultItem } from '../tests/result.item';
 import { CftComponent } from '../tests/cft/cft.component';
@@ -17,14 +16,15 @@ export interface TestFlowItem {
   type: string;
   level: number;
 }
->>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
 
 @Injectable({
   providedIn: 'root'
 })
 export class TestbuilderService {
 
-  constructor(private translation: TranslateService) { }
+  constructor(private translation: TranslateService, private dl: DataloaderService) { 
+    this.getLevels();
+  }
 
   public ttypes = [
       {type: 'aud', desc: 'Auditory Test', trans: 'auditory_test'},
@@ -32,10 +32,6 @@ export class TestbuilderService {
       {type: 'spl', desc: 'Spelling Test', trans: 'spelling_test'}
   ];
 
-<<<<<<< HEAD
-  public results = [];
-
-=======
   public breaks = [
     {break: "Break1"},
     {break: "Break2"},
@@ -113,7 +109,6 @@ export class TestbuilderService {
     return {status: r, bad: bad_levels, good: good_levels};
   }
 
->>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
   getDescription(type) {
     for(let i in this.ttypes) if(this.ttypes[i].type === type) return this.translation.instant(this.ttypes[i].trans);
     return '';
@@ -138,12 +133,8 @@ export class TestbuilderService {
     if(t.type === "intro" || t.type === "resultspcm" || t.type === "results" || t.type === "cft") approve = false;
 
     //  Add new result item
-<<<<<<< HEAD
-    if(approve) results.push({type: t.type, desc: this.getDescription(t.type), presented: 0, wrong: 0, details: []});
-=======
     //if(approve) results.push({type: t.type, desc: this.getDescription(t.type), presented: 0, wrong: 0, count: 0, details: []});
     if(approve) results.push({type: t.type, desc: t.description, presented: 0, wrong: 0, count: 0, details: []});
->>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
 
   }
 
@@ -202,8 +193,6 @@ deleteResults() {
       if(c.type === 'spl') out.push(new CardItem(SpellingComponent, c));
       if(c.type === 'intro') out.push(new CardItem(IntroComponent, c));
       if(c.type === 'results') out.push(new CardItem(ResultsComponent, c));
-<<<<<<< HEAD
-=======
       if(c.type === 'resultspcm') out.push(new CardItem(ResultspcmComponent, c));
       if(c.type === 'audt') out.push(new CardItem(AuditoryComponent, c));
       if(c.type === 'cmpt') out.push(new CardItem(ComprehensionComponent, c));
@@ -211,7 +200,6 @@ deleteResults() {
       if(c.type === 'cft') out.push(new CardItem(CftComponent, c));
 
       this.test_flow.push({position: c.pos, type: c.type, level: parseInt(c.break)});
->>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
 
     }
 
@@ -219,8 +207,6 @@ deleteResults() {
 
   }
 
-<<<<<<< HEAD
-=======
   getLevelByResults(res){
 
     //  Get max reached level for each test type
@@ -393,11 +379,12 @@ deleteResults() {
     for(let i in this.results) {
       let level = this.results[i].level;
       let type = this.results[i].type;
+      let inst = this.results[i].inst;
       let description = this.results[i].description;
       //  Check if level exists
       let le = null;
       for(let k in r) { if(r[k].level === level && r[k].type == type) { le = r[k]; break; } }
-      if(!le) { le = {level: level, type: type, success: [], average: 0, description: description, presented: 0, wrong: 0, details: [], treshold: 0}; r.push(le); }
+      if(!le) { le = {level: level, type: type, inst: inst, success: [], average: 0, description: description, presented: 0, wrong: 0, details: [], treshold: 0}; r.push(le); }
       le.success.push(this.results[i].getSuccess());
       le.presented += this.results[i].presented;
       le.wrong += this.results[i].wrong;
@@ -477,5 +464,4 @@ deleteResults() {
    return al;
   }
 
->>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
 }

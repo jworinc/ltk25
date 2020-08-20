@@ -13,6 +13,7 @@ export class DataloaderService {
   public lu = 10;
   public card_descriptor = 'none';
   public current_locale = 'en';
+  public logid = 0;
 
   constructor(
     private http: HttpClient, 
@@ -159,7 +160,6 @@ export class DataloaderService {
       }).pipe(share());
   }
 
-
   logMissingAudio(m) {
     if(!this.Token.loggedIn()) return empty();
     return this.http.post(`${this.base_url}/media/log/missing/audio`, {'url': m}, {
@@ -192,12 +192,6 @@ export class DataloaderService {
     }).pipe(share());
   }
   
-  getTest() {
-    return this.http.get(`${this.base_url}/testing/${this.lu}`, {
-        headers: this.Token.getAuthHeader()
-      }).toPromise();
-  }
-
   getTranslation(word, locale = null) {
     if(typeof word == 'undefined' || word === "") return empty().toPromise();
     if(!locale && this.Token.loggedIn()) {
@@ -226,15 +220,13 @@ export class DataloaderService {
       }).toPromise();
   }
 
-<<<<<<< HEAD
-=======
   getTest() {
     return this.http.get(`${this.base_url}/testing/${this.lu}`, {
         headers: this.Token.getAuthHeader()
       }).toPromise();
   }
 
-  getPlacement() {
+  getPlacementTest() {
     if(this.Token.getCode() && this.Token.getCode() !== ""){
       return this.http.get(`${this.base_url}/placement/${this.Token.getCode()}/${this.Token.getEmail()}`, {
         headers: this.Token.getAuthHeader()
@@ -295,7 +287,6 @@ export class DataloaderService {
   }
 
 
->>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
   sendLinkExpiredNotificationEmail(link) {
     return this.http.get(`${this.base_url}/service/expired/${link}`).toPromise();
   }
@@ -320,6 +311,12 @@ export class DataloaderService {
 
   setStartingLesson(ln) {
     return this.http.get(`${this.base_url}/student/set/starting/${ln}`, {
+      headers: this.Token.getAuthHeader()
+    }).toPromise();
+  }
+
+  getTestingLog() {
+    return this.http.get(`${this.base_url}/testing/log`, {
       headers: this.Token.getAuthHeader()
     }).toPromise();
   }

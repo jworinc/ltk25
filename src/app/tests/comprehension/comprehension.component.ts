@@ -40,7 +40,7 @@ export class ComprehensionComponent extends BasetestComponent implements OnInit 
 
   ngOnInit() {
     this.card = this.data;
-    this.type = this.data.type;
+    //this.type = this.data.type;
   }
 
   show() {

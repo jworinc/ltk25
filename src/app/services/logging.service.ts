@@ -118,6 +118,22 @@ export class LoggingService {
 
 	}
 
+	//	Logging command end
+	placementEnd(result, logid, level, brk, lsn) {
+		
+		//return this.http.post(`${this.base_url}/placement/end`, {email: this.Token.getEmail(), result: result, logid: logid, level: level, break: brk, lesson: lsn}).toPromise();
+		if(this.Token.loggedIn()){
+			return this.http.post(`${this.base_url}/placement/end`, {email: this.Token.getEmail(), result: result, logid: logid, level: level, break: brk, lesson: lsn}, {
+				headers: this.Token.getAuthHeader()
+			}).toPromise();
+		} else {
+			return this.http.post(`${this.base_url}/placement/end`, {email: this.Token.getEmail(), result: result, logid: logid, level: level, break: brk, lesson: lsn}).toPromise();
+		}
+
+	}
+
+
+
 
 
 

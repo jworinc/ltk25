@@ -213,10 +213,8 @@
 	"save_new_student_name_error" : "Save new student name error!",
 	"your_request_was_sent" : "Your request was successfully sent to the tutor!",
 	"find_tutor_request_error" : "Error during send your request, please contact administrator!",
-<<<<<<< HEAD
 	"related_accounts": "Related Accounts",
 	"select_starting_lesson": "Select starting lesson",
-=======
 	"Auditory" : "Auditory",
 	"Spelling" : "Spelling",
 	"Comprehension" : "Comprehension",
@@ -228,13 +226,11 @@
 	"retake_a_test" : "Retake a test",
 	"test_in_practice" : "Take a test in practice mode",
 	"you_finished_practice" : "You finished practice, try again or take a test.",
-<<<<<<< HEAD
->>>>>>> cf89eee... Testing changes, ui change, sidebar, translations, treshold, buttons, spelling multi-choise
-=======
 	"complete" : "Complete",
 	"submit" : "SUBMIT",
 	"level" : "Level",
->>>>>>> 0d6f410... Testing various UI changes
+	"test" : "Test",
+	"y_have_to_take_test" : "You have to take a test before!",
 	"help_lesson_header_desc" : "Shows the lesson student is on",
 	"help_option_desc" : "Change LTK various settings (Options)",
 	"help_chat_desc" : "Use this button to access chat and communicate with other students and teachers.",

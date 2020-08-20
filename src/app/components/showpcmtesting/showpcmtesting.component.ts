@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ComponentFactoryResolver, AfterViewInit, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, ViewChild, ComponentFactoryResolver, AfterViewInit, ElementRef, HostListener, EventEmitter } from '@angular/core';
 import { TestComponent } from '../test/test.component';
 import { TestDirective } from '../../directives/test.directive';
 import { DataloaderService } from '../../services/dataloader.service';
@@ -73,11 +73,22 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
   public blinkprevnavbtn: boolean = false;
   public blinkcompletenavbtn: boolean = false;
 
+  @Output() closetesting = new EventEmitter<boolean>();
+  @Input('show')
+  set show(show: boolean) {
+    this.showPage(show);
+  }
+  @Input('scale')
+  set scsale(scale: number) {
+    this._scale = scale;
+    this.calcScsale();
+  }
+
   showPage(show = true) {
     this._show = show;
     
     if(!show){
-      this.saveTestResultsToLog();
+      //this.saveTestResultsToLog();
       this.tstdata = null;
       this.layout = {
         'transform': 'scale('+this._scale+', '+this._scale+')',
@@ -94,7 +105,7 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
 
       //  Check user status, if registered or has email
       if(this.tn.getEmail() == 'none' || this.tn.getEmail() == "" || this.tn.getEmail() == null || this.tn.getEmail() == 'null' || this.tn.getEmail() == 'undefined'){ 
-        this.router.navigateByUrl("/start");
+        this.router.navigateByUrl("/home");
         return;
       }
 
@@ -331,6 +342,8 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
       let componentRef = viewContainerRef.createComponent(componentFactory);
       //  Link card data
       (<TestComponent>componentRef.instance).data = card.data;
+      //  Link test type and inst
+      (<TestComponent>componentRef.instance).inst = data.test.type;
       //  Link move next event
       (<TestComponent>componentRef.instance).mnext.subscribe(function(){
         that.mvNext();
@@ -473,8 +486,9 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
             } else {
               this.show_results = true;
             }
-            c.instance.card.content.results = this.tb.combineResults();
+            c.instance.card.content.results = this.test_results = this.tb.combineResults();
             console.log("Test results details prepared!", c.instance.card.content.results);
+            this.saveTestResultsToLog();
           }
 
           //  Set default test description
@@ -540,17 +554,11 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
   }
   
   saveTestResultsToLog() {
-    let sc = null;
-    for(let i in this.cts){
-      let c = this.cts[i];
-      if(c.instance.isActive()){
-        sc = c.instance; 
-      }
-    }
-    if(typeof sc !== 'undefined' && sc !== null && typeof sc.card.position !== 'undefined'  && !this.test_log_sent) {
-      //if(!this.sidetripmode){
+    
+    if(!this.test_log_sent) {
+      if(!this.practice_mode){
         this.test_log_sent = true;
-        this.logging.testEnd('TST', sc.card.position, this.test_results, this.ctestpos, this.dl.lu, this.complete)
+        this.logging.testEnd('TST', 0, this.test_results, this.ctestpos, this.dl.lu, this.complete)
           .subscribe(
             data => { console.log('Testing >>>>>>>>>>  Test Results Saved!'); console.log(data); },
             error => {
@@ -558,8 +566,8 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
               alert('Logging End Test status: ' + error.status + ' ' + error.statusText);
             }
           );
-      //} 
-      this.clearResults();
+      } 
+      //this.clearResults();
     }
   }
 
@@ -627,9 +635,18 @@ export class ShowpcmtestingComponent implements OnInit, AfterViewInit {
   reloadTest() {
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
+    this.playmedia.stop();
     this.tb.deleteResults();
-    this.router.navigateByUrl('/demo', {skipLocationChange: true})
+    this.router.navigateByUrl('/home', {skipLocationChange: true})
       .then(() => this.router.navigate(['/test']));
+  }
+
+  goBack() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    this.playmedia.stop();
+    this.tb.deleteResults();
+    this.router.navigateByUrl('/home');
   }
 
   getCardDescriptor() {

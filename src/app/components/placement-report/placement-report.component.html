@@ -49,6 +49,7 @@
 		<thead>
 			<tr>
 				<th>{{ 'lesson' | translate }}</th>
+				<th>{{ 'test' | translate }}</th>
 				<th>{{ 'activity' | translate }}</th>
 				<th>{{ 'student_score' | translate }}</th>
 				<th>{{ 'student_details' | translate }}</th>
@@ -59,6 +60,7 @@
 			<tr *ngFor="let t of tests">
 				<td>{{ t.lesson }}</td>
 				<td>{{ t.desc }}</td>
+				<td>{{ t.activity }}</td>
 				<td>{{ getValue(t.result) }}%</td>
 				<td><span class='btn btn-success' (click)="showTestDetails(t.result.details)">{{ 'student_details' | translate }}</span></td>
 				<td>{{ t.begin }}</td>

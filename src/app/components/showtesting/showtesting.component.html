@@ -1,30 +1,136 @@
+<!--
 <div class="card-block-item card-style-obj-single testing-container" [ngClass]="" [ngStyle]="layout">
-
+-->
+    <!--
     <div id='app-is-loading-screen' [hidden]="tstdata !== undefined && tstdata !== null ? true:false" style='display: flex; text-align: center; justify-content: center; margin-top: 20px; position: relative;'><img src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PGxpbmVhckdyYWRpZW50IGlkPSdGYXN0TG9hZGluZ0luZGljYXRvci1saW5lYXJHcmFkaWVudCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnIHgxPScxLjc4MDQnIHkxPScxNi4wMzc5JyB4Mj0nMzAuMTQzOScgeTI9JzE2LjAzNzknPjxzdG9wIG9mZnNldD0nMC40MTY5JyBzdG9wLWNvbG9yPScjQ0RDRkQyJy8+PHN0b3Agb2Zmc2V0PScwLjkzNzYnIHN0b3AtY29sb3I9J3JnYmEoMjQ4LDI0OCwyNDksMCknLz48L2xpbmVhckdyYWRpZW50PjxjaXJjbGUgY3g9JzE2JyBjeT0nMTYnIHI9JzEyLjcnIHN0eWxlPSdmaWxsOiBub25lOyBzdHJva2U6IHVybCgjRmFzdExvYWRpbmdJbmRpY2F0b3ItbGluZWFyR3JhZGllbnQpOyBzdHJva2Utd2lkdGg6IDI7Jz48L2NpcmNsZT48L3N2Zz4=' alt='' style="width: 36px; height: 36px;" /></div>
-
+    -->
     <!-- Tests content container -->
+    <!--
     <div class="tc-container" [hidden]="tstdata == undefined || tstdata === null ? true:false">
-
-    <!-- Test content slider -->
-    <div class="tc-slider">
-      <ng-template app-test></ng-template>
-    </div>
-
-
-    <!-- Test content navigation -->
-    <div class="tc-nav">
-      <div class="tc-nav-panel">
-          <span class="tc-nav-item tc-nav-prev" (click)="mvPrev()" [hidden]="ctestpos === 0 || ctestpos >= max"><!--PREV-->{{ 'prev_testing_btn' | translate }}</span>
-          <span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos !== 0" (click)="mvNext()"><!--Continue-->{{ 'continue_testing_btn' | translate }}</span>
-          <span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos < max" (click)="mvNext()"><!--Finish-->{{ 'finish_testing_btn' | translate }}</span>
-          <span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos === 0 || ctestpos >= max">{{ ctestpos }} <!--of-->{{ 'of' | translate }} {{ max-1 }}</span>
-          <span class="tc-nav-item tc-nav-next" (click)="mvNext()" [hidden]="ctestpos === 0 || ctestpos >= max"><!--NEXT-->{{ 'next_testing_btn' | translate }}</span>
+      -->
+      <!-- Test content slider -->
+      <!--
+      <div class="tc-slider">
+        <ng-template app-test></ng-template>
       </div>
-    </div>
+      -->
 
-  </div>
-  
+      <!-- Test content navigation -->
+      <!--
+      <div class="tc-nav">
+        <div class="tc-nav-panel">
+            <span class="tc-nav-item tc-nav-prev" (click)="mvPrev()" [hidden]="ctestpos === 0 || ctestpos >= max"><!--PREV{{ 'prev_testing_btn' | translate }}</span>
+            <span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos !== 0" (click)="mvNext()"><!--Continue{{ 'continue_testing_btn' | translate }}</span>
+            <span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos < max" (click)="mvNext()"><!--Finish{{ 'finish_testing_btn' | translate }}</span>
+            <span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos === 0 || ctestpos >= max">{{ ctestpos }} <!--of{{ 'of' | translate }} {{ max-1 }}</span>
+            <span class="tc-nav-item tc-nav-next" (click)="mvNext()" [hidden]="ctestpos === 0 || ctestpos >= max"><!--NEXT{{ 'next_testing_btn' | translate }}</span>
+        </div>
+      </div>
+      -->
+    <!--
+    </div>
+    -->
+<!-- 
 </div>
+-->
+
+
+<!-- Practice mode enabled message -->
+<div class='row sidetrip-mode' *ngIf='practice_mode'>
+  <span class='sidetrip-message'>{{ 'practice_mode' | translate }}<span class='sidetrip-disable-btn' (click)="disablePractice()">&nbsp;&nbsp;&nbsp;{{ 'here' | translate }}</span>.</span>
+</div>
+<div class="testing-wrap"> 
+  <div class="card-block-item card-style-obj-single testing-container" [ngClass]="" [ngStyle]="layout">
+
+      <div id='app-is-loading-screen' [hidden]="tstdata !== undefined && tstdata !== null ? true:false" style='display: flex; text-align: center; justify-content: center; margin-top: 20px; position: relative;'><img src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PGxpbmVhckdyYWRpZW50IGlkPSdGYXN0TG9hZGluZ0luZGljYXRvci1saW5lYXJHcmFkaWVudCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnIHgxPScxLjc4MDQnIHkxPScxNi4wMzc5JyB4Mj0nMzAuMTQzOScgeTI9JzE2LjAzNzknPjxzdG9wIG9mZnNldD0nMC40MTY5JyBzdG9wLWNvbG9yPScjQ0RDRkQyJy8+PHN0b3Agb2Zmc2V0PScwLjkzNzYnIHN0b3AtY29sb3I9J3JnYmEoMjQ4LDI0OCwyNDksMCknLz48L2xpbmVhckdyYWRpZW50PjxjaXJjbGUgY3g9JzE2JyBjeT0nMTYnIHI9JzEyLjcnIHN0eWxlPSdmaWxsOiBub25lOyBzdHJva2U6IHVybCgjRmFzdExvYWRpbmdJbmRpY2F0b3ItbGluZWFyR3JhZGllbnQpOyBzdHJva2Utd2lkdGg6IDI7Jz48L2NpcmNsZT48L3N2Zz4=' alt='' style="width: 36px; height: 36px;" /></div>
+
+      <!-- Tests content container -->
+      <div class="tc-container" [hidden]="tstdata == undefined || tstdata === null ? true:false">
+
+      <!-- Test content slider -->
+      <div class="tc-slider">
+        <ng-template app-test></ng-template>
+      </div>
+
+
+      <!-- Test content navigation -->
+      <div class="tc-nav">
+        <div class="tc-nav-panel">
+            <!--
+            <span class="tc-nav-item tc-nav-prev" (click)="mvPrev()" [hidden]="ctestpos === 0 || ctestpos >= max">{{ 'prev_testing_btn' | translate }}</span>-->
+            
+            <!--<span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos === 0 || ctestpos >= max">{{ ctestpos }} <!--of--><!--{{ 'of' | translate }} {{ max-1 }}</span>-->
+            <span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos === 0 || ctestpos >= max">{{ complete }} %</span>
+            <!--
+            <span class="tc-nav-item tc-nav-next" (click)="mvNext()" [hidden]="ctestpos === 0 || ctestpos >= max">{{ 'next_testing_btn' | translate }}</span>-->
+        </div>
+        <div class="tc-nav-panel tc-nav-panel-subtitles">
+            <!--
+            <span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos !== 0" (click)="mvNext()"><!--Continue--><!--{{ 'continue_testing_btn' | translate }}</span>
+            <span class="tc-nav-item tc-nav-pages" [hidden]="ctestpos < max" (click)="mvNext()"><!--Finish--><!--{{ 'finish_testing_btn' | translate }}</span>
+            -->
+            {{ test_description }}
+        </div>
+
+        <!-- Card lesson position activity tag -->
+        <span class='lesson-position-activity-tag' 
+            [hidden]="card_descriptor.lesson==0&&card_descriptor.position==0&&card_descriptor.activity==''" 
+            title="{{ 'feedback_btn' | translate }}"
+            (click)="onShowFeedback()">
+            #{{ card_descriptor.lesson }}-{{ card_descriptor.position }}:{{ card_descriptor.activity }}
+            <span [hidden]="current_feedback_list.length < 1" class="lesson-description-feedback-exists">
+                <i class="fas fa-check-double"></i>
+            </span>
+        </span>
+
+      </div>
+
+    </div>
+    
+  </div>
+</div>
+
+<div class="testing-sidebar">
+  <!--<div class="testing-sb-group next-section" [hidden]="show_results">-->
+  <div class="testing-sb-group next-section">
+    <span class='zoom-card-next testing-next' (click)='mvNext()' 
+                                  title="{{ 'move_to_next' | translate }}" 
+                                  [ngClass]="{'testing-next-hlight': blinknextnavbtn}"
+                                  [hidden]="!show_next"></span>
+    <span class='zoom-card-next testing-next testing-prev' (click)='mvPrev()' 
+                                  title="{{ 'move_to_prev' | translate }}" 
+                                  [ngClass]="{'testing-next-hlight': blinkprevnavbtn}"
+                                  [hidden]="!show_prev"></span>
+    <span class='zoom-card-next testing-enable-practice' (click)="enablePractice()" [hidden]="!practice_show" title="{{ 'test_in_practice' | translate }}">
+      <i class="fab fa-cloudscale"></i>
+    </span>
+  </div>
+  <div class="testing-sb-group register-section">
+    <span class='zoom-card-next testing-edit-pcm-result'
+          [ngClass]="{'testing-next-hlight': blinkcompletenavbtn}"
+          (click)="sendCorrectRegisterRequest()"
+          [hidden]="!show_results || tn.loggedIn() || rrrequest_sent || rrrequest_start || practice_mode || !levels_screen" title="{{ 'complete' | translate }}">
+          <i class="fas fa-check"></i>
+    </span>
+    <!--
+    <span class='zoom-card-next testing-see-pcm-result'
+          (click)="sendRegisterRequest()"
+          [hidden]="!show_results || tn.loggedIn() || rrrequest_sent || rrrequest_start || practice_mode || !levels_screen" title="{{ 'see_a_result' | translate }}">
+      <i class="fas fa-chart-line"></i>
+    </span>
+    -->
+    <span class='zoom-card-next testing-retake-test' (click)="goBack()" title="{{ 'exit' | translate }}">
+      <i class="fas fa-power-off"></i>
+    </span>
+  </div>
+</div>
+
+<!--    Feedback window   -->
+<app-feedback  [show]='show_feedback_modal' 
+[hidden]="!show_feedback_modal"
+[card_descriptor]="'N'+card_descriptor.lesson+'-'+card_descriptor.position+'-'+card_descriptor.activity"
+[prev_feedbacks]="current_feedback_list"
+(closefeedback)="onCloseFeedback()"></app-feedback>
 
 <!-- Close button for reports -->
 <!--<button class="button-close-report" (click)="close()"><i class="far fa-window-close"></i></button>-->

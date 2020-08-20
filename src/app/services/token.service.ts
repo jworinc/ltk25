@@ -12,8 +12,6 @@ export class TokenService {
     signup: 'http://localhost:8000/api/signup',
     entrance: 'https://api.ltk.cards/api/entrance'
   };
-<<<<<<< HEAD
-=======
   
   private current_email = 'none';
   private current_name = '';
@@ -21,7 +19,6 @@ export class TokenService {
   private current_code = '';
   private current_type = '';
 
->>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
 
   constructor() { 
     this.iss.login = `${this.getApiUrl()}/login`;
@@ -41,8 +38,6 @@ export class TokenService {
     return localStorage.getItem('token');
   }
 
-<<<<<<< HEAD
-=======
   
   setEmail(email, name='') {
     localStorage.setItem('email', email);
@@ -102,7 +97,6 @@ export class TokenService {
   }
 
 
->>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
   getAuthHeader() {
     let t = this.get();
     return {'Authorization': `Bearer ${t}`};

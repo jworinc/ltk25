@@ -4,8 +4,15 @@ import { TestDirective } from '../../directives/test.directive';
 import { DataloaderService } from '../../services/dataloader.service';
 import { TestbuilderService } from '../../services/testbuilder.service';
 import { LoggingService } from '../../services/logging.service';
+import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from '../../services/auth.service';
+import { MediapreloaderService } from 'src/app/services/mediapreloader.service';
+import { TokenService } from '../../services/token.service';
+import { Router } from '@angular/router';
+import { CustomfieldService } from '../../services/customfield.service';
+import { PlaymediaService } from '../../services/playmedia.service';
 import { PickElementService } from '../../services/pick-element.service';
-//import { LessonComponent } from '../lesson/lesson.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-showtesting',

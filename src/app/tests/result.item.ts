@@ -3,6 +3,7 @@ import { Type } from '@angular/core';
 export class ResultItem {
   
     public type: string;
+    public inst: string;
     public presented: number;
     public wrong: number;
     public level: number;
@@ -10,8 +11,9 @@ export class ResultItem {
     public description: string;
     public treshold: number;
 
-    constructor(type, description, presented, wrong, level, details, treshold) {
+    constructor(type, description, presented, wrong, level, details, treshold, inst='') {
         this.type = type;
+        this.inst = inst;
         this.presented = presented;
         this.wrong = wrong;
         this.level = level;

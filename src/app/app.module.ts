@@ -102,7 +102,7 @@ import { NotebookComponent } from './components/notebook/notebook.component';
 import { GrammarComponent } from './components/grammar/grammar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ShowtestingComponent } from './components/showtesting/showtesting.component';
+import { ShowpcmtestingComponent } from './components/showpcmtesting/showpcmtesting.component';
 import { AuditoryComponent } from './tests/auditory/auditory.component';
 import { ComprehensionComponent } from './tests/comprehension/comprehension.component';
 import { TestDirective } from './directives/test.directive';
@@ -111,6 +111,7 @@ import { SpellingComponent } from './tests/spelling/spelling.component';
 import { TstComponent } from './activities/tst/tst.component';
 import { IntroComponent } from './tests/intro/intro.component';
 import { ResultsComponent } from './tests/results/results.component';
+import { ResultspcmComponent } from './tests/resultspcm/resultspcm.component';
 import { TestResultItemComponent } from './components/test-result-item/test-result-item.component';
 import { CustomfieldService } from './services/customfield.service';
 import { CfcComponent } from './activities/cfc/cfc.component';
@@ -125,13 +126,10 @@ import { PickElementService } from './services/pick-element.service';
 import { CourseExpireMsgComponent } from './components/course-expire-msg/course-expire-msg.component';
 import { LtkmenuComponent } from './components/ltkmenu/ltkmenu.component';
 import { TalkingNotepadComponent } from './components/talking-notepad/talking-notepad.component';
-<<<<<<< HEAD
 import { FilterByArrayPipe } from './pipes/filter-by-array.pipe';
 import { LangfilterPipe } from './pipes/langfilter.pipe';
 import { RelatedLoginComponent } from './components/related-login/related-login.component';
-=======
 import { CftComponent } from './tests/cft/cft.component';
->>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -213,7 +211,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NotebookComponent,
     GrammarComponent,
     BasetestComponent,
-    ShowtestingComponent,
+    ShowpcmtestingComponent,
     AuditoryComponent,
     ComprehensionComponent,
     TestDirective,
@@ -221,6 +219,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TstComponent,
     IntroComponent,
     ResultsComponent,
+    ResultspcmComponent,
     TestResultItemComponent,
     CfcComponent,
     HelpTooltipComponent,
@@ -233,13 +232,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     CourseExpireMsgComponent,
     LtkmenuComponent,
     TalkingNotepadComponent,
-<<<<<<< HEAD
     FilterByArrayPipe,
     LangfilterPipe,
-    RelatedLoginComponent
-=======
+    RelatedLoginComponent,
     CftComponent
->>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
   ],
   imports: [
     BrowserModule,
@@ -268,12 +264,8 @@ export function HttpLoaderFactory(http: HttpClient) {
   Bw6Component, Bw7Component, SypComponent, DiwComponent, GscComponent, Rp1Component, Rp2Component, GwmComponent, SiwComponent,
   GwfComponent, GqwComponent, DisComponent, SplComponent, GdnComponent, GcpComponent, GcsComponent, GisComponent, GmuComponent,
   GnbComponent, GslComponent, GsmComponent, GssComponent, Rw1Component, IdmComponent, Wl1Component, Bs1Component, AuditoryComponent,
-<<<<<<< HEAD
-  ComprehensionComponent, SpellingComponent, CccComponent, TstComponent, IntroComponent, ResultsComponent, CfcComponent ],
-=======
   ComprehensionComponent, SpellingComponent, CccComponent, TstComponent, IntroComponent, ResultsComponent, ResultspcmComponent,
   CfcComponent, CftComponent ],
->>>>>>> 1b61e38... Test changes, routes, customizations, democodes, results
   bootstrap: [AppComponent]
 })
 export class AppModule { }
