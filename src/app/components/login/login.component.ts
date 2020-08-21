@@ -41,6 +41,8 @@ export class LoginComponent implements OnInit {
   public locales: any;
   public have_link: boolean = false;
   public login_link: string = '';
+  public have_code: boolean = false;
+  public login_code: string = '';
   public login_screen: boolean = true;
   public request_update_screen: boolean = false;
   public update_message_screen: boolean = false;
@@ -74,6 +76,16 @@ export class LoginComponent implements OnInit {
     let link: any = '';
     if(lnk.length > 0) link = lnk[lnk.length - 1];
     this.dl.entrance(link).subscribe(
+      data => this.handleResponse(data),
+      //error => this.handleError(error)
+      error => this.notify.error(error.error.error, {timeout: 5000})
+    );
+  }
+
+  loginByCode() {
+    let lnk: any = this.login_code;
+    
+    this.dl.logincode(lnk).subscribe(
       data => this.handleResponse(data),
       //error => this.handleError(error)
       error => this.notify.error(error.error.error, {timeout: 5000})
@@ -127,6 +139,10 @@ export class LoginComponent implements OnInit {
       that.update_message_screen = true;
     }, 400);
 
+  }
+
+  goDemo() {
+    (window as any).location = 'https://ltk.cards/';
   }
 
 }

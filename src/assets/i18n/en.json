@@ -231,6 +231,8 @@
 	"level" : "Level",
 	"test" : "Test",
 	"y_have_to_take_test" : "You have to take a test before!",
+	"demo" : "Demo",
+	"i_have_code" : "I have a login code",
 	"help_lesson_header_desc" : "Shows the lesson student is on",
 	"help_option_desc" : "Change LTK various settings (Options)",
 	"help_chat_desc" : "Use this button to access chat and communicate with other students and teachers.",

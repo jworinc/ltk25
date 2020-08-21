@@ -10,7 +10,8 @@ export class TokenService {
     login: 'https://api.ltk.cards/api/login',
     rellogin: 'https://api.ltk.cards/api/rel/login',
     signup: 'http://localhost:8000/api/signup',
-    entrance: 'https://api.ltk.cards/api/entrance'
+    entrance: 'https://api.ltk.cards/api/entrance',
+    logincode: 'https://api.ltk.cards/api/logincode',
   };
   
   private current_email = 'none';
@@ -24,6 +25,7 @@ export class TokenService {
     this.iss.login = `${this.getApiUrl()}/login`;
     this.iss.rellogin = `${this.getApiUrl()}/rel/login`;
     this.iss.entrance = `${this.getApiUrl()}/entrance`;
+    this.iss.logincode = `${this.getApiUrl()}/logincode`;
   }
 
   handle(token) {
@@ -115,7 +117,9 @@ export class TokenService {
         //console.log(payload);
         //"https://api.alexapp.pp.ua/api/entrance/BOu3Gcea3HvhNQNoFfm1u6ln72DdOqgXAy46uYjLlYEe99sT5uSrRBWLKKRbDnbtGC7dmALF8eA3XprB2whtl9TySSwktrvnyhjniXex3fOqh7vRRAuPOrf2CtmMKTrbl7ktLmfhEH8nlscvKcJEAQKOwyVuZs4BDUWXnOCfmd3dT4vgdIGxwD0bpPmjyoJ1Asxl"
         let r = /api\/entrance/ig;
+        let lc = /api\/logincode/ig;
         if(r.test(payload.iss)) payload.iss = this.iss['entrance'];
+        if(lc.test(payload.iss)) payload.iss = this.iss['logincode'];
         let iss_valid = Object.values(this.iss).indexOf(payload.iss) > -1 ? true : false;
         let current_time = new Date().getTime()/1000;
         let exp_valid = current_time < payload.exp;

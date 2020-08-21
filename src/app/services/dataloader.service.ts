@@ -41,6 +41,12 @@ export class DataloaderService {
     return this.http.get(`${this.base_url}/entrance/${link}`)
   }
 
+  logincode(code) {
+    let cd = 'no';
+    if(code && code !== '') cd = code;
+    return this.http.get(`${this.base_url}/logincode/${cd}`)
+  }
+
   //  Using to get all existed locales and languages
   getLocales() {
     return this.http.get(`${this.base_url}/locales`)
