@@ -18,7 +18,6 @@ import { CardDirective } from '../../directives/card.directive';
 import { CardItem } from '../../card-item';
 import { CardComponent } from '../card/card.component';
 import { NotebookComponent } from '../notebook/notebook.component';
-import { ShowtestingComponent } from '../showtesting/showtesting.component';
 import { Howl, Howler } from 'howler';
 import * as $ from 'jquery';
 import { GrammarComponent } from '../grammar/grammar.component';
@@ -72,7 +71,6 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
   @ViewChild(CardDirective) appCard: CardDirective;
   @ViewChild(NotebookComponent) nb: NotebookComponent;
-  @ViewChild(ShowtestingComponent) sht: ShowtestingComponent;
   @ViewChild(GrammarComponent) grm: GrammarComponent;
   @ViewChildren(HelpTooltipComponent) helps !: QueryList<HelpTooltipComponent>;
 
@@ -1347,7 +1345,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
       }
     } else {
       if(this.show_testing){
-        this.sht.enter();
+        //this.sht.enter();
       }
       if(this.show_notebook){
         if(this.nb.isNotebook){

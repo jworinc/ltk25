@@ -2,7 +2,6 @@ import { Component, OnInit, Input, HostBinding, ElementRef, EventEmitter, Output
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { TestComponent } from '../../components/test/test.component';
 import { PlaymediaService } from '../../services/playmedia.service';
-import { ShowtestingComponent } from 'src/app/components/showtesting/showtesting.component';
 import { ResultItem } from '../../tests/result.item';
 
 

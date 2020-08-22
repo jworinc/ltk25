@@ -131,6 +131,7 @@ import { LangfilterPipe } from './pipes/langfilter.pipe';
 import { RelatedLoginComponent } from './components/related-login/related-login.component';
 import { CftComponent } from './tests/cft/cft.component';
 
+
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
