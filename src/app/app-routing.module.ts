@@ -5,7 +5,7 @@ import { EntranceComponent } from './components/entrance/entrance.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LessonComponent } from './components/lesson/lesson.component';
 import { ReportsComponent } from './components/reports/reports.component';
-
+import { ShowpcmtestingComponent } from './components/showpcmtesting/showpcmtesting.component';
 import { BeforeLoginService } from './services/before-login.service';
 import { AfterLoginService } from './services/after-login.service';
 
@@ -43,6 +43,11 @@ const routes: Routes = [
   {
     path: 'reports',
     component: ReportsComponent,
+    canActivate: [AfterLoginService],
+  },
+  {
+    path: 'test',
+    component: ShowpcmtestingComponent,
     canActivate: [AfterLoginService],
   },
   { path: '',   redirectTo: '/home', pathMatch: 'full' },

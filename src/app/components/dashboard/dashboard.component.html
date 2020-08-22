@@ -27,7 +27,19 @@
         <div class='row ltk-student' [hidden]="!sku">
 			<h2>{{ sku.title }}</h2>
             <h4>{{ sku.desc }}</h4>
-		</div>
+        </div>
+        <div class='row ltk-student ltk-set-starting' [hidden]="lessons.length == 0 || !student.new_user">
+            <div class="ltk-set-starting-caption">{{ 'select_starting_lesson' | translate }}:</div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ 'lesson' | translate }} {{ starting_lesson.alias }}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <span class="dropdown-item" *ngFor="let l of lessons" (click)="setStartingLesson(l)">{{ 'lesson' | translate }} {{ l.alias }}</span>
+                </div>
+            </div>
+            
+        </div>
 		<div class="row ltk-breaks-list" [hidden]="show_notebook || show_grammar || show_testing || show_course_expire_msg">
 	        <div class="col-md-12">
 	            <div class="tab" role="tabpanel">
@@ -54,13 +66,13 @@
 	                    <div role="tabpanel" class="tab-pane fade" id="break_1" aria-labelledby="break_1-tab" [ngClass]="{'in active': student.lu <= bborder_1[1], 'show': student.lu <= bborder_1[1]}">
 	                        <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_1.col_1.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_1.col_1' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_1.col_1' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -69,13 +81,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_1.col_2.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_1.col_2' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_1.col_2' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -84,13 +96,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_1.col_3.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_1.col_3' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_1.col_3' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                          <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -99,13 +111,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_1.col_4.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_1.col_4' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_1.col_4' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                          <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -114,13 +126,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_1.col_5.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_1.col_5' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_1.col_5' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                          <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -129,13 +141,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_1.col_6.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_1.col_6' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_1.col_6' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                          <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -148,13 +160,13 @@
 	                    <div role="tabpanel" class="tab-pane fade" id="break_2" aria-labelledby="break_2-tab" [ngClass]="{'in active': student.lu >= bborder_2[0] && student.lu <= bborder_2[1], 'show': student.lu >= bborder_2[0] && student.lu <= bborder_2[1]}">
 	                        <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_2.col_1.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_2.col_1' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_2.col_1' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -163,13 +175,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_2.col_2.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_2.col_2' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_2.col_2' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -178,13 +190,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_2.col_3.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_2.col_3' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_2.col_3' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -193,13 +205,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_2.col_4.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_2.col_4' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_2.col_4' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -208,13 +220,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_2.col_5.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_2.col_5' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_2.col_5' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -223,13 +235,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_2.col_6.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_2.col_6' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_2.col_6' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -242,13 +254,13 @@
 	                    <div role="tabpanel" class="tab-pane fade" id="break_3" aria-labelledby="break_3-tab" [ngClass]="{'in active': student.lu >= bborder_3[0] && student.lu <= bborder_3[1], 'show': student.lu >= bborder_3[0] && student.lu <= bborder_3[1]}">
 	                        <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_3.col_1.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_3.col_1' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_3.col_1' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -257,13 +269,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_3.col_2.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_3.col_2' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_3.col_2' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -272,13 +284,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_3.col_3.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_3.col_3' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_3.col_3' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -287,13 +299,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_3.col_4.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_3.col_4' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_3.col_4' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -302,13 +314,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_3.col_5.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_3.col_5' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_3.col_5' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -317,13 +329,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_3.col_6.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_3.col_6' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_3.col_6' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -336,13 +348,13 @@
 	                    <div role="tabpanel" class="tab-pane fade" id="break_4" aria-labelledby="break_4-tab" [ngClass]="{'in active': student.lu >= bborder_4[0] && student.lu <= bborder_4[1], 'show': student.lu >= bborder_4[0] && student.lu <= bborder_4[1]}">
 	                        <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_4.col_1.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_4.col_1' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_4.col_1' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -351,13 +363,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_4.col_2.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_4.col_2' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_4.col_2' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -366,13 +378,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_4.col_3.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_4.col_3' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_4.col_3' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -381,13 +393,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_4.col_4.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_4.col_4' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_4.col_4' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -396,13 +408,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_4.col_5.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_4.col_5' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_4.col_5' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -411,13 +423,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_4.col_6.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_4.col_6' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_4.col_6' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -430,13 +442,13 @@
 	                    <div role="tabpanel" class="tab-pane fade" id="break_5" aria-labelledby="break_5-tab" [ngClass]="{'in active': student.lu >= bborder_5[0], 'show': student.lu >= bborder_5[0]}">
 	                        <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_5.col_1.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_5.col_1' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_5.col_1' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -445,13 +457,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_5.col_2.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_5.col_2' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_5.col_2' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -460,13 +472,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_5.col_3.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_5.col_3' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_5.col_3' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -475,13 +487,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_5.col_4.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_5.col_4' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_5.col_4' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -490,13 +502,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_5.col_5.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_5.col_5' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_5.col_5' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -505,13 +517,13 @@
                             </div>
                             <div class='col-lg-2 col-md-3 col-sm-4 col-6' *ngIf="break_to_display_5.col_6.length > 0">
                                 <ul>
-                                    <li *ngFor='let lsn of break_to_display_5.col_6' (click)='setLesson(lsn.number)'
+                                    <li *ngFor='let lsn of break_to_display_5.col_6' (click)='setLesson(lsn)'
                                         [ngClass]="{'lenable': lsn.number == student.lu && !sidetripmode}">
                                         <div *ngIf='lsn.complete === "false"' 
                                             [ngClass]="{'lenable': lsn.number == student.lu || sidetripmode}">
                                             <i class="far fa-square"></i>
                                         </div>
-                                        <div *ngIf='lsn.complete === "true"'>
+                                        <div *ngIf='lsn.complete === "true" || lsn.passed'>
                                             <i class="far fa-check-square"></i>
                                         </div>
                                         <span>&nbsp;{{ lsn.alias }}</span>
@@ -573,7 +585,9 @@
             <app-grammar [show]="show_grammar" [scale]="scale" [hidden]="!show_grammar"></app-grammar>
 
             <!-- Testing -->
-            <app-showtesting [show]="show_testing" [scale]="scale" [hidden]="!show_testing" (closetesting)="onCloseTesting()"></app-showtesting>
+            <!--
+            <app-showpcmtesting [show]="show_testing" [scale]="scale" [hidden]="!show_testing" (closetesting)="onCloseTesting()"></app-showpcmtesting>
+            -->
         </div>
 
         <app-course-expire-msg [hidden]="!show_course_expire_msg"></app-course-expire-msg>

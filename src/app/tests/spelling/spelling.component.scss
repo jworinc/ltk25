@@ -1,3 +1,12 @@
+.testing-main-block{
+    display: flex;
+    flex-flow: column;
+    .cust-row{
+        display: flex;
+        flex: 1;
+        max-height: 90px;
+    }
+}
 .custom-slide{
     justify-content: normal;
 }
@@ -49,12 +58,16 @@
 }
 
 .word-row{
-    position: absolute;
-    bottom: 0px;
-    // margin-left: 0px;
-    // margin-right: 0px;
+    position: relative;
+    /* bottom: 0px; */
     padding: 20px 0;
     background-color: #F4F4F4;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-flow: row wrap;
+    order: 3;
 }
 
 .correct_answer{
@@ -78,6 +91,41 @@
     max-width: 33.3333%;
     flex: 0 0 33.3333%;
 }
+.common-div>.col-12{
+    margin: 0;
+    padding: 0;
+}
+.header-description{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.repeat-button{
+    font-size: 30px;
+    color: #0071BD;
+    cursor: pointer;
+}
+.spelling-content{
+    display: flex;
+    width: 100%;
+    min-width: 100%;
+    flex-flow: column;
+    flex: 1;
+    min-height: auto;
+    height: auto;
+    align-items: center;
+    justify-content: space-between;
+    justify-items: center;
+}
+.vert-mid{
+    display: flex;
+    position: relative;
+    order: 1;
+}
+.testing-answers{
+    background-color: transparent;
+    order: 2;
+}
 
 @media only screen and (max-width:1024px){
     .col-10{
@@ -94,9 +142,9 @@
         flex: 0 0 25%;
     }
     .p_design{
-        padding: 2px 4px;
-        font-size: 12px;
-        line-height: 1;
+        padding: 5px 2px;
+        font-size: 15px;
+        line-height: 1.2;
         margin-bottom: 0;
     }
     .cust-row h4 {
@@ -105,9 +153,11 @@
     }
 
     .vert-mid{
+        /*
         position: absolute;
         top: 40%;
         transform: translateY(-50%);
+        */
     }
 
     .word-row {

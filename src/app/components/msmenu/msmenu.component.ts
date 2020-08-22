@@ -203,7 +203,9 @@ export class MsmenuComponent implements OnInit {
     //	If mouse event locked by feedback
     if(this.pe.mouseLock()) return;
     this.playmedia.stop();
-    this.showtesting.emit();
+    //this.showtesting.emit();
+    this.Token.setType('placement-test');
+    this.location('/test');
   }
 
   fullscreenMax($event=null) {

@@ -2,7 +2,8 @@ import { Component, OnInit, ElementRef, HostListener } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BasetestComponent } from '../basetest/basetest.component';
 import { PlaymediaService } from '../../services/playmedia.service';
-
+import { PickElementService } from '../../services/pick-element.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-spelling',
@@ -20,23 +21,45 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
 
   public result:any= [];
   public test_complete = false;
+  public variants: string[] = [];
+  public var_for_display: string[] = [];
+  
+  public subtitles: any[] = [
+    {
+      type: 'intro',
+      key: 'type_missing_letter',
+      vawe: '_STMLITW'
+    }
+  ];
 
-  constructor(private element:ElementRef, private sz: DomSanitizer, private pms: PlaymediaService) { 
+
+  constructor(private element:ElementRef, 
+              private sz: DomSanitizer, 
+              private pms: PlaymediaService, 
+              public pe: PickElementService,
+              public translate: TranslateService) { 
     super(element, sz, pms);
   }
 
   ngOnInit() {
     this.card = this.data;
+    this.getLettersForVariants(this.data);
   }
 
   show() {
+    let that = this;
     console.log(this.data);
     // this.card = this.data['content'];
     this.ind = 0;
     this.result = [];
     this.test_complete = false;
     this.getWords();
-    
+    this.set_subtitles.emit(this.translate.instant(this.subtitles[0].key));
+    this.pms.stop();
+    this.pms.sound(this.subtitles[0].vawe, ()=>{
+      that.intro_sub_played = true;
+      that.pms.word(that.words.replace(/,/g , ""),function(){});
+    }, 500);
   }
 
   // getWords(){
@@ -78,7 +101,7 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
     let w = this.data.content[this.ind].parts.toString();
     this.words = w.replace(this.r,this.data.content[this.ind].missing);
 
-    this.pms.word(this.words.replace(/,/g , ""),function(){});
+    if(this.intro_sub_played) this.pms.word(this.words.replace(/,/g , ""),function(){});
 
 		//	Add word parts to markup
 		for(let i in this.data.content[this.ind].parts){
@@ -87,7 +110,7 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
 
 			//	Create box for digraph
 			if(typeof cn !== 'undefined' && cn !== '' && r.test(cn)) {
-				cn = cn.replace(r, "<input class='card-ar1-digraph-input' id='user_input' type='text' maxlength = '1' />");
+				cn = cn.replace(r, "<input class='card-ar1-digraph-input' id='user_input' type='text' maxlength = '1' disabled='disabled' />");
 				content += "<span class='card-ar2-syllable card-ar1-syllable'>"+cn+"</span>";
 			}
 			//	Create box for normal letters
@@ -114,12 +137,50 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
 
     },10);
 
+    //  Get variants for multi-select
+    if(this.variants.length >= 3) this.var_for_display = this.shuffle(this.variants).slice(0, 3);
+    else if(this.variants.length < 2) {
+      //  push static variants if letters not exists
+      this.variants.push('a');
+      this.variants.push('u');
+      this.var_for_display = this.shuffle(this.variants);
+    }
+    else this.var_for_display = this.shuffle(this.variants);
+    if(this.var_for_display.indexOf(this.data.content[this.ind].missing) < 0) {
+      let trimmed = this.var_for_display.slice(0, 2);
+      trimmed.push(this.data.content[this.ind].missing);
+      this.var_for_display = this.shuffle(trimmed);
+    }
+
     this.presented++;
 
   }
 
+  shuffle(a) {
+    let j, x, i;
+    let out = [];
+    for(let k in a)
+      out.push(a[k]);
+    for (i = out.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = out[i];
+        out[i] = out[j];
+        out[j] = x;
+    }
+    return out;
+}
+
   enter(){
     //this.getAnswer();
+  }
+
+  setAnswerLetter(l) {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    this.entered_val = l;
+    let ielm = this.element.nativeElement.querySelector('#user_input');
+    if(ielm) ielm.value = l;
+    this.getAnswer();
   }
 
   getAnswer() {
@@ -149,9 +210,26 @@ export class SpellingComponent extends BasetestComponent implements OnInit {
 
   
   getTestResult() {
-    if(this.test_complete) this.saveResults({type: this.card.type, presented: this.presented, wrong: this.wrong, results: this.result});
+    if(this.test_complete) return this.saveResults({type: this.card.type, presented: this.presented, wrong: this.wrong, results: this.result});
+    return null;
   }
 
+  //  Define unique letters for variants
+  getLettersForVariants(data) {
+    for(let i in data.content) {
+      let c = data.content[i];
+      if(this.variants.indexOf(c.missing) < 0) {
+        this.variants.push(c.missing);
+      }
+    }
+  }
+
+  repeat() {
+    //	If mouse event locked by feedback
+    if(this.pe.mouseLock()) return;
+    this.pms.stop();
+    this.pms.word(this.words.replace(/,/g , ""),function(){});
+  }
 
 
 

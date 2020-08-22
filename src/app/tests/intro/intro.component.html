@@ -1,8 +1,11 @@
 <section class="test-slide-item">
-  <p>
+  <p [hidden]="data.custom_field !== ''">
     <!--This test will measure you progress so far.-->
     {{ 'ttest_will_measure' | translate }} 
   </p>
+  <div class='card-content-body-wrap-cfc' [hidden]="data.custom_field == ''" [innerHtml]="data.custom_field | bindhtml">
+		
+  </div>
   <p><!--Please press Continue to begin.-->{{ 'ppress_continue' | translate }}</p>
-  <p><button (click)="next()"><!--Continue-->{{ 'continue_testing_btn' | translate }}</button></p>
+  <!--<p><button (click)="next()"><!--Continue--><!--{{ 'continue_testing_btn' | translate }}</button></p>-->
 </section>

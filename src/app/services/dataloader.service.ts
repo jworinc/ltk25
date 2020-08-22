@@ -13,6 +13,7 @@ export class DataloaderService {
   public lu = 10;
   public card_descriptor = 'none';
   public current_locale = 'en';
+  public logid = 0;
 
   constructor(
     private http: HttpClient, 
@@ -38,6 +39,12 @@ export class DataloaderService {
 
   entrance(link) {
     return this.http.get(`${this.base_url}/entrance/${link}`)
+  }
+
+  logincode(code) {
+    let cd = 'no';
+    if(code && code !== '') cd = code;
+    return this.http.get(`${this.base_url}/logincode/${cd}`)
   }
 
   //  Using to get all existed locales and languages
@@ -159,7 +166,6 @@ export class DataloaderService {
       }).pipe(share());
   }
 
-
   logMissingAudio(m) {
     if(!this.Token.loggedIn()) return empty();
     return this.http.post(`${this.base_url}/media/log/missing/audio`, {'url': m}, {
@@ -192,12 +198,6 @@ export class DataloaderService {
     }).pipe(share());
   }
   
-  getTest() {
-    return this.http.get(`${this.base_url}/testing/${this.lu}`, {
-        headers: this.Token.getAuthHeader()
-      }).toPromise();
-  }
-
   getTranslation(word, locale = null) {
     if(typeof word == 'undefined' || word === "") return empty().toPromise();
     if(!locale && this.Token.loggedIn()) {
@@ -226,6 +226,73 @@ export class DataloaderService {
       }).toPromise();
   }
 
+  getTest() {
+    return this.http.get(`${this.base_url}/testing/${this.lu}`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+  }
+
+  getPlacementTest() {
+    if(this.Token.getCode() && this.Token.getCode() !== ""){
+      return this.http.get(`${this.base_url}/placement/${this.Token.getCode()}/${this.Token.getEmail()}`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+    } else {
+      return this.http.get(`${this.base_url}/placement/${this.Token.getEmail()}`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+    }
+  }
+
+  getProfPlacement(prof) {
+    return this.http.get(`${this.base_url}/placement/prof/${prof}/${this.Token.getEmail()}`, {
+      headers: this.Token.getAuthHeader()
+    }).toPromise();
+  }
+
+  getTypedTest(type) {
+    if(this.Token.getCode() && this.Token.getCode() !== ""){
+      return this.http.get(`${this.base_url}/testing/typed/${this.Token.getCode()}/${type}/${this.Token.getEmail()}`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+    } else {
+      return this.http.get(`${this.base_url}/testing/typed/${type}/${this.Token.getEmail()}`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+    }
+    
+  }
+
+  getAssesmentLevels() {
+    if(this.Token.loggedIn() && this.Token.getCode() && this.Token.getCode() !== '') {
+      return this.http.get(`${this.base_url}/assesment/levels/${this.Token.getCode()}`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+    } 
+    else if(this.Token.loggedIn() && (!this.Token.getCode() || this.Token.getCode() === '')){
+      return this.http.get(`${this.base_url}/assesment/levels`, {
+        headers: this.Token.getAuthHeader()
+      }).toPromise();
+    } else {
+      if(this.Token.getCode() && this.Token.getCode() !== '') return this.http.get(`${this.base_url}/assesment/levels/${this.Token.getCode()}`).toPromise();
+      else return this.http.get(`${this.base_url}/assesment/levels`).toPromise();
+    }
+    
+  }
+
+  startTest(data) {
+    return this.http.post(`${this.base_url}/placement/start`, data).toPromise();
+  }
+
+  sendRegisterRequest(email, name='none') {
+    return this.http.get(`${this.base_url}/placement/register/${this.logid}/${email}/${name}`).toPromise();
+  }
+
+  setLogId(logid) {
+    this.logid = logid;
+  }
+
+
   sendLinkExpiredNotificationEmail(link) {
     return this.http.get(`${this.base_url}/service/expired/${link}`).toPromise();
   }
@@ -244,6 +311,18 @@ export class DataloaderService {
 
   getHelpConfiguration() {
     return this.http.get(`${this.base_url}/config/help/menu`, {
+      headers: this.Token.getAuthHeader()
+    }).toPromise();
+  }
+
+  setStartingLesson(ln) {
+    return this.http.get(`${this.base_url}/student/set/starting/${ln}`, {
+      headers: this.Token.getAuthHeader()
+    }).toPromise();
+  }
+
+  getTestingLog() {
+    return this.http.get(`${this.base_url}/testing/log`, {
       headers: this.Token.getAuthHeader()
     }).toPromise();
   }

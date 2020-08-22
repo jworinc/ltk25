@@ -35,15 +35,14 @@ export class OptionService {
   public pause_on_instruction: boolean = false;
   public show_word_translation: boolean = true;
 
-  public opt = {
-      expertlevel: "2",
-      language: "english",
-      mic: "50",
-      quickpace: "1",
-      replevel: "50",
-      screencolor: "1",
-      volume: "1"
-  }
+  public opt: any;
+  public break_tests = [
+    {break: 1, test: 'b1t', alias: 'test'},
+    {break: 2, test: 'b2t', alias: 'test'},
+    {break: 3, test: 'b3t', alias: 'test'},
+    {break: 4, test: 'b4t', alias: 'test'},
+    {break: 5, test: 'b5t', alias: 'test'}
+  ]
 
   constructor(private dl: DataloaderService) {
     let that = this;
@@ -52,7 +51,16 @@ export class OptionService {
       if(that.last_requested_lang !== ''){
         that.setLanguage(that.last_requested_lang);
       }
-    })
+    });
+    this.opt = {
+        expertlevel: "2",
+        language: "english",
+        mic: "50",
+        quickpace: "1",
+        replevel: "50",
+        screencolor: "1",
+        volume: "1"
+    }
   }
 
   getOptions() { return this.opt; }
@@ -114,5 +122,14 @@ export class OptionService {
     this.pause_on_instruction = false;
   }
 
+  breakTestEnabled() {
+    if(this.opt)
+      return this.opt.bt_enable;
+    else return false;
+  }
 
+  getBreakTest(b) {
+    for(let i in this.break_tests) if(b == this.break_tests[i].break) return this.break_tests[i];
+    return null;
+  }
 }

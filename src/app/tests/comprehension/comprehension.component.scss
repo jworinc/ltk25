@@ -79,6 +79,10 @@ h5{
     padding: 15px;
     font-size: 22px;
 }
+.common-div>.col-12{
+    margin: 0;
+    padding: 0;
+}
 
 @media only screen and (max-width:1024px){
     .col-10{

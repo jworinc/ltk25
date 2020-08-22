@@ -9,6 +9,7 @@ import { AuthService } from '../../services/auth.service';
 import { TokenService } from '../../services/token.service';
 import { Title } from '@angular/platform-browser';
 import { PickElementService } from '../../services/pick-element.service';
+import { type } from 'os';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,10 +23,12 @@ export class DashboardComponent implements OnInit {
     lu: 0,
     sid_message: 'Message',
     chatroom: "",
-    related_accounts: []
+    related_accounts: [],
+    new_user: false
   }
 
   public lessons = [];
+  public testing_log = [];
 
   //  Lessons sorted by breaks
   public break_1 = [];
@@ -33,6 +36,7 @@ export class DashboardComponent implements OnInit {
   public break_3 = [];
   public break_4 = [];
   public break_5 = [];
+  public breaks = [];
 
   //  Break borders to define first and last lessons
   public bborder_1 = [];
@@ -66,7 +70,8 @@ export class DashboardComponent implements OnInit {
   public show_rel_accounts: boolean = false;
   public show_switch_account: boolean = false;
 
-  public current_lesson = 0;
+  public current_lesson = 1;
+  public current_lesson_inst: any = null;
   public cl: any = {};
   public scale = 1;
   public slide_scale = 0.96;
@@ -91,13 +96,16 @@ export class DashboardComponent implements OnInit {
 
   public show_course_expire_msg = false;
 
+  //  Starting lesson
+  public starting_lesson: any;
+
   @ViewChild(NotebookComponent) nb: NotebookComponent;
 
   constructor(
   	private DL: DataloaderService,
     private notify: SnotifyService,
     private translate: TranslateService,
-    private Option: OptionService,
+    public Option: OptionService,
     private router: Router,
     private el: ElementRef,
     private Auth: AuthService,
@@ -110,6 +118,13 @@ export class DashboardComponent implements OnInit {
 
         // the lang to use, if the lang isn't available, it will use the current loader to get them
         this.translate.use(Option.getLocale());
+
+        //  Collect all breaks to single array
+        this.breaks.push(this.break_1);
+        this.breaks.push(this.break_2);
+        this.breaks.push(this.break_3);
+        this.breaks.push(this.break_4);
+        this.breaks.push(this.break_5);
   }
 
   ngOnInit() {
@@ -139,12 +154,14 @@ export class DashboardComponent implements OnInit {
     this.lang_change_event = this.Option.change_language_event.subscribe(()=>{
       console.log('Change language event.');
       this.translate.use(this.Option.getLocale());
-    })
+    });
+
+    this.starting_lesson = { alias: '001' };
 
   }
 
   ngOnDestroy() {
-    this.lang_change_event.unsubscribe();
+    if(this.lang_change_event) this.lang_change_event.unsubscribe();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -162,10 +179,19 @@ export class DashboardComponent implements OnInit {
 
   setLesson(l) {
     //	If mouse event locked by feedback
-		if(this.pe.mouseLock()) return;
-    this.current_lesson = l;
+    if(this.pe.mouseLock()) return;
+    
+    //  Check if link is test
+    if(typeof l.test !== 'undefined' && l.test !== '') {
+      this.Token.setType(l.test);
+      this.router.navigateByUrl('/test');
+      return;
+    }
+
+    this.current_lesson = l.number;
+    this.current_lesson_inst = l;
     for(let i in this.lessons){
-      if(parseInt(this.lessons[i].number) === parseInt(l)) this.cl = this.lessons[i];
+      if(parseInt(this.lessons[i].number) === parseInt(l.number)) this.cl = this.lessons[i];
     }
     let that = this;
     setTimeout(()=>{ that.showLessonArrowPointer(); }, 400);
@@ -184,7 +210,12 @@ export class DashboardComponent implements OnInit {
       this.student.related_accounts = data.related_accounts;
       if(data.related_accounts.length > 0) this.show_switch_account = true;
     }
+    if(typeof data.new_user !== 'undefined') {
+      this.student.new_user = data.new_user;
+    }
     this.Option.setLanguage(data.options.language);
+    this.Token.setEmail(data.email);
+    this.Option.setOptions(data.options);
 
     if(typeof data.sku !== 'undefined' && data.sku) this.sku = data.sku;
 
@@ -213,6 +244,7 @@ export class DashboardComponent implements OnInit {
             this.notify.error('Lessons list load status: ' + error.status + ' ' + error.statusText, {timeout: 5000});
           }
       );
+      this.DL.getTestingLog().then(data => this.handleTestingLog(data));
     }
     
   	
@@ -227,11 +259,66 @@ export class DashboardComponent implements OnInit {
     this.updateBreaks();
     if(this.student.lu !== 0) {
       this.current_lesson_title = this.getCurrentLessonTitle(this.student.lu);
-      this.setLesson(this.student.lu);
+      for(let i in this.lessons){
+        if(parseInt(this.lessons[i].number) === this.student.lu) {
+          this.cl = this.lessons[i];
+        }
+      }
+      this.setLesson(this.cl);
     }
 
     //  Show main screen
     this.el.nativeElement.querySelector('.book-container').style.opacity = '1';
+    this.updateTestsState();
+  }
+
+  handleTestingLog(data) {
+    console.log('Testing log loaded', data);
+    if(typeof data.length !== 'undefined' && data.length > 0) this.testing_log = data;
+    this.updateTestsState();
+  }
+
+  addBreakTests() {
+    let b = this.Option.getBreakTest(1);
+    if(b) this.break_2.unshift({test: b.test, alias: this.translate.instant(b.alias), level: b.break, passed: false});
+    b = this.Option.getBreakTest(2);
+    if(b) this.break_3.unshift({test: b.test, alias: this.translate.instant(b.alias), level: b.break, passed: false});
+    b = this.Option.getBreakTest(3);
+    if(b) this.break_4.unshift({test: b.test, alias: this.translate.instant(b.alias), level: b.break, passed: false});
+    b = this.Option.getBreakTest(4);
+    if(b) this.break_5.unshift({test: b.test, alias: this.translate.instant(b.alias), level: b.break, passed: false});
+  }
+
+  //  Go throught all tests in a lesson list
+  //  and compare it with log, then set 'passed' param
+  //  if any activity in log exists according particular test
+  updateTestsState() {
+    if(this.testing_log.length > 0) {
+      for(let b_k in this.breaks) {
+        let b = this.breaks[b_k];
+        //  Check if break contains test
+        if(typeof b.length !== 'undefined' && b.length > 0) {
+          for(let l_k in b) {
+            //  Get separate lesson in break
+            let l = b[l_k];
+            //  Check if lesson is test
+            if(typeof l.test !== 'undefined') {
+              let level = l.level;
+              l.passed = false;
+              //  Find log according to level
+              for(let lg_k in this.testing_log) {
+                let lg = this.testing_log[lg_k];
+                //  Check if log level match with current test level
+                if(lg.level === level) {
+                  //  Check if log has some info about this test
+                  if(typeof lg.log !== 'undefined' && lg.log.length > 0) l.passed = true;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   //  Devide lessons to breaks
@@ -251,6 +338,9 @@ export class DashboardComponent implements OnInit {
     if(this.break_3.length > 0) this.bborder_3 = [this.break_3[0].number, this.break_3[this.break_3.length - 1].number];
     if(this.break_4.length > 0) this.bborder_4 = [this.break_4[0].number, this.break_4[this.break_4.length - 1].number];
     if(this.break_5.length > 0) this.bborder_5 = [this.break_5[0].number, this.break_5[this.break_5.length - 1].number];
+
+    //  Check if need break tests
+    if(this.Option.breakTestEnabled()) this.addBreakTests();
 
   }
 
@@ -362,7 +452,7 @@ export class DashboardComponent implements OnInit {
               timeout: 5000,
               buttons: [
                 {text: res.sidetrip_btn, action: (toast)=>{console.log('Clicked: Sidetrip'); that.location("/sidetrip/"+n); that.notify.remove(toast.id);}, bold: false},
-                {text: res.next_btn, action: (toast) => {console.log('Clicked: Next'); that.location("/lesson"); that.notify.remove(toast.id);}, bold: false},
+                {text: res.next_btn, action: (toast) => {console.log('Clicked: Next'); that.checkForTesting(); that.notify.remove(toast.id);}, bold: false},
                 {text: res.close, action: (toast) => {console.log('Clicked: Close'); that.notify.remove(toast.id); }, bold: true},
               ],
               bodyMaxLength: 200
@@ -377,7 +467,7 @@ export class DashboardComponent implements OnInit {
               timeout: 5000,
               buttons: [
                 {text: res.sidetrip_btn, action: (toast)=>{console.log('Clicked: Sidetrip'); that.location("/sidetrip/"+n); that.notify.remove(toast.id);}, bold: false},
-                {text: res.lesson + ' ' + that.getCurrentLessonTitle(that.student.lu), action: (toast) => {console.log('Clicked: Yes'); that.location("/lesson"); that.notify.remove(toast.id);}, bold: false},
+                {text: res.lesson + ' ' + that.getCurrentLessonTitle(that.student.lu), action: (toast) => {console.log('Clicked: Yes'); that.checkForTesting(); that.notify.remove(toast.id);}, bold: false},
                 {text: res.close, action: (toast) => {console.log('Clicked: Close'); that.notify.remove(toast.id); }, bold: true},
               ],
               bodyMaxLength: 200
@@ -386,9 +476,61 @@ export class DashboardComponent implements OnInit {
       }
 
     } else {
-      this.router.navigateByUrl('/lesson');
+      this.checkForTesting();
     }
 
+  }
+
+  //  Check if testing is required before taking lesson
+  checkForTesting() {
+    
+      //  Check if required to pass some tests befor start a lesson
+      if(this.Option.getOptions().bt_enable && this.Option.getOptions().bt_required) {
+        console.log("Current lesson", this.current_lesson_inst);
+        if(this.current_lesson_inst && this.testing_log.length > 0) {
+          //  Get current lesson level
+          let sc = this.current_lesson_inst.section.split(' ');
+          let cl = parseInt(sc[sc.length - 1]);
+          console.log("Current lesson level", cl);
+          //  Check if test passed for level - 1
+          let passed = false;
+          //  Disable test for first break
+          if((cl - 1) < 1) passed = true;
+          else {
+            for(let i in this.testing_log) {
+              let tl = this.testing_log[i];
+              if(tl.level === (cl - 1) && tl.log.length > 0) passed = true;
+            }
+          }
+          //  Check if test for required level passed
+          if(passed) this.router.navigateByUrl('/lesson');
+          else {
+            let that = this;
+            this.translate.get(['y_have_to_take_test', 'test', 'close']).subscribe((res) => {
+              const toast = that.notify.warning(res.y_have_to_take_test, {
+                timeout: 5000,
+                buttons: [
+                  {text: res.test, action: (toast) => {
+                      console.log('Clicked: Next'); 
+                      that.Token.setType(that.Option.getBreakTest(cl-1).test);
+                      that.router.navigateByUrl('/test'); 
+                      that.notify.remove(toast.id);
+                    }, 
+                  bold: true},
+                  {text: res.close, action: (toast) => {console.log('Clicked: Close'); that.notify.remove(toast.id); }, bold: true},
+                ],
+                bodyMaxLength: 200
+              });
+            });
+          }
+        } else {
+          this.router.navigateByUrl('/lesson');
+        }
+      } else {
+        this.router.navigateByUrl('/lesson');
+      }
+
+      
   }
   
   location(l){
@@ -610,6 +752,18 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/reports', {skipLocationChange: true})
       .then(() => this.router.navigate(['/home']));
       this.loading_flag = false;
+  }
+
+  setStartingLesson(l) {
+    let that = this;
+    this.starting_lesson = l;
+    this.DL.setStartingLesson(l.number).then(()=>{
+      that.router.navigateByUrl('/reports', {skipLocationChange: true})
+      .then(() => that.router.navigate(['/home']));
+    }).catch((e)=>{
+      console.log("Error during set starting lesson", e);
+      alert("Error during set starting lesson");
+    });
   }
 
 }

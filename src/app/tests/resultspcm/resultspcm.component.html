@@ -1,0 +1,56 @@
+<section class="test-slide-item">
+  <!--
+  <p *ngFor="let r of card.content.results">
+    {{ r.desc }} - wrong: {{ r.wrong }} - total: {{ r.presented }}
+  </p>
+  -->
+  <!--
+  <div class="result-test-details">
+    
+    <app-test-result-item *ngFor="let r of complete_res" 
+          [header]="r.description" [value]="r.average" [units]="'%'">
+    </app-test-result-item>
+    
+  </div>
+  -->
+
+  <div class="result-test-details" [hidden]="data.custom_field == ''">
+    <div class='card-content-body-wrap-cfc' [hidden]="data.custom_field == ''" [innerHtml]="data.custom_field | bindhtml">
+		
+    </div>
+  </div>
+  
+  <div class="result-test-level" [hidden]="!tn.loggedIn() || practice_mode">
+    <p>{{ 'your_level' | translate }} <span>{{ complete_level.level }}</span></p>
+    <p>{{ 'start_ltk_from' | translate }} <span class="result-break">{{ complete_level.start }} {{ 'lesson' | translate }}: {{ complete_level.lesson }}</span></p>
+  </div>
+
+  <div class="result-test-level" [hidden]="tn.loggedIn() || practice_mode">
+      <p [hidden]="rrrequest_sent">{{ 'r_to_see_level' | translate }}</p>
+      <div class="reg-form" [hidden]="rrrequest_sent">
+        <div>
+          <span>{{ 'email' | translate }}</span>
+          <input type="email" [(ngModel)]="u_email" />
+        </div>
+        <div>
+          <span>{{ 'your_name' | translate }}</span>
+          <input type="text" [(ngModel)]="u_name" />
+        </div>
+      </div>
+      <!--
+      <p [hidden]="rrrequest_sent">
+        <button (click)="sendCorrectRegisterRequest()" [disabled]="rrrequest_start">{{ 'correct' | translate }}</button>&nbsp;
+        <button (click)="sendRegisterRequest()" [disabled]="rrrequest_start">{{ 'see_a_result' | translate }}</button>
+      </p>
+      -->
+      <button [hidden]="rrrequest_sent"  [disabled]="rrrequest_start" (click)="complete()">{{ 'submit' | translate }}</button>
+      
+      <p [hidden]="!rrrequest_sent">{{ 't_ch_e_further' | translate }}</p>
+    </div>
+
+    <div class="result-test-level" [hidden]="!practice_mode">
+      <p>{{ 'you_finished_practice' | translate }}</p>
+      
+    </div>
+
+</section>

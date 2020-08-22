@@ -102,7 +102,8 @@ export class PlacementReportComponent implements OnInit {
   }
 
   getValue(r) {
-    if(r.presented > 0)
+    if(typeof r.average !== 'undefined') return r.average;
+    else if(r.presented > 0)
       return Math.round(((r.presented-r.wrong)/r.presented)*100);
     else return 0;
   }

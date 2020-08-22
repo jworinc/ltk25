@@ -171,9 +171,9 @@ export class TstComponent extends BaseComponent implements OnInit {
         that.global_desc = e;
       });
       //  Link save results action to current results instance
-      (<TestComponent>componentRef.instance).save_results.subscribe(function(e){
-        that.tb.addResult(e.type, e.presented, e.wrong, e.results, that.test_results);
-      });
+      //(<TestComponent>componentRef.instance).save_results.subscribe(function(e){
+      //  that.tb.addResult(e.type, e.presented, e.wrong, e.results, that.test_results);
+      //});
       //this.le.ccs.push(componentRef);
       this.cts.push(componentRef);
     }

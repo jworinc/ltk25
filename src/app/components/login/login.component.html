@@ -32,20 +32,30 @@
 	    <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="" [(ngModel)]="form.password">
 	  </div>
 	  
-	  <button type="submit" class="btn btn-primary">{{ 'login' | translate }}</button>
+    <button type="submit" class="btn btn-primary" [attr.disabled]="(!form.email || !form.password) ? '' : null">{{ 'login' | translate }}</button>
+    <button class="btn btn-primary" style="margin-left: 20px;" (click)="goDemo()">{{ 'demo' | translate }}</button>
 	</form>
 
 	
 	<div class="form-group form-check havelink-checkbox">
+    <!--
 		<input type="checkbox" class="form-check-input" id="exampleCheck1" [(ngModel)]="have_link">
-		<label class="form-check-label" for="exampleCheck1">{{ 'i_have_link' | translate }}</label>
+    <label class="form-check-label" for="exampleCheck1">{{ 'i_have_link' | translate }}</label>
+    -->
+    <input type="checkbox" class="form-check-input" id="exampleCheck2" [(ngModel)]="have_code">
+		<label class="form-check-label" for="exampleCheck1">{{ 'i_have_code' | translate }}</label>
 	</div>
 	
-	<div class="form-group form-check" *ngIf="have_link">
+	<div class="form-group form-check" *ngIf="have_link && !have_code">
 
 			<input type="text" class="form-control" [(ngModel)]="login_link">
 			<button class="btn btn-primary btn-login-link" (click)="loginByLink()">{{ 'login' | translate }}</button>
-	</div>
+  </div>
+  <div class="form-group form-check" *ngIf="have_code && !have_link">
+
+    <input type="text" class="form-control" [(ngModel)]="login_code">
+    <button class="btn btn-primary btn-login-link" [attr.disabled]="!login_code ? true : null" (click)="loginByCode()">{{ 'login' | translate }}</button>
+  </div>
 		
 
   </div>
