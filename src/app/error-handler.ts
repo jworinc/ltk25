@@ -19,7 +19,8 @@ export class GlobalErrorHandler implements ErrorHandler {
     let reference = 'none';
     
     //  Try to get descriptor
-    let current_component = (router.children[0].component as any).name;
+    let current_component = "none";
+    if(router.children.length > 0) current_component = (router.children[0].component as any).name;
     if(current_component === 'LessonComponent'){
         reference = dl.card_descriptor;
     }
