@@ -156,6 +156,7 @@ export class TokenService {
         localStorage.removeItem(test);
         return true;
     } catch(e) {
+        console.log('Access to localStorage disabled!');
         return false;
     }
 }
