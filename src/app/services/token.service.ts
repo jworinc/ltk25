@@ -34,17 +34,18 @@ export class TokenService {
   }
 
   set(token) {
-    localStorage.setItem('token', token);
+    if(this.lsTest()) localStorage.setItem('token', token);
   }
   get() {
-    return localStorage.getItem('token');
+    if(this.lsTest()) return localStorage.getItem('token');
+    else return '';
   }
 
   
   setEmail(email, name='') {
-    localStorage.setItem('email', email);
+    if(this.lsTest()) localStorage.setItem('email', email);
     if(name!=='') {
-      localStorage.setItem('name', name);
+      if(this.lsTest()) localStorage.setItem('name', name);
       this.current_name = name;
     }
     this.current_email = email;
@@ -52,7 +53,7 @@ export class TokenService {
   getEmail() {
     //return localStorage.getItem('email');
     let e = this.current_email;
-    if(e == 'none' || e == '') e = localStorage.getItem('email');
+    if(this.lsTest() && (e == 'none' || e == '')) e = localStorage.getItem('email');
     return e;
   }
 
@@ -62,7 +63,7 @@ export class TokenService {
   }
 
   setProf(prof) {
-    localStorage.setItem('prof', prof);
+    if(this.lsTest()) localStorage.setItem('prof', prof);
     this.current_prof = prof;
   }
   getProf() {
@@ -70,32 +71,34 @@ export class TokenService {
   }
 
   setCode(code) {
-    localStorage.setItem('pcmcode', code);
+    if(this.lsTest()) localStorage.setItem('pcmcode', code);
     this.current_code = code;
   }
   getCode() {
     
     let e = this.current_code;
-    if(e == 'none' || e == '') e = localStorage.getItem('pcmcode');
+    if(this.lsTest() && (e == 'none' || e == '')) e = localStorage.getItem('pcmcode');
     return e;
   }
 
   setType(type) {
-    localStorage.setItem('testtype', type);
+    if(this.lsTest()) localStorage.setItem('testtype', type);
     this.current_type = type;
   }
   getType() {
     let e = this.current_type;
-    if(e == 'none' || e == '') e = localStorage.getItem('testtype');
+    if(this.lsTest() && (e == 'none' || e == '')) e = localStorage.getItem('testtype');
     return e;
   }
 
   clearUserTestingInfo() {
     //localStorage.removeItem('email');
     //localStorage.removeItem('name');
-    localStorage.removeItem('prof');
-    localStorage.removeItem('pcmcode');
-    localStorage.removeItem('testtype');
+    if(this.lsTest()) {
+      localStorage.removeItem('prof');
+      localStorage.removeItem('pcmcode');
+      localStorage.removeItem('testtype');
+    }
   }
 
 
@@ -105,7 +108,7 @@ export class TokenService {
   }
 
   remove() {
-    localStorage.removeItem('token');
+    if(this.lsTest()) localStorage.removeItem('token');
     //this.clearUserTestingInfo();
   }
 
