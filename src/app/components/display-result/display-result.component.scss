@@ -1,0 +1,74 @@
+:host {
+    display: flex;
+    position: relative;
+    max-width: 98%;
+    max-height: 98%;
+    width: 98%;
+}
+.gsc-results {
+    display: flex;
+    position: relative;
+    min-height: 30%;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10%;
+
+    div div {
+        display: flex;
+        gap: 30px;
+        img {
+            width: 60px;
+        }
+    }
+}
+.gsc-results span {
+    display: block;
+    position: relative;
+    width: 70%;
+    margin: auto;
+    text-align: center;
+    font-size: 42px;
+
+    line-height: 1.8em;
+}
+.gsc-result-right {
+    background-color: #03cd03;
+}
+.gsc-result-wrong {
+    background-color: lightcoral;
+}
+
+@media only screen and (max-width: 1024px) {
+    .gsc-user-input span,
+    .gsc-letters span {
+        padding: 0px 6px;
+        padding-bottom: 7px;
+        font-size: 34px;
+    }
+    .gsc-user-input,
+    .gsc-letters {
+        padding-top: 15px;
+    }
+    .gsc-letters {
+        margin-top: 24px;
+    }
+    .gsc-right-answer {
+        width: 30px;
+        font-size: 28px !important;
+        margin-left: -15px !important;
+    }
+    .gsc-results {
+        margin-top: 40px;
+    }
+    .gsc-results span {
+        font-size: 26px;
+        color: white;
+        line-height: 1.6em;
+    }
+    .card-description-wrap-ar2 {
+        margin-top: 4px;
+    }
+    
+}

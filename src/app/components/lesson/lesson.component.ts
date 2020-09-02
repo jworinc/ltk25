@@ -688,6 +688,9 @@ export class LessonComponent implements OnInit, AfterViewInit {
       this.ccs.push(componentRef);
     }
     
+    //  Check for each card if it has intro and conclusion
+    this.checkForIntroConclusion();
+
   }
 
   //  Handle cards when it loaded
@@ -854,6 +857,25 @@ export class LessonComponent implements OnInit, AfterViewInit {
     for(let i in this.ccs){
       let c = this.ccs[i];
       c.instance.global_recorder = mode;
+    }
+  }
+
+  checkForIntroConclusion() {
+    for(let i in this.ccs){
+      let c = this.ccs[i];
+      //  Skip cards that has id > 100, (intro, conclusion, customization)
+      if(c.instance.data.id > 100) continue;
+      let curr_id = c.instance.data.id;
+      //  Check for intro / conclusion card, it must has id + 100 and id + 200
+      for(let k in this.ccs){
+        let cl = this.ccs[k];
+        if(cl.instance.data.id === (curr_id + 100)) {
+          c.instance.has_intro = true;
+        }
+        if(cl.instance.data.id === (curr_id + 200)) {
+          c.instance.has_conclusion = true;
+        }
+      }
     }
   }
 

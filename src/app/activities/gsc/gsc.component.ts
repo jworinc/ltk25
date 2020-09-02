@@ -5,6 +5,7 @@ import { PlaymediaService } from '../../services/playmedia.service';
 import { LoggingService } from '../../services/logging.service';
 import { ColorschemeService } from '../../services/colorscheme.service';
 import { PickElementService } from '../../services/pick-element.service';
+import { DisplayResultsService } from '../../services/display-results.service';
 
 @Component({
   selector: 'app-gsc',
@@ -19,7 +20,8 @@ export class GscComponent extends BaseComponent implements OnInit {
 			  private playmedia: PlaymediaService, 
 			  private gsclog: LoggingService, 
 			  private gsccs: ColorschemeService,
-			  private gscpe: PickElementService) {
+			  private gscpe: PickElementService,
+			  public drs: DisplayResultsService) {
   	super(elm, sanitizer, playmedia, gsclog, gsccs, gscpe);
   }
 
@@ -168,6 +170,7 @@ export class GscComponent extends BaseComponent implements OnInit {
 		//	Hide option buttons
 		this.optionHide();
 		this.enterHide();
+		if(!this.has_conclusion) this.drs.clear();
 	}
 
 	setFocus(){
@@ -227,16 +230,23 @@ export class GscComponent extends BaseComponent implements OnInit {
 			else this.display_result.wrong++;
 		}
 
-		this.card.content[0].desc = '';
+		//	Add results to Display Results Service
+		this.drs.setResult(this.display_result.right, this.display_result.wrong);
 
-		this.elm.nativeElement.querySelector('.gsc-letters').style.display = 'none';
-		this.elm.nativeElement.querySelector('.gsc-results').style.display = 'block';
-		let that = this;
-		//	Play chimes
-		this.playmedia.action('CHIMES', function(){
-			that.uinputph = 'finish';
-			that.enableNextCard(); that.moveNext();
-		}, 300);
+		this.card.content[0].desc = '';
+		if(!this.has_conclusion) {
+			this.elm.nativeElement.querySelector('.gsc-letters').style.display = 'none';
+			this.elm.nativeElement.querySelector('.gsc-results').style.display = 'block';
+			let that = this;
+			//	Play chimes
+			this.playmedia.action('CHIMES', function(){
+				that.uinputph = 'finish';
+				that.enableNextCard(); that.moveNext();
+			}, 300);
+		} else {
+			this.uinputph = 'finish';
+			this.enableNextCard(); this.moveNext();
+		}
 
 	}
 

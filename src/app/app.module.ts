@@ -43,6 +43,7 @@ import { LoggingService } from './services/logging.service';
 import { ColorschemeService } from './services/colorscheme.service';
 import { HelpService } from './services/help.service';
 import { ErrorLogService } from './services/error-log.service';
+import { DisplayResultsService } from './services/display-results.service';
 
 import { CardDirective } from './directives/card.directive';
 import { Al1Component } from './activities/al1/al1.component';
@@ -130,6 +131,8 @@ import { FilterByArrayPipe } from './pipes/filter-by-array.pipe';
 import { LangfilterPipe } from './pipes/langfilter.pipe';
 import { RelatedLoginComponent } from './components/related-login/related-login.component';
 import { CftComponent } from './tests/cft/cft.component';
+import { ClcComponent } from './activities/clc/clc.component';
+import { DisplayResultComponent } from './components/display-result/display-result.component';
 
 
 // AoT requires an exported function for factories
@@ -236,7 +239,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     FilterByArrayPipe,
     LangfilterPipe,
     RelatedLoginComponent,
-    CftComponent
+    CftComponent,
+    ClcComponent,
+    DisplayResultComponent
   ],
   imports: [
     BrowserModule,
@@ -256,7 +261,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [DataloaderService, TokenService, AuthService, BeforeLoginService, AfterLoginService, PickElementService,
   { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
     SnotifyService, OptionService, CardbuilderService, PlaymediaService, RecorderService, MediapreloaderService, 
-    LoggingService, ColorschemeService, CustomfieldService, ErrorLogService, Title, HelpService,
+    LoggingService, ColorschemeService, CustomfieldService, ErrorLogService, Title, HelpService, DisplayResultsService,
     { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
     ///*{ provide: ErrorHandler, useClass: GlobalErrorHandler }*/ ],
     { provide: ErrorHandler, useClass: GlobalErrorHandler }],
@@ -265,7 +270,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   Bw6Component, Bw7Component, SypComponent, DiwComponent, GscComponent, Rp1Component, Rp2Component, GwmComponent, SiwComponent,
   GwfComponent, GqwComponent, DisComponent, SplComponent, GdnComponent, GcpComponent, GcsComponent, GisComponent, GmuComponent,
   GnbComponent, GslComponent, GsmComponent, GssComponent, Rw1Component, IdmComponent, Wl1Component, Bs1Component, AuditoryComponent,
-  ComprehensionComponent, SpellingComponent, CccComponent, TstComponent, IntroComponent, ResultsComponent, ResultspcmComponent,
+  ComprehensionComponent, SpellingComponent, CccComponent, ClcComponent, TstComponent, IntroComponent, ResultsComponent, ResultspcmComponent,
   CfcComponent, CftComponent ],
   bootstrap: [AppComponent]
 })

@@ -13,10 +13,16 @@
 			<span *ngFor='let l of letters; let kl = index' [attr.data-index]='kl' (click)='addAnswer(kl)'>
 			{{ l }}</span>
 		</div>
+		
 		<div class='gsc-results'>
+			<!--
 			<span class='gsc-result-right'>Right: {{ display_result.right }}</span>
 			<span class='gsc-result-wrong'>Wrong: {{ display_result.wrong }}</span>
+			-->
+			<app-display-result [hidden]="drs.isEmpty()"></app-display-result>
 		</div>
+		
+		
 		<div class='card-description-wrap-ar2 diw-card-description'>
             <span>{{ card.content[0].desc }}</span>
         </div>

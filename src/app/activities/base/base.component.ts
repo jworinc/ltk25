@@ -64,6 +64,8 @@ export class BaseComponent implements OnInit, CardComponent {
 	@Input() prev_btn: any;
 	@Input() sidetripmode: boolean;
 	@Input() global_start: boolean;
+	@Input() has_conclusion: boolean = false;
+	@Input() has_intro: boolean = false;
 
 
 	@Input('cpos')
