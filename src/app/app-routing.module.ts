@@ -16,6 +16,11 @@ const routes: Routes = [
     canActivate: [BeforeLoginService],
   },
   {
+    path: 'login/:e',
+    component: LoginComponent,
+    canActivate: [BeforeLoginService],
+  },
+  {
     path: 'entrance/:l',
     component: EntranceComponent,
     canActivate: [BeforeLoginService],
