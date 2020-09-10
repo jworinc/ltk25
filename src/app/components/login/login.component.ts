@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DataloaderService } from '../../services/dataloader.service';
 import { TokenService } from '../../services/token.service';
 import { AuthService } from '../../services/auth.service';
@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
     private dl: DataloaderService, 
     private tn: TokenService,
     private router: Router,
+    private route: ActivatedRoute,
     private Auth: AuthService,
     private notify: SnotifyService,
     private translate: TranslateService,
@@ -58,7 +59,16 @@ export class LoginComponent implements OnInit {
       //if(e && typeof e.length !== 'undefined' && e.length > 0){
         this.locales = e;
       //}
-    })
+    });
+    let that = this;
+    let sub = that.route.params.subscribe(params => {
+      if(params.hasOwnProperty('e')){
+        that.form.email = params['e']; // (+) converts string 'id' to a number
+        
+      }
+
+    });
+
   }
 
   onSubmit() {
