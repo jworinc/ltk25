@@ -28,9 +28,9 @@
         </div>
       </div>
       
-      <div class="word-row">
-        <div class="col-4" *ngFor="let word of var_for_display">
-            <p class="p_design" (click)="setAnswerLetter(word)">{{word}}</p>
+      <div class="word-row testing-vars">
+        <div class="col-4 var-item" *ngFor="let word of var_for_display">
+            <p class="p_design var-text" (click)="setAnswerLetter(word)">{{word}}</p>
         </div>
     </div>
 

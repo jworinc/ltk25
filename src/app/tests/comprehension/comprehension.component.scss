@@ -104,6 +104,9 @@ h5{
     }
     .word-row{
         padding: 4px 0;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
     }
     .cust-row h4 {
         margin: 4px 0;
@@ -114,5 +117,15 @@ h5{
         font-size: 16px;
         line-height: 1em;
         margin-bottom: 3px;
+        margin-top: 20%;
     }
+    .var-item{
+        flex: 0 0 66.66666%;
+        max-width: 66.66666%;
+    }
+    .var-text{
+        font-size: 30px;
+        padding-bottom: 6px;
+    }
+    
 }

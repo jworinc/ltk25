@@ -60,7 +60,8 @@ export class AuditoryComponent extends BasetestComponent implements OnInit {
     this.pms.stop();
     this.pms.sound(this.subtitles[0].vawe, ()=>{
       that.intro_sub_played = true;
-      that.pms.word(this.card[this.ind].answer.wavename,function(){});
+      if(that.ind < that.card.length && typeof that.card[that.ind] !== 'undefined')
+        that.pms.word(that.card[that.ind].answer.wavename,function(){});
     }, 500);
   }
   
