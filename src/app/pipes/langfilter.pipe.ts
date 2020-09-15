@@ -7,7 +7,7 @@ export class LangfilterPipe implements PipeTransform {
 
   transform(items: any, sku: any): any {
 
-    if(!sku) return items;
+    if(!sku || !sku.languages) return items;
     let locales = [];
     sku.languages.split(",").map((l)=>{ locales.push(l.trim()) });
     return items.filter((item) => {
