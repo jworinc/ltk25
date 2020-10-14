@@ -1,0 +1,112 @@
+<app-topnav></app-topnav>
+
+
+<div class="card col-sm-10 col-lg-8 col-xl-6" style='padding: 0; box-shadow: 0 0 20px #ddd;' [hidden]="!login_screen">
+  <div class="card-header" style="padding-top: 18px;">
+    {{ 'login' | translate }}
+    <span style="display: block; position: relative; float: right; margin-top: 0px;">
+		<label for='language-select'>{{ 'language' | translate }}&nbsp;</label>
+		<select id='language-select' [ngModel]="language" (ngModelChange)="setNewLanguage($event)">
+		    <!--
+		    <option value='en'>English</option>
+		    <option value='ru'>Русский</option>
+				<option value='tr'>Türk</option>
+				-->
+
+				<option *ngFor="let l of locales" [attr.value]="l.locale">{{ l.title }}</option>
+		    
+		</select>
+	</span>
+  </div>
+  <div class="card-body">
+
+    <form #loginForm=ngForm (ngSubmit)="onSubmit()">
+      <input type="hidden" name="userlocale" [(ngModel)]="form.userlocale"  >
+	  <div class="form-group">
+	    <label for="exampleInputEmail1">{{ 'emailaddress' | translate }}</label>
+	    <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="" [(ngModel)]="form.email">
+	    <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+    </div>
+    <!--
+	  <div class="form-group">
+	    <label for="exampleInputPassword1">{{ 'password' | translate }}</label>
+	    <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="" [(ngModel)]="form.password">
+    </div>
+  -->
+	  
+    <button type="submit" class="btn btn-primary" [attr.disabled]="(!form.email) ? '' : null">{{ 'login' | translate }}</button>
+    <button class="btn btn-primary" style="margin-left: 20px;" (click)="goDemo()">{{ 'demo' | translate }}</button>
+	</form>
+
+	
+	<div class="form-group form-check havelink-checkbox">
+    <!--
+		<input type="checkbox" class="form-check-input" id="exampleCheck1" [(ngModel)]="have_link">
+    <label class="form-check-label" for="exampleCheck1">{{ 'i_have_link' | translate }}</label>
+    -->
+    <input type="checkbox" class="form-check-input" id="exampleCheck2" [(ngModel)]="have_code">
+		<label class="form-check-label" for="exampleCheck1">{{ 'i_have_code' | translate }}</label>
+	</div>
+	
+	<div class="form-group form-check" *ngIf="have_link && !have_code">
+
+			<input type="text" class="form-control" [(ngModel)]="login_link">
+			<button class="btn btn-primary btn-login-link" (click)="loginByLink()">{{ 'login' | translate }}</button>
+  </div>
+  <div class="form-group form-check" *ngIf="have_code && !have_link">
+
+    <input type="text" class="form-control" [(ngModel)]="login_code">
+    <button class="btn btn-primary btn-login-link" [attr.disabled]="!login_code ? true : null" (click)="loginByCode()">{{ 'login' | translate }}</button>
+  </div>
+		
+
+  </div>
+</div>
+
+<!--  Login link expired notification modal -->
+<div class="modal" tabindex="-1" role="dialog" [hidden]="!request_update_screen" style='display: block; margin-top: 58px;'>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'link_expired' | translate }}</h5>
+        <!--
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        -->
+      </div>
+      <div class="modal-body">
+        <p>{{ 'login_link_exp_message' | translate }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" 
+				(click)="sendRequestToUpdate()" 
+				[ngClass]="{'disabled': disable_request_button}">
+					{{ 'request_link_update' | translate }}
+				</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--  Request update message sent modal -->
+<div class="modal" tabindex="-1" role="dialog" [hidden]="!update_message_screen" style='display: block; margin-top: 58px;'>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'message_sent' | translate }}</h5>
+        <!--
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        -->
+      </div>
+      <div class="modal-body">
+        <p>{{ 'message_sent_info' | translate }}</p>
+      </div>
+      
+    </div>
+  </div>
+</div>

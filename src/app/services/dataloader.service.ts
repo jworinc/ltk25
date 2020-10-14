@@ -30,6 +30,11 @@ export class DataloaderService {
     return this.http.post(`${this.base_url}/login`, data)
   }
 
+  //	Use only email to login user in app (for demo skus)
+  come(data) {
+    return this.http.post(`${this.base_url}/come`, data)
+  }
+
   //	Use login and pass to login user in app
   relatedLogin(data) {
     return this.http.post(`${this.base_url}/rel/login`, data, {

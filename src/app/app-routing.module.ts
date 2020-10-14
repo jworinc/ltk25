@@ -8,6 +8,7 @@ import { ReportsComponent } from './components/reports/reports.component';
 import { ShowpcmtestingComponent } from './components/showpcmtesting/showpcmtesting.component';
 import { BeforeLoginService } from './services/before-login.service';
 import { AfterLoginService } from './services/after-login.service';
+import { ComeComponent } from './components/come/come.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,16 @@ const routes: Routes = [
   {
     path: 'entrance/:l',
     component: EntranceComponent,
+    canActivate: [BeforeLoginService],
+  },
+  {
+    path: 'come',
+    component: ComeComponent,
+    canActivate: [BeforeLoginService],
+  },
+  {
+    path: 'come/:e',
+    component: ComeComponent,
     canActivate: [BeforeLoginService],
   },
   {

@@ -133,6 +133,7 @@ import { RelatedLoginComponent } from './components/related-login/related-login.
 import { CftComponent } from './tests/cft/cft.component';
 import { ClcComponent } from './activities/clc/clc.component';
 import { DisplayResultComponent } from './components/display-result/display-result.component';
+import { ComeComponent } from './components/come/come.component';
 
 
 // AoT requires an exported function for factories
@@ -241,7 +242,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     RelatedLoginComponent,
     CftComponent,
     ClcComponent,
-    DisplayResultComponent
+    DisplayResultComponent,
+    ComeComponent
   ],
   imports: [
     BrowserModule,

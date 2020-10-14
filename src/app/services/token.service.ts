@@ -12,6 +12,7 @@ export class TokenService {
     signup: 'http://localhost:8000/api/signup',
     entrance: 'https://api.ltk.cards/api/entrance',
     logincode: 'https://api.ltk.cards/api/logincode',
+    come: 'https://api.ltk.cards/api/come'
   };
   
   private current_email = 'none';
@@ -26,6 +27,7 @@ export class TokenService {
     this.iss.rellogin = `${this.getApiUrl()}/rel/login`;
     this.iss.entrance = `${this.getApiUrl()}/entrance`;
     this.iss.logincode = `${this.getApiUrl()}/logincode`;
+    this.iss.come = `${this.getApiUrl()}/come`;
   }
 
   handle(token) {
