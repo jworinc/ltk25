@@ -27,12 +27,12 @@ const routes: Routes = [
     canActivate: [BeforeLoginService],
   },
   {
-    path: 'come',
+    path: 'welcome',
     component: ComeComponent,
     canActivate: [BeforeLoginService],
   },
   {
-    path: 'come/:e',
+    path: 'welcome/:e',
     component: ComeComponent,
     canActivate: [BeforeLoginService],
   },
