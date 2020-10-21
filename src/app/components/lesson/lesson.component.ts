@@ -256,8 +256,16 @@ export class LessonComponent implements OnInit, AfterViewInit {
     }
 
     this.sub = this.route.params.subscribe(params => {
-      
-      if(params.hasOwnProperty('n') && that.router.isActive("sidetrip", false)){
+
+      if(params.hasOwnProperty('n') && params.hasOwnProperty('p') && that.router.isActive("sidetrip", false)){
+        that.n = +params['n']; // (+) converts string 'id' to a number
+        that.start_position = (+params['p'])-1;
+        that.sidetripmode = true;
+        that.setSidetripMode(true);
+        console.log('Application runned in sidetrip mode!');
+        return;
+      }
+      else if(params.hasOwnProperty('n') && that.router.isActive("sidetrip", false)){
         that.n = +params['n']; // (+) converts string 'id' to a number
         that.sidetripmode = true;
         that.setSidetripMode(true);
@@ -536,7 +544,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
       this.loadCards(this.n);
       this.current_lesson_title = this.getCurrentLessonTitle(this.n);
       this.card_descriptor.lesson = this.n;
-      this.start_position = 0;
+      if(!this.start_position) this.start_position = 0;
       console.log('Run sidetrip, start position setted to start!');
       //  Setup lesson for testing
       //  Subscription execution issue, to keep sequence and set last uncomplete in a right order
