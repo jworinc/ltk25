@@ -50,6 +50,7 @@ export class LessonComponent implements OnInit, AfterViewInit {
   }
 
   public start_position: any;
+  public shift_position = 0;
 
   public current_lesson_title: string = '000';
   public sidetripmode = false;
@@ -259,7 +260,15 @@ export class LessonComponent implements OnInit, AfterViewInit {
 
       if(params.hasOwnProperty('n') && params.hasOwnProperty('p') && that.router.isActive("sidetrip", false)){
         that.n = +params['n']; // (+) converts string 'id' to a number
-        that.start_position = (+params['p'])-1;
+        that.shift_position = +params['p'];
+        that.sidetripmode = true;
+        that.setSidetripMode(true);
+        console.log('Application runned in sidetrip mode!');
+        return;
+      }
+      else if(params.hasOwnProperty('n') && params.hasOwnProperty('p') && that.router.isActive("position", false)){
+        that.n = +params['n']; // (+) converts string 'id' to a number
+        that.start_position = +params['p'];
         that.sidetripmode = true;
         that.setSidetripMode(true);
         console.log('Application runned in sidetrip mode!');
@@ -736,6 +745,19 @@ export class LessonComponent implements OnInit, AfterViewInit {
         }
         console.log("Start position search finish, selected position: "+current_cpos);
         this.cpos = current_cpos;
+      }
+      else if(typeof this.shift_position !== 'undefined' && this.shift_position !== null && this.shift_position >= 2){
+        let current_shift = parseInt(data.cards[1].pos);
+        console.log("Start position search start:");
+        for(let i in data.cards){
+          let c = data.cards[i];
+          if(parseInt(c.pos) === this.shift_position){
+            current_shift = c.pos;
+            console.log("Found shift position", {search_card_position: c.position, required_position: this.start_position, current: current_shift});
+          }
+        }
+        console.log("Shift position search finish, selected position: "+current_shift);
+        this.cpos = current_shift;
       } else {
         console.log("Start position setted default!");
         this.cpos = parseInt(data.cards[1].pos);
