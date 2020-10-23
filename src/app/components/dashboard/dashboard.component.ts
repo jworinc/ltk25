@@ -22,6 +22,7 @@ export class DashboardComponent implements OnInit {
   	name: 'Admin',
     lu: 0,
     sid_message: 'Message',
+    set_start_lesson: true,
     chatroom: "",
     related_accounts: [],
     new_user: false
@@ -205,6 +206,7 @@ export class DashboardComponent implements OnInit {
     this.student.name = data.user_name;
     this.student.lu = data.last_uncomplete;
     this.student.sid_message = data.sid_message;
+    this.student.set_start_lesson = data.set_start_lesson;
     this.student.chatroom = data.chatroom;
     if(typeof data.related_accounts !== 'undefined') {
       this.student.related_accounts = data.related_accounts;
