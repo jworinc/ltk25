@@ -28,7 +28,7 @@
 			<h2>{{ sku.title }}</h2>
             <h4>{{ sku.desc }}</h4>
         </div>
-        <div class='row ltk-student ltk-set-starting' [hidden]="lessons.length == 0 || !student.new_user">
+        <div class='row ltk-student ltk-set-starting' [hidden]="lessons.length == 0 || !student.new_user || !student.set_start_lesson">
             <div class="ltk-set-starting-caption">{{ 'select_starting_lesson' | translate }}:</div>
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
