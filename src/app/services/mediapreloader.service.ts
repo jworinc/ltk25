@@ -381,6 +381,7 @@ export class MediapreloaderService {
 			let img = images[g];
 			if(typeof document !== 'undefined'){
 				let el = document.getElementById('main-app-container');
+				if(!el) break;
 				let imel = document.createElement('img');
 				imel.setAttribute('style', 'display: none;');
 				imel.src = this.options.getMediaStorage() + '/storage/app/public/pic_png/' + img;
