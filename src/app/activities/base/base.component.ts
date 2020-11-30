@@ -311,7 +311,7 @@ export class BaseComponent implements OnInit, CardComponent {
 
 			that.checkForHeader();
 			that.show(); 
-		}, 3);
+		}, 100);
 
 		
 		/*
