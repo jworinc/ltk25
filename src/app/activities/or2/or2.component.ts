@@ -42,7 +42,7 @@ export class Or2Component extends BaseorComponent implements OnInit {
 
     //	Create list of word/image content of the card
     let content = '';
-    for(let i = 0; i < this.data.content[0].parts.length; i++) {
+    for(let i = 0; i < this.data.content[0].parts.length / 2; i++) {
 
       //	Get current list item
       this.words.push(this.data.content[0].parts[i].title.replace('(', '').replace(')', ''));
@@ -123,7 +123,7 @@ export class Or2Component extends BaseorComponent implements OnInit {
   next() {
     this.current_word++;
     let that = this;
-    if(this.current_word < this.card.content[0].parts.length){
+    if(this.current_word < this.words.length){
       this.answer_word = this.words[this.current_word];
       setTimeout(()=>{
         that.psn.origin_text = '';
