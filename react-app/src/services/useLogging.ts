@@ -1,5 +1,7 @@
 // LoggingService equivalent for React
 // Provides lesson, command, and placement logging, and performance calculation
+import { useRef } from 'react';
+import axios from 'axios';
 import { useToken } from './useToken';
 
 const BASE_URL = 'https://api.ltk.cards/api';
@@ -7,42 +9,35 @@ const single_types = ['AL1', 'GSC', 'GWM', 'OR1', 'OR3', 'OR4', 'SYP', 'SET', 'S
 
 export function useLogging() {
   const token = useToken();
-  let currentLesson = 0;
+  const currentLessonRef = useRef<number>(0);
 
   function setCurrentLesson(l: number) {
-    currentLesson = l;
+    currentLessonRef.current = l;
   }
 
   async function lessonBegin(l: number) {
-    const res = await fetch(`${BASE_URL}/u/logging/lesson/begin/${l}`,
-      { headers: { ...token.getAuthHeader() } });
-    return res.json();
+    const headers = token.getAuthHeader();
+    return axios.get(`${BASE_URL}/u/logging/lesson/begin/${l}`, { headers });
   }
 
   async function lessonEnd(l: number) {
-    const res = await fetch(`${BASE_URL}/u/logging/lesson/end/${l}`,
-      { headers: { ...token.getAuthHeader() } });
-    return res.json();
+    const headers = token.getAuthHeader();
+    return axios.get(`${BASE_URL}/u/logging/lesson/end/${l}`, { headers });
   }
 
   async function lessonTimeon(l: number) {
-    const res = await fetch(`${BASE_URL}/u/logging/lesson/timeon/${l}`,
-      { headers: { ...token.getAuthHeader() } });
-    return res.json();
+    const headers = token.getAuthHeader();
+    return axios.get(`${BASE_URL}/u/logging/lesson/timeon/${l}`, { headers });
   }
 
   async function commandBegin(instance: string, position: number, l?: number) {
+    const headers = token.getAuthHeader();
     const data = {
       instance,
       position,
-      lesson: l ?? currentLesson,
+      lesson: typeof l === 'number' ? l : currentLessonRef.current,
     };
-    const res = await fetch(`${BASE_URL}/u/logging/command/begin`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...token.getAuthHeader() },
-      body: JSON.stringify(data),
-    });
-    return res.json();
+    return axios.post(`${BASE_URL}/u/logging/command/begin`, data, { headers });
   }
 
   function perfCalc(inst: string, pres: number, err: number) {
@@ -56,7 +51,15 @@ export function useLogging() {
     return Math.round(perf * 100) / 100;
   }
 
-  async function commandEnd(instance: string, position: number, errlog: any[], presented: number, l: number, complete: boolean) {
+  async function commandEnd(
+    instance: string,
+    position: number,
+    errlog: any[],
+    presented: number,
+    l: number,
+    complete: boolean
+  ) {
+    const headers = token.getAuthHeader();
     const data = {
       instance,
       position,
@@ -67,15 +70,18 @@ export function useLogging() {
       lesson: l,
       complete,
     };
-    const res = await fetch(`${BASE_URL}/u/logging/command/end`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...token.getAuthHeader() },
-      body: JSON.stringify(data),
-    });
-    return res.json();
+    return axios.post(`${BASE_URL}/u/logging/command/end`, data, { headers });
   }
 
-  async function testEnd(instance: string, position: number, errlog: any[], presented: number, l: number, complete: boolean) {
+  async function testEnd(
+    instance: string,
+    position: number,
+    errlog: any[],
+    presented: number,
+    l: number,
+    complete: boolean
+  ) {
+    const headers = token.getAuthHeader();
     const data = {
       instance,
       position,
@@ -83,30 +89,24 @@ export function useLogging() {
       lesson: l,
       complete,
     };
-    const res = await fetch(`${BASE_URL}/u/logging/test/end`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...token.getAuthHeader() },
-      body: JSON.stringify(data),
-    });
-    return res.json();
+    return axios.post(`${BASE_URL}/u/logging/test/end`, data, { headers });
   }
 
-  async function placementEnd(result: any, logid: number, level: number, brk: number, lsn: number) {
-    const data = {
-      email: token.getEmail(),
-      result,
-      logid,
-      level,
-      break: brk,
-      lesson: lsn,
-    };
-    const headers = { 'Content-Type': 'application/json', ...token.getAuthHeader() };
-    const res = await fetch(`${BASE_URL}/placement/end`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(data),
-    });
-    return res.json();
+  async function placementEnd(
+    result: any,
+    logid: number,
+    level: number,
+    brk: number,
+    lsn: number
+  ) {
+    const email = token.getEmail();
+    const data = { email, result, logid, level, break: brk, lesson: lsn };
+    const headers = token.getAuthHeader();
+    if (token.loggedIn()) {
+      return axios.post(`${BASE_URL}/placement/end`, data, { headers });
+    } else {
+      return axios.post(`${BASE_URL}/placement/end`, data);
+    }
   }
 
   return {

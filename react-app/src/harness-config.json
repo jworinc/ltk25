@@ -1,0 +1,13 @@
+{
+  "defaultApi": "getTest",
+  "apiOptions": [
+    { "label": "Placement Test", "value": "getTest" },
+    { "label": "Lesson Cards", "value": "getCards" },
+    { "label": "Typed Test (Auditory)", "value": "getTypedTest" }
+  ],
+  "defaultLessonId": 1,
+  "ui": {
+    "showDebug": true,
+    "theme": "light"
+  }
+}

@@ -1,0 +1,41 @@
+Folder PATH listing for volume Windows
+Volume serial number is 3619-07D7
+C:.
+¦   App.css
+¦   App.tsx
+¦   harness-tests.ts
+¦   Harness.tsx
+¦   index.css
+¦   logger.ts
+¦   main.tsx
+¦   tree.txt
+¦   vite-env.d.ts
+¦   
++---assets
+¦       react.svg
+¦       
++---routes
+¦       RequireAuth.tsx
+¦       RequireNoAuth.tsx
+¦       
++---services
+        dataloader.ts
+        useAuth.tsx
+        useCardbuilder.test.mjs
+        useCardbuilder.test.ts
+        useCardbuilder.tsx
+        useColorScheme.ts
+        UseColorSchemeHarness.tsx
+        useCustomField.ts
+        UseCustomFieldHarness.tsx
+        useDataloader.ts
+        useErrorLog.ts
+        UseErrorLogHarness.tsx
+        useHelp.ts
+        UseHelpHarness.tsx
+        useLogging.ts
+        UseLoggingHarness.tsx
+        useOptions.ts
+        UseOptionsHarness.tsx
+        useToken.ts
+        

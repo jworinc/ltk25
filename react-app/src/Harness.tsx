@@ -1,11 +1,107 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './services/useAuth';
-import * as dataloader from './services/dataloader';
-import { harnessTests, getTestByName, HarnessTest, sampleCardData } from './harness-tests';
-import { getCards as getCardbuilderCards } from './services/useCardbuilder.tsx';
+import TabbedHarness from './TabbedHarness';
+import { useTestBuilder } from './services/useTestBuilder';
+import { useDataloader } from './services/useDataloader';
+import config from './harness-config.json';
+import { useFontAdjuster } from './services/useFontAdjuster';
+import { usePlaySentence } from './services/usePlaySentence';
+import { usePlayWords } from './services/usePlayWords';
+import { WordTranslate } from './services/WordTranslate';
+import { CardAnchor } from './services/CardAnchor';
+import { TestAnchor } from './services/TestAnchor';
 
 const TEST_EMAIL = 'test1@test.ts';
 const TEST_PASSWORD = 'test123';
+
+// Top-level API explorer component
+const TopLevelApiExplorer: React.FC = () => {
+  const dl = useDataloader();
+  const [results, setResults] = useState<any>({});
+  const [loading, setLoading] = useState(false);
+  const [summary, setSummary] = useState<any[]>([]);
+
+  // List of endpoints to call
+  const apis = [
+    { name: 'getLessons', fn: () => dl.getLessons() },
+    { name: 'getCards', fn: () => dl.getCards(1) }, // use lesson 1 as example
+    { name: 'getOptions', fn: () => dl.getOptions() },
+    { name: 'getStudentInfo', fn: () => dl.getStudentInfo() },
+    { name: 'getStudentLessons', fn: () => dl.getStudentLessons() },
+    { name: 'getProgress', fn: () => dl.getProgress() },
+    { name: 'getSummary', fn: () => dl.getSummary() },
+    { name: 'getPlacement', fn: () => dl.getPlacement() },
+    { name: 'getSightWords', fn: () => dl.getSightWords() },
+    { name: 'getNotebookWords', fn: () => dl.getNotebookWords() },
+    { name: 'getGrammarTopics', fn: () => dl.getGrammarTopics() },
+    { name: 'getHelpConfiguration', fn: () => dl.getHelpConfiguration() },
+    { name: 'activities', fn: () => dl.activities() },
+  ];
+
+  useEffect(() => {
+    setLoading(true);
+    setResults({});
+    setSummary([]);
+    const fetchAll = async () => {
+      const newResults: any = {};
+      const newSummary: any[] = [];
+      for (const api of apis) {
+        try {
+          // eslint-disable-next-line no-console
+          console.log(`[TopLevelApiExplorer] Calling ${api.name}`);
+          const data = await api.fn();
+          newResults[api.name] = { status: 'success', data };
+          newSummary.push({ name: api.name, status: 'success' });
+          // eslint-disable-next-line no-console
+          console.log(`[TopLevelApiExplorer] ${api.name} success`, data);
+        } catch (err: any) {
+          newResults[api.name] = { status: 'error', error: err?.message || String(err) };
+          newSummary.push({ name: api.name, status: 'error', error: err?.message || String(err) });
+          // eslint-disable-next-line no-console
+          console.error(`[TopLevelApiExplorer] ${api.name} error`, err);
+        }
+      }
+      setResults(newResults);
+      setSummary(newSummary);
+      setLoading(false);
+    };
+    fetchAll();
+    // Only run once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div>
+      {loading && <div>Loading top-level entities...</div>}
+      {!loading && (
+        <>
+          <table className="w-full text-sm mb-2">
+            <thead>
+              <tr>
+                <th className="text-left">Endpoint</th>
+                <th>Status</th>
+                <th>Error</th>
+              </tr>
+            </thead>
+            <tbody>
+              {summary.map((s, idx) => (
+                <tr key={s.name}>
+                  <td>{s.name}</td>
+                  <td style={{ color: s.status === 'success' ? 'limegreen' : 'crimson' }}>{s.status}</td>
+                  <td style={{ color: 'red' }}>{s.error || ''}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <details>
+            <summary>Full API Results & Logs</summary>
+            <pre style={{ maxHeight: 300, overflow: 'auto' }}>{JSON.stringify(results, null, 2)}</pre>
+          </details>
+        </>
+      )}
+    </div>
+  );
+};
 
 const Harness: React.FC = () => {
   const { loggedIn, changeAuthStatus } = useAuth();
@@ -55,6 +151,71 @@ const Harness: React.FC = () => {
     setError('');
   };
 
+  // --- BEGIN: Config-driven API-powered Harness Section ---
+  const testBuilder = useTestBuilder();
+  const dl = useDataloader();
+  const [api, setApi] = useState(config.defaultApi);
+  const [lessonId, setLessonId] = useState(config.defaultLessonId);
+  const [testData, setTestData] = useState<any[] | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [answers, setAnswers] = useState<any[]>([]);
+
+  // Fetch test data from selected API
+  useEffect(() => {
+    if (!loggedIn) return;
+    setLoading(true);
+    setApiError(null);
+    let promise;
+    if (api === 'getTest') promise = dl.getTest();
+    else if (api === 'getCards') promise = dl.getCards(lessonId);
+    else if (api === 'getTypedTest') promise = dl.getTypedTest('aud');
+    else promise = Promise.resolve([]);
+    promise
+      .then(data => {
+        setTestData(data);
+        setLoading(false);
+        setCurrentStep(0);
+        setAnswers([]);
+      })
+      .catch(e => {
+        setApiError(e.message || 'Failed to load test data');
+        setLoading(false);
+      });
+  }, [api, lessonId, dl, loggedIn]);
+
+  const steps = testData ? testBuilder.getTests(testData) : [];
+
+  const handleAnswer = (answer: any) => {
+    const updatedAnswers = [...answers];
+    updatedAnswers[currentStep] = answer;
+    setAnswers(updatedAnswers);
+    if (currentStep < steps.length - 1) setCurrentStep(currentStep + 1);
+  };
+  const goToStep = (idx: number) => setCurrentStep(idx);
+  const handleRestart = () => {
+    setAnswers([]);
+    setCurrentStep(0);
+  };
+  const currentStepElement =
+    steps.length > 0
+      ? React.cloneElement(steps[currentStep], {
+          onAnswer: handleAnswer,
+          ...(answers[currentStep] !== undefined ? { userAnswer: answers[currentStep] } : {}),
+        })
+      : null;
+
+  // Example usage of new hooks
+  const fontContent = "This font will auto-adjust!";
+  const fontRef = useFontAdjuster(0, [fontContent]);
+
+  const sentence = "The quick brown fox jumps over the lazy dog.";
+  const { ref: sentenceRef, handleClick: handleSentenceClick } = usePlaySentence(sentence, (w, i) => `/audio/${w}.mp3`);
+
+  const words = ["alpha", "beta", "gamma"];
+  const { playWords } = usePlayWords(words, (w, i) => `/audio/${w}.mp3`);
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">React Migration Harness</h1>
@@ -99,205 +260,108 @@ const Harness: React.FC = () => {
           </button>
         )}
       </div>
-      {/* DataloaderService Test Section */}
-      <div className="mt-6 p-4 border rounded bg-gray-900/40">
-        <h2 className="font-semibold mb-2">DataloaderService Test</h2>
-        <DataloaderTestUI />
-      </div>
-      {/* Harness Test Section */}
-      <div className="mt-6 p-4 border rounded bg-gray-900/40">
-        <h2 className="font-semibold mb-2">Harness Tests</h2>
-        <HarnessTestUI />
-      </div>
-    </div>
-  );
-};
 
-const HarnessTestUI: React.FC = () => {
-  const [selectedTest, setSelectedTest] = useState<string>('');
-  const [testResult, setTestResult] = useState<any>(null);
-  const [testError, setTestError] = useState<string>('');
-
-  // Utility to get URL params
-  function getParam(name: string): string | null {
-    return new URLSearchParams(window.location.search).get(name);
-  }
-
-  // Run a single test
-  async function runTest(test: HarnessTest) {
-    setTestError('');
-    setTestResult(null);
-    console.log(`[HarnessTestUI] Running test: ${test.name}`);
-    try {
-      const result = await test.run();
-      setTestResult(result);
-      console.log(`[HarnessTestUI] Test result for ${test.name}:`, result);
-    } catch (err: any) {
-      setTestError(err.message || 'Test error');
-      setTestResult(null);
-      console.log(`[HarnessTestUI] Test error for ${test.name}:`, err);
-    }
-  }
-
-  // Run all tests
-  async function runAllTests() {
-    setTestError('');
-    setTestResult(null);
-    console.log('[HarnessTestUI] Running all tests');
-    const results: Record<string, any> = {};
-    for (const test of harnessTests) {
-      try {
-        const result = await test.run();
-        results[test.name] = result;
-        console.log(`[HarnessTestUI] Test result for ${test.name}:`, result);
-      } catch (err: any) {
-        results[test.name] = { error: err.message || 'Test error' };
-        console.log(`[HarnessTestUI] Test error for ${test.name}:`, err);
-      }
-    }
-    setTestResult(results);
-  }
-
-  // Auto-run by URL param
-  useEffect(() => {
-    const testName = getParam('testname');
-    const runAll = getParam('test') !== null;
-    if (testName) {
-      const test = getTestByName(testName);
-      if (test) runTest(test);
-    } else if (runAll) {
-      runAllTests();
-    }
-    // eslint-disable-next-line
-  }, []);
-
-  return (
-    <div className="flex flex-col gap-2">
-      <div className="flex gap-2 flex-wrap items-center">
-        <select
-          className="px-2 py-1 rounded border bg-gray-800 text-white"
-          value={selectedTest}
-          onChange={e => setSelectedTest(e.target.value)}
-        >
-          <option value="">-- Select Test --</option>
-          {harnessTests.map(t => (
-            <option key={t.name} value={t.name}>{t.label}</option>
-          ))}
-        </select>
-        <button
-          className="px-3 py-1 bg-blue-700 text-white rounded hover:bg-blue-800"
-          onClick={() => {
-            const test = getTestByName(selectedTest);
-            if (test) runTest(test);
-          }}
-          disabled={!selectedTest}
-        >
-          Run Test
-        </button>
-        <button
-          className="px-3 py-1 bg-blue-700 text-white rounded hover:bg-blue-800"
-          onClick={runAllTests}
-        >
-          Run All
-        </button>
-      </div>
-      {testError && <div className="text-red-400">{testError}</div>}
-      {testResult && (
-        <pre className="bg-black/40 p-2 mt-2 rounded text-xs overflow-auto">{JSON.stringify(testResult, null, 2)}</pre>
-      )}
-    </div>
-  );
-};
-
-const DataloaderTestUI: React.FC = () => {
-  const [studentInfo, setStudentInfo] = useState<any>(null);
-  const [lessons, setLessons] = useState<any>(null);
-  const [cards, setCards] = useState<any>(null);
-  const [options, setOptions] = useState<any>(null);
-  const [lessonId, setLessonId] = useState('');
-  const [error, setError] = useState('');
-  const [cardbuilderResult, setCardbuilderResult] = useState<any>(null);
-
-  const callApi = async (fn: () => Promise<any>, setter: (data: any) => void, label: string) => {
-    setError('');
-    try {
-      console.log(`[DataloaderTestUI] Button pressed: ${label}`);
-      const data = await fn();
-      setter(data);
-      console.log(`[DataloaderTestUI] Output for ${label}:`, data);
-    } catch (err: any) {
-      setError(err.message || 'API error');
-      setter(null);
-      console.log(`[DataloaderTestUI] Error for ${label}:`, err);
-    }
-  };
-
-  return (
-    <div className="flex flex-col gap-2">
-      <div className="flex gap-2 flex-wrap">
-        <button
-          className="px-3 py-1 bg-blue-700 text-white rounded hover:bg-blue-800 mr-2"
-          onClick={() => callApi(dataloader.getStudentInfo, setStudentInfo, 'Fetch Student Info')}
-        >
-          Fetch Student Info
-        </button>
-        <button
-          className="px-3 py-1 bg-blue-700 text-white rounded hover:bg-blue-800 mr-2"
-          onClick={() => callApi(dataloader.getLessons, setLessons, 'Fetch Lessons')}
-        >
-          Fetch Lessons
-        </button>
-        <input
-          type="number"
-          placeholder="Lesson ID"
-          value={lessonId}
-          onChange={e => setLessonId(e.target.value)}
-          className="px-2 py-1 rounded border bg-gray-800 text-white w-28"
-        />
-        <button
-          className="px-3 py-1 bg-blue-700 text-white rounded hover:bg-blue-800 mr-2"
-          onClick={() => lessonId && callApi(() => dataloader.getCards(Number(lessonId)), setCards, `Fetch Cards (lessonId=${lessonId})`)}
-        >
-          Fetch Cards
-        </button>
-        <button
-          className="px-3 py-1 bg-blue-700 text-white rounded hover:bg-blue-800 mr-2"
-          onClick={() => callApi(dataloader.getOptions, setOptions, 'Fetch Options')}
-        >
-          Fetch Options
-        </button>
-      <button
-        className="px-3 py-1 bg-blue-700 text-white rounded hover:bg-blue-800 mr-2"
-        onClick={async () => {
-          setError('');
-          setCardbuilderResult(null);
-          try {
-            const result = getCardbuilderCards(sampleCardData);
-            setCardbuilderResult(result);
-            console.log('[DataloaderTestUI] Cardbuilder result:', result);
-          } catch (err: any) {
-            setError(err.message || 'Cardbuilder error');
-            setCardbuilderResult(null);
-            console.log('[DataloaderTestUI] Cardbuilder error:', err);
-          }
-        }}
-      >
-        Test Cardbuilder
-      </button>
-      </div>
-      {error && <div className="text-red-400">{error}</div>}
-      {studentInfo && <pre className="bg-black/40 p-2 mt-2 rounded text-xs overflow-auto">{JSON.stringify(studentInfo, null, 2)}</pre>}
-      {lessons && <pre className="bg-black/40 p-2 mt-2 rounded text-xs overflow-auto">{JSON.stringify(lessons, null, 2)}</pre>}
-      {cards && <pre className="bg-black/40 p-2 mt-2 rounded text-xs overflow-auto">{JSON.stringify(cards, null, 2)}</pre>}
-      {options && <pre className="bg-black/40 p-2 mt-2 rounded text-xs overflow-auto">{JSON.stringify(options, null, 2)}</pre>}
-      {cardbuilderResult && (
-        <div className="bg-black/40 p-2 mt-2 rounded text-xs overflow-auto">
-          <div className="mb-1 font-semibold">Cardbuilder Output:</div>
-          <pre>{JSON.stringify(cardbuilderResult, null, 2)}</pre>
+      {/* BEGIN TOP-LEVEL ENTITY FETCH/LOGGING */}
+      {loggedIn && (
+        <div className="mt-6 p-4 border rounded bg-gray-800/30">
+          <h2 className="font-semibold mb-2">Top-Level Entity API Calls</h2>
+          <TopLevelApiExplorer />
         </div>
       )}
+      {/* END TOP-LEVEL ENTITY FETCH/LOGGING */}
+
+      {/* BEGIN API-DRIVEN HARNESS UI */}
+      {loggedIn && (
+        <div className="mt-6 p-4 border rounded bg-gray-700/30">
+          <h2 className="font-semibold mb-2">Test Builder Harness (Config-Driven, API-Powered)</h2>
+          <div>
+            <h3>Play Words Demo</h3>
+            <div>
+              {words.join(' ')}
+              <button style={{ marginLeft: 8 }} onClick={playWords}>Play Words</button>
+            </div>
+          </div>
+          <div>
+            <h3>Word Translate Demo</h3>
+            <div style={{ display: 'flex', gap: 8 }}>
+              {['cat', 'dog', 'apple'].map(word => (
+                <WordTranslate
+                  key={word}
+                  word={word}
+                  getTranslation={async w => `Translation of ${w}`}
+                  iconPosition="right"
+                  iconHide={false}
+                />
+              ))}
+            </div>
+          </div>
+          <div>
+            <h3>Card Anchor Demo</h3>
+            <CardAnchor>
+              <div style={{ border: '1px solid #aaa', padding: 12, borderRadius: 6, background: '#f9f9f9' }}>
+                <strong>Dynamic Card Content</strong>
+                <div>This content is rendered inside CardAnchor.</div>
+              </div>
+            </CardAnchor>
+          </div>
+          <div>
+            <h3>Test Anchor Demo</h3>
+            <TestAnchor>
+              <div style={{ border: '1px solid #0af', padding: 12, borderRadius: 6, background: '#eef7ff' }}>
+                <strong>Dynamic Test-Step Content</strong>
+                <div>This content is rendered inside TestAnchor.</div>
+              </div>
+            </TestAnchor>
+          </div>
+          <div style={{ marginBottom: 12 }}>
+            <label>
+              API:
+              <select value={api} onChange={e => setApi(e.target.value)} style={{ marginLeft: 8 }}>
+                {config.apiOptions.map(opt => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+            </label>
+            {api === 'getCards' && (
+              <input
+                type="number"
+                value={lessonId}
+                min={1}
+                onChange={e => setLessonId(Number(e.target.value))}
+                style={{ marginLeft: 8, width: 80 }}
+                placeholder="Lesson ID"
+              />
+            )}
+          </div>
+          {loading && <div>Loading test data...</div>}
+          {apiError && <div style={{ color: 'red' }}>Error: {apiError}</div>}
+          {!loading && !apiError && steps.length > 0 && (
+            <>
+              <strong>Step {currentStep + 1} of {steps.length}</strong>
+              <div style={{ margin: '24px 0' }}>{currentStepElement}</div>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button onClick={() => goToStep(currentStep - 1)} disabled={currentStep === 0}>Previous</button>
+                <button onClick={() => goToStep(currentStep + 1)} disabled={currentStep >= steps.length - 1}>Next</button>
+                <button onClick={handleRestart}>Restart</button>
+              </div>
+            </>
+          )}
+          <hr />
+          {config.ui.showDebug && (
+            <details style={{ marginTop: 16 }}>
+              <summary>Debug Info</summary>
+              <pre>{JSON.stringify({ answers, currentStep, testData, api, lessonId }, null, 2)}</pre>
+            </details>
+          )}
+        </div>
+      )}
+      {/* END API-DRIVEN HARNESS UI */}
+
+      {/* BEGIN TABBED HARNESS UI */}
+      <TabbedHarness />
     </div>
   );
 };
 
 export default Harness;
+
