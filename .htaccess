@@ -1,1 +1,33 @@
-Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+#Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+#RewriteEngine on
+#RewriteCond %{REQUEST_URI} !^dist/LTKLessons
+#RewriteRule ^(.*)$ dist/LTKLessons/$1 [L]
+
+
+RewriteEngine On
+#RewriteCond     %{SERVER_PORT} ^80$
+#RewriteRule     ^(.*)$ https://%{SERVER_NAME}%{REQUEST_URI} [L,R]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/$ /$1 [L,R=301]
+#RewriteCond %{REQUEST_URI} ^/cards [NC]
+#RewriteRule ^(.*)$ - [R=403,L]
+RewriteCond %{REQUEST_URI} !(\.css|\.js|\.png|\.jpg|\.gif|robots\.txt)$ [NC]
+#RewriteCond %(REQUEST_URI} ^/cards [NC,OR]
+#RewriteCond %{REQUEST_URI} ^$ [NC]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(css|js|images)/(.*)$ public/$1/$2 [L,NC]
+#RewriteCond %{REQUEST_URI} ^/cards
+#RewriteRule ^(.*)$ [R=403,L]
+# 1 hour
+<FilesMatch "\.(js|css|json)$">
+    Header set Cache-Control "max-age=3600, public"
+</FilesMatch>
+<Files ~ "\.(env|json|config.js|md|gitignore|gitattributes|lock)$">
+    Order allow,deny
+    Deny from all
+</Files>

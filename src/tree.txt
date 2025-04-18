@@ -1,0 +1,858 @@
+ulessons
+¦   .htaccess
+¦   beep.mp3
+¦   browserslist
+¦   favicon.ico
+¦   index.html
+¦   karma.conf.js
+¦   main.ts
+¦   polyfills.ts
+¦   recorderWorker.js
+¦   sitemap.xml
+¦   styles.scss
+¦   test.ts
+¦   tree.txt
+¦   tsconfig.app.json
+¦   tsconfig.spec.json
+¦   tslint.json
+¦   YHNRY.mp3
+¦   _ltk_cards_htaccess
+¦   
++---app
+¦   ¦   app-routing.module.ts
+¦   ¦   app.component.html
+¦   ¦   app.component.scss
+¦   ¦   app.component.spec.ts
+¦   ¦   app.component.ts
+¦   ¦   app.module.ts
+¦   ¦   card-item.ts
+¦   ¦   error-handler.ts
+¦   ¦   
+¦   +---activities
+¦   ¦   +---al1
+¦   ¦   ¦       al1.component.html
+¦   ¦   ¦       al1.component.scss
+¦   ¦   ¦       al1.component.spec.ts
+¦   ¦   ¦       al1.component.ts
+¦   ¦   ¦       
+¦   ¦   +---al2
+¦   ¦   ¦       al2.component.html
+¦   ¦   ¦       al2.component.scss
+¦   ¦   ¦       al2.component.spec.ts
+¦   ¦   ¦       al2.component.ts
+¦   ¦   ¦       
+¦   ¦   +---ar1
+¦   ¦   ¦       ar1.component.html
+¦   ¦   ¦       ar1.component.scss
+¦   ¦   ¦       ar1.component.spec.ts
+¦   ¦   ¦       ar1.component.ts
+¦   ¦   ¦       
+¦   ¦   +---ar2
+¦   ¦   ¦       ar2.component.html
+¦   ¦   ¦       ar2.component.scss
+¦   ¦   ¦       ar2.component.spec.ts
+¦   ¦   ¦       ar2.component.ts
+¦   ¦   ¦       
+¦   ¦   +---ar3
+¦   ¦   ¦       ar3.component.html
+¦   ¦   ¦       ar3.component.scss
+¦   ¦   ¦       ar3.component.spec.ts
+¦   ¦   ¦       ar3.component.ts
+¦   ¦   ¦       
+¦   ¦   +---ar4
+¦   ¦   ¦       ar4.component.html
+¦   ¦   ¦       ar4.component.scss
+¦   ¦   ¦       ar4.component.spec.ts
+¦   ¦   ¦       ar4.component.ts
+¦   ¦   ¦       
+¦   ¦   +---ar5
+¦   ¦   ¦       ar5.component.html
+¦   ¦   ¦       ar5.component.scss
+¦   ¦   ¦       ar5.component.spec.ts
+¦   ¦   ¦       ar5.component.ts
+¦   ¦   ¦       
+¦   ¦   +---ar6
+¦   ¦   ¦       ar6.component.html
+¦   ¦   ¦       ar6.component.scss
+¦   ¦   ¦       ar6.component.spec.ts
+¦   ¦   ¦       ar6.component.ts
+¦   ¦   ¦       
+¦   ¦   +---base
+¦   ¦   ¦       base.component.scss
+¦   ¦   ¦       base.component.ts
+¦   ¦   ¦       
+¦   ¦   +---basear
+¦   ¦   ¦       basear.component.html
+¦   ¦   ¦       basear.component.scss
+¦   ¦   ¦       basear.component.spec.ts
+¦   ¦   ¦       basear.component.ts
+¦   ¦   ¦       
+¦   ¦   +---basebw
+¦   ¦   ¦       basebw.component.html
+¦   ¦   ¦       basebw.component.scss
+¦   ¦   ¦       basebw.component.spec.ts
+¦   ¦   ¦       basebw.component.ts
+¦   ¦   ¦       
+¦   ¦   +---baseor
+¦   ¦   ¦       baseor.component.html
+¦   ¦   ¦       baseor.component.scss
+¦   ¦   ¦       baseor.component.spec.ts
+¦   ¦   ¦       baseor.component.ts
+¦   ¦   ¦       
+¦   ¦   +---bs1
+¦   ¦   ¦       bs1.component.html
+¦   ¦   ¦       bs1.component.scss
+¦   ¦   ¦       bs1.component.spec.ts
+¦   ¦   ¦       bs1.component.ts
+¦   ¦   ¦       
+¦   ¦   +---bw1
+¦   ¦   ¦       bw1.component.html
+¦   ¦   ¦       bw1.component.scss
+¦   ¦   ¦       bw1.component.spec.ts
+¦   ¦   ¦       bw1.component.ts
+¦   ¦   ¦       
+¦   ¦   +---bw2
+¦   ¦   ¦       bw2.component.html
+¦   ¦   ¦       bw2.component.scss
+¦   ¦   ¦       bw2.component.spec.ts
+¦   ¦   ¦       bw2.component.ts
+¦   ¦   ¦       
+¦   ¦   +---bw3
+¦   ¦   ¦       bw3.component.html
+¦   ¦   ¦       bw3.component.scss
+¦   ¦   ¦       bw3.component.spec.ts
+¦   ¦   ¦       bw3.component.ts
+¦   ¦   ¦       
+¦   ¦   +---bw5
+¦   ¦   ¦       bw5.component.html
+¦   ¦   ¦       bw5.component.scss
+¦   ¦   ¦       bw5.component.spec.ts
+¦   ¦   ¦       bw5.component.ts
+¦   ¦   ¦       
+¦   ¦   +---bw6
+¦   ¦   ¦       bw6.component.html
+¦   ¦   ¦       bw6.component.scss
+¦   ¦   ¦       bw6.component.spec.ts
+¦   ¦   ¦       bw6.component.ts
+¦   ¦   ¦       
+¦   ¦   +---bw7
+¦   ¦   ¦       bw7.component.html
+¦   ¦   ¦       bw7.component.scss
+¦   ¦   ¦       bw7.component.spec.ts
+¦   ¦   ¦       bw7.component.ts
+¦   ¦   ¦       
+¦   ¦   +---car
+¦   ¦   ¦       car.component.html
+¦   ¦   ¦       car.component.scss
+¦   ¦   ¦       car.component.spec.ts
+¦   ¦   ¦       car.component.ts
+¦   ¦   ¦       
+¦   ¦   +---ccc
+¦   ¦   ¦       ccc.component.html
+¦   ¦   ¦       ccc.component.scss
+¦   ¦   ¦       ccc.component.spec.ts
+¦   ¦   ¦       ccc.component.ts
+¦   ¦   ¦       
+¦   ¦   +---cfc
+¦   ¦   ¦       cfc.component.html
+¦   ¦   ¦       cfc.component.scss
+¦   ¦   ¦       cfc.component.spec.ts
+¦   ¦   ¦       cfc.component.ts
+¦   ¦   ¦       
+¦   ¦   +---clc
+¦   ¦   ¦       clc.component.html
+¦   ¦   ¦       clc.component.scss
+¦   ¦   ¦       clc.component.spec.ts
+¦   ¦   ¦       clc.component.ts
+¦   ¦   ¦       
+¦   ¦   +---dis
+¦   ¦   ¦       dis.component.html
+¦   ¦   ¦       dis.component.scss
+¦   ¦   ¦       dis.component.spec.ts
+¦   ¦   ¦       dis.component.ts
+¦   ¦   ¦       
+¦   ¦   +---diw
+¦   ¦   ¦       diw.component.html
+¦   ¦   ¦       diw.component.scss
+¦   ¦   ¦       diw.component.spec.ts
+¦   ¦   ¦       diw.component.ts
+¦   ¦   ¦       
+¦   ¦   +---gcp
+¦   ¦   ¦       gcp.component.html
+¦   ¦   ¦       gcp.component.scss
+¦   ¦   ¦       gcp.component.spec.ts
+¦   ¦   ¦       gcp.component.ts
+¦   ¦   ¦       
+¦   ¦   +---gcs
+¦   ¦   ¦       gcs.component.html
+¦   ¦   ¦       gcs.component.scss
+¦   ¦   ¦       gcs.component.spec.ts
+¦   ¦   ¦       gcs.component.ts
+¦   ¦   ¦       
+¦   ¦   +---gdn
+¦   ¦   ¦       gdn.component.html
+¦   ¦   ¦       gdn.component.scss
+¦   ¦   ¦       gdn.component.spec.ts
+¦   ¦   ¦       gdn.component.ts
+¦   ¦   ¦       
+¦   ¦   +---gis
+¦   ¦   ¦       gis.component.html
+¦   ¦   ¦       gis.component.scss
+¦   ¦   ¦       gis.component.spec.ts
+¦   ¦   ¦       gis.component.ts
+¦   ¦   ¦       
+¦   ¦   +---gmu
+¦   ¦   ¦       gmu.component.html
+¦   ¦   ¦       gmu.component.scss
+¦   ¦   ¦       gmu.component.spec.ts
+¦   ¦   ¦       gmu.component.ts
+¦   ¦   ¦       
+¦   ¦   +---gnb
+¦   ¦   ¦       gnb.component.html
+¦   ¦   ¦       gnb.component.scss
+¦   ¦   ¦       gnb.component.spec.ts
+¦   ¦   ¦       gnb.component.ts
+¦   ¦   ¦       
+¦   ¦   +---gqw
+¦   ¦   ¦       gqw.component.html
+¦   ¦   ¦       gqw.component.scss
+¦   ¦   ¦       gqw.component.spec.ts
+¦   ¦   ¦       gqw.component.ts
+¦   ¦   ¦       
+¦   ¦   +---gsc
+¦   ¦   ¦       gsc.component.html
+¦   ¦   ¦       gsc.component.scss
+¦   ¦   ¦       gsc.component.spec.ts
+¦   ¦   ¦       gsc.component.ts
+¦   ¦   ¦       
+¦   ¦   +---gsl
+¦   ¦   ¦       gsl.component.html
+¦   ¦   ¦       gsl.component.scss
+¦   ¦   ¦       gsl.component.spec.ts
+¦   ¦   ¦       gsl.component.ts
+¦   ¦   ¦       
+¦   ¦   +---gsm
+¦   ¦   ¦       gsm.component.html
+¦   ¦   ¦       gsm.component.scss
+¦   ¦   ¦       gsm.component.spec.ts
+¦   ¦   ¦       gsm.component.ts
+¦   ¦   ¦       
+¦   ¦   +---gss
+¦   ¦   ¦       gss.component.html
+¦   ¦   ¦       gss.component.scss
+¦   ¦   ¦       gss.component.spec.ts
+¦   ¦   ¦       gss.component.ts
+¦   ¦   ¦       
+¦   ¦   +---gwf
+¦   ¦   ¦       gwf.component.html
+¦   ¦   ¦       gwf.component.scss
+¦   ¦   ¦       gwf.component.spec.ts
+¦   ¦   ¦       gwf.component.ts
+¦   ¦   ¦       
+¦   ¦   +---gwm
+¦   ¦   ¦       gwm.component.html
+¦   ¦   ¦       gwm.component.scss
+¦   ¦   ¦       gwm.component.spec.ts
+¦   ¦   ¦       gwm.component.ts
+¦   ¦   ¦       
+¦   ¦   +---idm
+¦   ¦   ¦       idm.component.html
+¦   ¦   ¦       idm.component.scss
+¦   ¦   ¦       idm.component.spec.ts
+¦   ¦   ¦       idm.component.ts
+¦   ¦   ¦       
+¦   ¦   +---or1
+¦   ¦   ¦       or1.component.html
+¦   ¦   ¦       or1.component.scss
+¦   ¦   ¦       or1.component.spec.ts
+¦   ¦   ¦       or1.component.ts
+¦   ¦   ¦       
+¦   ¦   +---or2
+¦   ¦   ¦       or2.component.html
+¦   ¦   ¦       or2.component.scss
+¦   ¦   ¦       or2.component.spec.ts
+¦   ¦   ¦       or2.component.ts
+¦   ¦   ¦       
+¦   ¦   +---or3
+¦   ¦   ¦       or3.component.html
+¦   ¦   ¦       or3.component.scss
+¦   ¦   ¦       or3.component.spec.ts
+¦   ¦   ¦       or3.component.ts
+¦   ¦   ¦       
+¦   ¦   +---or4
+¦   ¦   ¦       or4.component.html
+¦   ¦   ¦       or4.component.scss
+¦   ¦   ¦       or4.component.spec.ts
+¦   ¦   ¦       or4.component.ts
+¦   ¦   ¦       
+¦   ¦   +---rp1
+¦   ¦   ¦       rp1.component.html
+¦   ¦   ¦       rp1.component.scss
+¦   ¦   ¦       rp1.component.spec.ts
+¦   ¦   ¦       rp1.component.ts
+¦   ¦   ¦       
+¦   ¦   +---rp2
+¦   ¦   ¦       rp2.component.html
+¦   ¦   ¦       rp2.component.scss
+¦   ¦   ¦       rp2.component.spec.ts
+¦   ¦   ¦       rp2.component.ts
+¦   ¦   ¦       
+¦   ¦   +---rw1
+¦   ¦   ¦       rw1.component.html
+¦   ¦   ¦       rw1.component.scss
+¦   ¦   ¦       rw1.component.spec.ts
+¦   ¦   ¦       rw1.component.ts
+¦   ¦   ¦       
+¦   ¦   +---siw
+¦   ¦   ¦       siw.component.html
+¦   ¦   ¦       siw.component.scss
+¦   ¦   ¦       siw.component.spec.ts
+¦   ¦   ¦       siw.component.ts
+¦   ¦   ¦       
+¦   ¦   +---spl
+¦   ¦   ¦       spl.component.html
+¦   ¦   ¦       spl.component.scss
+¦   ¦   ¦       spl.component.spec.ts
+¦   ¦   ¦       spl.component.ts
+¦   ¦   ¦       
+¦   ¦   +---syp
+¦   ¦   ¦       syp.component.html
+¦   ¦   ¦       syp.component.scss
+¦   ¦   ¦       syp.component.spec.ts
+¦   ¦   ¦       syp.component.ts
+¦   ¦   ¦       
+¦   ¦   +---tst
+¦   ¦   ¦       tst.component.html
+¦   ¦   ¦       tst.component.scss
+¦   ¦   ¦       tst.component.spec.ts
+¦   ¦   ¦       tst.component.ts
+¦   ¦   ¦       
+¦   ¦   +---wl1
+¦   ¦           wl1.component.html
+¦   ¦           wl1.component.scss
+¦   ¦           wl1.component.spec.ts
+¦   ¦           wl1.component.ts
+¦   ¦           
+¦   +---components
+¦   ¦   +---card
+¦   ¦   ¦       card.component.ts
+¦   ¦   ¦       
+¦   ¦   +---come
+¦   ¦   ¦       come.component.html
+¦   ¦   ¦       come.component.scss
+¦   ¦   ¦       come.component.spec.ts
+¦   ¦   ¦       come.component.ts
+¦   ¦   ¦       
+¦   ¦   +---course-expire-msg
+¦   ¦   ¦       course-expire-msg.component.html
+¦   ¦   ¦       course-expire-msg.component.scss
+¦   ¦   ¦       course-expire-msg.component.spec.ts
+¦   ¦   ¦       course-expire-msg.component.ts
+¦   ¦   ¦       
+¦   ¦   +---dashboard
+¦   ¦   ¦       dashboard.component.html
+¦   ¦   ¦       dashboard.component.scss
+¦   ¦   ¦       dashboard.component.spec.ts
+¦   ¦   ¦       dashboard.component.ts
+¦   ¦   ¦       
+¦   ¦   +---detail-report
+¦   ¦   ¦       detail-report.component.html
+¦   ¦   ¦       detail-report.component.scss
+¦   ¦   ¦       detail-report.component.spec.ts
+¦   ¦   ¦       detail-report.component.ts
+¦   ¦   ¦       
+¦   ¦   +---display-result
+¦   ¦   ¦       display-result.component.html
+¦   ¦   ¦       display-result.component.scss
+¦   ¦   ¦       display-result.component.spec.ts
+¦   ¦   ¦       display-result.component.ts
+¦   ¦   ¦       
+¦   ¦   +---emaillogin
+¦   ¦   ¦       emaillogin.component.html
+¦   ¦   ¦       emaillogin.component.scss
+¦   ¦   ¦       emaillogin.component.spec.ts
+¦   ¦   ¦       emaillogin.component.ts
+¦   ¦   ¦       
+¦   ¦   +---entrance
+¦   ¦   ¦       entrance.component.html
+¦   ¦   ¦       entrance.component.scss
+¦   ¦   ¦       entrance.component.spec.ts
+¦   ¦   ¦       entrance.component.ts
+¦   ¦   ¦       
+¦   ¦   +---feedback
+¦   ¦   ¦       feedback.component.html
+¦   ¦   ¦       feedback.component.scss
+¦   ¦   ¦       feedback.component.spec.ts
+¦   ¦   ¦       feedback.component.ts
+¦   ¦   ¦       
+¦   ¦   +---grammar
+¦   ¦   ¦       grammar.component.html
+¦   ¦   ¦       grammar.component.scss
+¦   ¦   ¦       grammar.component.spec.ts
+¦   ¦   ¦       grammar.component.ts
+¦   ¦   ¦       
+¦   ¦   +---help
+¦   ¦   ¦       help.component.html
+¦   ¦   ¦       help.component.scss
+¦   ¦   ¦       help.component.spec.ts
+¦   ¦   ¦       help.component.ts
+¦   ¦   ¦       
+¦   ¦   +---help-tooltip
+¦   ¦   ¦       help-tooltip.component.html
+¦   ¦   ¦       help-tooltip.component.scss
+¦   ¦   ¦       help-tooltip.component.spec.ts
+¦   ¦   ¦       help-tooltip.component.ts
+¦   ¦   ¦       
+¦   ¦   +---lesson
+¦   ¦   ¦       lesson.component.html
+¦   ¦   ¦       lesson.component.scss
+¦   ¦   ¦       lesson.component.spec.ts
+¦   ¦   ¦       lesson.component.ts
+¦   ¦   ¦       
+¦   ¦   +---levelselector
+¦   ¦   ¦       levelselector.component.html
+¦   ¦   ¦       levelselector.component.scss
+¦   ¦   ¦       levelselector.component.spec.ts
+¦   ¦   ¦       levelselector.component.ts
+¦   ¦   ¦       
+¦   ¦   +---login
+¦   ¦   ¦       login.component.html
+¦   ¦   ¦       login.component.scss
+¦   ¦   ¦       login.component.spec.ts
+¦   ¦   ¦       login.component.ts
+¦   ¦   ¦       
+¦   ¦   +---ltkmenu
+¦   ¦   ¦       ltkmenu.component.html
+¦   ¦   ¦       ltkmenu.component.scss
+¦   ¦   ¦       ltkmenu.component.spec.ts
+¦   ¦   ¦       ltkmenu.component.ts
+¦   ¦   ¦       
+¦   ¦   +---msmenu
+¦   ¦   ¦       msmenu.component.html
+¦   ¦   ¦       msmenu.component.scss
+¦   ¦   ¦       msmenu.component.spec.ts
+¦   ¦   ¦       msmenu.component.ts
+¦   ¦   ¦       
+¦   ¦   +---multiselect
+¦   ¦   ¦       multiselect.component.html
+¦   ¦   ¦       multiselect.component.scss
+¦   ¦   ¦       multiselect.component.spec.ts
+¦   ¦   ¦       multiselect.component.ts
+¦   ¦   ¦       
+¦   ¦   +---notebook
+¦   ¦   ¦       notebook.component.html
+¦   ¦   ¦       notebook.component.scss
+¦   ¦   ¦       notebook.component.spec.ts
+¦   ¦   ¦       notebook.component.ts
+¦   ¦   ¦       
+¦   ¦   +---placement-report
+¦   ¦   ¦       placement-report.component.html
+¦   ¦   ¦       placement-report.component.scss
+¦   ¦   ¦       placement-report.component.spec.ts
+¦   ¦   ¦       placement-report.component.ts
+¦   ¦   ¦       
+¦   ¦   +---progress-report
+¦   ¦   ¦       progress-report.component.html
+¦   ¦   ¦       progress-report.component.scss
+¦   ¦   ¦       progress-report.component.spec.ts
+¦   ¦   ¦       progress-report.component.ts
+¦   ¦   ¦       
+¦   ¦   +---related-login
+¦   ¦   ¦       related-login.component.html
+¦   ¦   ¦       related-login.component.scss
+¦   ¦   ¦       related-login.component.spec.ts
+¦   ¦   ¦       related-login.component.ts
+¦   ¦   ¦       
+¦   ¦   +---reports
+¦   ¦   ¦       reports.component.html
+¦   ¦   ¦       reports.component.scss
+¦   ¦   ¦       reports.component.spec.ts
+¦   ¦   ¦       reports.component.ts
+¦   ¦   ¦       
+¦   ¦   +---settings
+¦   ¦   ¦       settings.component.html
+¦   ¦   ¦       settings.component.scss
+¦   ¦   ¦       settings.component.spec.ts
+¦   ¦   ¦       settings.component.ts
+¦   ¦   ¦       
+¦   ¦   +---showme-report
+¦   ¦   ¦       showme-report.component.html
+¦   ¦   ¦       showme-report.component.scss
+¦   ¦   ¦       showme-report.component.spec.ts
+¦   ¦   ¦       showme-report.component.ts
+¦   ¦   ¦       
+¦   ¦   +---showpcmtesting
+¦   ¦   ¦       showpcmtesting.component.html
+¦   ¦   ¦       showpcmtesting.component.scss
+¦   ¦   ¦       showpcmtesting.component.ts
+¦   ¦   ¦       
+¦   ¦   +---snooze
+¦   ¦   ¦       snooze.component.html
+¦   ¦   ¦       snooze.component.scss
+¦   ¦   ¦       snooze.component.spec.ts
+¦   ¦   ¦       snooze.component.ts
+¦   ¦   ¦       
+¦   ¦   +---summary-report
+¦   ¦   ¦       summary-report.component.html
+¦   ¦   ¦       summary-report.component.scss
+¦   ¦   ¦       summary-report.component.spec.ts
+¦   ¦   ¦       summary-report.component.ts
+¦   ¦   ¦       
+¦   ¦   +---talking-notepad
+¦   ¦   ¦       talking-notepad.component.html
+¦   ¦   ¦       talking-notepad.component.scss
+¦   ¦   ¦       talking-notepad.component.spec.ts
+¦   ¦   ¦       talking-notepad.component.ts
+¦   ¦   ¦       
+¦   ¦   +---test
+¦   ¦   ¦       test.component.ts
+¦   ¦   ¦       
+¦   ¦   +---test-result-item
+¦   ¦   ¦       test-result-item.component.html
+¦   ¦   ¦       test-result-item.component.scss
+¦   ¦   ¦       test-result-item.component.spec.ts
+¦   ¦   ¦       test-result-item.component.ts
+¦   ¦   ¦       
+¦   ¦   +---topnav
+¦   ¦   ¦       topnav.component.html
+¦   ¦   ¦       topnav.component.scss
+¦   ¦   ¦       topnav.component.spec.ts
+¦   ¦   ¦       topnav.component.ts
+¦   ¦   ¦       
+¦   ¦   +---warncomplete
+¦   ¦           warncomplete.component.html
+¦   ¦           warncomplete.component.scss
+¦   ¦           warncomplete.component.spec.ts
+¦   ¦           warncomplete.component.ts
+¦   ¦           
+¦   +---directives
+¦   ¦       card.directive.spec.ts
+¦   ¦       card.directive.ts
+¦   ¦       fontadjuster.directive.spec.ts
+¦   ¦       fontadjuster.directive.ts
+¦   ¦       playsentence.directive.spec.ts
+¦   ¦       playsentence.directive.ts
+¦   ¦       playwords.directive.spec.ts
+¦   ¦       playwords.directive.ts
+¦   ¦       test.directive.spec.ts
+¦   ¦       test.directive.ts
+¦   ¦       wordtranslate.directive.spec.ts
+¦   ¦       wordtranslate.directive.ts
+¦   ¦       
+¦   +---interceptors
+¦   ¦       http_interceptor.ts
+¦   ¦       
+¦   +---pipes
+¦   ¦       bindhtml.pipe.spec.ts
+¦   ¦       bindhtml.pipe.ts
+¦   ¦       filter-by-array.pipe.spec.ts
+¦   ¦       filter-by-array.pipe.ts
+¦   ¦       langfilter.pipe.spec.ts
+¦   ¦       langfilter.pipe.ts
+¦   ¦       reverse.pipe.spec.ts
+¦   ¦       reverse.pipe.ts
+¦   ¦       
+¦   +---services
+¦   ¦       after-login.service.spec.ts
+¦   ¦       after-login.service.ts
+¦   ¦       auth.service.spec.ts
+¦   ¦       auth.service.ts
+¦   ¦       before-login.service.spec.ts
+¦   ¦       before-login.service.ts
+¦   ¦       cardbuilder.service.spec.ts
+¦   ¦       cardbuilder.service.ts
+¦   ¦       colorscheme.service.spec.ts
+¦   ¦       colorscheme.service.ts
+¦   ¦       customfield.service.spec.ts
+¦   ¦       customfield.service.ts
+¦   ¦       dataloader.service.spec.ts
+¦   ¦       dataloader.service.ts
+¦   ¦       display-results.service.spec.ts
+¦   ¦       display-results.service.ts
+¦   ¦       error-log.service.spec.ts
+¦   ¦       error-log.service.ts
+¦   ¦       help.service.spec.ts
+¦   ¦       help.service.ts
+¦   ¦       logging.service.spec.ts
+¦   ¦       logging.service.ts
+¦   ¦       mediapreloader.service.spec.ts
+¦   ¦       mediapreloader.service.ts
+¦   ¦       option.service.spec.ts
+¦   ¦       option.service.ts
+¦   ¦       pick-element.service.spec.ts
+¦   ¦       pick-element.service.ts
+¦   ¦       playmedia.service.spec.ts
+¦   ¦       playmedia.service.ts
+¦   ¦       recorder.service.spec.ts
+¦   ¦       recorder.service.ts
+¦   ¦       testbuilder.service.spec.ts
+¦   ¦       testbuilder.service.ts
+¦   ¦       token.service.spec.ts
+¦   ¦       token.service.ts
+¦   ¦       
+¦   +---tests
+¦       ¦   result.item.ts
+¦       ¦   
+¦       +---auditory
+¦       ¦       auditory.component.html
+¦       ¦       auditory.component.scss
+¦       ¦       auditory.component.spec.ts
+¦       ¦       auditory.component.ts
+¦       ¦       
+¦       +---basetest
+¦       ¦       basetest.component.scss
+¦       ¦       basetest.component.ts
+¦       ¦       
+¦       +---cft
+¦       ¦       cft.component.html
+¦       ¦       cft.component.scss
+¦       ¦       cft.component.spec.ts
+¦       ¦       cft.component.ts
+¦       ¦       
+¦       +---comprehension
+¦       ¦       comprehension.component.html
+¦       ¦       comprehension.component.scss
+¦       ¦       comprehension.component.spec.ts
+¦       ¦       comprehension.component.ts
+¦       ¦       
+¦       +---intro
+¦       ¦       intro.component.html
+¦       ¦       intro.component.scss
+¦       ¦       intro.component.spec.ts
+¦       ¦       intro.component.ts
+¦       ¦       
+¦       +---results
+¦       ¦       results.component.html
+¦       ¦       results.component.scss
+¦       ¦       results.component.spec.ts
+¦       ¦       results.component.ts
+¦       ¦       
+¦       +---resultspcm
+¦       ¦       resultspcm.component.html
+¦       ¦       resultspcm.component.scss
+¦       ¦       resultspcm.component.ts
+¦       ¦       
+¦       +---spelling
+¦               spelling.component.html
+¦               spelling.component.scss
+¦               spelling.component.spec.ts
+¦               spelling.component.ts
+¦               
++---assets
+¦   ¦   .gitkeep
+¦   ¦   
+¦   +---audio
+¦   ¦   ¦   beep.mp3
+¦   ¦   ¦   
+¦   ¦   +---cdeck
+¦   ¦   ¦       c10_content_0.mp3
+¦   ¦   ¦       c10_head.mp3
+¦   ¦   ¦       c10_subtitle.mp3
+¦   ¦   ¦       c10_title.mp3
+¦   ¦   ¦       c11_content_0.mp3
+¦   ¦   ¦       c11_head.mp3
+¦   ¦   ¦       c11_subtitle.mp3
+¦   ¦   ¦       c11_title.mp3
+¦   ¦   ¦       c12_content_0.mp3
+¦   ¦   ¦       c12_head.mp3
+¦   ¦   ¦       c12_subtitle.mp3
+¦   ¦   ¦       c12_title.mp3
+¦   ¦   ¦       c13_content_0.mp3
+¦   ¦   ¦       c13_head.mp3
+¦   ¦   ¦       c13_subtitle.mp3
+¦   ¦   ¦       c13_title.mp3
+¦   ¦   ¦       c14_content_0.mp3
+¦   ¦   ¦       c14_content_1.mp3
+¦   ¦   ¦       c14_content_2.mp3
+¦   ¦   ¦       c14_head.mp3
+¦   ¦   ¦       c14_subtitle.mp3
+¦   ¦   ¦       c14_title.mp3
+¦   ¦   ¦       c15_s0_content_0.mp3
+¦   ¦   ¦       c15_s0_head.mp3
+¦   ¦   ¦       c15_s0_subtitle.mp3
+¦   ¦   ¦       c15_s0_title.mp3
+¦   ¦   ¦       c15_s1_content_0.mp3
+¦   ¦   ¦       c15_s1_head.mp3
+¦   ¦   ¦       c15_s1_subtitle.mp3
+¦   ¦   ¦       c15_s1_title.mp3
+¦   ¦   ¦       c15_s2_title.mp3
+¦   ¦   ¦       c15_s3_title.mp3
+¦   ¦   ¦       c15_s4_title.mp3
+¦   ¦   ¦       c15_s5_title.mp3
+¦   ¦   ¦       c15_s6_title.mp3
+¦   ¦   ¦       c15_title.mp3
+¦   ¦   ¦       c16_content_0.mp3
+¦   ¦   ¦       c16_head.mp3
+¦   ¦   ¦       c16_subtitle.mp3
+¦   ¦   ¦       c16_title.mp3
+¦   ¦   ¦       c1_content_0.mp3
+¦   ¦   ¦       c1_head.mp3
+¦   ¦   ¦       c1_subtitle.mp3
+¦   ¦   ¦       c1_title.mp3
+¦   ¦   ¦       c2_content_0.mp3
+¦   ¦   ¦       c2_head.mp3
+¦   ¦   ¦       c2_subtitle.mp3
+¦   ¦   ¦       c2_title.mp3
+¦   ¦   ¦       c3_content_0.mp3
+¦   ¦   ¦       c3_head.mp3
+¦   ¦   ¦       c3_subtitle.mp3
+¦   ¦   ¦       c3_title.mp3
+¦   ¦   ¦       c4_content_0.mp3
+¦   ¦   ¦       c4_head.mp3
+¦   ¦   ¦       c4_subtitle.mp3
+¦   ¦   ¦       c4_title.mp3
+¦   ¦   ¦       c5_content_0.mp3
+¦   ¦   ¦       c5_head.mp3
+¦   ¦   ¦       c5_subtitle.mp3
+¦   ¦   ¦       c5_title.mp3
+¦   ¦   ¦       c6_content_0.mp3
+¦   ¦   ¦       c6_head.mp3
+¦   ¦   ¦       c6_subtitle.mp3
+¦   ¦   ¦       c6_title.mp3
+¦   ¦   ¦       c7_content_0.mp3
+¦   ¦   ¦       c7_head.mp3
+¦   ¦   ¦       c7_subtitle.mp3
+¦   ¦   ¦       c7_title.mp3
+¦   ¦   ¦       c8_content_0.mp3
+¦   ¦   ¦       c8_head.mp3
+¦   ¦   ¦       c8_subtitle.mp3
+¦   ¦   ¦       c8_title.mp3
+¦   ¦   ¦       c9_content_0.mp3
+¦   ¦   ¦       c9_head.mp3
+¦   ¦   ¦       c9_subtitle.mp3
+¦   ¦   ¦       c9_title.mp3
+¦   ¦   ¦       
+¦   ¦   +---l1_al2
+¦   ¦   ¦       A.mp3
+¦   ¦   ¦       B.mp3
+¦   ¦   ¦       
+¦   ¦   +---l1_ar2
+¦   ¦           lop.mp3
+¦   ¦           wal.mp3
+¦   ¦           
+¦   +---fonts
+¦   ¦   ¦   KGPrimaryDots-webfont.woff
+¦   ¦   ¦   KGPrimaryDots-webfont.woff2
+¦   ¦   ¦   KGPrimaryDots.ttf
+¦   ¦   ¦   
+¦   ¦   +---bootstrap
+¦   ¦           glyphicons-halflings-regular.eot
+¦   ¦           glyphicons-halflings-regular.svg
+¦   ¦           glyphicons-halflings-regular.ttf
+¦   ¦           glyphicons-halflings-regular.woff
+¦   ¦           glyphicons-halflings-regular.woff2
+¦   ¦           
+¦   +---i18n
+¦   ¦       ar.json
+¦   ¦       de.json
+¦   ¦       en.json
+¦   ¦       es.json
+¦   ¦       fa.json
+¦   ¦       fr.json
+¦   ¦       hi.json
+¦   ¦       ht.json
+¦   ¦       id.json
+¦   ¦       iw.json
+¦   ¦       ko.json
+¦   ¦       pl.json
+¦   ¦       pt.json
+¦   ¦       ru.json
+¦   ¦       ta.json
+¦   ¦       te.json
+¦   ¦       tl.json
+¦   ¦       tr.json
+¦   ¦       uk.json
+¦   ¦       ur.json
+¦   ¦       vi.json
+¦   ¦       zh-chs.json
+¦   ¦       
+¦   +---img
+¦       ¦   arrowrnd_button.png
+¦       ¦   bad_b.png
+¦       ¦   btn_background.png
+¦       ¦   clear_button.png
+¦       ¦   enter_button.png
+¦       ¦   erase-xxl.png
+¦       ¦   exit_button.png
+¦       ¦   expertlevel.png
+¦       ¦   feedback_icon.png
+¦       ¦   fullscreen.png
+¦       ¦   fullscreen_max.png
+¦       ¦   fullscreen_min.png
+¦       ¦   good_b.png
+¦       ¦   grammar_btn.png
+¦       ¦   head_bg.png
+¦       ¦   help_button.png
+¦       ¦   hint_button.png
+¦       ¦   index.php
+¦       ¦   keyboard_button.png
+¦       ¦   laleft.png
+¦       ¦   languages.png
+¦       ¦   laright.png
+¦       ¦   lbg.jpg
+¦       ¦   lesson_bg.png
+¦       ¦   lesson_bg1.png
+¦       ¦   lesson_bg2.png
+¦       ¦   lesson_bg3.png
+¦       ¦   listen_button.png
+¦       ¦   ltk_button.png
+¦       ¦   ltk_start_icon.png
+¦       ¦   mail_button.png
+¦       ¦   mat.png
+¦       ¦   mic.png
+¦       ¦   microphone.png
+¦       ¦   nav_slide.png
+¦       ¦   next_button.png
+¦       ¦   notebook_btn.png
+¦       ¦   notebook_button.png
+¦       ¦   options_button.png
+¦       ¦   play_icon_start.png
+¦       ¦   prev_button.png
+¦       ¦   quickpace.png
+¦       ¦   rec_button.png
+¦       ¦   repeat_button.png
+¦       ¦   rule_button.png
+¦       ¦   screencolors.png
+¦       ¦   slideshadow-2-min.png
+¦       ¦   slideshadow-min.png
+¦       ¦   Slide_shadow.pdn
+¦       ¦   Slide_shadow.png
+¦       ¦   Slide_shadow2.png
+¦       ¦   snooze_icon.png
+¦       ¦   speaker.png
+¦       ¦   start_lesson_bg.jpg
+¦       ¦   start_lesson_bg2.jpg
+¦       ¦   start_lesson_bg_mobile.jpg
+¦       ¦   start_lesson_bg_mobile2.jpg
+¦       ¦   testing_btn.png
+¦       ¦   zigzag_button.png
+¦       ¦   
+¦       +---cards
+¦               a-apple.png
+¦               a-camera.png
+¦               a-safe.png
+¦               ai-train.png
+¦               ald-bald.png
+¦               alk-chalk.png
+¦               all-ball.png
+¦               alm-palm.png
+¦               alt-salt.png
+¦               am-ham.png
+¦               an-fan.png
+¦               ang-fang.png
+¦               ank-tank.png
+¦               ar-dollar.png
+¦               ar-marry.png
+¦               ar-star.png
+¦               au-saucer.png
+¦               e-equal.png
+¦               e-jet.png
+¦               
++---environments
+        environment.dev.ts
+        environment.dev1.ts
+        environment.dev1prod.ts
+        environment.devprod.ts
+        environment.prod.ts
+        environment.ts
+        
