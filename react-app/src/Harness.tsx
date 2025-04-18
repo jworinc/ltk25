@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from './services/useAuth';
 import TabbedHarness from './TabbedHarness';
 import { useTestBuilder } from './services/useTestBuilder';
 import { useDataloader } from './services/useDataloader';
 import config from './harness-config.json';
-import { useFontAdjuster } from './services/useFontAdjuster';
-import { usePlaySentence } from './services/usePlaySentence';
+
 import { usePlayWords } from './services/usePlayWords';
 import { WordTranslate } from './services/WordTranslate';
 import { CardAnchor } from './services/CardAnchor';
@@ -17,9 +16,10 @@ const TEST_PASSWORD = 'test123';
 // Top-level API explorer component
 const TopLevelApiExplorer: React.FC = () => {
   const dl = useDataloader();
-  const [results, setResults] = useState<any>({});
+  type ApiResults = Record<string, { status: 'success' | 'error'; data?: unknown; error?: string }>;
+  const [results, setResults] = useState<ApiResults>({});
   const [loading, setLoading] = useState(false);
-  const [summary, setSummary] = useState<any[]>([]);
+  const [summary, setSummary] = useState<{ name: string; status: string; error?: string }[]>([]);
 
   // List of endpoints to call
   const apis = [
@@ -43,21 +43,18 @@ const TopLevelApiExplorer: React.FC = () => {
     setResults({});
     setSummary([]);
     const fetchAll = async () => {
-      const newResults: any = {};
-      const newSummary: any[] = [];
+      const newResults: ApiResults = {};
+      const newSummary: { name: string; status: string; error?: string }[] = [];
       for (const api of apis) {
         try {
-          // eslint-disable-next-line no-console
           console.log(`[TopLevelApiExplorer] Calling ${api.name}`);
           const data = await api.fn();
           newResults[api.name] = { status: 'success', data };
           newSummary.push({ name: api.name, status: 'success' });
-          // eslint-disable-next-line no-console
           console.log(`[TopLevelApiExplorer] ${api.name} success`, data);
         } catch (err: any) {
           newResults[api.name] = { status: 'error', error: err?.message || String(err) };
           newSummary.push({ name: api.name, status: 'error', error: err?.message || String(err) });
-          // eslint-disable-next-line no-console
           console.error(`[TopLevelApiExplorer] ${api.name} error`, err);
         }
       }
@@ -66,9 +63,7 @@ const TopLevelApiExplorer: React.FC = () => {
       setLoading(false);
     };
     fetchAll();
-    // Only run once on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dl]);
 
   return (
     <div>
@@ -84,7 +79,7 @@ const TopLevelApiExplorer: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {summary.map((s, idx) => (
+              {summary.map((s) => (
                 <tr key={s.name}>
                   <td>{s.name}</td>
                   <td style={{ color: s.status === 'success' ? 'limegreen' : 'crimson' }}>{s.status}</td>
@@ -156,11 +151,11 @@ const Harness: React.FC = () => {
   const dl = useDataloader();
   const [api, setApi] = useState(config.defaultApi);
   const [lessonId, setLessonId] = useState(config.defaultLessonId);
-  const [testData, setTestData] = useState<any[] | null>(null);
+  const [testData, setTestData] = useState<unknown[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
-  const [answers, setAnswers] = useState<any[]>([]);
+  const [answers, setAnswers] = useState<unknown[]>([]);
 
   // Fetch test data from selected API
   useEffect(() => {
@@ -185,9 +180,9 @@ const Harness: React.FC = () => {
       });
   }, [api, lessonId, dl, loggedIn]);
 
-  const steps = testData ? testBuilder.getTests(testData) : [];
+  const steps = useMemo(() => testData ? testBuilder.getTests(testData) : [], [testData, testBuilder]);
 
-  const handleAnswer = (answer: any) => {
+  const handleAnswer = (answer: unknown) => {
     const updatedAnswers = [...answers];
     updatedAnswers[currentStep] = answer;
     setAnswers(updatedAnswers);
@@ -198,23 +193,22 @@ const Harness: React.FC = () => {
     setAnswers([]);
     setCurrentStep(0);
   };
-  const currentStepElement =
+  const currentStepElement = useMemo(() => (
     steps.length > 0
-      ? React.cloneElement(steps[currentStep], {
-          onAnswer: handleAnswer,
-          ...(answers[currentStep] !== undefined ? { userAnswer: answers[currentStep] } : {}),
-        })
-      : null;
+      ? React.cloneElement(
+          steps[currentStep] as React.ReactElement<{ onAnswer: (answer: unknown) => void; userAnswer?: unknown }>,
+          {
+            onAnswer: handleAnswer,
+            ...(answers[currentStep] !== undefined ? { userAnswer: answers[currentStep] } : {}),
+          }
+        )
+      : null
+  ), [steps, currentStep, answers, handleAnswer]);
 
   // Example usage of new hooks
-  const fontContent = "This font will auto-adjust!";
-  const fontRef = useFontAdjuster(0, [fontContent]);
-
-  const sentence = "The quick brown fox jumps over the lazy dog.";
-  const { ref: sentenceRef, handleClick: handleSentenceClick } = usePlaySentence(sentence, (w, i) => `/audio/${w}.mp3`);
-
+  // Demo hooks (remove unused variables to fix lint errors)
   const words = ["alpha", "beta", "gamma"];
-  const { playWords } = usePlayWords(words, (w, i) => `/audio/${w}.mp3`);
+  const { playWords } = usePlayWords(words, (w) => `/audio/${w}.mp3`);
 
   return (
     <div className="p-4">

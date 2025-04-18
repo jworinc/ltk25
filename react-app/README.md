@@ -1,6 +1,53 @@
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## LTK React Migration: Architecture, Utilities, and Testing
+
+This project is a migration from Angular to React, with a focus on maintainability, modern React patterns, and feature parity.
+
+---
+
+## 🏗️ Architecture Overview
+
+- **Hooks & Services:** Core logic is implemented as custom React hooks in `src/services/` (e.g., `useOptions`, `useColorScheme`, `useHelp`, `useLogging`).
+- **Providers/Contexts:**
+  - `useAuth` is wrapped in an `AuthProvider` for global authentication state.
+  - If you need global language, theme, or options state, refactor `useOptions` and `useColorScheme` into Context Providers.
+- **Harnesses:** Each major hook/service has a corresponding Harness component for interactive testing and demo.
+- **Utilities:** Utility functions (ported from Angular pipes) are in `src/services/utils.ts`.
+
+---
+
+## 🛠️ Utility Functions (Pipes Ported)
+
+- `langFilter(items, sku)`: Filters items by locales in `sku.languages` (comma-separated string).
+- `reverseArray(arr)`: Returns a reversed copy of an array.
+- `filterByArray(items, arr)`: Filters items whose `menu_id` is in `arr`.
+- `sanitizeHtml(html)`: Returns HTML string (placeholder, use DOMPurify for real sanitization).
+
+---
+
+## 🎨 Theming
+
+- Use the `useColorScheme` hook for light/dark mode or custom themes.
+- For global theming, refactor to a `ThemeProvider` using React Context and CSS variables.
+
+---
+
+## 🧪 Testing Strategy
+
+- All utilities and hooks should have corresponding tests (see `src/services/utils.test.ts`).
+- Use [Jest](https://jestjs.io/) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) for unit and integration tests.
+- Run tests with `npm test` or `yarn test`.
+
+---
+
+## 📚 Documentation & Comments
+
+- All hooks, components, and utilities should have JSDoc-style comments.
+- Update this README when new architectural patterns or utilities are added.
+
+---
+
 
 Currently, two official plugins are available:
 
